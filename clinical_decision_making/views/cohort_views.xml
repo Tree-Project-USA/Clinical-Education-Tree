@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- cohort Views -->
+    <record id="cohort_view_tree" model="ir.ui.view">
+        <field name="name">cohort.view.tree</field>
+        <field name="model">cohort</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom" js_class="o_fields_col">
+                <header>
+                    <button name="action_send_email_to_students" string="Send Email" type="object"/>
+                </header>
+                <field name="cpdm_tree_id" invisible="1"/>
+                <!-- Student Information -->
+                <field name="student_id" class="o_fields_col"/>
+                <field name="first_name" class="o_fields_col"/>
+                <field name="last_name" class="o_fields_col"/>
+                <field name="cohort_label" class="o_fields_col"/>
+                <field name="stu_email" class="o_fields_col"/>
+                <field name="stu_phone" class="o_fields_col"/>
+                <field name="home_address" class="o_fields_col"/>
+                <field name="stu_setting_one_id" class="o_fields_col"/>
+                <field name="stu_setting_two_id" class="o_fields_col"/>
+                <field name="stu_setting_three_id" class="o_fields_col"/>
+                <field name="stu_locatio_city_one_id" class="o_fields_col"/>
+                <field name="stu_locatio_city_two_id" class="o_fields_col"/>
+                <field name="stu_locatio_city_three_id" class="o_fields_col"/>
+                <field name="stu_locatio_city_four_id" class="o_fields_col"/>
+                <field name="stu_locatio_city_five_id" class="o_fields_col"/>
+                <field name="stu_locatio_state_one_id" class="o_fields_col"/>
+                <field name="stu_locatio_state_two_id" class="o_fields_col"/>
+                <field name="stu_locatio_state_three_id" class="o_fields_col"/>
+                <field name="stu_locatio_state_four_id" class="o_fields_col"/>
+                <field name="stu_locatio_state_five_id" class="o_fields_col"/>
+                <field name="stu_locatio_zip_one" class="o_fields_col"/>
+                <field name="stu_locatio_zip_two" class="o_fields_col"/>
+                <field name="stu_locatio_zip_three" class="o_fields_col"/>
+                <field name="stu_locatio_zip_four" class="o_fields_col"/>
+                <field name="stu_locatio_zip_five" class="o_fields_col"/>
+
+                <!-- Hardship Status -->
+                <field name="hardship_status" class="o_fields_col"/>
+
+                <!-- Hardship Status -->
+                <field name="cat_one_requirment" class="o_state"/>
+                <field name="met_via" class="o_state"/>
+                <field name="pta_supervision" class="o_state"/>
+                <field name="ipe" class="o_state"/>
+
+                <!-- Placement ICE  -->
+                <field name="ice_setting_id" class="o_ice"/>
+                <field name="ice_site_id" class="o_ice"/>
+                <field name="ice_site_address" class="o_ice"/>
+                <field name="ice_city_id" class="o_ice"/>
+                <field name="ice_country_id" class="o_ice"/>
+                <field name="ice_state_id" class="o_ice"/>
+                <field name="ice_zip" class="o_ice"/>
+                <field name="ice_scce_id" class="o_ice"/>
+                <field name="ice_scce_first_name" class="o_ice"/>
+                <field name="ice_scce_last_name" class="o_ice"/>
+                <field name="ice_scce_email" class="o_ice"/>
+                <field name="ice_placement_status" class="o_ice"/>
+                <field name="ice_accepted_distances" class="o_ice"/>
+
+                <!-- Placement TCE 1  -->
+                <field name="tce1_setting_id" class="o_tce1"/>
+                <field name="tce1_site_id" class="o_tce1"/>
+                <field name="tce1_site_address" class="o_tce1"/>
+                <field name="tce1_city_id" class="o_tce1"/>
+                <field name="tce1_country_id" class="o_tce1"/>
+                <field name="tce1_state_id" class="o_tce1"/>
+                <field name="tce1_zip" class="o_tce1"/>
+                <field name="tce1_scce_id" class="o_tce1"/>
+                <field name="tce1_scce_first_name" class="o_tce1"/>
+                <field name="tce1_scce_last_name" class="o_tce1"/>
+                <field name="tce1_scce_email" class="o_tce1"/>
+                <field name="tce1_placement_status" class="o_tce1"/>
+                <field name="tce1_accepted_distances" class="o_tce1"/>
+
+                <!-- Placement TCE 2  -->
+                <field name="tce2_setting_id" class="o_tce2"/>
+                <field name="tce2_site_id" class="o_tce2"/>
+                <field name="tce2_site_address" class="o_tce2"/>
+                <field name="tce2_city_id" class="o_tce2"/>
+                <field name="tce2_country_id" class="o_tce2"/>
+                <field name="tce2_state_id" class="o_tce2"/>
+                <field name="tce2_zip" class="o_tce2"/>
+                <field name="tce2_scce_id" class="o_tce2"/>
+                <field name="tce2_scce_first_name" class="o_tce2"/>
+                <field name="tce2_scce_last_name" class="o_tce2"/>
+                <field name="tce2_scce_email" class="o_tce2"/>
+                <field name="tce2_placement_status" class="o_tce2"/>
+                <field name="tce2_accepted_distances" class="o_tce2"/>
+
+            </tree>
+
+        </field>
+    </record>
+
+    <!-- cpdm.tree Views -->
+    <record id="cpdm_tree_view_tree" model="ir.ui.view">
+        <field name="name">cpdm.tree.view.tree</field>
+        <field name="model">cpdm.tree</field>
+        <field name="arch" type="xml">
+            <tree >
+                <field name="name"/>
+                <field name="create_date"/>
+                <field name="total_students"/>
+                <field name="total_confirmed"/>
+                <field name="total_pending"/>
+                <field name="total_not_placed"/>
+                <field name="total_hardships"/>
+                <field name="state" widget="badge" decoration-muted="state=='draft'" decoration-success="state == 'running'" decoration-info="state=='done  '"/>
+            </tree>
+        </field>
+    </record>
+    <!-- cpdm.tree form view -->
+    <record id="cpdm_tree_view_form" model="ir.ui.view">
+        <field name="name">cpdm.tree.view.form</field>
+        <field name="model">cpdm.tree</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <header>
+                    <button name="action_post" string="Confirm" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'draft')]}" data-hotkey="v"/>
+                    <button name="action_draft" string="Reset To Draft" type="object" class="btn btn-secondary" attrs="{'invisible': [('state', '!=', 'done')]}" data-hotkey="w"/>
+                    <field name="state" widget="statusbar" clickable="False"/>
+                </header>
+                <sheet>
+                    <div class="oe_title mb24">
+                        <h1>
+                            <field id="name" class="text-break" name="name" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <label for="date_begin" string="Dates"/>
+                            <div class="o_row">
+                                <span class="text-muted">From</span>
+                                <field name="date_begin" class="oe_inline" widget="daterange" options="{'related_end_date': 'date_end'}" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <span class="text-muted">To</span>
+                                <field name="date_end" class="oe_inline" widget="daterange" options="{'related_end_date': 'date_begin'}" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            </div>
+                            <field name="create_date"/>
+                        </group>
+                        <group>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Info">
+                            <field name="info_ids">
+                                <tree editable="bottom" delete="false">
+                                    <field name="is_confirmed_send" invisible="1"/>
+                                    <field name="clinc_id" attrs="{'readonly': [('state', '=', 'confirmed')]}"/>
+                                    <field name="num_students" attrs="{'readonly': [('state', '=', 'confirmed')]}"/>
+                                    <field name="state" widget="badge" decoration-muted="state=='not_confirmed'" decoration-info="state=='confirmed'"/>
+                                    <button string="Confirm" name="action_confirm" type="object" class="oe_highlight" attrs="{'invisible': [('state', '=', 'confirmed')]}"/>
+                                    <button name="action_send_email_to_clinck" string="Send Mail" type="object" icon="fa-paper-plane" attrs="{'invisible': ['|', ('state', '=', 'confirmed'), ('is_confirmed_send', '!=', False)]}"/>
+                                    <button name="action_send_email_to_clinck" string="Resend" type="object" icon="fa-repeat" attrs="{'invisible': ['|', ('state', '=', 'confirmed'), ('is_confirmed_send', '=', False)]}"/>
+                                </tree>
+
+                            </field>
+                        </page>
+                        <page string="Cohort Lines">
+                            <field name="cohort_ids" readonly="1">
+                                <tree>
+                                    <field name="student_id"/>
+                                    <field name="first_name"/>
+                                    <field name="last_name"/>
+                                    <field name="cohort_label"/>
+                                    <field name="stu_email"/>
+                                    <field name="stu_phone"/>
+                                    <field name="home_address"/>
+                                    <field name="hardship_status" class="o_MessagingMenu_counter o_mail_systray_item o_notification_counter"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page name='internal_notes' string="Internal Notes">
+                            <field name="comment" placeholder="Internal notes..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

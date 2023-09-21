@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- SCCE Views -->
+    <record id="scce_view_tree" model="ir.ui.view">
+        <field name="name">scce.view.tree</field>
+        <field name="model">scce</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="first_name"/>
+                <field name="last_name"/>
+                <field name="email"/>
+            </tree>
+        </field>
+    </record>
+    <record id="scce_view_form" model="ir.ui.view">
+        <field name="name">scce.view.form</field>
+        <field name="model">scce</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="first_name"/>
+                        <field name="last_name"/>
+                        <field name="email"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Site Views -->
+    <record id="site_view_tree" model="ir.ui.view">
+        <field name="name">site.view.tree</field>
+        <field name="model">site</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="email"/>
+                <field name="address"/>
+                <field name="city_id"/>
+                <field name="country_id"/>
+                <field name="state_id"/>
+                <field name="zip"/>
+                <field name="setting_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+            </tree>
+        </field>
+    </record>
+    <record id="site_view_form" model="ir.ui.view">
+        <field name="name">site.view.form</field>
+        <field name="model">site</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <label for="name"/>
+                        <field name="name"/>
+                        <group>
+                            <field name="setting_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                            <field name="email"/>
+                            <field name="address"/>
+                            <field name="city_id"/>
+                        </group>
+                        <group>
+                            <field name="country_id"/>
+                            <field name="state_id"/>
+                            <field name="zip"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Category Setting Views -->
+    <record id="category_setting_view_tree" model="ir.ui.view">
+        <field name="name">category.setting.view.tree</field>
+        <field name="model">category.setting</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name"/>
+                <field name="color" widget="color_picker"/>
+            </tree>
+        </field>
+    </record>
+    <record id="category_setting_view_form" model="ir.ui.view">
+        <field name="name">category.setting.view.form</field>
+        <field name="model">category.setting</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="color" widget="color_picker"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Location Setting Views -->
+    <record id="location_setting_view_tree" model="ir.ui.view">
+        <field name="name">location.setting.view.tree</field>
+        <field name="model">location.setting</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="student_id"/>
+                <field name="country_id"/>
+                <field name="state_id"/>
+                <field name="city_id"/>
+                <field name="zip"/>
+            </tree>
+        </field>
+    </record>
+    <record id="location_setting_view_form" model="ir.ui.view">
+        <field name="name">location.setting.view.form</field>
+        <field name="model">location.setting</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <label for="student_id" attrs="{'readonly': [('id', '!=', False)]}"/>
+                        <field name="student_id"/>
+                        <group>
+                            <field name="country_id"/>
+                            <field name="state_id"/>
+                        </group>
+                        <group>
+                            <field name="city_id"/>
+                            <field name="zip"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>

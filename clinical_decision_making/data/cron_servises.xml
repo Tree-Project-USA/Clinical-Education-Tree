@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <record id="ir_cron_check_end_date_cpdm_tree_to_update_status" model="ir.cron">
+            <field name="name">Check End Date To Update Status</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="nextcall" eval="(DateTime.now().replace(hour=22, minute=0, second=0)).strftime('%Y-%m-%d %H:%M:%S')" />
+            <field name="doall" eval="False"/>
+            <field name="model_id" ref="model_cpdm_tree"/>
+            <field name="code">model.check_end_date_to_update_status()</field>
+            <field name="state">code</field>
+        </record>
+</odoo>

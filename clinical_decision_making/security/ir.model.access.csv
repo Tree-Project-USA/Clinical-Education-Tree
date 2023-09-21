@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_cohort,cohort,model_cohort,,1,1,1,1
+access_cpdm_tree,cpdm.tree,model_cpdm_tree,,1,1,1,1
+
+access_scce,scce,model_scce,,1,1,1,1
+access_site,site,model_site,,1,1,1,1
+access_category_setting,category.setting,model_category_setting,,1,1,1,1
+access_location_setting,location.setting,model_location_setting,,1,1,1,1
+access_placement_setting,placement.setting,model_placement_setting,,1,1,1,1
+access_clinic_info_gathering,clinic.info.gathering,model_clinic_info_gathering,,1,1,1,1

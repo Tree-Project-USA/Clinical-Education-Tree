@@ -1,0 +1,26 @@
+.o_ice {
+    background-color: yellow !important; 
+    width: 150px !important;
+}
+.o_tce1 {
+    background-color: orange !important; 
+    width: 150px !important;
+}
+.o_tce2 {
+    background-color: rgb(65, 163, 65) !important;
+    width: 150px !important;
+}
+.o_state {
+    background-color: orange !important;
+    width: 150px !important;
+}
+
+.o_fields_col,.o_column_sortable{
+    width: 150px !important;
+}
+.o_list_table :not(.o_field_x2many_list) > .o_list_renderer .o_list_table thead tr > :not(:empty), .o_list_renderer .o_list_table tfoot tr > :not(:empty) {
+
+            width: 150px !important;
+
+
+}

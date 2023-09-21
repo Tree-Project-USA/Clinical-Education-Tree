@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem name="CPDM Tree" id="menu_root_cpdm" />
+
+    <record id="student_action" model="ir.actions.act_window">
+        <field name="name">Student</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('is_student', '=', True)]</field>
+        <field name="context">{'default_is_student': True}</field>
+    </record>
+
+    <record id="student_action_view2" model="ir.actions.act_window.view">
+        <field eval="1" name="sequence"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="clinical_decision_making.student_view_tree"/>
+        <field name="act_window_id" ref="student_action"/>
+    </record>
+    <record id="student_action_view3" model="ir.actions.act_window.view">
+        <field eval="2" name="sequence"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="clinical_decision_making.student_view_form"/>
+        <field name="act_window_id" ref="student_action"/>
+    </record>
+
+    <record id="cpdm_tree_action" model="ir.actions.act_window">
+        <field name="type">ir.actions.act_window</field>
+        <field name="name">Decision Making</field>
+        <field name="res_model">cpdm.tree</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="cohort_action" model="ir.actions.act_window">
+        <field name="type">ir.actions.act_window</field>
+        <field name="name">cohort</field>
+        <field name="res_model">cohort</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="scce_action" model="ir.actions.act_window">
+        <field name="type">ir.actions.act_window</field>
+        <field name="name">scce</field>
+        <field name="res_model">scce</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <record id="site_action" model="ir.actions.act_window">
+        <field name="type">ir.actions.act_window</field>
+        <field name="name">Clinic</field>
+        <field name="res_model">site</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <record id="category_setting_action" model="ir.actions.act_window">
+        <field name="type">ir.actions.act_window</field>
+        <field name="name">Category Setting</field>
+        <field name="res_model">category.setting</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <record id="location_setting_action" model="ir.actions.act_window">
+        <field name="type">ir.actions.act_window</field>
+        <field name="name">Location Setting</field>
+        <field name="res_model">location.setting</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <record id="placement_setting_action" model="ir.actions.act_window">
+        <field name="type">ir.actions.act_window</field>
+        <field name="name">Placement Setting</field>
+        <field name="res_model">placement.setting</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem
+        id="cpdm_tree_menu"
+        name="Decisions Making Tree"
+        action="cpdm_tree_action"
+        parent="menu_root_cpdm"
+        sequence="1"/>
+    
+    <menuitem
+        id="cohort_menu"
+        name="Placement"
+        action="cohort_action"
+        parent="menu_root_cpdm"
+        sequence="2"/>
+
+    <menuitem
+        id="student_menu"
+        name="Students"
+        action="student_action"
+        parent="menu_root_cpdm"
+        sequence="3"/>
+    
+    <menuitem
+        id="setting_menu"
+        name="setting"
+        parent="menu_root_cpdm"
+        sequence="99"/>
+        
+    <menuitem
+        id="site_menu"
+        name="Clinics(Sites)"
+        action="site_action"
+        parent="setting_menu"
+        sequence="1"/>
+    <menuitem
+        id="scce_menu"
+        name="Scces"
+        action="scce_action"
+        parent="setting_menu"
+        sequence="2"/>
+    <menuitem
+        id="category_setting_menu"
+        name="Categories Setting"
+        action="category_setting_action"
+        parent="setting_menu"
+        sequence="3"/>
+    <menuitem
+        id="location_setting_menu"
+        name="Locations"
+        action="location_setting_action"
+        parent="setting_menu"
+        sequence="4"/>
+    <!-- TODO Improve this for better performance
+    <menuitem 
+        id="placement_setting_menu"
+        name="Placement"
+        action="placement_setting_action"
+        parent="setting_menu"
+        sequence="5"/> -->
+
+</odoo>

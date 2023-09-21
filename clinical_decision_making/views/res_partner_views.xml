@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Student Views -->
+    <record id="student_view_tree" model="ir.ui.view">
+        <field name="name">Student.view.tree</field>
+        <field name="model">res.partner</field>
+        <field name="mode">primary</field>
+        <field name="priority">0</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="cohort_label"/>
+                <field name="email"/>
+                <field name="phone"/>
+                <field name="home_address"/>
+                <field name="contact_address"/>
+                <field name="setting_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="student_view_form" model="ir.ui.view">
+        <field name="name">student.view.form</field>
+        <field name="model">res.partner</field>
+        <field name="mode">primary</field>
+        <field name="priority">0</field>
+        <field name="arch" type="xml">
+            <form string="Partners">
+                <field name="active" invisible="1"/>
+                <field name="is_student" invisible="1"/>
+                <sheet>
+                    <div class="oe_button_box" name="button_box"/>
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+                    <div class="oe_title mb24">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group>
+                            <span class="o_form_label o_td_label" name="address_name">
+                                <b >Name</b>
+                            </span>
+                            <div class="o_address_format">
+                                <field name="first_name" placeholder="First Name" class="o_address_city"/>
+                                <field name="last_name" class="o_address_state" placeholder="Last Name"/>
+                            </div>
+                            <field name="cohort_label"/>
+                        </group>
+                        <group>
+                            <field name="home_address"/>
+                            <field name="email"/>
+                            
+                            <field name="setting_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                        </group>
+                    </group>
+
+                    <notebook colspan="4">
+                        <page string="Locations" name="student_locations" autofocus="autofocus">
+                            <field name="locatio_ids" mode="tree">
+                                <tree editable="bottom">
+                                    <field name="country_id" invisible="1"/>
+                                    <field name="state_id"/>
+                                    <field name="city_id"/>
+                                    <field name="zip"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page name='internal_notes' string="Internal Notes">
+                            <field name="comment" placeholder="Internal notes..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>
