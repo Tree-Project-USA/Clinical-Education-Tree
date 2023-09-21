@@ -18,5 +18,5 @@ class NamaModel(models.Model):
     @api.onchange('first_name', 'last_name')
     def _compute_name(self):
         for rec in self:
-            rec.name = rec.first_name + ', ' + rec.last_name
+            rec.name = rec.first_name if rec.first_name else '' + ', ' + rec.last_name if rec.last_name else ''
     
