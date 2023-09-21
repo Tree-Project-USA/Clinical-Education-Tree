@@ -33,7 +33,7 @@
 
     <record id="cohort_action" model="ir.actions.act_window">
         <field name="type">ir.actions.act_window</field>
-        <field name="name">cohort</field>
+        <field name="name">Placement</field>
         <field name="res_model">cohort</field>
         <field name="view_mode">tree,form</field>
     </record>

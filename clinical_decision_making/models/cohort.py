@@ -226,6 +226,7 @@ class Cohort(models.Model):
         self.price_total = self.quantity * self.price
     
     
+    
     def action_send_email_to_students(self):
         for rec in self:
             print("rec",rec.id)
@@ -235,9 +236,9 @@ class Cohort(models.Model):
                             .sudo()
                             .create(
                                 {
-                                    "subject": _("please confirm"),
+                                    "subject": _("Test Student Upadte Information"),
                                     "email_from": self.env.company.email,
-                                    "body_html": "Dear :- {},<br/>Please confirm <br/><br/>Thank you,<br/>".format(
+                                    "body_html": "Dear :- {},<br/>Update Your Information <br/><br/>Thank you,<br/>".format(
                                         rec.student_id.name
                                     ),
                                     "email_to": rec.student_id.email,
@@ -272,7 +273,18 @@ class CPDMTree(models.Model):
     total_hardships   = fields.Integer(compute='_compute_total_students', string='Total Hardships')
     comment = fields.Html(string='Notes')
     info_ids = fields.One2many('clinic.info.gathering', 'tree_id', string='Clinic Information Gathering')
+
     
+    def open_hardship_button(self):
+        tree_view_id = self.env.ref('clinical_decision_making.cohort_view_tree').id
+        return {
+            "type": "ir.actions.act_window",
+            "name": _("Placement"),
+            "res_model": "cohort",
+            "domain": [['cpdm_tree_id', '=', self.id]],
+            "views": [[tree_view_id, "tree"], [False, "form"]],
+            "context": {'default_cpdm_tree_id': self.id}
+        }
     @api.depends('cohort_ids')
     def _compute_total_students(self):
         for rec in self:
@@ -297,6 +309,8 @@ class CPDMTree(models.Model):
         cpdm_tree_ids.sudo().write({
             "state" : "done"
             })
+    
+    
 
 
 class ClinicInfoGathering(models.Model):
@@ -329,9 +343,9 @@ class ClinicInfoGathering(models.Model):
                             .sudo()
                             .create(
                                 {
-                                    "subject": _("please confirm"),
+                                    "subject": _("Test Request confirm Hardship"),
                                     "email_from": self.env.company.email,
-                                    "body_html": "Dear :- {},<br/>Please confirm <br/><br/>Thank you,<br/>".format(
+                                    "body_html": "Dear :- {},<br/>Test to Click confirm  <br/><br/>Thank you,<br/>".format(
                                         rec.clinc_id.name
                                     ),
                                     "email_to": rec.clinc_id.email,

@@ -13,6 +13,7 @@ class NamaModel(models.Model):
     graduation_date = fields.Date(string='Graduation Date', required=True)
     home_address = fields.Char(string='Home Address')
     setting_ids = fields.Many2many(comodel_name='category.setting', string='Category Setting')
+    country_id = fields.Many2one(comodel_name='res.country', default=lambda self: self.env.company.country_id)
     locatio_ids = fields.One2many(comodel_name='location.setting', inverse_name='student_id', string='Locations')
         
     @api.onchange('first_name', 'last_name')
