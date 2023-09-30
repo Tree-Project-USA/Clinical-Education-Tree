@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <template id="user_profile_templates" name="User Information">
+
+<!-- ================================================================ user_information ===================================================================== -->
+      <t t-call="website.layout">
+        <div class="delegate_profile">
+          <div class="container">
+              <div class="row mt-4">
+                <div class="col-12">
+                  <div class="text-center mb-4 mt-2">
+                    <h3>User Information</h3>
+                  </div>
+                  <div class="text-center">
+                    <img
+                      t-att-src="image_data_uri(partner.image_1920)"
+                      class="img img-fluid rounded-circle o_wblog_author_avatar mr-1"
+                      loading="lazy"
+                      style="width: 12rem; height:12rem;"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="row mt-4 text-center">
+                <div class="col-lg-6 col-12">
+                  <i class="fa fa-user" style="color:#ab8631; font-size:30px;"/>
+                  <span
+                    class="text-center"
+                    style=" border: solid 1px #ab8631;
+                            border-radius:6px;
+                            display:inline-block;
+                            width:27rem;
+                            height: 3rem;
+                            padding-top: 10px;
+                            font-weight: bold;"
+                  >
+                    <div class="row">
+                      <div class="col-12 text-center">
+                        <span t-esc="partner.name"/>
+                      </div>
+                    </div>
+                  </span>
+                </div>
+                <div class="col-lg-6 col-12">
+                  <i class="fa fa-user" style="color:#ab8631; font-size:30px;"/>
+                  <span
+                    class="text-center"
+                    style=" border: solid 1px #ab8631;
+                            border-radius:6px;
+                            display:inline-block;
+                            width:27rem;
+                            height: 3rem;
+                            padding-top: 10px;
+                            font-weight: bold;"
+                  >
+                    <div class="row">
+                      <div class="col-12 text-center">
+                        <span t-esc="partner.first_name"/>
+                      </div>
+                    </div>
+                  </span>
+                </div>
+              </div>
+              <div class="row mt-4 text-center">
+                <div class="col-lg-6 col-12">
+                  <i class="fa fa-user" style="color:#ab8631; font-size:30px;"/>
+                  <span
+                    class="text-center"
+                    style="
+                          border: solid 1px #ab8631;
+                          border-radius:6px;
+                          display:inline-block;
+                          width:27rem;
+                          height: 3rem;
+                          padding-top: 10px;
+                          font-weight: bold;"
+                  >
+                    <div class="row">
+                      <div dir="ltr" class="col-12 text-center">
+                        <span t-esc="partner.last_name"/>
+                      </div>
+                    </div>
+                  </span>
+                </div>
+                <div class="col-lg-6 col-12">
+                  <i class="fa fa-phone" style="color:#ab8631; font-size:30px;"/>
+                  <span
+                    class="text-center"
+                    style="
+                          border: solid 1px #ab8631;
+                          border-radius:6px;
+                          display:inline-block;
+                          width:27rem;
+                          height: 3rem;
+                          padding-top: 10px;
+                          font-weight: bold;"
+                  >
+                    <div class="row">
+                      <div class="col-12 text-center">
+                        <span t-esc="partner.phone"/>
+                      </div>
+                    </div>
+                  </span>
+                </div>
+              </div>
+              <div class="row mt-4 text-center">
+                <div class="col-lg-6 col-12">
+                  <i class="fa fa-envelope" style="color:#ab8631; font-size:30px;"/>
+                  <span
+                    class="text-center"
+                    style="
+                          border: solid 1px #ab8631;
+                          border-radius:6px;
+                          display:inline-block;
+                          width:27rem;
+                          height: 3rem;
+                          padding-top: 10px;
+                          font-weight: bold;"
+                  >
+                    <div class="row">
+                      <div class="col-12 text-center">
+                        <span t-esc="partner.email"/>
+                      </div>
+                    </div>
+                  </span>
+                </div>
+                <div class="col-lg-6 col-12">
+                  <i class="fa fa-map-marker" style="color:#ab8631; font-size:30px;"/>
+                  <span
+                    class="text-center"
+                    style="
+                          border: solid 1px #ab8631;
+                          border-radius:6px;
+                          display:inline-block;
+                          width:27rem;
+                          height: 3rem;
+                          padding-top: 10px;
+                          font-weight: bold;"
+                  >
+                    <div class="row">
+                      <div class="col-12 text-center">
+                        <span t-esc="partner.home_address"/>
+                      </div>
+                    </div>
+                  </span>
+                </div>
+              </div>
+              <div class="row mt-4 mb-4 text-center">
+                <div class="col-12 mr-2">
+                  <a
+                    type="button"
+                    class="btn"
+                    role="button" 
+                    href="/my/account"
+                    style="background-color:  #ab8631; !important; color: #fff"
+                  >
+                    <i class="fa fa-pencil"/> Add Location 
+                  </a>
+                </div>
+              </div>
+          </div>
+        </div>
+      </t>
+  </template>
+</odoo>
