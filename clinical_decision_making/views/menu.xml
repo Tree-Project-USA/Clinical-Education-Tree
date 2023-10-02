@@ -8,7 +8,7 @@
         <field name="res_model">res.partner</field>
         <field name="view_mode">tree,form</field>
         <field name="domain">[('is_student', '=', True)]</field>
-        <field name="context">{'default_is_student': True}</field>
+        <field name="context">{'default_is_student': True, 'can_apply_hardship': True}</field>
     </record>
 
     <record id="student_action_view2" model="ir.actions.act_window.view">

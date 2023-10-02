@@ -16,6 +16,7 @@ class NamaModel(models.Model):
     country_id = fields.Many2one(comodel_name='res.country', default=lambda self: self.env.company.country_id)
     locatio_ids = fields.One2many(comodel_name='location.setting', inverse_name='student_id', string='Locations')
     can_apply_hardship = fields.Boolean(string='Apply Hardship', default=False)
+    is_reach_maximum_zip_code = fields.Boolean(string='Reach Maximum Zip Code', default=False)
     
         
     @api.onchange('first_name', 'last_name')
