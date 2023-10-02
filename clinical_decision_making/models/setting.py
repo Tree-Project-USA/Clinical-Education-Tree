@@ -1,10 +1,125 @@
 # -*- coding: utf-8 -*-
 import requests
 import json
+from collections import defaultdict
 from odoo.exceptions import ValidationError
 from odoo import api, models, fields, _
 
 
+class Archive(models.Model):
+    _name = 'archive'
+    _description = 'Archive Placement'
+    _rec_name = 'student_id'
+    
+    student_id = fields.Many2one(comodel_name='res.partner', string='Student', readonly=True)
+    site_id = fields.Many2one(comodel_name='site', string='Site', readonly=True)
+    tree_id = fields.Many2one(comodel_name='cpdm.tree', string='Clinc Placement Tree', readonly=True)
+    cohort_id = fields.Many2one(comodel_name='cohort', string='Cohort', readonly=True)
+    date = fields.Date(string='Date',default=fields.Date.today(), readonly=True)
+    
+class SiteContractHistory(models.Model):
+    _name = 'site.contract.history'
+    _description = 'Contract history'
+    _order = 'is_under_contract'
+    
+    contract_id = fields.Many2one('site.contract', readonly=True)
+
+    site_id = fields.Many2one('site', string='Site', readonly=True)
+    display_name = fields.Char(compute='_compute_display_name')
+    name = fields.Char('Contract Name', readonly=True)
+    date_start = fields.Date('Start Date', readonly=True)
+    date_end = fields.Date('End Date', readonly=True)
+    is_under_contract = fields.Boolean('Is Currently Under Contract', readonly=True)
+    responsible_id = fields.Many2one('res.users', string='Site Responsible', readonly=True)
+    state = fields.Selection([
+        ('draft', 'New'),
+        ('open', 'Running'),
+        ('close', 'Expired'),
+        ('cancel', 'Cancelled')
+    ], string='Status', readonly=True)
+    company_id = fields.Many2one('res.company', string='Company', readonly=True)
+    company_country_id = fields.Many2one('res.country', string="Company country", related='company_id.country_id', readonly=True)
+    country_code = fields.Char(related='company_country_id.code', depends=['company_country_id'], readonly=True)
+    contract_ids = fields.One2many('site.contract', string='Contracts', compute='_compute_contract_ids', readonly=True, compute_sudo=True)
+    contract_count = fields.Integer(compute='_compute_contract_count', string="# Contracts")
+    under_contract_state = fields.Selection([
+        ('done', 'Under Contract'),
+        ('blocked', 'Not Under Contract')
+    ], string='Contractual Status', compute='_compute_under_contract_state')
+    activity_state = fields.Selection(related='contract_id.activity_state')
+
+    @api.depends('is_under_contract')
+    def _compute_under_contract_state(self):
+        for history in self:
+            history.under_contract_state = 'done' if history.is_under_contract else 'blocked'
+
+    @api.depends('site_id.contract_ids')
+    def _compute_contract_ids(self):
+        sorted_contracts = self.mapped('site_id.contract_ids').sorted('date_start', reverse=True)
+
+        mapped_site_contracts = defaultdict(lambda: self.env['site.contract'])
+        for contract in sorted_contracts:
+            mapped_site_contracts[contract.site_id] |= contract
+
+        for history in self:
+            history.contract_ids = mapped_site_contracts[history.site_id]
+
+    @api.depends('site_id.name')
+    def _compute_display_name(self):
+        for history in self:
+            history.display_name = _("%s's Contracts History", history.site_id.name)
+    
+    @api.depends('contract_ids')
+    def _compute_contract_count(self):
+        for history in self:
+            history.contract_count = len(history.contract_ids)
+            
+    def site_contract_view_form_new_action(self):
+        self.ensure_one()
+        action = self.env['ir.actions.actions']._for_xml_id('clinical_decision_making.action_site_contract')
+        action.update({
+            'context': {'default_site_id': self.site_id.id},
+            'view_mode': 'form',
+            'view_id': self.env.ref('clinical_decision_making.site_contract_view_form').id,
+            'views': [(self.env.ref('clinical_decision_making.site_contract_view_form').id, 'form')],
+        })
+        return action
+    
+
+class SiteContracts(models.Model):
+    _name = 'site.contract'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
+    _description = 'Site Contract'
+    _rec_name = 'site_id'
+    
+    name = fields.Char('Contract Reference', required=True)
+    site_id = fields.Many2one(comodel_name='site', string='Site')
+    date_start = fields.Datetime('Start Date', required=True)
+    date_end = fields.Datetime('End Date', required=True)
+    notes = fields.Html('Notes')
+    state = fields.Selection([
+        ('draft', 'New'),
+        ('open', 'Running'),
+        ('close', 'Expired'),
+        ('cancel', 'Cancelled')
+    ], string='Status', group_expand='_expand_states', copy=False,
+       tracking=True, help='Status of the contract', default='draft')
+    
+    def _expand_states(self, states, domain, order):
+        return [key for key, val in type(self).state.selection]
+    
+    def action_open_contract_form(self):
+        self.ensure_one()
+        action = self.env['ir.actions.actions']._for_xml_id('clinical_decision_making.action_site_contract')
+        action.update({
+            'view_mode': 'form',
+            'view_id': self.env.ref('clinical_decision_making.site_contract_view_form').id,
+            'views': [(self.env.ref('clinical_decision_making.site_contract_view_form').id, 'form')],
+            'res_id': self.id,
+        })
+        return action
+
+    
 class SCCE(models.Model):
     _name = 'scce'
     _description = 'SCCE'
@@ -34,7 +149,10 @@ class Site(models.Model):
     country_id = fields.Many2one(comodel_name='res.country', default=lambda self: self.env.company.country_id, required=True)
     state_id = fields.Many2one(comodel_name='res.country.state', string='State', domain="[('country_id', '=', country_id)]", required=True)
     zip = fields.Char(string='Zip Code', max_length=5, required=True)
-    
+    contract_ids = fields.One2many('site.contract', 'site_id', string='Site Contracts')
+    contract_id = fields.Many2one(
+        'site.contract', string='Current Contract', groups="hr.group_hr_user",
+        domain="[('company_id', '=', company_id), ('site_id', '=', id)]", help='Current contract of the Site')
     
 class CategorySetting(models.Model):
     _name = 'category.setting'
@@ -65,7 +183,7 @@ class LocationSetting(models.Model):
                 for location_id in location_ids:
                     distance = self.get_distance(rec.zip, location_id.zip)
                     if distance and distance < float(max_distance_mel):
-                        raise ValidationError(_('The Distance Between Locations (%s) and (%s) is too small that the distance required to (%s)'% (rec.zip , location_id.zip, max_distance_mel)))
+                        raise ValidationError(_('The Distance Between zip codes (%s) and (%s) is too small that the distance required to (%s) miles'% (rec.zip , location_id.zip, max_distance_mel)))
     
     def get_distance(self, zip_one, zip_two):
         token = self.env['ir.config_parameter'].sudo(

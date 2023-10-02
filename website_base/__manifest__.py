@@ -8,7 +8,6 @@
     # any module necessary for this one to work correctly
     "depends": [
         "website",
-        "web_ar",
     ],
     # always loaded
     "data": [

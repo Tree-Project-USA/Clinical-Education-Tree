@@ -13,6 +13,7 @@
                   </div>
                   <div class="text-center">
                     <img
+                      t-if="partner.image_1920"
                       t-att-src="image_data_uri(partner.image_1920)"
                       class="img img-fluid rounded-circle o_wblog_author_avatar mr-1"
                       loading="lazy"

@@ -15,6 +15,8 @@ class NamaModel(models.Model):
     setting_ids = fields.Many2many(comodel_name='category.setting', string='Category Setting')
     country_id = fields.Many2one(comodel_name='res.country', default=lambda self: self.env.company.country_id)
     locatio_ids = fields.One2many(comodel_name='location.setting', inverse_name='student_id', string='Locations')
+    can_apply_hardship = fields.Boolean(string='Apply Hardship', default=False)
+    
         
     @api.onchange('first_name', 'last_name')
     def _compute_name(self):

@@ -8,3 +8,9 @@ access_category_setting,category.setting,model_category_setting,,1,1,1,1
 access_location_setting,location.setting,model_location_setting,,1,1,1,1
 access_placement_setting,placement.setting,model_placement_setting,,1,1,1,1
 access_clinic_info_gathering,clinic.info.gathering,model_clinic_info_gathering,,1,1,1,1
+
+access_site_contract_history,site.contract.history,model_site_contract_history,,1,1,1,1
+access_site_contract,site.contract,model_site_contract,,1,1,1,1
+access_archive,archive,model_archive,,1,1,1,1
+
+access_hardship_request,hardship.request,model_hardship_request,,1,1,1,1

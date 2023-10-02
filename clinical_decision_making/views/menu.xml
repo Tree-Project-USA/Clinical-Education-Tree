@@ -69,6 +69,40 @@
         <field name="view_mode">tree,form</field>
     </record>
 
+    <record id="archive_action" model="ir.actions.act_window">
+        <field name="type">ir.actions.act_window</field>
+        <field name="name">Archive</field>
+        <field name="res_model">archive</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="hardship_request_action" model="ir.actions.act_window">
+        <field name="type">ir.actions.act_window</field>
+        <field name="name">Hardship Request</field>
+        <field name="res_model">hardship.request</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- <record id="action_site_contract" model="ir.actions.act_window">
+        <field name="type">ir.actions.act_window</field>
+        <field name="name">Contracts</field>
+        <field name="res_model">site.contract.history</field>
+        <field name="view_mode">tree,form</field>
+    </record> -->
+
+        <record id="action_site_contract" model="ir.actions.act_window">
+            <field name="name">Contracts</field>
+            <field name="res_model">site.contract.history</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('site_id', '!=', False)]</field>
+            <field name="context">{'search_default_group_by_state': 1}</field>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Create a new contract
+              </p>
+            </field>
+        </record>
+
     <menuitem
         id="cpdm_tree_menu"
         name="Decisions Making Tree"
@@ -89,6 +123,12 @@
         action="student_action"
         parent="menu_root_cpdm"
         sequence="3"/>
+    <menuitem
+        id="hardship_request_menu"
+        name="Students"
+        action="hardship_request_action"
+        parent="menu_root_cpdm"
+        sequence="4"/>
     
     <menuitem
         id="setting_menu"
@@ -119,6 +159,26 @@
         name="Locations"
         action="location_setting_action"
         parent="setting_menu"
+        sequence="4"/>
+
+    <menuitem
+        id="archive_menu"
+        name="Archive Placements"
+        action="archive_action"
+        parent="setting_menu"
+        sequence="4"/>
+    <menuitem
+        id="site_contract_menu"
+        name="Contract Details"
+        action="action_site_contract"
+        parent="setting_menu"
+        sequence="5"/>
+
+    <menuitem
+        id="hardship_request_menu"
+        name="Hardship"
+        action="hardship_request_action"
+        parent="menu_root_cpdm"
         sequence="4"/>
     <!-- TODO Improve this for better performance
     <menuitem 

@@ -7,13 +7,15 @@
     'version': '16.0',
     'description': "",
     'license': 'LGPL-3',
-    'depends': ['base', 'base_address_extended'],
+    'depends': ['base', 'base_address_extended', 'mail'],
     'data': [
         'security/ir.model.access.csv',
         'data/cron_servises.xml',
         'views/setting_views.xml',
         'views/cohort_views.xml',
         'views/res_partner_views.xml',
+        'views/site_contract_views.xml',
+        'views/hardship_request_views.xml',
         'views/res_config_views.xml',
         'views/menu.xml',
 

@@ -229,7 +229,6 @@ class Cohort(models.Model):
     
     def action_send_email_to_students(self):
         for rec in self:
-            print("rec",rec.id)
             if rec.student_id.email:
                 mail = (
                             self.env["mail.mail"]

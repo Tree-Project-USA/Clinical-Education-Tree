@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- archive Views -->
+    <record id="archive_view_tree" model="ir.ui.view">
+        <field name="name">archive.view.tree</field>
+        <field name="model">archive</field>
+        <field name="mode">primary</field>
+        <field name="priority">0</field>
+        <field name="arch" type="xml">
+            <tree string="Students Placement Archive">
+                <field name="student_id"/>
+                <field name="site_id"/>
+                <field name="tree_id"/>
+                <field name="cohort_id"/>
+                <field name="date"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="archive_view_form" model="ir.ui.view">
+        <field name="name">archive.view.form</field>
+        <field name="model">archive</field>
+        <field name="mode">primary</field>
+        <field name="priority">0</field>
+        <field name="arch" type="xml">
+            <form string="Student Placement Archive">
+                <sheet>
+                    <div class="oe_button_box" name="button_box"/>
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger"/>
+                    <group>
+                        <group>
+                            <field name="student_id"/>
+                            <field name="site_id"/>
+                            <field name="tree_id"/>
+                        </group>
+                        <group>
+                            <field name="cohort_id"/>
+                            <field name="date"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>
