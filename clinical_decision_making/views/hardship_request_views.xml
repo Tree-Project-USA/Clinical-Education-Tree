@@ -25,8 +25,8 @@
             <form string="Request">
                 <header>
                     <button name="action_confirm" string="Confirm" type="object" class="oe_highlight" attrs="{'invisible': ['|',('state', '=', 'confirm'), ('state', '=', 'cancel')]}" data-hotkey="c"/>
-                    <button name="action_update" string="Update Information" type="object" class="btn btn-warning" attrs="{'invisible': ['|', '|', ('state', '=', 'draft'), ('state', '=', 'confirm'), ('state', '=', 'cancel')]}" data-hotkey="u"/>
-                    <button name="action_cancel" string="Cancel" type="object" class="btn btn-danger" attrs="{'invisible': [('state', '!=', 'cancel')]}" data-hotkey="c"/>
+                    <button name="action_update" string="Update Information" type="object" class="btn btn-warning" attrs="{'invisible': ['|',('state', '=', 'confirm'), ('state', '=', 'cancel')]}" data-hotkey="u"/>
+                    <button name="action_cancel" string="Cancel" type="object" class="btn btn-danger" attrs="{'invisible': ['|',('state', '=', 'confirm'), ('state', '=', 'cancel')]}" data-hotkey="c"/>
                     <field name="state" widget="statusbar" readonly="1"/>
                 </header>
                 <sheet>
