@@ -98,7 +98,7 @@
                 <field name="site_id"/>
                 <field name="date_start"/>
                 <field name="date_end"/>
-                <field name="state"/>
+                <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-warning="state == 'close'" decoration-success="state == 'open'"/>
             </tree>
         </field>
     </record>
@@ -109,7 +109,7 @@
         <field name="mode">primary</field>
         <field name="priority">0</field>
         <field name="arch" type="xml">
-            <form string="Student Placement site.contract">
+            <form string="Current Contract">
                 <header>
                     <field name="state" widget="statusbar" options="{'clickable': '1'}"/>
                 </header>
@@ -133,6 +133,14 @@
                         <group>
                         </group>
                     </group>
+                    <notebook>
+                        <page string="Contract Details" name="other">
+                            <group><field name="contract_attachment" required="1"/></group>
+                            <group name="notes_group" string="Notes">
+                                <field name="notes" nolabel="1" colspan="2" placeholder="Type in notes about this contract..."/>
+                            </group>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>

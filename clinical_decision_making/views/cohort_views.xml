@@ -7,7 +7,7 @@
         <field name="arch" type="xml">
             <tree editable="bottom" js_class="o_fields_col">
                 <header>
-                    <button name="action_send_email_to_students" string="Send Email" type="object"/>
+                    <button name="action_send_email_to_students" string="Send to Update Data" type="object"/>
                 </header>
                 <field name="cpdm_tree_id" invisible="1"/>
                 <!-- Student Information -->

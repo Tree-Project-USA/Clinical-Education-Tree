@@ -35,15 +35,15 @@
                     <widget name="web_ribbon" title="Required Update" bg_color="bg-warning" attrs="{'invisible': [('state', '!=', 'update')]}"/>
                     <widget name="web_ribbon" title="Validated" bg_color="bg-success" attrs="{'invisible': [('state', '!=', 'confirm')]}"/>
                     <group>
-                        <field name="student_id"/>
+                        <field name="student_id" attrs="{'readonly': [('state', 'in', ('cancel', 'confirm'))]}"/>
                         <field name="create_date"/>
                     </group>
                 <notebook>
                     <page string="Attachment" name="attachment_ids">
-                        <field name="attachment_ids" widget="many2many_binary" string="Attach a file" nolabel="1" colspan="2"/>
+                        <field name="attachment_ids" widget="many2many_binary" string="Attach a file" nolabel="1" colspan="2" attrs="{'readonly': [('state', 'in', ('cancel', 'confirm'))]}"/>
                     </page>
                     <page string="Notes" name="notes">
-                        <field name="note"/>
+                        <field name="note" attrs="{'readonly': [('state', 'in', ('cancel', 'confirm'))]}"/>
                     </page>
                 </notebook>
                 </sheet>
