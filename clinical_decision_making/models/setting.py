@@ -187,10 +187,10 @@ class Site(models.Model):
     setting_ids = fields.Many2many(comodel_name='category.setting', string='Category Setting')
     address = fields.Char(string='Address')
     email = fields.Char(string='Email Address')
-    city_id = fields.Many2one(comodel_name='res.city', string='City', required=True)
-    country_id = fields.Many2one(comodel_name='res.country', default=lambda self: self.env.company.country_id, required=True)
-    state_id = fields.Many2one(comodel_name='res.country.state', string='State', domain="[('country_id', '=', country_id)]", required=True)
-    zip = fields.Char(string='Zip Code', max_length=5, required=True)
+    city_id = fields.Many2one(comodel_name='res.city', string='City')
+    country_id = fields.Many2one(comodel_name='res.country', default=lambda self: self.env.company.country_id)
+    state_id = fields.Many2one(comodel_name='res.country.state', string='State', domain="[('country_id', '=', country_id)]")
+    zip = fields.Char(string='Zip Code', max_length=5)
     contract_ids = fields.One2many('site.contract', 'site_id', string='Site Contracts')
     contract_id = fields.Many2one(
         'site.contract', string='Current Contract',
