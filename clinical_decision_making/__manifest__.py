@@ -16,6 +16,7 @@
         'views/res_partner_views.xml',
         'views/site_contract_views.xml',
         'views/hardship_request_views.xml',
+        'views/archive_views.xml',
         'views/res_config_views.xml',
         'views/menu.xml',
 

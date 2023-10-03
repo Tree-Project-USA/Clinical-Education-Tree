@@ -49,6 +49,7 @@ class HardshipRequest(models.Model):
                     )
                     )
         mail.send()
+        self.student_id.can_apply_hardship = False
         
     def action_cancel(self):
         self.write({
@@ -69,6 +70,7 @@ class HardshipRequest(models.Model):
                     )
                     )
         mail.send()
+        self.student_id.can_apply_hardship = True
         
     def action_update(self):
         self.write({
@@ -89,3 +91,4 @@ class HardshipRequest(models.Model):
                     )
                     )
         mail.send()
+        self.student_id.can_apply_hardship = True

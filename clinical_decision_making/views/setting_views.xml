@@ -51,9 +51,9 @@
         <field name="model">site</field>
         <field name="arch" type="xml">
             <form>
+                <field name="contract_attachment" invisible="1"/>
                 <sheet>
-                    <group>
-                    <!-- <div name="button_box" position="inside">
+                    <div name="button_box" position="inside">
                         <field name="contract_warning" invisible="1"/>
                         <button name="action_open_contract_history"
                             class="oe_stat_button"
@@ -83,7 +83,17 @@
                                 </span>
                             </div>
                         </button>
-                    </div> -->
+                        <button
+                            name="print_report"
+                            type="object"
+                            string="Contact Attachment File"
+                            class="oe_highlight"
+                            icon="fa-download"
+                            attrs="{'invisible' : [('contract_attachment', '=', False)]}"
+                            >
+                        </button>
+                    </div>
+                    <group>
                         <label for="name"/>
                         <field name="name"/>
                         <group>
@@ -110,6 +120,7 @@
         <field name="arch" type="xml">
             <tree editable="bottom">
                 <field name="name"/>
+                <field name="code"/>
                 <field name="color" widget="color_picker"/>
             </tree>
         </field>
@@ -122,6 +133,7 @@
                 <sheet>
                     <group>
                         <field name="name"/>
+                        <field name="code"/>
                         <field name="color" widget="color_picker"/>
                     </group>
                 </sheet>

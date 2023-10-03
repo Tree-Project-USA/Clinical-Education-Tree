@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+
+from werkzeug.urls import url_encode
+import werkzeug
+from odoo.http import request
 import requests
 import json
 from collections import defaultdict
@@ -93,6 +97,7 @@ class SiteContracts(models.Model):
     _rec_name = 'site_id'
     
     name = fields.Char('Contract Reference', required=True)
+    contract_attachment = fields.Binary(string='Contract Attachment', attachment=True)
     site_id = fields.Many2one(comodel_name='site', string='Site')
     date_start = fields.Datetime('Start Date', required=True)
     date_end = fields.Datetime('End Date', required=True)
@@ -118,6 +123,43 @@ class SiteContracts(models.Model):
             'res_id': self.id,
         })
         return action
+
+
+    def _assign_open_contract(self):
+        for contract in self:
+            contract.site_id.sudo().write({'contract_id': contract.id})
+    @api.model_create_multi
+    def create(self, vals_list):
+        contracts = super(SiteContracts, self).create(vals_list)
+        contracts.filtered(lambda c: c.state == 'open')._assign_open_contract()
+        return contracts
+         
+    def write(self, vals):
+        old_state = {c.id: c.state for c in self}
+        res = super(SiteContracts, self).write(vals)
+        new_state = {c.id: c.state for c in self}
+        if vals.get('state') == 'open':
+            self._assign_open_contract()
+        today = fields.Date.today()
+        for contract in self:
+            if contract == contract.site_id.contract_id \
+                and old_state[contract.id] == 'open' \
+                and new_state[contract.id] != 'open':
+                running_contract = self.env['site.contract'].search([
+                    ('site_id', '=', contract.site_id.id),
+                    ('state', '=', 'open'),
+                ]).filtered(lambda c: c.date_start <= today and (not c.date_end or c.date_end >= today))
+                if running_contract:
+                    contract.site_id.contract_id = running_contract[0]
+        if vals.get('state') == 'close':
+            for contract in self.filtered(lambda c: not c.date_end):
+                contract.date_end = max(date.today(), contract.date_start)
+        date_end = vals.get('date_end')
+        if self.env.context.get('close_contract', True) and date_end and fields.Date.from_string(date_end) < fields.Date.context_today(self):
+            for contract in self.filtered(lambda c: c.state == 'open'):
+                contract.state = 'close'
+
+        return res
 
     
 class SCCE(models.Model):
@@ -151,15 +193,82 @@ class Site(models.Model):
     zip = fields.Char(string='Zip Code', max_length=5, required=True)
     contract_ids = fields.One2many('site.contract', 'site_id', string='Site Contracts')
     contract_id = fields.Many2one(
-        'site.contract', string='Current Contract', groups="hr.group_hr_user",
+        'site.contract', string='Current Contract',
         domain="[('company_id', '=', company_id), ('site_id', '=', id)]", help='Current contract of the Site')
+
+    contract_attachment = fields.Binary(string="Contract Attachment", store=True, compute='_compute_contract_warning')
+    contract_warning = fields.Boolean(string='Contract Warning', store=True, compute='_compute_contract_warning')
+    first_contract_date = fields.Date(compute='_compute_first_contract_date', store=True)
+    contracts_count = fields.Integer(compute='_compute_contracts_count', string='Contract Count')
     
+        
+    @api.depends('contract_id', 'contract_id.state')
+    def _compute_contract_warning(self):
+        for site in self:
+            site.contract_warning = not site.contract_id or site.contract_id.state != 'open'
+            site.contract_attachment = site.contract_id.contract_attachment
+            
+    @api.depends('contract_ids.state', 'contract_ids.date_start')
+    def _compute_first_contract_date(self):
+        for site in self:
+            site.first_contract_date = site._get_first_contract_date()
+            
+    def _get_first_contract_date(self, no_gap=True):
+        self.ensure_one()
+        def remove_gap(contracts):
+            if not contracts:
+                return self.env['site.contract']
+            if len(contracts) == 1:
+                return contracts
+            current_contract = contracts[0]
+            older_contracts = contracts[1:]
+            current_date = current_contract.date_start
+            for i, other_contract in enumerate(older_contracts):
+                gap = (current_date - (other_contract.date_end or date(2100, 1, 1))).days
+                current_date = other_contract.date_start
+                if gap >= 4:
+                    return older_contracts[0:i] + current_contract
+            return older_contracts + current_contract
+
+        contracts = self._get_first_contracts().sorted('date_start', reverse=True)
+        if no_gap:
+            contracts = remove_gap(contracts)
+        return min(contracts.mapped('date_start')) if contracts else False
+    
+    def _get_first_contracts(self):
+        self.ensure_one()
+        contracts = self.sudo().contract_ids.filtered(lambda c: c.state != 'cancel')
+        if self.env.context.get('before_date'):
+            contracts = contracts.filtered(lambda c: c.date_start <= self.env.context['before_date'])
+        return contracts
+    
+    def _compute_contracts_count(self):
+        contract_histories = self.env['site.contract.history'].sudo().search([('site_id', 'in', self.ids)])
+        for site in self:
+            contract_history = len(contract_histories.filtered(lambda ch: ch.site_id == site))
+            site.contracts_count = contract_history
+            
+    def action_open_contract_history(self):
+        self.ensure_one()
+        action = self.env["ir.actions.actions"]._for_xml_id('clinical_decision_making.site_contract_history_view_form_action')
+        action['site_id'] = self.id
+        action['context'] = {'default_site_id':  self.id}
+        return action
+    
+    def print_report(self):
+        return {
+                    'type' : 'ir.actions.act_url',
+                    'url': '/contract/attachment/%s'%(self.id),
+                    'target': 'new',
+        }
+
 class CategorySetting(models.Model):
     _name = 'category.setting'
     _description = 'Category Setting'
     _rec_name = 'name'
     
     name = fields.Char(string='Name', required=True)
+    code = fields.Selection(string='Code', selection=[('ip', 'IP'), ('op', 'OP')], default='op', required=True)
     color = fields.Integer('Color Index')
 
 class LocationSetting(models.Model):

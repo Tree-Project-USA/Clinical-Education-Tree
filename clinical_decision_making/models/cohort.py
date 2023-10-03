@@ -90,9 +90,7 @@ class Cohort(models.Model):
     pta_supervision = fields.Selection([('not_met', 'Not Met'), ('met', 'Met'),], string='PTA Supervision')
     ipe = fields.Selection([('not_met', 'Not Met'), ('met', 'Met'),], string='IPE')
    
-    
-    field_name = fields.Char(compute='_compute_cat_one_requirment', string='field_name')
-    
+        
     @api.depends('stu_setting_one_id', 'stu_setting_two_id', 'stu_setting_three_id', 'ice_setting_id', 'tce1_setting_id', 'tce2_setting_id')
     def _compute_cat_one_requirment(self):
         for rec in self:
