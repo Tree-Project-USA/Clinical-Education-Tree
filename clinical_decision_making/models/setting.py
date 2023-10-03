@@ -305,6 +305,18 @@ class LocationSetting(models.Model):
                 return res.json().get('distance')
         else:
             return False
+        
+    def get_locstion_infor(self,zip):
+        token = self.env['ir.config_parameter'].sudo(
+        ).get_param('zip_code_token')
+        if token:
+            token= 'DemoOnly00gH8wbb344Ca9wRlS2B9Btt3Nqg7g6GkvvSswAhCSX2jtqxzmK8kWuM'
+            url = "https://www.zipcodeapi.com/rest/%s/info.json/%s/degrees" % (token, zip)
+            res = requests.get(url)
+            if res.status_code == 200:
+                return res.json()
+        else:
+            return False
     
 class Placement(models.Model):
     _name = 'placement.setting'

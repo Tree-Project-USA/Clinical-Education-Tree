@@ -1,7 +1,30 @@
 .form-control {
     border: 1px solid #ab8631 !important;
 }
+
 .form-control:focus {
     border-color: #ab8631 !important;
+    border-bottom: 1px solid #b5b5b5 !important;
 }
 
+.form-input {
+    color: #3c3c3c;
+    border: 0 !important;
+    border-bottom: 1px solid #b5b5b5 !important;
+    border-radius: 0;
+}
+
+.form-input:focus {
+    box-shadow: none;
+}
+
+#bk_n_res_loader {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: url(/website_base/static/src/img/bk_loader.gif) center no-repeat rgba(255, 255, 255, 0.5);
+    text-shadow: 0 1px 1px white;
+}

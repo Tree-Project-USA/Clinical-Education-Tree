@@ -30,7 +30,7 @@ class CustomerPortals(http.Controller):
             }
         )
         partner_id.sudo().write({
-            "can_apply_hardship": False,
+            "can_apply_hardship": True,
         })
         return request.redirect("/success/hardship/request")
     

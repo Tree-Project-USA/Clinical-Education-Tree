@@ -10,7 +10,7 @@
                 href="/hardship/request" 
                 role="menuitem" 
                 class="dropdown-item"
-                t-if="res_partner_vals.can_apply_hardship == True"
+                t-if="res_partner_vals.can_apply_hardship == False"
               >
               Hardship Request
               </a>
