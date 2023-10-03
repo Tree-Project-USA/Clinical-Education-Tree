@@ -16,13 +16,19 @@
         "views/my_account_templates.xml",
         "views/profle_template.xml",
         "views/locations_students_templates.xml",
+        "views/index.xml",
+        "views/hardship_request_remplates.xml",
+        "views/success_hardship_request_templates.xml",
+        "views/locations_students_info_templates.xml",
 
     ],
     # only loaded in demonstration mode
     "demo": [],
     "assets": {
         "web.assets_frontend": [
+            "website_base/static/src/css/profile_user.css",
             "website_base/static/src/js/location_student.js",
+            "website_base/static/src/js/file.js",
         ],
     },
     "installable": True,

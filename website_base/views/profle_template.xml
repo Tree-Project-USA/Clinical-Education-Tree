@@ -19,136 +19,116 @@
                       loading="lazy"
                       style="width: 12rem; height:12rem;"
                     />
+                    <img
+                      t-else=""
+                      src="/website_base/static/src/img/blank-profile-picture.jpg"
+                      class="img img-fluid rounded-circle o_wblog_author_avatar mr-1"
+                      loading="lazy"
+                      style="width: 12rem; height:12rem;"
+                  />
                   </div>
                 </div>
               </div>
-              <div class="row mt-4 text-center">
+              <div class="row mt-4">
                 <div class="col-lg-6 col-12">
-                  <i class="fa fa-user" style="color:#ab8631; font-size:30px;"/>
-                  <span
-                    class="text-center"
-                    style=" border: solid 1px #ab8631;
-                            border-radius:6px;
-                            display:inline-block;
-                            width:27rem;
-                            height: 3rem;
-                            padding-top: 10px;
-                            font-weight: bold;"
-                  >
-                    <div class="row">
-                      <div class="col-12 text-center">
-                        <span t-esc="partner.name"/>
-                      </div>
+                    <label for="name">Name</label>
+                    <div class="form-group">
+                        <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        class="form-control"
+                        required="required"
+                        placeholder="name"
+                        readonly="1"
+                        t-att-value="partner.name"
+                        />
                     </div>
-                  </span>
                 </div>
                 <div class="col-lg-6 col-12">
-                  <i class="fa fa-user" style="color:#ab8631; font-size:30px;"/>
-                  <span
-                    class="text-center"
-                    style=" border: solid 1px #ab8631;
-                            border-radius:6px;
-                            display:inline-block;
-                            width:27rem;
-                            height: 3rem;
-                            padding-top: 10px;
-                            font-weight: bold;"
-                  >
-                    <div class="row">
-                      <div class="col-12 text-center">
-                        <span t-esc="partner.first_name"/>
-                      </div>
+                    <label for="first_name">First name</label>
+                    <div class="form-group">
+                        <input
+                        type="text"
+                        id="first_name"
+                        name="first_name"
+                        class="form-control"
+                        required="required"
+                        placeholder="first_name"
+                        readonly="1"
+                        t-att-value="partner.first_name"
+                        />
                     </div>
-                  </span>
                 </div>
               </div>
-              <div class="row mt-4 text-center">
+              <div class="row mt-4">
                 <div class="col-lg-6 col-12">
-                  <i class="fa fa-user" style="color:#ab8631; font-size:30px;"/>
-                  <span
-                    class="text-center"
-                    style="
-                          border: solid 1px #ab8631;
-                          border-radius:6px;
-                          display:inline-block;
-                          width:27rem;
-                          height: 3rem;
-                          padding-top: 10px;
-                          font-weight: bold;"
-                  >
-                    <div class="row">
-                      <div dir="ltr" class="col-12 text-center">
-                        <span t-esc="partner.last_name"/>
-                      </div>
-                    </div>
-                  </span>
+                  <label for="last_name">Last name</label>
+                  <div class="form-group">
+                      <input
+                      type="text"
+                      id="last_name"
+                      name="last_name"
+                      required="required"
+                      class="form-control"
+                      placeholder="last_name"
+                      readonly="1"
+                      t-att-value="partner.last_name"
+                      />
+                  </div>
                 </div>
                 <div class="col-lg-6 col-12">
-                  <i class="fa fa-phone" style="color:#ab8631; font-size:30px;"/>
-                  <span
-                    class="text-center"
-                    style="
-                          border: solid 1px #ab8631;
-                          border-radius:6px;
-                          display:inline-block;
-                          width:27rem;
-                          height: 3rem;
-                          padding-top: 10px;
-                          font-weight: bold;"
-                  >
-                    <div class="row">
-                      <div class="col-12 text-center">
-                        <span t-esc="partner.phone"/>
-                      </div>
-                    </div>
-                  </span>
+                  <label for="phone">Phone</label>
+                  <div class="form-group">
+                      <input
+                      type="text"
+                      id="phone"
+                      name="phone"
+                      class="form-control"
+                      required="required"
+                      placeholder="phone"
+                      readonly="1"
+                      t-att-value="partner.phone"
+                      />
+                  </div>
                 </div>
               </div>
-              <div class="row mt-4 text-center">
+              <div class="row mt-4">
                 <div class="col-lg-6 col-12">
-                  <i class="fa fa-envelope" style="color:#ab8631; font-size:30px;"/>
-                  <span
-                    class="text-center"
-                    style="
-                          border: solid 1px #ab8631;
-                          border-radius:6px;
-                          display:inline-block;
-                          width:27rem;
-                          height: 3rem;
-                          padding-top: 10px;
-                          font-weight: bold;"
-                  >
-                    <div class="row">
-                      <div class="col-12 text-center">
-                        <span t-esc="partner.email"/>
-                      </div>
-                    </div>
-                  </span>
+                  <label for="email">Email</label>
+                  <div class="form-group">
+                      <input
+                      type="text"
+                      id="email"
+                      name="email"
+                      class="form-control"
+                      required="required"
+                      placeholder="email"
+                      readonly="1"
+                      t-att-value="partner.email"
+                      />
+                  </div>
                 </div>
                 <div class="col-lg-6 col-12">
-                  <i class="fa fa-map-marker" style="color:#ab8631; font-size:30px;"/>
-                  <span
-                    class="text-center"
-                    style="
-                          border: solid 1px #ab8631;
-                          border-radius:6px;
-                          display:inline-block;
-                          width:27rem;
-                          height: 3rem;
-                          padding-top: 10px;
-                          font-weight: bold;"
-                  >
-                    <div class="row">
-                      <div class="col-12 text-center">
-                        <span t-esc="partner.home_address"/>
-                      </div>
-                    </div>
-                  </span>
+                  <label for="home_address">Home address</label>
+                  <div class="form-group">
+                      <input
+                      type="text"
+                      id="home_address"
+                      name="home_address"
+                      class="form-control"
+                      required="required"
+                      placeholder="home_address"
+                      readonly="1"
+                      t-att-value="partner.home_address"
+                      />
+                  </div>
                 </div>
               </div>
               <div class="row mt-4 mb-4 text-center">
                 <div class="col-12 mr-2">
                   <a
+                    t-if="partner.is_reach_maximum_zip_code == False"
                     type="button"
                     class="btn"
                     role="button" 
@@ -156,6 +136,16 @@
                     style="background-color:  #ab8631; !important; color: #fff"
                   >
                     <i class="fa fa-pencil"/> Add Location 
+                  </a>
+                  <a
+                    t-if="partner.is_reach_maximum_zip_code == True"
+                    type="button"
+                    class="btn"
+                    role="button" 
+                    href="/info/hardship/request"
+                    style="background-color:  #ab8631; !important; color: #fff"
+                  >
+                    Show your Location 
                   </a>
                 </div>
               </div>
