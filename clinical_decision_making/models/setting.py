@@ -291,7 +291,7 @@ class LocationSetting(models.Model):
                 location_ids = self.env['location.setting'].search([('student_id', '=', rec.student_id.id), ('id', '!=', rec.id)])
                 for location_id in location_ids:
                     distance = self.get_distance(rec.zip, location_id.zip)
-                    if distance and distance < float(max_distance_mel):
+                    if distance and distance <= float(max_distance_mel):
                         raise ValidationError(_('The Distance Between zip codes (%s) and (%s) is too small that the distance required to (%s) miles'% (rec.zip , location_id.zip, max_distance_mel)))
     
     def get_distance(self, zip_one, zip_two):
