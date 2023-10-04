@@ -9,6 +9,12 @@
                             <t t-esc="error" />
                         </strong>
                     </div>
+                    <!-- <div class="alert alert-danger w-10 mx-auto text-center d-none" id="zip_code_error" role="alert">
+                        <strong class=""/>
+                    </div> -->
+                    <div class="row text-center" style="padding: 0 15px;margin-bottom: 7px;">
+                        <strong class="zip_code_error"/>
+                    </div>
                     <div class="container">
                         <div  id="bk_n_res_loader" style="display:none;"/>
                         <form method="post" action="/add/location">
@@ -68,7 +74,7 @@
                                                                     </td>
                                                                     <td>
                                                                         <div class="form-group">
-                                                                            <input type="text" id="state_id" name="state_id"  class="form-control form-input" t-att-value="val['state_id'] if data_line_ids else ' ' " />
+                                                                            <input type="text" id="state_id" name="state_id" readonly="readonly"  required="required"  class="form-control form-input" t-att-value="val['state_id'] if data_line_ids else ' ' " />
                                                                             <!-- <input type="text" id="zip" name="zip" required="required" maxlength="9" class="form-control form-input" t-att-value="val['zip'] if data_line_ids else '122'" /> -->
 
                                                                             <!-- <select name="state_id" id="state_id" class="form-control" t-att-value="partner.state_id">
@@ -82,7 +88,7 @@
                                                                     </td>
                                                                     <td>
                                                                         <div class="form-group">
-                                                                            <input type="text" id="city_id" name="city_id"  maxlength="9" class="form-control form-input" t-att-value="val['city_id'] if data_line_ids else '' " />
+                                                                            <input type="text" id="city_id" name="city_id" required="required" readonly="readonly" class="form-control form-input" t-att-value="val['city_id'] if data_line_ids else '' " />
 
                                                                             <!-- <select name="city_id" id="city_id" class="form-control" t-att-value="partner.city_id">
                                                                                 <t t-foreach="citys" t-as="city">

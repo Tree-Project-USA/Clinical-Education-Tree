@@ -1,4 +1,5 @@
 import base64
+import requests
 from datetime import datetime
 import json
 from odoo import _, http
@@ -107,5 +108,24 @@ class CustomerPortals(CustomerPortal):
         print(value)
         return request.render("website_base.locations_students_template", value)
     
+    @http.route(['/get/locstion/infor'], type='json', auth="public", methods=['POST'], website=True)
+    def get_locstion_infor(self,**post):
+        print('zip')
+        print('zip')
+        print('zip')
+        print('zip')
+        zip = post.get('post')
+        token = self.env['ir.config_parameter'].sudo(
+        ).get_param('zip_code_token')
+        if token:
+            token= 'DemoOnly00gH8wbb344Ca9wRlS2B9Btt3Nqg7g6GkvvSswAhCSX2jtqxzmK8kWuM'
+            url = "https://www.zipcodeapi.com/rest/%s/info.json/%s/degrees" % (token, zip)
+            res = requests.get(url)
+            if res.status_code == 200:
+                return res.json()
+        else:
+            return False
+
+
     
     

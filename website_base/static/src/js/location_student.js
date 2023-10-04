@@ -14,61 +14,116 @@ odoo.define('website_base.location_student', function(require) {
             'click .add_total_project': '_onClickAdd_total_project',
             'click .remove_line': '_onClickRemove_line',
             'click .custom_create': '_onClickSubmit',
-            // 'change input[name="zip"]': "_onZipCodeChanges",
+            'change input[name="zip"]': "_onZipCodeChanges",
         },
 
         // _.each(rows, function(row) {
 
         // }).
 
-        // _onZipCodeChanges: function() {
-        //     var self = this
-        //     console.log('============')
-        //     var aaa = $('.total_project_costs > tbody > tr.project_cost_line div > input[name="zip"]');
-        //     var State = $('.total_project_costs > tbody > tr.project_cost_line div > input[name="state"]');
-        //     var City = $('.total_project_costs > tbody > tr.project_cost_line div > input[name="city"]');
-        //     var bk_loader = $('#bk_n_res_loader');
-        //     bk_loader.show();
-        //     _.each(aaa, function(value, index) {
-        //             console.log('2222222222222222', index, value)
-        //             if (index) {
+        _onZipCodeChanges: function() {
+            var self = this
+            console.log('============')
+            var aaa = $('.total_project_costs > tbody > tr.project_cost_line div > input[name="zip"]');
+            var State = $('.total_project_costs > tbody > tr.project_cost_line div > input[name="state_id"]');
+            var City = $('.total_project_costs > tbody > tr.project_cost_line div > input[name="city_id"]');
+            var zip_code_error = $('.zip_code_error');
+            var bk_loader = $('#bk_n_res_loader');
+            _.each(aaa, function(value, index) {
+                    //         if (index) {
+                    // bk_loader.show();
 
-        //                 aaa[index].onblur = function() {
-        //                         self._rpc({
-        //                             model: 'location.setting',
-        //                             method: 'get_locstion_infor',
-        //                             args: [, this.value]
-        //                         }).then(function(data) {
-        //                             console.log('>>>>>>>>>>>>>>>', data)
-        //                             if (data) {
+                    aaa[index].onblur = function() {
+                        if (this.value) {
 
-        //                                 console.log('>>>>>>>>>>>>>>>', State[index].value)
-        //                                 console.log('>>>>>>>>>>>>>>>', City[index])
-        //                                 console.log('>>>>>>>>>>>>>>>', data)
-        //                                 State[index].value = data['state']
-        //                                 City[index].value = data['city']
-        //                                 bk_loader.hide();
-        //                             }
-        //                             // _.each(sectors, function(sector) {
-        //                             // 	$(sector_id).append($('<option>', {
-        //                             // 		value: sector.id,
-        //                             // 		text: sector.name,
-        //                             // 	}));
+                            console.log('2222222222222222', index)
+                            bk_loader.show();
+                            console.log("Input value changed:", this.value);
+                            self._rpc({
+                                model: 'location.setting',
+                                method: 'get_locstion_infor',
+                                args: [, this.value]
+                            }).then(function(data) {
+                                if (data) {
+                                    console.log('>>>>>>>>data>>>>>>>', data)
+                                    State[index].value = data['state']
+                                    City[index].value = data['city']
+                                } else {
+                                    aaa[index].value = ''
+                                        // $('#zip_code_error')
+                                    zip_code_error.html('ooooooooooo').show();
+                                    setTimeout(function() {
+                                        zip_code_error.empty().hide()
+                                    }, 6000);
+                                }
+                                bk_loader.hide();
 
-        //                             // });
-        //                             // return sectors;
-        //                         });
-        //                     }
-        //                     // console.log("Input value changed:", this.value);
-        //             };
-        //         })
-        //         // for (var i = 0; i < aaa.length; i++) {
-        //         //     // console.log(row)
-        //         //     aaa[i].onchange = function() {
-        //         //         console.log("Input value changed:", this.value);
-        //         //     };
-        //         // }
-        // },
+                            })
+                        }
+
+                        //                     ajax.jsonRpc("/get/locstion/infor", 'call', {
+                        //                             'zip': this.value,
+                        //                         })
+                        //                         .then(function(result) {
+                        //                             console.log('dfdfdfdfdfd', result)
+                        //                                 // if (result) {
+                        //                                 // 	window.location.href = "/shop/payment/cart?payment=" + paymentOptionId
+                        //                                 // 	ev.stopPropagation();
+                        //                                 // } else {
+                        //                                 // 	self._onClickPay(ev);
+                        //                                 // }
+
+                        //                         })
+                        //                         // self._rpc({
+                        //                         //     model: 'location.setting',
+                        //                         //     method: 'get_locstion_infor',
+                        //                         //     args: [, this.value]
+                        //                         // }).then(function(data) {
+                        //                         //     console.log('>>>>>>>>>>>>>>>', data)
+                        //                         //     if (data) {
+
+                        //                     //         console.log('>>>>>>>>>>>>>>>', State[index].value)
+                        //                     //         console.log('>>>>>>>>>>>>>>>', City[index])
+                        //                     //         console.log('>>>>>>>>>>>>>>>', data)
+                        //                     //         State[index].value = data['state']
+                        //                     //         City[index].value = data['city']
+                        //                     //     }
+                        //                     //     // _.each(sectors, function(sector) {
+                        //                     //     // 	$(sector_id).append($('<option>', {
+                        //                     //     // 		value: sector.id,
+                        //                     //     // 		text: sector.name,
+                        //                     //     // 	}));
+
+                        //                     //     // });
+                        //                     //     // return sectors;
+                        //                     // });
+                        //                 }
+                        //                 // console.log("Input value changed:", this.value);
+                    }
+                })
+                // for (var i = 0; i < aaa.length; i++) {
+                //     // console.log(row)
+                //     aaa[i].onblur = function() {
+                //         bk_loader.show();
+                //         console.log('>>>>>>>>i>>>>>>>', i)
+                //         console.log("Input value changed:", this.value);
+                //         self._rpc({
+                //             model: 'location.setting',
+                //             method: 'get_locstion_infor',
+                //             args: [, this.value]
+                //         }).then(function(data) {
+                //             // if (data) {
+                //             // State[i].value = data['state']
+                //             // City[i].value = data['city']
+                //             console.log('>>>>>>>>>>>>>>>', data)
+                //             console.log('>>>>>>>>State>>>>>>>', State)
+                //             console.log('>>>>>>>>City>>>>>>>', City)
+                //                 // }
+                //             bk_loader.hide();
+                //         })
+                //     };
+                // }
+        },
         _onClickSubmit: async function(ev) {
             var self = this;
             var locations_data = [];

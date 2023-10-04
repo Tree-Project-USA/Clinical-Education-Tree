@@ -146,7 +146,7 @@
                     type="button"
                     class="btn"
                     role="button" 
-                    href="/my/account"
+                    href="/add/location"
                     style="background-color:  #ab8631; !important; color: #fff"
                   >
                     <i class="fa fa-pencil"/> Add Location 

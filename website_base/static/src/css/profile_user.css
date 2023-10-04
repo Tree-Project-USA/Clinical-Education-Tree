@@ -18,6 +18,10 @@
     box-shadow: none;
 }
 
+.form-input[readonly] {
+    background-color: inherit;
+}
+
 #bk_n_res_loader {
     position: fixed;
     left: 0px;
@@ -27,4 +31,15 @@
     z-index: 9999;
     background: url(/website_base/static/src/img/bk_loader.gif) center no-repeat rgba(255, 255, 255, 0.5);
     text-shadow: 0 1px 1px white;
+}
+
+.zip_code_error {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+    margin: 0;
+    padding: 7px 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    display: none;
 }
