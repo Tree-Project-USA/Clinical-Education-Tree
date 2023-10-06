@@ -39,7 +39,6 @@
                 <field name="email"/>
                 <field name="address"/>
                 <field name="city_id"/>
-                <field name="country_id"/>
                 <field name="state_id"/>
                 <field name="zip"/>
                 <field name="setting_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
@@ -103,7 +102,6 @@
                             <field name="city_id"/>
                         </group>
                         <group>
-                            <field name="country_id"/>
                             <field name="state_id"/>
                             <field name="zip"/>
                         </group>
@@ -148,7 +146,6 @@
         <field name="arch" type="xml">
             <tree>
                 <field name="student_id"/>
-                <field name="country_id"/>
                 <field name="state_id"/>
                 <field name="city_id"/>
                 <field name="zip"/>
@@ -165,7 +162,6 @@
                         <label for="student_id" attrs="{'readonly': [('id', '!=', False)]}"/>
                         <field name="student_id"/>
                         <group>
-                            <field name="country_id"/>
                             <field name="state_id"/>
                         </group>
                         <group>

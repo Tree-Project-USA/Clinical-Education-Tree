@@ -56,7 +56,6 @@
                         <group>
                             <field name="site_id"/>
                             <field name="contract_id" invisible="1"/>
-                            <field name="company_country_id" invisible="1"/>
                             <field name="country_code" invisible="1"/>
                         </group>
                     </group>

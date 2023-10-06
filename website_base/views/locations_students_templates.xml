@@ -3,15 +3,12 @@
     <template id="locations_students_template" name="Locations Students Template">
         <t t-call="website.layout">
             <div id="form_temp">
-                <div id="wrap" class="oe_structure oe_empty">
+                <div id="wrap" class="oe_structure oe_empty my-4">
                     <div class="alert alert-danger w-10 mx-auto text-center" t-if="error" role="alert">
                         <strong>
                             <t t-esc="error" />
                         </strong>
                     </div>
-                    <!-- <div class="alert alert-danger w-10 mx-auto text-center d-none" id="zip_code_error" role="alert">
-                        <strong class=""/>
-                    </div> -->
                     <div class="row text-center" style="padding: 0 15px;margin-bottom: 7px;">
                         <strong class="zip_code_error"/>
                     </div>
@@ -52,7 +49,6 @@
                                                     <div class="collapse">
                                                         <tbody>
                                                             <t t-if="data_line_ids">
-                                                                
                                                                 <t t-set="variable" t-value="json.loads(data_line_ids)"/>
                                                             </t>
                                                             <t t-else="">
@@ -62,56 +58,26 @@
                                                                     <td>
                                                                         <div class="form-group">
                                                                             <span t-esc="val_index + 1"/>
-                                                                            
-                                                                            <!-- <select name="state_id" id="state_id" class="form-control" t-att-value="partner.state_id">
-                                                                                <t t-foreach="states" t-as="state">
-                                                                                    <option t-att-value="state.id" value="state.id">
-                                                                                        <t t-esc="state.name" />
-                                                                                    </option>
-                                                                                </t>
-                                                                            </select> -->
                                                                         </div>
                                                                     </td>
                                                                     <td>
                                                                         <div class="form-group">
-                                                                            <input type="text" id="state_id" name="state_id" readonly="readonly"  required="required"  class="form-control form-input" t-att-value="val['state_id'] if data_line_ids else ' ' " />
-                                                                            <!-- <input type="text" id="zip" name="zip" required="required" maxlength="9" class="form-control form-input" t-att-value="val['zip'] if data_line_ids else '122'" /> -->
-
-                                                                            <!-- <select name="state_id" id="state_id" class="form-control" t-att-value="partner.state_id">
-                                                                                <t t-foreach="states" t-as="state">
-                                                                                    <option t-att-value="state.id" value="state.id">
-                                                                                        <t t-esc="state.name" />
-                                                                                    </option>
-                                                                                </t>
-                                                                            </select> -->
+                                                                            <input type="text" id="state_id" name="state_id" readonly="readonly"  required="required"  class="form-control" t-att-value="val['state_id'] if data_line_ids else ' ' " />
                                                                         </div>
                                                                     </td>
                                                                     <td>
                                                                         <div class="form-group">
-                                                                            <input type="text" id="city_id" name="city_id" required="required" readonly="readonly" class="form-control form-input" t-att-value="val['city_id'] if data_line_ids else '' " />
-
-                                                                            <!-- <select name="city_id" id="city_id" class="form-control" t-att-value="partner.city_id">
-                                                                                <t t-foreach="citys" t-as="city">
-                                                                                    <option t-att-value="city.id" value="city.id">
-                                                                                        <t t-esc="city.name" />
-                                                                                    </option>
-                                                                                </t>
-                                                                            </select> -->
+                                                                            <input type="text" id="city_id" name="city_id" required="required" readonly="readonly" class="form-control" t-att-value="val['city_id'] if data_line_ids else '' " />
                                                                         </div>
                                                                     </td>
                                                                     <td>
                                                                         <div class="form-group">
                                                                             <div class="input-group mb-2">
-                                                                                <input type="text" id="zip" name="zip" required="required" maxlength="9" class="form-control form-input" t-att-value="val['zip'] if data_line_ids else ''" />
+                                                                                <input type="text" id="zip" name="zip" required="required" maxlength="9" class="form-control" t-att-value="val['zip'] if data_line_ids else ''" />
                                                                             </div>
                                                                         </div>
                                                                     </td>
                                                                 </tr>
-                                                               
-                                                          
-                                                            <!-- <t t-foreach="iteration" >
-                                                                
-                                                            </t> -->
                                                         </tbody>
                                                     </div>
                                                 </table>

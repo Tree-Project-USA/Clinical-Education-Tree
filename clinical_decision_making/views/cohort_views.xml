@@ -51,7 +51,6 @@
                 <field name="ice_site_id" class="o_ice"/>
                 <field name="ice_site_address" class="o_ice"/>
                 <field name="ice_city_id" class="o_ice"/>
-                <field name="ice_country_id" class="o_ice"/>
                 <field name="ice_state_id" class="o_ice"/>
                 <field name="ice_zip" class="o_ice"/>
                 <field name="ice_scce_id" class="o_ice"/>
@@ -66,7 +65,6 @@
                 <field name="tce1_site_id" class="o_tce1"/>
                 <field name="tce1_site_address" class="o_tce1"/>
                 <field name="tce1_city_id" class="o_tce1"/>
-                <field name="tce1_country_id" class="o_tce1"/>
                 <field name="tce1_state_id" class="o_tce1"/>
                 <field name="tce1_zip" class="o_tce1"/>
                 <field name="tce1_scce_id" class="o_tce1"/>
@@ -81,7 +79,6 @@
                 <field name="tce2_site_id" class="o_tce2"/>
                 <field name="tce2_site_address" class="o_tce2"/>
                 <field name="tce2_city_id" class="o_tce2"/>
-                <field name="tce2_country_id" class="o_tce2"/>
                 <field name="tce2_state_id" class="o_tce2"/>
                 <field name="tce2_zip" class="o_tce2"/>
                 <field name="tce2_scce_id" class="o_tce2"/>

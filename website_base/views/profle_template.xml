@@ -46,16 +46,6 @@
                     color: #4b4a4a;
                     border-bottom: 2px solid #716d6d;">
                     <span t-field="partner.first_name" />
-                        <!-- <input
-                        type="text"
-                        id="first_name"
-                        name="first_name"
-                        class="form-control"
-                        required="required"
-                        placeholder="first_name"
-                        readonly="1"
-                        t-att-value="partner.first_name"
-                        /> -->
                     </div>
                 </div>
               </div>
@@ -67,16 +57,6 @@
                   color: #4b4a4a;
                   border-bottom: 2px solid #716d6d;">
                   <span t-field="partner.last_name" />
-                      <!-- <input
-                      type="text"
-                      id="last_name"
-                      name="last_name"
-                      required="required"
-                      class="form-control"
-                      placeholder="last_name"
-                      readonly="1"
-                      t-att-value="partner.last_name"
-                      /> -->
                   </div>
                 </div>
                 <div class="col-lg-6 col-12">
@@ -86,16 +66,6 @@
                   color: #4b4a4a;
                   border-bottom: 2px solid #716d6d;">
                   <span t-field="partner.phone" />
-                      <!-- <input
-                      type="text"
-                      id="phone"
-                      name="phone"
-                      class="form-control"
-                      required="required"
-                      placeholder="phone"
-                      readonly="1"
-                      t-att-value="partner.phone"
-                      /> -->
                   </div>
                 </div>
               </div>
@@ -107,16 +77,6 @@
                   color: #4b4a4a;
                   border-bottom: 2px solid #716d6d;">
                   <span t-field="partner.email" />
-                      <!-- <input
-                      type="text"
-                      id="email"
-                      name="email"
-                      class="form-control"
-                      required="required"
-                      placeholder="email"
-                      readonly="1"
-                      t-att-value="partner.email"
-                      /> -->
                   </div>
                 </div>
                 <div class="col-lg-6 col-12">
@@ -126,16 +86,6 @@
                   color: #4b4a4a;
                   border-bottom: 2px solid #716d6d;">
                   <span t-field="partner.home_address" />
-                      <!-- <input
-                      type="text"
-                      id="home_address"
-                      name="home_address"
-                      class="form-control"
-                      required="required"
-                      placeholder="home_address"
-                      readonly="1"
-                      t-att-value="partner.home_address"
-                      /> -->
                   </div>
                 </div>
               </div>
