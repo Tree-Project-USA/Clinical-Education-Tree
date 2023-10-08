@@ -18,7 +18,8 @@ class NamaModel(models.Model):
     locatio_ids = fields.One2many(comodel_name='location.setting', inverse_name='student_id', string='Locations')
     can_apply_hardship = fields.Boolean(string='Apply Hardship', default=False)
     is_reach_maximum_zip_code = fields.Boolean(string='Reach Maximum Zip Code', default=False)
-
+    deny_show_student = fields.Boolean()
+    
     @api.onchange('first_name', 'last_name')
     def _compute_name(self):
         for rec in self:

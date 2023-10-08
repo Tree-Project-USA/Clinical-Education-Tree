@@ -8,7 +8,7 @@ class HardshipRequest(models.Model):
     _description = 'Hardship Request'
     _rec_name = 'student_id'
     
-    student_id = fields.Many2one(comodel_name='res.partner', string='Student', domain=[('is_student', '=', True)], tracking=True)
+    student_id = fields.Many2one(comodel_name='res.partner', string='Student', domain=[('is_student', '=', True),('deny_show_student', '=', False)], tracking=True)
     attachment_ids = fields.Many2many(
         comodel_name='ir.attachment',
         string="Attachments",
@@ -29,10 +29,16 @@ class HardshipRequest(models.Model):
         tracking=True,
         default='draft',
     )
+    _sql_constraints = [
+        ("student_id_unique", "UNIQUE(student_id)", "You Can Not Add Hardship For student more than one"),
+    ]
     
     def action_confirm(self):
         self.write({
             'state': 'confirm',
+        })
+        self.student_id.write({
+            'deny_show_student': True,
         })
         mail = (
                     self.env["mail.mail"]
@@ -54,6 +60,9 @@ class HardshipRequest(models.Model):
     def action_cancel(self):
         self.write({
             'state': 'cancel',
+        })
+        self.student_id.write({
+            'deny_show_student': False,
         })
         mail = (
                     self.env["mail.mail"]

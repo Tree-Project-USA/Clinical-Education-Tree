@@ -128,6 +128,7 @@
                                 type="object"
                                 name="open_hardship_button"
                                 icon="fa-file-text-o"
+                                attrs="{'invisible': [('state', '=', 'draft')]}"
                             >
                             Placement
                             </button>
@@ -154,15 +155,22 @@
                     <notebook>
                         <page string="Info">
                             <field name="info_ids">
-                                <tree editable="bottom" delete="false">
-                                    <field name="is_confirmed_send" invisible="1"/>
-                                    <field name="clinc_id" attrs="{'readonly': [('state', '=', 'confirmed')]}"/>
-                                    <field name="num_students" attrs="{'readonly': [('state', '=', 'confirmed')]}"/>
-                                    <field name="state" widget="badge" decoration-muted="state=='not_confirmed'" decoration-info="state=='confirmed'"/>
-                                    <button string="Confirm" name="action_confirm" type="object" class="oe_highlight" attrs="{'invisible': [('state', '=', 'confirmed')]}"/>
-                                    <button name="action_send_email_to_clinck" string="Send Mail" type="object" icon="fa-paper-plane" attrs="{'invisible': ['|', ('state', '=', 'confirmed'), ('is_confirmed_send', '!=', False)]}"/>
-                                    <button name="action_send_email_to_clinck" string="Resend" type="object" icon="fa-repeat" attrs="{'invisible': ['|', ('state', '=', 'confirmed'), ('is_confirmed_send', '=', False)]}"/>
-                                </tree>
+                              <tree editable="bottom" delete="false">
+                                <field name="is_confirmed_send" invisible="1"/>
+                                <field name="clinc_id" attrs="{'readonly': [('state', '=', 'confirmed')]}"/>
+                                <field name="num_students" attrs="{'readonly': [('state', '=', 'confirmed')]}"/>
+                                <field name="setting_type"/>
+                                <field name="state" widget="badge" decoration-muted="state=='not_confirmed'" decoration-info="state=='confirmed'"/>
+                                <field name="date_end" widget="remaining_days"/>
+                                <field name="contract_state" widget="badge"
+                                    decoration-info="state == 'draft'"
+                                    decoration-warning="state == 'close'"
+                                    decoration-success="state == 'open'"
+                                />
+                                <button string="Confirm" name="action_confirm" type="object" class="oe_highlight" attrs="{'invisible': [('state', '=', 'confirmed')]}"/>
+                                <button name="action_send_email_to_clinck" string="Send Mail" type="object" icon="fa-paper-plane" attrs="{'invisible': ['|', ('state', '=', 'confirmed'), ('is_confirmed_send', '!=', False)]}"/>
+                                <button name="action_send_email_to_clinck" string="Resend" type="object" icon="fa-repeat" attrs="{'invisible': ['|', ('state', '=', 'confirmed'), ('is_confirmed_send', '=', False)]}"/>
+                              </tree>
 
                             </field>
                         </page>

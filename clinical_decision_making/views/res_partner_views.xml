@@ -61,8 +61,8 @@
                         <page string="Locations" name="student_locations" autofocus="autofocus">
                             <field name="locatio_ids" mode="tree">
                                 <tree editable="bottom">
-                                    <field name="state_id"/>
-                                    <field name="city_id"/>
+                                    <field name="state"/>
+                                    <field name="city"/>
                                     <field name="zip"/>
                                 </tree>
                             </field>
