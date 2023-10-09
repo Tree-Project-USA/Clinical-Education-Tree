@@ -192,9 +192,11 @@ class SCCE(models.Model):
 
 class Site(models.Model):
     _name = 'site'
+    _inherit = ['mail.thread']
     _description = 'Site'
     _rec_name = 'name'
     
+<<<<<<< HEAD
     name = fields.Char(string='Name', required=True)
     setting_ids = fields.Many2many(comodel_name='category.setting', string='Category Setting')
     address = fields.Char(string='Address')
@@ -202,16 +204,26 @@ class Site(models.Model):
     city_id = fields.Char(string='City')
     state_id = fields.Char(string='State')
     zip = fields.Char(string='Zip Code', max_length=5, required=True)
+=======
+    name = fields.Char(string='Name', required=True, tracking=True)
+    setting_ids = fields.Many2many(comodel_name='category.setting', string='Category Setting', tracking=True)
+    address = fields.Char(string='Address', tracking=True)
+    email = fields.Char(string='Email Address', tracking=True)
+    city_id = fields.Many2one(comodel_name='res.city', string='City')
+    country_id = fields.Many2one(comodel_name='res.country', default=lambda self: self.env.company.country_id)
+    state_id = fields.Many2one(comodel_name='res.country.state', string='State', domain="[('country_id', '=', country_id)]")
+    zip = fields.Char(string='Zip Code', max_length=5, tracking=True)
+>>>>>>> TREE Opt Code
     contract_ids = fields.One2many('site.contract', 'site_id', string='Site Contracts')
     contract_id = fields.Many2one(
         'site.contract', string='Current Contract',
-        domain="[('company_id', '=', company_id), ('site_id', '=', id)]", help='Current contract of the Site')
+        domain="[('company_id', '=', company_id), ('site_id', '=', id)]", help='Current contract of the Site', tracking=True)
 
-    contract_attachment = fields.Binary(string="Contract Attachment", store=True, compute='_compute_contract_warning')
+    contract_attachment = fields.Binary(string="Contract Attachment", store=True, compute='_compute_contract_warning', tracking=True)
     contract_warning = fields.Boolean(string='Contract Warning', store=True, compute='_compute_contract_warning')
     first_contract_date = fields.Date(compute='_compute_first_contract_date', store=True)
-    contracts_count = fields.Integer(compute='_compute_contracts_count', string='Contract Count')
-    
+    contracts_count = fields.Integer(compute='_compute_contracts_count', string='Contract Count', tracking=True)
+    scce_ids = fields.Many2many(comodel_name='scce', string='SCCES', tracking=True)        
         
     @api.depends('contract_id', 'contract_id.state')
     def _compute_contract_warning(self):

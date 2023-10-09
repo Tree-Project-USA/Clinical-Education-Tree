@@ -32,6 +32,8 @@ class HardshipRequest(models.Model):
     _sql_constraints = [
         ("student_id_unique", "UNIQUE(student_id)", "You Can Not Add Hardship For student more than one"),
     ]
+    expiration_date = fields.Date(string='Expiration Date')
+    
     
     def action_confirm(self):
         self.write({

@@ -37,6 +37,7 @@
                     <group>
                         <field name="student_id" attrs="{'readonly': [('state', 'in', ('cancel', 'confirm'))]}"/>
                         <field name="create_date"/>
+                        <field name="expiration_date"/>
                     </group>
                 <notebook>
                     <page string="Attachment" name="attachment_ids">

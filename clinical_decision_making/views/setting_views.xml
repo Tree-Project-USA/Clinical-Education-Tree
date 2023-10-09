@@ -106,7 +106,16 @@
                             <field name="zip"/>
                         </group>
                     </group>
+                    <notebook>
+                        <page string="SCCE">
+                            <field name="scce_ids"/>
+                        </page>
+                    </notebook>
                 </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="message_ids"/>
+                </div>
             </form>
         </field>
     </record>
