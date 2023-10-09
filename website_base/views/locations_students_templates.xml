@@ -3,29 +3,32 @@
     <template id="locations_students_template" name="Locations Students Template">
         <t t-call="website.layout">
             <div id="form_temp">
-                <div id="wrap" class="oe_structure oe_empty">
-                    <div
-                        class="alert alert-danger w-10 mx-auto text-center"
-                        t-if="error"
-                        role="alert"
-                    >
+                <div id="wrap" class="oe_structure oe_empty my-4">
+                    <div class="alert alert-danger w-10 mx-auto text-center" t-if="error" role="alert">
                         <strong>
-                            <t t-esc="error"/>
+                            <t t-esc="error" />
                         </strong>
                     </div>
+                    <div class="row text-center" style="padding: 0 15px;margin-bottom: 7px;">
+                        <strong class="zip_code_error"/>
+                    </div>
                     <div class="container">
-                        <form method="post" action="/create/web_form_record">
+                        <div  id="bk_n_res_loader" style="display:none;"/>
+                        <form method="post" action="/add/location">
                             <div id="form_template">
-                                <input type="hidden" name="csrf_token"
-                                       t-att-value="request.csrf_token()"/>
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
                                 <div class="form-group">
-                                    <div class='row ml-1'
-                                         style="width:99%;">
+                                    <div class='row ml-1' style="width:99%;">
                                         <div class="form-group col-12 show_total_project">
                                             <div class="row s_col_no_resize s_col_no_bgcolor">
-                                                <table class="table table-bordered mt-3 total_project_costs">
+                                                <table class="table table-borderless mt-3 total_project_costs">
                                                     <thead>
                                                         <tr>
+                                                            <td>
+                                                                <strong>
+                                                                    #
+                                                                </strong>
+                                                            </td>
                                                             <td>
                                                                 <strong>
                                                                     State
@@ -43,465 +46,49 @@
                                                             </td>
                                                         </tr>
                                                     </thead>
-                                                    <div class="collapse" t-if="partner.can_apply_hardship == True">
+                                                    <div class="collapse">
                                                         <tbody>
-                                                            <tr class="project_cost_line">
-                                                                <td>
-                                                                    <div class="form-group">
-                                                                        <select
-                                                                                                    name="state_id"
-                                                                                                    id="state_id"
-                                                                                                    class="form-control"
-                                                                                                    t-att-value="partner.state_id"
-                                                                                                >
-                                                                            <t t-foreach="states" t-as="state">
-                                                                                <option
-                                                                                                            t-att-value="state.id"
-                                                                                                            value="state.id"
-                                                                                                        >
-                                                                                    <t t-esc="state.name" />
-                                                                                </option>
-                                                                            </t>
-                                                                        </select>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="form-group">
-                                                                        <select
-                                                                                                    name="city_id"
-                                                                                                    id="city_id"
-                                                                                                    class="form-control"
-                                                                                                    t-att-value="partner.city_id"
-                                                                                                >
-                                                                            <t t-foreach="citys" t-as="city">
-                                                                                <option
-                                                                                                            t-att-value="city.id"
-                                                                                                            value="city.id"
-                                                                                                        >
-                                                                                    <t t-esc="city.name" />
-                                                                                </option>
-                                                                            </t>
-                                                                        </select>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="form-group">
-                                                                        <div class="input-group mb-2">
-                                                                            <input 
-                                                                                type="text" 
-                                                                                id="zip" 
-                                                                                name="zip" 
-                                                                                required="required"
-                                                                                maxlength="9" 
-                                                                                class="form-control" 
-                                                                                t-att-value="partner.zip" 
-                                                                                />
+                                                            <t t-if="data_line_ids">
+                                                                <t t-set="variable" t-value="json.loads(data_line_ids)"/>
+                                                            </t>
+                                                            <t t-else="">
+                                                                <t t-set="variable" t-value="rw"/>
+                                                            </t>
+                                                                <tr  t-foreach="variable" t-as="val" class="project_cost_line">
+                                                                    <td>
+                                                                        <div class="form-group">
+                                                                            <span t-esc="val_index + 1"/>
                                                                         </div>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                            <tr class="project_cost_line">
-                                                                <td>
-                                                                    <div class="form-group">
-                                                                        <select
-                                                                                                    name="state_id"
-                                                                                                    id="state_id"
-                                                                                                    class="form-control"
-                                                                                                    t-att-value="partner.state_id"
-                                                                                                >
-                                                                            <t t-foreach="states" t-as="state">
-                                                                                <option
-                                                                                                            t-att-value="state.id"
-                                                                                                            value="state.id"
-                                                                                                        >
-                                                                                    <t t-esc="state.name" />
-                                                                                </option>
-                                                                            </t>
-                                                                        </select>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="form-group">
-                                                                        <select
-                                                                                                    name="city_id"
-                                                                                                    id="city_id"
-                                                                                                    class="form-control"
-                                                                                                    t-att-value="partner.city_id"
-                                                                                                >
-                                                                            <t t-foreach="citys" t-as="city">
-                                                                                <option
-                                                                                                            t-att-value="city.id"
-                                                                                                            value="city.id"
-                                                                                                        >
-                                                                                    <t t-esc="city.name" />
-                                                                                </option>
-                                                                            </t>
-                                                                        </select>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="form-group">
-                                                                        <div class="input-group mb-2">
-                                                                            <input 
-                                                                                type="text" 
-                                                                                id="zip" 
-                                                                                name="zip" 
-                                                                                required="required"
-                                                                                maxlength="9" 
-                                                                                class="form-control" 
-                                                                                t-att-value="partner.zip" 
-                                                                                />
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="form-group">
+                                                                            <input type="text" id="state_id" name="state_id" readonly="readonly"  required="required"  class="form-control" t-att-value="val['state_id'] if data_line_ids else ' ' " />
                                                                         </div>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                            <tr class="project_cost_line">
-                                                                <td>
-                                                                    <div class="form-group">
-                                                                        <select
-                                                                                                    name="state_id"
-                                                                                                    id="state_id"
-                                                                                                    class="form-control"
-                                                                                                    t-att-value="partner.state_id"
-                                                                                                >
-                                                                            <t t-foreach="states" t-as="state">
-                                                                                <option
-                                                                                                            t-att-value="state.id"
-                                                                                                            value="state.id"
-                                                                                                        >
-                                                                                    <t t-esc="state.name" />
-                                                                                </option>
-                                                                            </t>
-                                                                        </select>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="form-group">
-                                                                        <select
-                                                                                                    name="city_id"
-                                                                                                    id="city_id"
-                                                                                                    class="form-control"
-                                                                                                    t-att-value="partner.city_id"
-                                                                                                >
-                                                                            <t t-foreach="citys" t-as="city">
-                                                                                <option
-                                                                                                            t-att-value="city.id"
-                                                                                                            value="city.id"
-                                                                                                        >
-                                                                                    <t t-esc="city.name" />
-                                                                                </option>
-                                                                            </t>
-                                                                        </select>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="form-group">
-                                                                        <div class="input-group mb-2">
-                                                                            <input 
-                                                                                type="text" 
-                                                                                id="zip" 
-                                                                                name="zip" 
-                                                                                required="required"
-                                                                                maxlength="9" 
-                                                                                class="form-control" 
-                                                                                t-att-value="partner.zip" 
-                                                                                />
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="form-group">
+                                                                            <input type="text" id="city_id" name="city_id" required="required" readonly="readonly" class="form-control" t-att-value="val['city_id'] if data_line_ids else '' " />
                                                                         </div>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                            <tr class="project_cost_line">
-                                                                <td>
-                                                                    <div class="form-group">
-                                                                        <select
-                                                                                                    name="state_id"
-                                                                                                    id="state_id"
-                                                                                                    class="form-control"
-                                                                                                    t-att-value="partner.state_id"
-                                                                                                >
-                                                                            <t t-foreach="states" t-as="state">
-                                                                                <option
-                                                                                                            t-att-value="state.id"
-                                                                                                            value="state.id"
-                                                                                                        >
-                                                                                    <t t-esc="state.name" />
-                                                                                </option>
-                                                                            </t>
-                                                                        </select>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="form-group">
-                                                                        <select
-                                                                                                    name="city_id"
-                                                                                                    id="city_id"
-                                                                                                    class="form-control"
-                                                                                                    t-att-value="partner.city_id"
-                                                                                                >
-                                                                            <t t-foreach="citys" t-as="city">
-                                                                                <option
-                                                                                                            t-att-value="city.id"
-                                                                                                            value="city.id"
-                                                                                                        >
-                                                                                    <t t-esc="city.name" />
-                                                                                </option>
-                                                                            </t>
-                                                                        </select>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="form-group">
-                                                                        <div class="input-group mb-2">
-                                                                            <input 
-                                                                                type="text" 
-                                                                                id="zip" 
-                                                                                name="zip" 
-                                                                                required="required"
-                                                                                maxlength="9" 
-                                                                                class="form-control" 
-                                                                                t-att-value="partner.zip" 
-                                                                                />
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="form-group">
+                                                                            <div class="input-group mb-2">
+                                                                                <input type="text" id="zip" name="zip" required="required" maxlength="9" class="form-control" t-att-value="val['zip'] if data_line_ids else ''" />
+                                                                            </div>
                                                                         </div>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                            <tr class="project_cost_line">
-                                                                <td>
-                                                                    <div class="form-group">
-                                                                        <select
-                                                                                                    name="state_id"
-                                                                                                    id="state_id"
-                                                                                                    class="form-control"
-                                                                                                    t-att-value="partner.state_id"
-                                                                                                >
-                                                                            <t t-foreach="states" t-as="state">
-                                                                                <option
-                                                                                                            t-att-value="state.id"
-                                                                                                            value="state.id"
-                                                                                                        >
-                                                                                    <t t-esc="state.name" />
-                                                                                </option>
-                                                                            </t>
-                                                                        </select>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="form-group">
-                                                                        <select
-                                                                                                    name="city_id"
-                                                                                                    id="city_id"
-                                                                                                    class="form-control"
-                                                                                                    t-att-value="partner.city_id"
-                                                                                                >
-                                                                            <t t-foreach="citys" t-as="city">
-                                                                                <option
-                                                                                                            t-att-value="city.id"
-                                                                                                            value="city.id"
-                                                                                                        >
-                                                                                    <t t-esc="city.name" />
-                                                                                </option>
-                                                                            </t>
-                                                                        </select>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="form-group">
-                                                                        <div class="input-group mb-2">
-                                                                            <input 
-                                                                                type="text" 
-                                                                                id="zip" 
-                                                                                name="zip" 
-                                                                                required="required"
-                                                                                maxlength="9" 
-                                                                                class="form-control" 
-                                                                                t-att-value="partner.zip" 
-                                                                                />
-                                                                        </div>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </div>
-                                                    <div class="collapse" t-if="partner.can_apply_hardship == False">
-                                                        <tbody>
-                                                            <tr class="project_cost_line">
-                                                                <td>
-                                                                    <div class="form-group">
-                                                                        <select
-                                                                                                    name="state_id"
-                                                                                                    id="state_id"
-                                                                                                    class="form-control"
-                                                                                                    t-att-value="partner.state_id"
-                                                                                                >
-                                                                            <t t-foreach="states" t-as="state">
-                                                                                <option
-                                                                                                            t-att-value="state.id"
-                                                                                                            value="state.id"
-                                                                                                        >
-                                                                                    <t t-esc="state.name" />
-                                                                                </option>
-                                                                            </t>
-                                                                        </select>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="form-group">
-                                                                        <select
-                                                                                                    name="city_id"
-                                                                                                    id="city_id"
-                                                                                                    class="form-control"
-                                                                                                    t-att-value="partner.city_id"
-                                                                                                >
-                                                                            <t t-foreach="citys" t-as="city">
-                                                                                <option
-                                                                                                            t-att-value="city.id"
-                                                                                                            value="city.id"
-                                                                                                        >
-                                                                                    <t t-esc="city.name" />
-                                                                                </option>
-                                                                            </t>
-                                                                        </select>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="form-group">
-                                                                        <div class="input-group mb-2">
-                                                                            <input 
-                                                                                type="text" 
-                                                                                id="zip" 
-                                                                                name="zip" 
-                                                                                required="required"
-                                                                                maxlength="9" 
-                                                                                class="form-control" 
-                                                                                t-att-value="partner.zip" 
-                                                                                />
-                                                                        </div>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                            <tr class="project_cost_line">
-                                                                <td>
-                                                                    <div class="form-group">
-                                                                        <select
-                                                                                                    name="state_id"
-                                                                                                    id="state_id"
-                                                                                                    class="form-control"
-                                                                                                    t-att-value="partner.state_id"
-                                                                                                >
-                                                                            <t t-foreach="states" t-as="state">
-                                                                                <option
-                                                                                                            t-att-value="state.id"
-                                                                                                            value="state.id"
-                                                                                                        >
-                                                                                    <t t-esc="state.name" />
-                                                                                </option>
-                                                                            </t>
-                                                                        </select>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="form-group">
-                                                                        <select
-                                                                                                    name="city_id"
-                                                                                                    id="city_id"
-                                                                                                    class="form-control"
-                                                                                                    t-att-value="partner.city_id"
-                                                                                                >
-                                                                            <t t-foreach="citys" t-as="city">
-                                                                                <option
-                                                                                                            t-att-value="city.id"
-                                                                                                            value="city.id"
-                                                                                                        >
-                                                                                    <t t-esc="city.name" />
-                                                                                </option>
-                                                                            </t>
-                                                                        </select>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="form-group">
-                                                                        <div class="input-group mb-2">
-                                                                            <input 
-                                                                                type="text" 
-                                                                                id="zip" 
-                                                                                name="zip" 
-                                                                                required="required"
-                                                                                maxlength="9" 
-                                                                                class="form-control" 
-                                                                                t-att-value="partner.zip" 
-                                                                                />
-                                                                        </div>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                            <tr class="project_cost_line">
-                                                                <td>
-                                                                    <div class="form-group">
-                                                                        <select
-                                                                                                    name="state_id"
-                                                                                                    id="state_id"
-                                                                                                    class="form-control"
-                                                                                                    t-att-value="partner.state_id"
-                                                                                                >
-                                                                            <t t-foreach="states" t-as="state">
-                                                                                <option
-                                                                                                            t-att-value="state.id"
-                                                                                                            value="state.id"
-                                                                                                        >
-                                                                                    <t t-esc="state.name" />
-                                                                                </option>
-                                                                            </t>
-                                                                        </select>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="form-group">
-                                                                        <select
-                                                                                                    name="city_id"
-                                                                                                    id="city_id"
-                                                                                                    class="form-control"
-                                                                                                    t-att-value="partner.city_id"
-                                                                                                >
-                                                                            <t t-foreach="citys" t-as="city">
-                                                                                <option
-                                                                                                            t-att-value="city.id"
-                                                                                                            value="city.id"
-                                                                                                        >
-                                                                                    <t t-esc="city.name" />
-                                                                                </option>
-                                                                            </t>
-                                                                        </select>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="form-group">
-                                                                        <div class="input-group mb-2">
-                                                                            <input 
-                                                                                type="text" 
-                                                                                id="zip" 
-                                                                                name="zip" 
-                                                                                required="required"
-                                                                                maxlength="9" 
-                                                                                class="form-control" 
-                                                                                t-att-value="partner.zip" 
-                                                                                />
-                                                                        </div>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
+                                                                    </td>
+                                                                </tr>
                                                         </tbody>
                                                     </div>
                                                 </table>
                                             </div>
-                                            <textarea class="d-none"
-                                                      name="data_line_ids">
+                                            <textarea class="d-none" name="data_line_ids">
                                             </textarea>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="clearfix oe_login_buttons">
-                                    <button type="submit"
-                                            class="custom_create btn btn-block" style="background-color:#ab8631;color:#fff;">
+                                    <button type="submit" class="custom_create btn btn-block" style="background-color:#ab8631;color:#fff;">
                                         Confirm
                                     </button>
                                 </div>

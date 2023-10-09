@@ -30,9 +30,9 @@ odoo.define("wbsite_base.file", function(require) {
                             <div>
 								<input
 									type="file"
-									multiple="multiple"
 									accept="image/jpg, image/jpeg, image/png, application/pdf"
 									class="form-control"
+                                    required="required"
 									name="datas_` + counter_files + `" 
 									id="datas_` + counter_files + `"
 								/>

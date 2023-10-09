@@ -1,4 +1,5 @@
 import base64
+import requests
 from datetime import datetime
 import json
 from odoo import _, http
@@ -6,99 +7,64 @@ from odoo.http import request, route
 from odoo.exceptions import ValidationError
 from odoo.addons.portal.controllers.portal import CustomerPortal
 
-class CustomAccount(CustomerPortal):
-    @route(["/my/account"], type="http", auth="user", website=True)
-    def account(self, redirect=None, **post):
-        values = {}
-        if request.httprequest.method == "GET":
-            partner = request.env.user.partner_id
-            values.update(dict(request.params))
-            countries = request.env["res.country"].sudo().search([])
-            states = request.env["res.country.state"].sudo().search([])
-            citys = request.env["res.city"].sudo().search([])
-            values.update({
-                "partner": partner,
-                "countries": countries,
-                "states": states,
-                "citys": citys,
-                "has_check_vat": hasattr(request.env["res.partner"], "check_vat"),
-                "redirect": redirect,
-                "page_name": "my_details",
-            })
-
-        if post and request.httprequest.method == "POST":
-            try:
-                update_inforamtion = {
-                    "name": post.get("name"),
-                    "email": post.get("email"),
-                    "mobile": post.get("mobile"),
-                    "street": post.get("street"),
-                    "country_id": int(post.get("country_id")),
-                    "state_id": post.get("state_id"),
-                    "city_id": post.get("city_id"),
-                }
-                partner.sudo().write(
-                    update_inforamtion
-                )
-                values.update(
-                    {
-                        "success": (_("تم تعديل معلوماتك بنجاح"))
-                    }
-                )
-            except Exception as e:
-                values.update(
-                    {
-                        "error_message": (_("حدث خطاء في إدخال المعلومات"))
-                    }
-                )
-                return values
-        response = request.render("website_base.locations_students_template", values)
-        response.headers["X-Frame-Options"] = "DENY"
-        return response
-        
-    @route(["/user/profile"], type="http", auth="user", website=True)
-    def user_profile(self, redirect=None, **post):
-        value={}
-        partner = request.env.user.partner_id
-        value["partner_id"] = partner
-        return request.render("website_base.user_profile_templates", value)
-    
 
 class CustomerPortals(CustomerPortal):
-    @route(["/my", "/my/home"], type="http", auth="user", website=True)
-    def home(self, **kw):
-        return request.redirect("/my/home")
-        
-    @route(
-        ["/my/home"],
-        type="http",
-        auth="public",
-        methods=["GET"],
-    )
-    def home(self):
-        values = {}
-        res_partner_id = request.env.user.partner_id
-        values["partner"] = res_partner_id 
-        return request.render("website_base.user_profile_templates", values)
     
-    @http.route("/create/web_form_record", type="http", website=True, auth="public", Methods=["POST"])
-    def create_form(self, **kw):
+    @route([])
+    def home(self):
         res_partner_id = request.env.user.partner_id
-        params = {}
-        data = json.loads(kw["data_line_ids"])
-        val = [(0, 0, line) for line in data]
-        values = {
-            "locatio_ids": val,
-            "is_reach_maximum_zip_code": True,
-        }
-        try:
-            res_partner_id.locatio_ids._check_product_uom_category_id()
-            res_partner_id.sudo().write(values)
-        except ValidationError as msg:
-            error = str(msg.args[0])
-            if error:
-                params["error"] = error
-                return request.redirect_query(
-                    "/my/account", params
-                )
-        return request.redirect("/my/home")
+        return request.render("website_base.user_profile_templates", {'partner': res_partner_id})
+    
+    @http.route("/add/location", type="http", website=True, auth="user", Methods=["POST"])
+    def add_location(self, **kw):
+        res_partner_id = request.env.user.partner_id
+        if kw and request.httprequest.method == "POST":
+            data = json.loads(kw["data_line_ids"])
+            val = [(0, 0, line) for line in data]
+            values = {
+                "locatio_ids": val,
+                "is_reach_maximum_zip_code": True,
+            }
+            try:
+                lists = []
+                for line in data:
+                    if line["zip"] in lists:
+                       raise ValidationError(_("zip code is define before please zip code must be non-dublicate"))
+                    else:
+                        lists.append(line["zip"])
+                request_dummy = request.env["res.partner"].sudo().new(values)  
+                request_dummy.check_zip_code_distance(lists)
+                res_partner_id.sudo().write(values)
+                return request.redirect("/my/home")
+            except ValidationError as msg:
+                values.update(kw)
+                error = str(msg.args[0])
+                if error:
+                    kw["error"] = error
+        value = kw 
+        if res_partner_id.can_apply_hardship:
+            can_apply_hardship = 3
+        else:
+            can_apply_hardship = 5
+        value.update({
+            'rw': can_apply_hardship
+        })
+        return request.render("website_base.locations_students_template", value)
+    
+    @http.route(['/get/locstion/infor'], type='json', auth="public", methods=['POST'], website=True)
+    def get_locstion_infor(self,**post):
+        zip = post.get('post')
+        token = self.env['ir.config_parameter'].sudo(
+        ).get_param('zip_code_token')
+        if token:
+            token= 'DemoOnly00gH8wbb344Ca9wRlS2B9Btt3Nqg7g6GkvvSswAhCSX2jtqxzmK8kWuM'
+            url = "https://www.zipcodeapi.com/rest/%s/info.json/%s/degrees" % (token, zip)
+            res = requests.get(url)
+            if res.status_code == 200:
+                return res.json()
+        else:
+            return False
+
+
+    
+    

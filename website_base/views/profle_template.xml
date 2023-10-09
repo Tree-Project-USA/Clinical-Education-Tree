@@ -32,96 +32,60 @@
               <div class="row mt-4">
                 <div class="col-lg-6 col-12">
                     <label for="name">Name</label>
-                    <div class="form-group">
-                        <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        class="form-control"
-                        required="required"
-                        placeholder="name"
-                        readonly="1"
-                        t-att-value="partner.name"
-                        />
+                    <div class="form-group mt-1" style="background-color: #e0e0e0;
+                    padding: 0.5rem;
+                    color: #4b4a4a;
+                    border-bottom: 2px solid #716d6d;">
+                      <span t-field="partner.name" />
                     </div>
                 </div>
                 <div class="col-lg-6 col-12">
                     <label for="first_name">First name</label>
-                    <div class="form-group">
-                        <input
-                        type="text"
-                        id="first_name"
-                        name="first_name"
-                        class="form-control"
-                        required="required"
-                        placeholder="first_name"
-                        readonly="1"
-                        t-att-value="partner.first_name"
-                        />
+                    <div class="form-group mt-1" style="background-color: #e0e0e0;
+                    padding: 0.5rem;
+                    color: #4b4a4a;
+                    border-bottom: 2px solid #716d6d;">
+                    <span t-field="partner.first_name" />
                     </div>
                 </div>
               </div>
               <div class="row mt-4">
                 <div class="col-lg-6 col-12">
                   <label for="last_name">Last name</label>
-                  <div class="form-group">
-                      <input
-                      type="text"
-                      id="last_name"
-                      name="last_name"
-                      required="required"
-                      class="form-control"
-                      placeholder="last_name"
-                      readonly="1"
-                      t-att-value="partner.last_name"
-                      />
+                  <div class="form-group mt-1" style="background-color: #e0e0e0;
+                  padding: 0.5rem;
+                  color: #4b4a4a;
+                  border-bottom: 2px solid #716d6d;">
+                  <span t-field="partner.last_name" />
                   </div>
                 </div>
                 <div class="col-lg-6 col-12">
                   <label for="phone">Phone</label>
-                  <div class="form-group">
-                      <input
-                      type="text"
-                      id="phone"
-                      name="phone"
-                      class="form-control"
-                      required="required"
-                      placeholder="phone"
-                      readonly="1"
-                      t-att-value="partner.phone"
-                      />
+                  <div class="form-group mt-1" style="background-color: #e0e0e0;
+                  padding: 0.5rem;
+                  color: #4b4a4a;
+                  border-bottom: 2px solid #716d6d;">
+                  <span t-field="partner.phone" />
                   </div>
                 </div>
               </div>
               <div class="row mt-4">
                 <div class="col-lg-6 col-12">
                   <label for="email">Email</label>
-                  <div class="form-group">
-                      <input
-                      type="text"
-                      id="email"
-                      name="email"
-                      class="form-control"
-                      required="required"
-                      placeholder="email"
-                      readonly="1"
-                      t-att-value="partner.email"
-                      />
+                  <div class="form-group mt-1" style="background-color: #e0e0e0;
+                  padding: 0.5rem;
+                  color: #4b4a4a;
+                  border-bottom: 2px solid #716d6d;">
+                  <span t-field="partner.email" />
                   </div>
                 </div>
                 <div class="col-lg-6 col-12">
                   <label for="home_address">Home address</label>
-                  <div class="form-group">
-                      <input
-                      type="text"
-                      id="home_address"
-                      name="home_address"
-                      class="form-control"
-                      required="required"
-                      placeholder="home_address"
-                      readonly="1"
-                      t-att-value="partner.home_address"
-                      />
+                  <div class="form-group mt-1" style="background-color: #e0e0e0;
+                  padding: 0.5rem;
+                  color: #4b4a4a;
+                  border-bottom: 2px solid #716d6d;">
+                  <span t-field="partner.home_address" />
                   </div>
                 </div>
               </div>
@@ -132,7 +96,7 @@
                     type="button"
                     class="btn"
                     role="button" 
-                    href="/my/account"
+                    href="/add/location"
                     style="background-color:  #ab8631; !important; color: #fff"
                   >
                     <i class="fa fa-pencil"/> Add Location 

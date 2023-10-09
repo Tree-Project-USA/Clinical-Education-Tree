@@ -8,15 +8,17 @@
     # any module necessary for this one to work correctly
     "depends": [
         "website",
+        "clinical_decision_making",
     ],
     # always loaded
     "data": [
-
+        
+        # Data
+        'data/data.xml',
         # Views
         "views/my_account_templates.xml",
         "views/profle_template.xml",
         "views/locations_students_templates.xml",
-        "views/index.xml",
         "views/hardship_request_remplates.xml",
         "views/success_hardship_request_templates.xml",
         "views/locations_students_info_templates.xml",

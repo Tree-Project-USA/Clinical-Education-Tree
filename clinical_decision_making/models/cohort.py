@@ -29,28 +29,28 @@ class Cohort(models.Model):
     # Student Locations
         # One
     stu_locatio_zip_one = fields.Char(string='Zip Code One', compute='compute_student_locations')
-    stu_locatio_city_one_id = fields.Many2one(comodel_name='res.city', string='City One', compute='compute_student_locations')
-    stu_locatio_state_one_id = fields.Many2one(comodel_name='res.country.state', string='State One', compute='compute_student_locations')
+    stu_locatio_city_one_id = fields.Char(string='City One', compute='compute_student_locations')
+    stu_locatio_state_one_id =fields.Char(string='State One', compute='compute_student_locations')
         
         # Two
     stu_locatio_zip_two = fields.Char(string='Zip Code Two', compute='compute_student_locations')
-    stu_locatio_city_two_id = fields.Many2one(comodel_name='res.city', string='City Two', compute='compute_student_locations')
-    stu_locatio_state_two_id = fields.Many2one(comodel_name='res.country.state', string='State Two', compute='compute_student_locations')
+    stu_locatio_city_two_id = fields.Char(string='City Two', compute='compute_student_locations')
+    stu_locatio_state_two_id =fields.Char(string='State Two', compute='compute_student_locations')
         
         # THREE
     stu_locatio_zip_three = fields.Char(string='Zip Code Three', compute='compute_student_locations')
-    stu_locatio_city_three_id = fields.Many2one(comodel_name='res.city', string='City Three', compute='compute_student_locations')
-    stu_locatio_state_three_id = fields.Many2one(comodel_name='res.country.state', string='State Three', compute='compute_student_locations')
+    stu_locatio_city_three_id = fields.Char(string='City Three', compute='compute_student_locations')
+    stu_locatio_state_three_id =fields.Char(string='State Three', compute='compute_student_locations')
         
         # FOUR
     stu_locatio_zip_four = fields.Char(string='Zip Code Four', compute='compute_student_locations')
-    stu_locatio_city_four_id = fields.Many2one(comodel_name='res.city', string='City Four', compute='compute_student_locations')
-    stu_locatio_state_four_id = fields.Many2one(comodel_name='res.country.state', string='State Four', compute='compute_student_locations')
+    stu_locatio_city_four_id = fields.Char(string='City Four', compute='compute_student_locations')
+    stu_locatio_state_four_id =fields.Char(string='State Four', compute='compute_student_locations')
         
         # FIVE
     stu_locatio_zip_five = fields.Char(string='Zip Code Five', compute='compute_student_locations')
-    stu_locatio_city_five_id = fields.Many2one(comodel_name='res.city', string='City Five', compute='compute_student_locations')
-    stu_locatio_state_five_id = fields.Many2one(comodel_name='res.country.state', string='State Five', compute='compute_student_locations')
+    stu_locatio_city_five_id = fields.Char(string='City Five', compute='compute_student_locations')
+    stu_locatio_state_five_id =fields.Char(string='State Five', compute='compute_student_locations')
             
     @api.depends('student_id', 'student_id.locatio_ids')
     def compute_student_locations(self):
@@ -116,9 +116,8 @@ class Cohort(models.Model):
     ice_setting_id =  fields.Many2one(comodel_name='category.setting', string="Setting")
     ice_site_id = fields.Many2one(comodel_name='site', string='ICE Site Name')
     ice_site_address = fields.Char(related='ice_site_id.address')
-    ice_city_id = fields.Many2one('res.city',related='ice_site_id.city_id')
-    ice_country_id = fields.Many2one('res.country', related='ice_site_id.country_id')
-    ice_state_id = fields.Many2one('res.country.state', related='ice_site_id.state_id')
+    ice_city_id = fields.Char(related='ice_site_id.city_id')
+    ice_state_id = fields.Char(related='ice_site_id.state_id')
     ice_zip = fields.Char(related='ice_site_id.zip')
     
         # SCCE
@@ -138,9 +137,8 @@ class Cohort(models.Model):
     tce1_setting_id =  fields.Many2one(comodel_name='category.setting', string="TCE I Setting")
     tce1_site_id = fields.Many2one(comodel_name='site', string='TCE I Site Name')
     tce1_site_address = fields.Char(related='ice_site_id.address')
-    tce1_city_id = fields.Many2one('res.city',related='ice_site_id.city_id')
-    tce1_country_id = fields.Many2one('res.country', related='ice_site_id.country_id')
-    tce1_state_id = fields.Many2one('res.country.state', related='ice_site_id.state_id')
+    tce1_city_id = fields.Char(related='ice_site_id.city_id')
+    tce1_state_id = fields.Char(related='ice_site_id.state_id')
     tce1_zip = fields.Char(related='ice_site_id.zip')
     
         # SCCE
@@ -160,9 +158,8 @@ class Cohort(models.Model):
     tce2_setting_id =  fields.Many2one(comodel_name='category.setting', string="TCE II Setting")
     tce2_site_id = fields.Many2one(comodel_name='site', string='TCE II Site Name')
     tce2_site_address = fields.Char(related='ice_site_id.address')
-    tce2_city_id = fields.Many2one('res.city',related='ice_site_id.city_id')
-    tce2_country_id = fields.Many2one('res.country', related='ice_site_id.country_id')
-    tce2_state_id = fields.Many2one('res.country.state', related='ice_site_id.state_id')
+    tce2_city_id = fields.Char(related='ice_site_id.city_id')
+    tce2_state_id = fields.Char(related='ice_site_id.state_id')
     tce2_zip = fields.Char(related='ice_site_id.zip')
     
         # SCCE
