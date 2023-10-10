@@ -196,7 +196,6 @@ class Site(models.Model):
     _description = 'Site'
     _rec_name = 'name'
     
-<<<<<<< HEAD
     name = fields.Char(string='Name', required=True)
     setting_ids = fields.Many2many(comodel_name='category.setting', string='Category Setting')
     address = fields.Char(string='Address')
@@ -204,16 +203,6 @@ class Site(models.Model):
     city_id = fields.Char(string='City')
     state_id = fields.Char(string='State')
     zip = fields.Char(string='Zip Code', max_length=5, required=True)
-=======
-    name = fields.Char(string='Name', required=True, tracking=True)
-    setting_ids = fields.Many2many(comodel_name='category.setting', string='Category Setting', tracking=True)
-    address = fields.Char(string='Address', tracking=True)
-    email = fields.Char(string='Email Address', tracking=True)
-    city_id = fields.Many2one(comodel_name='res.city', string='City')
-    country_id = fields.Many2one(comodel_name='res.country', default=lambda self: self.env.company.country_id)
-    state_id = fields.Many2one(comodel_name='res.country.state', string='State', domain="[('country_id', '=', country_id)]")
-    zip = fields.Char(string='Zip Code', max_length=5, tracking=True)
->>>>>>> TREE Opt Code
     contract_ids = fields.One2many('site.contract', 'site_id', string='Site Contracts')
     contract_id = fields.Many2one(
         'site.contract', string='Current Contract',
