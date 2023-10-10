@@ -172,18 +172,6 @@ class Cohort(models.Model):
     tce2_placement_status = fields.Selection([('not_met', 'Confirmed'), ('met', 'Met'),], string='TCE II Placement Status')
     tce2_accepted_distances = fields.Boolean(string='TCE II Accepted Distances', default=False)
     
-    
-    def get_distance(self, zip_one, zip_two):
-        token = self.env['ir.config_parameter'].sudo(
-        ).get_param('zip_code_token')
-        if token:
-            token= 'DemoOnly00gH8wbb344Ca9wRlS2B9Btt3Nqg7g6GkvvSswAhCSX2jtqxzmK8kWuM'
-            url = 'https://www.zipcodeapi.com/rest/%s/distance.json/%s/%s/mile'% (token, zip_one, zip_two)
-            res = requests.get(url)
-            if res.status_code == 200:
-                return res.json().get('distance')
-        else:
-            return False
 
     @api.depends('stu_locatio_zip_two', 'stu_locatio_zip_three', 'stu_locatio_zip_four', 'stu_locatio_zip_five', 'ice_setting_id', 'tce1_setting_id', 'tce2_setting_id')
     def get_price_total(self):
@@ -321,7 +309,26 @@ class ClinicInfoGathering(models.Model):
             ],
         string='State', default='not_confirmed')
     is_confirmed_send = fields.Boolean(string='is Confirmation Send')
-    
+    setting_type = fields.Selection([
+        ('ip', 'IP'),
+        ('op', 'OP'),
+    ], string='Setting Type',default='ip')
+    date_end = fields.Datetime('End Date')
+    contract_state = fields.Selection([
+        ('draft', 'New'),
+        ('open', 'Running'),
+        ('close', 'Expired'),
+        ('cancel', 'Cancelled')
+    ], string='Contract State', group_expand='_expand_states', copy=False,
+       tracking=True, help='Status of the contract', default='draft')
+
+    @api.onchange('clinc_id')
+    def _get_state(self):
+        for rec in self:
+            if rec.clinc_id:
+                rec.contract_state = rec.clinc_id.contract_id.state or False
+                rec.date_end = rec.clinc_id.contract_id.date_end or False
+
     def action_confirm(self):
         for rec in self:
             rec.write({

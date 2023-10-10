@@ -21,6 +21,22 @@ def get_distance(zip_one, zip_two):
             return res.json().get('distance')
     else:
         return False
+
+def get_locstion_infor(zip):
+        try:
+            token = request.env['ir.config_parameter'].sudo(
+            ).get_param('zip_code_token')
+            print("token",token)
+            if token:
+                token= 'DemoOnly00gH8wbb344Ca9wRlS2B9Btt3Nqg7g6GkvvSswAhCSX2jtqxzmK8kWuM'
+                url = "https://www.zipcodeapi.com/rest/%s/info.json/%s/degrees" % (token, zip)
+                res = requests.get(url)
+                if res.status_code == 200:
+                    return res.json()
+        except Exception as e:
+        # else:
+            return False
+
 class Archive(models.Model):
     _name = 'archive'
     _description = 'Archive Placement'
@@ -287,9 +303,9 @@ class LocationSetting(models.Model):
     _rec_name = 'student_id'
     
     student_id = fields.Many2one(comodel_name='res.partner', string='Student', required=True)
-    zip = fields.Char(string='Zip Code', max_length=5)
-    city_id = fields.Char(string='City')
-    state_id = fields.Char(string='State')
+    zip = fields.Integer(string='Zip Code', size=5)
+    city = fields.Char(string='City')
+    state = fields.Char(string='State')
     
     @api.constrains('zip', 'student_id')
     def _check_product_uom_category_id(self):
@@ -305,20 +321,14 @@ class LocationSetting(models.Model):
     
 
         
-    def get_locstion_infor(self,zip):
-        try:
-            token = self.env['ir.config_parameter'].sudo(
-            ).get_param('zip_code_token')
-            if token:
-                token= 'DemoOnly00gH8wbb344Ca9wRlS2B9Btt3Nqg7g6GkvvSswAhCSX2jtqxzmK8kWuM'
-                url = "https://www.zipcodeapi.com/rest/%s/info.json/%s/degrees" % (token, zip)
-                res = requests.get(url)
-                if res.status_code == 200:
-                    return res.json()
-        except Exception as e:
-        # else:
-            return False
-    
+    @api.onchange('zip')
+    def _get_state_and_city(self):
+        for rec in self:
+            result = get_locstion_infor(self.zip)
+            if result:
+                rec.state = result['state']
+                rec.city = result['city']
+            
 class Placement(models.Model):
     _name = 'placement.setting'
     _description = 'Placement Setting'
