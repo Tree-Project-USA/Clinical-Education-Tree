@@ -120,29 +120,34 @@
         <field name="arch" type="xml">
             <form string="">
                 <header>
+                    <field name="is_bot" invisible="1"/>
                     <button name="action_post" string="Confirm" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'draft')]}" data-hotkey="v"/>
                     <button name="action_draft" string="Reset To Draft" type="object" class="btn btn-secondary" attrs="{'invisible': [('state', '!=', 'done')]}" data-hotkey="w"/>
+                    <button name="action_complete" string="Complete" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'running')]}" data-hotkey="w"/>
+                    <button name="action_processing_by_bot" string="Processing By Bot" type="object" class="btn btn-secondary" attrs="{'invisible': ['|',('state', '!=', 'draft'),('is_bot', '=',True)]}" data-hotkey="w"/>
                     <field name="state" widget="statusbar" clickable="False"/>
                 </header>
                 <sheet>
+                    <widget name="web_ribbon" title="Bot" bg_color="bg-primary" attrs="{'invisible': [('is_bot', '=', False)]}"/>
+
                         <div class="oe_button_box" name="button_box">
-                            <button
-                                class="oe_stat_button"
-                                type="object"
-                                name="open_hardship_button"
-                                icon="fa-file-text-o"
-                                attrs="{'invisible': [('state', '=', 'draft')]}"
-                            >
-                            Placement
-                            </button>
                             <button
                                 class="oe_stat_button shake"
                                 type="object"
                                 name="open_hardship_button"
                                 icon="fa-smile-o"
-                                attrs="{'invisible': [('state', '=', 'draft')]}"
+                                attrs="{'invisible': ['|',('is_bot', '=', False),('state', '=', 'draft')]}"
                             >
                             Bot Placement
+                            </button>
+                            <button
+                                class="oe_stat_button"
+                                type="object"
+                                name="open_hardship_button"
+                                icon="fa-file-text-o"
+                                attrs="{'invisible': ['|',('is_bot', '=', True),('state', '=', 'draft')]}"
+                            >
+                            Placement
                             </button>
                         </div>
                     <div class="oe_title mb24">
@@ -163,15 +168,18 @@
                         </group>
                         <group>
                         <field name="cohort_labels"/>
+                        <field name="Ice" widget="boolean_toggle" readonly="1"/>
+                        <field name="Tci1" widget="boolean_toggle" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        <field name="Tci2" widget="boolean_toggle" attrs="{'readonly': [('state', '!=', 'draft')]}"/>    
                         </group>
                     </group>
                     <notebook>
                         <page string="Info">
-                            <field name="info_ids">
+                            <field name="info_ids" attrs="{'readonly': [('state', '!=', 'draft')]}">
                               <tree editable="bottom" delete="false">
                                 <field name="is_confirmed_send" invisible="1"/>
-                                <field name="clinc_id" attrs="{'readonly': [('state', '=', 'confirmed')]}"/>
-                                <field name="num_students" attrs="{'readonly': [('state', '=', 'confirmed')]}"/>
+                                <field name="clinc_id"/>
+                                <field name="num_students"/>
                                 <field name="setting_type"/>
                                 <field name="state" widget="badge" decoration-muted="state=='not_confirmed'" decoration-info="state=='confirmed'"/>
                                 <field name="date_end" widget="remaining_days"/>
@@ -184,7 +192,6 @@
                                 <button name="action_send_email_to_clinck" string="Send Mail" type="object" icon="fa-paper-plane" attrs="{'invisible': ['|', ('state', '=', 'confirmed'), ('is_confirmed_send', '!=', False)]}"/>
                                 <button name="action_send_email_to_clinck" string="Resend" type="object" icon="fa-repeat" attrs="{'invisible': ['|', ('state', '=', 'confirmed'), ('is_confirmed_send', '=', False)]}"/>
                               </tree>
-
                             </field>
                         </page>
                         <page string="Cohort Lines">

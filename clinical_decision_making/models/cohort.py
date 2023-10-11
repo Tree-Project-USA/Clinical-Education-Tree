@@ -4,6 +4,7 @@ import requests
 from lxml.etree import LxmlError
 from datetime import date
 from odoo import models, fields, api,_
+from odoo.exceptions import ValidationError
 
 class Cohort(models.Model):
     _name = 'cohort'
@@ -277,6 +278,11 @@ class CPDMTree(models.Model):
     _description = 'Cohort'
     _rec_name = 'name'
     
+    def get_cohort_label(self):
+        cohort_labels = self.env['res.partner'].sudo().search([('is_student', '=', True)]).mapped('cohort_label')
+        selection = [(item, item) for item in list(set(cohort_labels))]
+        return selection
+
     name = fields.Char(string='Name')
     
     # placement_ids = fields.Many2one(comodel_name='placement.setting', string='Placement')
@@ -298,31 +304,36 @@ class CPDMTree(models.Model):
     total_hardships   = fields.Integer(compute='_compute_total_students', string='Total Hardships')
     comment = fields.Html(string='Notes')
     info_ids = fields.One2many('clinic.info.gathering', 'tree_id', string='Clinic Information Gathering')
+    cohort_labels = fields.Selection(selection=get_cohort_label, string='Cohort Labels', required=True)
+    is_bot = fields.Boolean(string='')
+    Ice = fields.Boolean(string='ICE', default=True)
+    Tci1 = fields.Boolean(string='TCI 1')
+    Tci2 = fields.Boolean(string='TCI 2')
     
     # avalible_student_ids = fields.Many2many(comodel_name='res.partner', string='Avalible Student', domain=[('is_student', '=', True)], compute='_compute_avalible_student_id', store=True,)
-    @api.onchange('cohort_ids.student_id', 'cohort_ids')
-    def get_avalible_student_ids(self):
+    # @api.onchange('cohort_ids.student_id', 'cohort_ids')
+    # def get_avalible_student_ids(self):
+    #     for rec in self:
+    #         s= self.env['res.partner'].sudo().search([('is_student', '=', True), ('cohort_label', '=', rec.cohort_labels), ('id', 'not in', rec.cohort_ids.mapped('student_id').ids)])
+    #         rec.write({
+    #             'avalible_student_ids': s.ids
+    #             }) 
+                 
+    @api.onchange('Tci2')
+    def _onchange_Tci2(self):
         for rec in self:
-            s= self.env['res.partner'].sudo().search([('is_student', '=', True), ('cohort_label', '=', rec.cohort_labels), ('id', 'not in', rec.cohort_ids.mapped('student_id').ids)])
-            write({
-                'avalible_student_ids': s.ids
-                }) 
-            
+            if rec.Tci2 :rec.Tci1 = True
 
-        
+    @api.onchange('Tci1')
+    def _onchange_Tci1(self):
+        for rec in self:
+            if not rec.Tci1: rec.Tci2 = False
+
     @api.depends('cohort_ids')
     def _compute_avalible_student_id(self):
         for rec in self:
             data  = self.env['res.partner'].sudo().search([('is_student', '=', True), ('cohort_label', '=', rec.cohort_labels), ('id', 'not in', rec.cohort_ids.mapped('student_id').ids)])
-            print('*************data', data)
-            print(rec)
             rec.avalible_student_ids = data
-    def get_cohort_label(self):
-        cohort_labels = self.env['res.partner'].sudo().search([('is_student', '=', True)]).mapped('cohort_label')
-        selection = [(item, item) for item in list(set(cohort_labels))]
-        return selection
-    
-    cohort_labels = fields.Selection(selection=get_cohort_label, string='Cohort Labels', required=True)
     
     def open_hardship_button(self):
         tree_view_id = self.env.ref('clinical_decision_making.cohort_view_tree').id
@@ -344,13 +355,32 @@ class CPDMTree(models.Model):
             rec.total_hardships = 0
             
     def action_post(self):
-        self.write({
-            'state': 'running',
-        })
+        for rec in self :
+            if not rec.info_ids :
+                raise ValidationError("You Shoul Add Clinic Info")
+            if any(record.state == 'not_confirmed' for record in rec.info_ids):
+                raise ValidationError("You Shoul Confirm all clinic Info or deleted")
+            elif any(record.num_students == 0 for record in rec.info_ids):
+                raise ValidationError("Student number of all Clinck Shoul Be Bigger Than Zero")
+
+            rec.write({
+                'state': 'running',
+            })
     def action_draft(self):
         self.write({
             'state': 'draft',
         })
+    def action_complete(self):
+        self.write({
+            'state': 'done',
+        })
+    
+    def action_processing_by_bot(self):
+        self.write({
+            'is_bot': True,
+        })
+    
+    
         
     # Cron job
     def check_end_date_to_update_status(self):
