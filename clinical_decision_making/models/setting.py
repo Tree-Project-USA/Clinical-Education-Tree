@@ -41,14 +41,26 @@ def get_locstion_infor(zip):
 class Archive(models.Model):
     _name = 'archive'
     _description = 'Archive Placement'
-    _rec_name = 'student_id'
+    _rec_name = 'setting_id'
     
     student_id = fields.Many2one(comodel_name='res.partner', string='Student', readonly=True)
     site_id = fields.Many2one(comodel_name='site', string='Site', readonly=True)
     tree_id = fields.Many2one(comodel_name='cpdm.tree', string='Clinc Placement Tree', readonly=True)
     cohort_id = fields.Many2one(comodel_name='cohort', string='Cohort', readonly=True)
     date = fields.Date(string='Date',default=fields.Date.today(), readonly=True)
-    intership_time = fields.Selection(selection='',string='', required=True)
+    setting_id = fields.Many2one(comodel_name='category.setting', string="Setting Intership", required=True)
+    zip = fields.Char(string='Zip Code', required=True)
+    
+    intership_period = fields.Selection([
+        ('ice', 'ICE'),
+        ('tce1', 'TCE1'),
+        ('tce2', 'TCE2'),
+    ], string='Period', required=True)
+    
+    _sql_constraints = [
+        ('uniq_student_period', 'unique(student_id, intership_period)', 'The student period is already present. ')
+    ]
+    locatio_ids = fields.One2many(comodel_name='location.setting', inverse_name='archive_id', string='Locations')
     
 class SiteContractHistory(models.Model):
     _name = 'site.contract.history'
@@ -157,6 +169,7 @@ class SiteContracts(models.Model):
     def _assign_open_contract(self):
         for contract in self:
             contract.site_id.sudo().write({'contract_id': contract.id})
+        
     @api.model_create_multi
     def create(self, vals_list):
         contracts = super(SiteContracts, self).create(vals_list)
@@ -315,6 +328,7 @@ class LocationSetting(models.Model):
     _rec_name = 'student_id'
     
     student_id = fields.Many2one(comodel_name='res.partner', string='Student', required=True)
+    archive_id = fields.Many2one(comodel_name='archive', string='Archive', required=True)
     zip = fields.Integer(string='Zip Code', size=5, required=True)
     city = fields.Char(string='City')
     state = fields.Char(string='State')

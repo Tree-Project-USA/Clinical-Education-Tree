@@ -11,6 +11,7 @@ class Cohort(models.Model):
     _rec_name = 'cpdm_tree_id'
 
     cpdm_tree_id = fields.Many2one(comodel_name='cpdm.tree', string='cpdm Tree')
+    parent_state = fields.Selection(related='cpdm_tree_id.state')
         
     # Student Information
     student_id = fields.Many2one(comodel_name='res.partner', string='Student', domain=[('is_student', '=', True)])
@@ -23,8 +24,9 @@ class Cohort(models.Model):
     
     def get_default_avalible_student_ids(self):
         cpdm_tree_id = self.env['cpdm.tree'].browse(self.env.context.get('default_cpdm_tree_id'))
-        s= self.env['res.partner'].sudo().search([('is_student', '=', True), ('cohort_label', '=', cpdm_tree_id.cohort_labels), ('id', 'not in', cpdm_tree_id.cohort_ids.mapped('student_id').ids)])
-        return s
+        avalible_student_ids = self.env['res.partner'].sudo().search([('is_student', '=', True), ('cohort_label', '=', cpdm_tree_id.cohort_labels), ('id', 'not in', cpdm_tree_id.cohort_ids.mapped('student_id').ids)])
+        return avalible_student_ids
+    
     avalible_student_ids = fields.Many2many(comodel_name='res.partner', string='Avalible Student', domain=[('is_student', '=', True)], default=get_default_avalible_student_ids, readonly=True)    
     _sql_constraints = [
         ("student_id_unique", "UNIQUE(student_id, cpdm_tree_id)", "Student is already exists"),
@@ -59,6 +61,25 @@ class Cohort(models.Model):
     stu_locatio_zip_five = fields.Char(string='Zip Code Five', compute='compute_student_locations')
     stu_locatio_city_five_id = fields.Char(string='City Five', compute='compute_student_locations')
     stu_locatio_state_five_id =fields.Char(string='State Five', compute='compute_student_locations')
+    
+        
+    @api.depends('student_id.locatio_ids')
+    def _compute_intershi_ice(self):
+        for rec in self:
+            archive_id = rec.student_id.archive_ids.filtered(lambda setting_id : setting_id.intership_period == 'ice')
+            rec.stu_setting_one_id = archive_id.setting_id
+            
+    @api.depends('student_id.locatio_ids')
+    def _compute_intershi_tce1(self):
+        for rec in self:
+            archive_id = rec.student_id.archive_ids.filtered(lambda setting_id : setting_id.intership_period == 'tce1')
+            rec.stu_setting_two_id = archive_id.setting_id
+            
+    @api.depends('student_id.locatio_ids')
+    def _compute_intershi_tce2(self):
+        for rec in self:
+            archive_id = rec.student_id.archive_ids.filtered(lambda setting_id : setting_id.intership_period == 'tce2')
+            rec.stu_setting_three_id = archive_id.setting_id
             
     @api.depends('student_id', 'student_id.locatio_ids')
     def compute_student_locations(self):
@@ -90,7 +111,21 @@ class Cohort(models.Model):
     hardship_status = fields.Selection([
         ('approved', 'Approved'),
         ('not_approved', 'Not Approved'),
-    ], string='Hardship Status')
+    ], string='Hardship Status', compute='_compute_hardship_status', store=True, precompute=True)
+    
+    
+    @api.depends('student_id', 'student_id.hardship_ids')
+    def _compute_hardship_status(self):
+        for rec in self:
+            if self.parent_state == 'running':
+                hardship_id = rec.student_id.hardship_ids
+                if hardship_id:
+                    rec.hardship_status = 'approved' if hardship_id[0].state == 'confirm' else 'not_approved'
+                else:
+                    rec.hardship_status = False
+            else:
+                if not rec.hardship_status:
+                    rec.hardship_status = False
     
     # Met Rquirements
     cat_one_requirment = fields.Selection([('not_met', 'Not Met'), ('met', 'Met'),], string='CAT 1 Requirment', compute='_compute_cat_one_requirment')

@@ -11,15 +11,16 @@
                 </header>
                 <field name="avalible_student_ids" invisible="1"/>
                 <field name="cpdm_tree_id" invisible="1"/>
+                <field name="parent_state"/>
                 <!-- Student Information -->
                 <field name="student_id" domain="[('id', 'in', avalible_student_ids)]" class="o_fields_col"/>
                 <field name="avalible_student_ids"/>
                 <field name="first_name" class="o_fields_col"/>
                 <field name="last_name" class="o_fields_col"/>
-                <field name="cohort_label" class="o_fields_col"/>
-                <field name="stu_email" class="o_fields_col"/>
-                <field name="stu_phone" class="o_fields_col"/>
-                <field name="home_address" class="o_fields_col"/>
+                <field name="cohort_label" class="o_fields_col" optional="hide"/>
+                <field name="stu_email" class="o_fields_col" optional="hide"/>
+                <field name="stu_phone" class="o_fields_col" optional="hide"/>
+                <field name="home_address" class="o_fields_col" optional="hide"/>
                 <field name="stu_setting_one_id" class="o_fields_col"/>
                 <field name="stu_setting_two_id" class="o_fields_col"/>
                 <field name="stu_setting_three_id" class="o_fields_col"/>
@@ -40,7 +41,7 @@
                 <field name="stu_locatio_zip_five" class="o_fields_col"/>
 
                 <!-- Hardship Status -->
-                <field name="hardship_status" class="o_fields_col"/>
+                <field name="hardship_status" class="o_fields_col" widget="badge" decoration-warning="hardship_status=='not_approved'" decoration-success="hardship_status == 'approved'"/>
 
                 <!-- Hardship Status -->
                 <field name="cat_one_requirment" class="o_state"/>
@@ -61,7 +62,7 @@
                 <field name="ice_scce_email" class="o_ice"/>
                 <field name="ice_placement_status" class="o_ice"/>
                 <field name="ice_accepted_distances" class="o_ice"/>
-
+                
                 <!-- Placement TCE 1  -->
                 <field name="tce1_setting_id" class="o_tce1"/>
                 <field name="tce1_site_id" class="o_tce1"/>
@@ -108,7 +109,7 @@
                 <field name="total_pending"/>
                 <field name="total_not_placed"/>
                 <field name="total_hardships"/>
-                <field name="state" widget="badge" decoration-muted="state=='draft'" decoration-success="state == 'running'" decoration-info="state=='done  '"/>
+                <field name="state" widget="badge" decoration-muted="state=='draft'" decoration-success="state == 'running'" decoration-info="state=='done'"/>
             </tree>
         </field>
     </record>
