@@ -38,8 +38,8 @@
                 <field name="name"/>
                 <field name="email"/>
                 <field name="address"/>
-                <field name="city_id"/>
-                <field name="state_id"/>
+                <field name="city"/>
+                <field name="state"/>
                 <field name="zip"/>
                 <field name="setting_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
             </tree>
@@ -96,19 +96,27 @@
                         <label for="name"/>
                         <field name="name"/>
                         <group>
-                            <field name="setting_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
                             <field name="email"/>
                             <field name="address"/>
-                            <field name="city_id"/>
+                            <field name="city"/>
                         </group>
                         <group>
-                            <field name="state_id"/>
+                            <field name="state"/>
                             <field name="zip"/>
                         </group>
                     </group>
                     <notebook>
                         <page string="SCCE">
                             <field name="scce_ids"/>
+                        </page>
+                        <page string="Sitting">
+                            <field name="setting_ids">
+                                <tree editable="bottom">
+                                    <field name="name"/>
+                                    <field name="code"/>
+                                    <field name="color" widget="color_picker"/>
+                                </tree>
+                            </field>
                         </page>
                     </notebook>
                 </sheet>
@@ -126,6 +134,7 @@
         <field name="model">category.setting</field>
         <field name="arch" type="xml">
             <tree editable="bottom">
+                <field name="site_id" required="1"/>
                 <field name="name"/>
                 <field name="code"/>
                 <field name="color" widget="color_picker"/>
@@ -139,6 +148,7 @@
             <form>
                 <sheet>
                     <group>
+                        <field name="site_id" required="1"/>
                         <field name="name"/>
                         <field name="code"/>
                         <field name="color" widget="color_picker"/>

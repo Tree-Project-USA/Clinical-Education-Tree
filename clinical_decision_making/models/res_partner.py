@@ -20,6 +20,13 @@ class NamaModel(models.Model):
     is_reach_maximum_zip_code = fields.Boolean(string='Reach Maximum Zip Code', default=False)
     deny_show_student = fields.Boolean()
     
+    @api.onchange('locatio_ids')
+    def _get_state_and_city(self):
+        for rec in self.locatio_ids:
+            if rec.zip in self.locatio_ids.filtered(lambda x : x.id != rec.id).mapped('zip'): #TODO remove this when add new Setting in location to avoide Bugs
+                raise ValidationError(_('Zip code must be unique. '))
+        self.check_zip_code_distance(self.locatio_ids.mapped('zip'))
+
     @api.onchange('first_name', 'last_name')
     def _compute_name(self):
         for rec in self:
@@ -33,4 +40,4 @@ class NamaModel(models.Model):
                 if zip_code != single_code:
                     distance = get_distance(zip_code, single_code)
                     if distance and distance < float(max_distance_mel):
-                        raise ValidationError(_('The Distance Between zip codes (%s) and (%s) is too small that the distance required to (%s) miles'% (zip_code , single_code, max_distance_mel)))
+                        raise ValidationError(_('The Distance Between zip codes (%s) and (%s) is (%s) and  too small that the distance required to (%s) miles'% (zip_code , single_code, distance, max_distance_mel)))
