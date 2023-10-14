@@ -29,6 +29,7 @@ class CustomerPortals(http.Controller):
                     'datas': base64.b64encode(post.get("datas_" + str(files), False).read()),
                 })
             file_list.append(line)
+            hardship_id.attachment_ids.unlink()
             HardshipRequest.sudo().write({
                 "note":  post.get("note") if post.get("note") else False,
                 "attachment_ids": file_list,
@@ -72,5 +73,7 @@ class CustomerPortals(http.Controller):
     @http.route("/info/hardship/request", type="http", website=True, auth="public")
     def info_hardship_request(self):
         values = {}
-        values["partner"] = request.env.user.partner_id
+        partner_id = request.env.user.partner_id
+        locations_id = request.env["location.setting"].sudo().search([('student_id','=', partner_id.id )])
+        values["locations"] = locations_id
         return request.render("website_base.locations_students_info_template", values)
