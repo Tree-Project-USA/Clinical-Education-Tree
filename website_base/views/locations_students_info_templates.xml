@@ -35,7 +35,7 @@
                                                     </tr>
                                                 </thead>
                                                 <div class="collapse">
-                                                    <tbody t-foreach="partner.locatio_ids" t-as="val">
+                                                    <tbody t-foreach="locations" t-as="val">
                                                         <tr class="project_cost_line">
                                                             <td>
                                                                 <div class="form-group">
@@ -49,7 +49,7 @@
                                                                             type="text" 
                                                                             readonly="1"
                                                                             class="form-control" 
-                                                                            t-att-value="val.state_id" 
+                                                                            t-att-value="val.state" 
                                                                             />
                                                                     </div>
                                                                 </div>
@@ -61,7 +61,7 @@
                                                                             type="text" 
                                                                             readonly="1"
                                                                             class="form-control" 
-                                                                            t-att-value="val.city_id"
+                                                                            t-att-value="val.city"
                                                                         />
                                                                     </div>
                                                                 </div>

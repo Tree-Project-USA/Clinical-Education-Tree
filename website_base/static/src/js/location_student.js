@@ -19,8 +19,8 @@ odoo.define('website_base.location_student', function(require) {
         _onZipCodeChanges: function() {
             var self = this
             var zip = $('.total_project_costs > tbody > tr.project_cost_line div > input[name="zip"]');
-            var State = $('.total_project_costs > tbody > tr.project_cost_line div > input[name="state_id"]');
-            var City = $('.total_project_costs > tbody > tr.project_cost_line div > input[name="city_id"]');
+            var State = $('.total_project_costs > tbody > tr.project_cost_line div > input[name="state"]');
+            var City = $('.total_project_costs > tbody > tr.project_cost_line div > input[name="city"]');
             var zip_code_error = $('.zip_code_error');
             var bk_loader = $('#bk_n_res_loader');
             _.each(zip, function(value, index) {
@@ -54,12 +54,12 @@ odoo.define('website_base.location_student', function(require) {
             var locations_data = [];
             var rows = $('.total_project_costs > tbody > tr.project_cost_line');
             _.each(rows, function(row) {
-                let state_id = $(row).find('input[name="state_id"]').val();
-                let city_id = $(row).find('input[name="city_id"]').val();
+                let state = $(row).find('input[name="state"]').val();
+                let city = $(row).find('input[name="city"]').val();
                 let zip = $(row).find('input[name="zip"]').val();
                 locations_data.push({
-                    'state_id': state_id,
-                    'city_id': city_id,
+                    'state': state,
+                    'city': city,
                     'zip': zip,
                 });
             });

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Send Mail Hardship Request -->
+    <record id="mail_template_send_hardship_request" model="mail.template">
+        <field name="name">Send Mail Hardship Request</field>
+        <field name="model_id" ref="clinical_decision_making.model_hardship_request"/>
+        <field name="subject">Request for days off</field>
+        <field name="email_from">{{ user.company_id.email_formatted or user.email_formatted }}</field>
+        <field name="partner_to">{{ object.student_id.id }}</field>
+        <field name="email_to">{{ object.student_id.email }}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    <p>Hello Dear</p>
+                    <h4> 
+                        <t t-out="object.student_id.name or ''"/>
+                    </h4>
+                    <p>
+                        we have received your hardship request and will get back to you soon. 
+                    </p>
+                </p>
+            </div>
+            <field name="auto_delete" eval="True"/>
+        </field>
+    </record>
+
+</odoo>

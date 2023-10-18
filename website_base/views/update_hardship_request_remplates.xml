@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <template id="inherit_submenu" inherit_id="website.submenu">
+    <xpath expr="//li[@t-if='submenu.is_visible and not (submenu.child_id or submenu.is_mega_menu)']" position="attributes">
+
+       <attribute name="t-if" add="and submenu.check_menu_hardship() and submenu.check_menu_update_hardship()" separator=" "/>
+    </xpath>
+  </template>
+  <template id="update_hardship_request_template" name="Hardship Request Template">
+      <t t-call="website.layout">
+          <div id="form_temp">
+              <div id="wrap" class="oe_structure oe_empty my-4">
+                  <div
+                      class="alert alert-danger w-10 mx-auto text-center"
+                      t-if="error"
+                      role="alert"
+                  >
+                      <strong>
+                          <t t-esc="error"/>
+                      </strong>
+                  </div>
+                  <div class="container">
+                      <form  
+                      t-att-action="'/update/hardship/request?hardship=%s' % (hardship_id.id)" 
+                          class="files"
+                          method="post"
+                          enctype="multipart/form-data"
+                      >
+                          <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                          <input type="hidden" name="len_file" value="1" />
+                          <div class="row mt-4">
+                              <div>
+                                <table class="table add_file table-bordered">
+                                  <thead>
+                                    <tr>
+                                      <th class="text-center" colspan="5">Application attachments</th>
+                                      <th class="text-center" />
+                                    </tr>
+                                  </thead>
+                                  <tbody id="add_file">
+                                    
+                                  </tbody>
+                                  <tfooter>
+                                    <tr>
+                                      <td colspan="6">
+                                        <a 
+                                          id="add_files" 
+                                          class="btn m-2"
+                                          style="background-color:#ab8631;color:#fff;" 
+                                        >
+                                          <h6>Add File</h6>
+                                        </a>
+                                      </td>
+                                    </tr>
+                                  </tfooter>
+                                </table>
+                              </div>
+                          </div>
+                          <div class="row mt-4">
+                            <div class="col-12">
+                                <div class="form-group green-border-focus">
+                                    <label class="required" for="note">Note</label>
+                                    <textarea
+                                      class="form-control"
+                                      row="3"
+                                      name="note"
+                                      type="text"
+                                      id="note"
+                                    >
+                                    </textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix oe_login_buttons mt-4">
+                            <button type="submit"
+                                    class="custom_create btn btn-block" style="background-color:#ab8631;color:#fff;">
+                                Submit
+                            </button>
+                        </div>
+                      </form>
+                  </div>
+              </div>
+          </div>
+      </t>
+  </template>
+</odoo>

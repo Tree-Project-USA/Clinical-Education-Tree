@@ -62,12 +62,12 @@
                                                                     </td>
                                                                     <td>
                                                                         <div class="form-group">
-                                                                            <input type="text" id="state_id" name="state_id" readonly="readonly"  required="required"  class="form-control" t-att-value="val['state_id'] if data_line_ids else ' ' " />
+                                                                            <input type="text" id="state" name="state" readonly="readonly"  required="required"  class="form-control" t-att-value="val['state'] if data_line_ids else ' ' " />
                                                                         </div>
                                                                     </td>
                                                                     <td>
                                                                         <div class="form-group">
-                                                                            <input type="text" id="city_id" name="city_id" required="required" readonly="readonly" class="form-control" t-att-value="val['city_id'] if data_line_ids else '' " />
+                                                                            <input type="text" id="city" name="city" required="required" readonly="readonly" class="form-control" t-att-value="val['city'] if data_line_ids else '' " />
                                                                         </div>
                                                                     </td>
                                                                     <td>
