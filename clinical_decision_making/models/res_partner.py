@@ -12,14 +12,22 @@ class NamaModel(models.Model):
     first_name = fields.Char(string='First Name', required=True)
     last_name = fields.Char(string='Last Name', required=True)
     cohort_label = fields.Char(string='Cohort Label')
-    graduation_date = fields.Date(string='Graduation Date', required=True)
+    graduation_date = fields.Date(string='Graduation Date')
+    hardship_ids = fields.One2many('hardship.request', 'student_id', string='Hardship')
     home_address = fields.Char(string='Home Address')
-    setting_ids = fields.Many2many(comodel_name='category.setting', string='Category Setting')
+    archive_ids = fields.One2many(comodel_name='archive', inverse_name='student_id', string='Archive')
     locatio_ids = fields.One2many(comodel_name='location.setting', inverse_name='student_id', string='Locations')
     can_apply_hardship = fields.Boolean(string='Apply Hardship', default=False)
     is_reach_maximum_zip_code = fields.Boolean(string='Reach Maximum Zip Code', default=False)
     deny_show_student = fields.Boolean()
     
+    @api.onchange('locatio_ids')
+    def _get_state_and_city(self):
+        for rec in self.locatio_ids:
+            if rec.zip in self.locatio_ids.filtered(lambda x : x.id != rec.id).mapped('zip'): #TODO remove this when add new Setting in location to avoide Bugs
+                raise ValidationError(_('Zip code must be unique. '))
+        self.check_zip_code_distance(self.locatio_ids.mapped('zip'))
+
     @api.onchange('first_name', 'last_name')
     def _compute_name(self):
         for rec in self:
@@ -33,4 +41,4 @@ class NamaModel(models.Model):
                 if zip_code != single_code:
                     distance = get_distance(zip_code, single_code)
                     if distance and distance < float(max_distance_mel):
-                        raise ValidationError(_('The Distance Between zip codes (%s) and (%s) is too small that the distance required to (%s) miles'% (zip_code , single_code, max_distance_mel)))
+                        raise ValidationError(_('The Distance Between zip codes (%s) and (%s) is (%s) and  too small that the distance required to (%s) miles'% (zip_code , single_code, distance, max_distance_mel)))

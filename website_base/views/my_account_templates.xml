@@ -66,12 +66,12 @@
                             </select>
                         </div>
                         <div t-attf-class="form-group col-lg-6 col-12">
-                            <label class="col-form-label" for="state_id">State</label>
+                            <label class="col-form-label" for="state">State</label>
                             <select
-                                                        name="state_id"
-                                                        id="state_id"
+                                                        name="state"
+                                                        id="state"
                                                         t-attf-class="custom-select"
-                                                        t-att-value="partner.state_id"
+                                                        t-att-value="partner.state"
                                                     >
                                 <t t-foreach="states" t-as="state">
                                     <option

@@ -26,7 +26,7 @@
 
     <record id="cpdm_tree_action" model="ir.actions.act_window">
         <field name="type">ir.actions.act_window</field>
-        <field name="name">Decision Making</field>
+        <field name="name">Internship</field>
         <field name="res_model">cpdm.tree</field>
         <field name="view_mode">tree,form</field>
     </record>
@@ -112,14 +112,14 @@
 
     <menuitem
         id="cpdm_menu"
-        name="Decisions Making"
+        name="Internship"
         action="cpdm_tree_action"
         parent="cpdm_tree_menu"
         sequence="1"/>
     
     <menuitem
         id="cohort_menu"
-        name="Placement"
+        name="Internship Placement"
         action="cohort_action"
         parent="cpdm_tree_menu"
         sequence="2"/>

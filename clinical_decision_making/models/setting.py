@@ -19,19 +19,48 @@ def get_distance(zip_one, zip_two):
         res = requests.get(url)
         if res.status_code == 200:
             return res.json().get('distance')
+        else:
+            raise ValidationError(res.json().get('error_msg', ''))
     else:
         return False
+
+def get_locstion_infor(zip):
+    token = request.env['ir.config_parameter'].sudo(
+    ).get_param('zip_code_token')
+    if token:
+        token= 'DemoOnly00gH8wbb344Ca9wRlS2B9Btt3Nqg7g6GkvvSswAhCSX2jtqxzmK8kWuM'
+        url = "https://www.zipcodeapi.com/rest/%s/info.json/%s/degrees" % (token, zip)
+        res = requests.get(url)
+        print(res.status_code)
+        if res.status_code == 200:
+            return res.json()
+        else:
+            raise ValidationError(res.json().get('error_msg', ''))
+
 
 class Archive(models.Model):
     _name = 'archive'
     _description = 'Archive Placement'
-    _rec_name = 'student_id'
+    _rec_name = 'setting_id'
     
     student_id = fields.Many2one(comodel_name='res.partner', string='Student', readonly=True)
     site_id = fields.Many2one(comodel_name='site', string='Site', readonly=True)
     tree_id = fields.Many2one(comodel_name='cpdm.tree', string='Clinc Placement Tree', readonly=True)
     cohort_id = fields.Many2one(comodel_name='cohort', string='Cohort', readonly=True)
     date = fields.Date(string='Date',default=fields.Date.today(), readonly=True)
+    setting_id = fields.Many2one(comodel_name='category.setting', string="Setting Intership", required=True)
+    zip = fields.Char(string='Zip Code', required=True)
+    
+    intership_period = fields.Selection([
+        ('ice', 'ICE'),
+        ('tce1', 'TCE1'),
+        ('tce2', 'TCE2'),
+    ], string='Period', required=True)
+    
+    _sql_constraints = [
+        ('uniq_student_period', 'unique(student_id, intership_period)', 'The student period is already present. ')
+    ]
+    locatio_ids = fields.One2many(comodel_name='location.setting', inverse_name='archive_id', string='Locations')
     
 class SiteContractHistory(models.Model):
     _name = 'site.contract.history'
@@ -140,6 +169,7 @@ class SiteContracts(models.Model):
     def _assign_open_contract(self):
         for contract in self:
             contract.site_id.sudo().write({'contract_id': contract.id})
+        
     @api.model_create_multi
     def create(self, vals_list):
         contracts = super(SiteContracts, self).create(vals_list)
@@ -192,27 +222,36 @@ class SCCE(models.Model):
 
 class Site(models.Model):
     _name = 'site'
+    _inherit = ['mail.thread']
     _description = 'Site'
     _rec_name = 'name'
     
     name = fields.Char(string='Name', required=True)
-    setting_ids = fields.Many2many(comodel_name='category.setting', string='Category Setting')
+    setting_ids = fields.One2many('category.setting', 'site_id',string='Category Setting')
     address = fields.Char(string='Address')
     email = fields.Char(string='Email Address')
-    city_id = fields.Char(string='City')
-    state_id = fields.Char(string='State')
+    city = fields.Char(string='City', readonly=True)
+    state = fields.Char(string='State', readonly=True)
     zip = fields.Char(string='Zip Code', max_length=5, required=True)
     contract_ids = fields.One2many('site.contract', 'site_id', string='Site Contracts')
     contract_id = fields.Many2one(
         'site.contract', string='Current Contract',
-        domain="[('company_id', '=', company_id), ('site_id', '=', id)]", help='Current contract of the Site')
+        domain="[('company_id', '=', company_id), ('site_id', '=', id)]", help='Current contract of the Site', tracking=True)
 
-    contract_attachment = fields.Binary(string="Contract Attachment", store=True, compute='_compute_contract_warning')
+    contract_attachment = fields.Binary(string="Contract Attachment", store=True, compute='_compute_contract_warning', tracking=True)
     contract_warning = fields.Boolean(string='Contract Warning', store=True, compute='_compute_contract_warning')
     first_contract_date = fields.Date(compute='_compute_first_contract_date', store=True)
-    contracts_count = fields.Integer(compute='_compute_contracts_count', string='Contract Count')
-    
+    contracts_count = fields.Integer(compute='_compute_contracts_count', string='Contract Count', tracking=True)
+    scce_ids = fields.Many2many(comodel_name='scce', string='SCCES', tracking=True)        
         
+    @api.onchange('zip')
+    def _get_state_and_city(self):
+        for rec in self:
+            result = get_locstion_infor(self.zip)
+            if result:
+                rec.state = result['state']
+                rec.city = result['city']
+    
     @api.depends('contract_id', 'contract_id.state')
     def _compute_contract_warning(self):
         for site in self:
@@ -280,6 +319,7 @@ class CategorySetting(models.Model):
     
     name = fields.Char(string='Name', required=True)
     code = fields.Selection(string='Code', selection=[('ip', 'IP'), ('op', 'OP')], default='op', required=True)
+    site_id = fields.Many2one(comodel_name='site', string='Site')
     color = fields.Integer('Color Index')
 
 class LocationSetting(models.Model):
@@ -288,7 +328,8 @@ class LocationSetting(models.Model):
     _rec_name = 'student_id'
     
     student_id = fields.Many2one(comodel_name='res.partner', string='Student', required=True)
-    zip = fields.Integer(string='Zip Code', size=5)
+    archive_id = fields.Many2one(comodel_name='archive', string='Archive', required=True)
+    zip = fields.Integer(string='Zip Code', size=5, required=True)
     city = fields.Char(string='City')
     state = fields.Char(string='State')
     
@@ -312,6 +353,9 @@ class LocationSetting(models.Model):
         for rec in self:
             if rec.zip:
                 location_ids = self.env['location.setting'].search([('student_id', '=', rec.student_id.id)])
+                if rec.zip in location_ids.filtered(lambda location_id: location_id.id != rec.id).mapped('zip'): #TODO remove this when add new Setting in location to avoide Bugs
+                    raise ValidationError(_('Zip code must be unique. '))
+                    
                 for location_id in location_ids:
                     distance = get_distance(rec.zip, location_id.zip)
                     if distance and distance < float(max_distance_mel):

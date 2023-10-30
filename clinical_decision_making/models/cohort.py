@@ -4,6 +4,7 @@ import requests
 from lxml.etree import LxmlError
 from datetime import date
 from odoo import models, fields, api,_
+from odoo.exceptions import ValidationError
 
 class Cohort(models.Model):
     _name = 'cohort'
@@ -11,6 +12,7 @@ class Cohort(models.Model):
     _rec_name = 'cpdm_tree_id'
 
     cpdm_tree_id = fields.Many2one(comodel_name='cpdm.tree', string='cpdm Tree')
+    parent_state = fields.Selection(related='cpdm_tree_id.state')
         
     # Student Information
     student_id = fields.Many2one(comodel_name='res.partner', string='Student', domain=[('is_student', '=', True)])
@@ -21,6 +23,15 @@ class Cohort(models.Model):
     stu_phone = fields.Char(related='student_id.phone')
     home_address = fields.Char(related='student_id.home_address')
     
+    def get_default_avalible_student_ids(self):
+        cpdm_tree_id = self.env['cpdm.tree'].browse(self.env.context.get('default_cpdm_tree_id'))
+        avalible_student_ids = self.env['res.partner'].sudo().search([('is_student', '=', True), ('cohort_label', '=', cpdm_tree_id.cohort_labels), ('id', 'not in', cpdm_tree_id.cohort_ids.mapped('student_id').ids)])
+        return avalible_student_ids
+    
+    avalible_student_ids = fields.Many2many(comodel_name='res.partner', string='Avalible Student', domain=[('is_student', '=', True)], default=get_default_avalible_student_ids, readonly=True)    
+    _sql_constraints = [
+        ("student_id_unique", "UNIQUE(student_id, cpdm_tree_id)", "Student is already exists"),
+    ]
     stu_setting_one_id = fields.Many2one(comodel_name='category.setting', string="Setting One")
     stu_setting_two_id = fields.Many2one(comodel_name='category.setting', string="Setting Two")
     stu_setting_three_id = fields.Many2one(comodel_name='category.setting', string="Setting Three")
@@ -51,6 +62,25 @@ class Cohort(models.Model):
     stu_locatio_zip_five = fields.Char(string='Zip Code Five', compute='compute_student_locations')
     stu_locatio_city_five_id = fields.Char(string='City Five', compute='compute_student_locations')
     stu_locatio_state_five_id =fields.Char(string='State Five', compute='compute_student_locations')
+    
+        
+    @api.depends('student_id.locatio_ids')
+    def _compute_intershi_ice(self):
+        for rec in self:
+            archive_id = rec.student_id.archive_ids.filtered(lambda setting_id : setting_id.intership_period == 'ice')
+            rec.stu_setting_one_id = archive_id.setting_id
+            
+    @api.depends('student_id.locatio_ids')
+    def _compute_intershi_tce1(self):
+        for rec in self:
+            archive_id = rec.student_id.archive_ids.filtered(lambda setting_id : setting_id.intership_period == 'tce1')
+            rec.stu_setting_two_id = archive_id.setting_id
+            
+    @api.depends('student_id.locatio_ids')
+    def _compute_intershi_tce2(self):
+        for rec in self:
+            archive_id = rec.student_id.archive_ids.filtered(lambda setting_id : setting_id.intership_period == 'tce2')
+            rec.stu_setting_three_id = archive_id.setting_id
             
     @api.depends('student_id', 'student_id.locatio_ids')
     def compute_student_locations(self):
@@ -59,30 +89,44 @@ class Cohort(models.Model):
             lines = len(rec.student_id.locatio_ids)
             
             rec.stu_locatio_zip_one = rec.student_id.locatio_ids[0].zip if lines  >= 1 else False
-            rec.stu_locatio_city_one_id = rec.student_id.locatio_ids[0].city_id if lines  >= 1 else False
-            rec.stu_locatio_state_one_id = rec.student_id.locatio_ids[0].state_id if lines  >= 1 else False
+            rec.stu_locatio_city_one_id = rec.student_id.locatio_ids[0].city if lines  >= 1 else False
+            rec.stu_locatio_state_one_id = rec.student_id.locatio_ids[0].state if lines  >= 1 else False
             
             rec.stu_locatio_zip_two = rec.student_id.locatio_ids[1].zip if lines  >= 2 else False
-            rec.stu_locatio_city_two_id = rec.student_id.locatio_ids[1].city_id if lines  >= 2 else False
-            rec.stu_locatio_state_two_id = rec.student_id.locatio_ids[1].state_id if lines  >= 2 else False
+            rec.stu_locatio_city_two_id = rec.student_id.locatio_ids[1].city if lines  >= 2 else False
+            rec.stu_locatio_state_two_id = rec.student_id.locatio_ids[1].state if lines  >= 2 else False
             
             rec.stu_locatio_zip_three = rec.student_id.locatio_ids[2].zip if lines  >= 3 else False
-            rec.stu_locatio_city_three_id = rec.student_id.locatio_ids[2].city_id if lines  >= 3 else False
-            rec.stu_locatio_state_three_id = rec.student_id.locatio_ids[2].state_id if lines  >= 3 else False
+            rec.stu_locatio_city_three_id = rec.student_id.locatio_ids[2].city if lines  >= 3 else False
+            rec.stu_locatio_state_three_id = rec.student_id.locatio_ids[2].state if lines  >= 3 else False
             
             rec.stu_locatio_zip_four = rec.student_id.locatio_ids[3].zip if lines  >= 4 else False
-            rec.stu_locatio_city_four_id = rec.student_id.locatio_ids[3].city_id if lines  >= 4 else False
-            rec.stu_locatio_state_four_id = rec.student_id.locatio_ids[3].state_id if lines  >= 4 else False
+            rec.stu_locatio_city_four_id = rec.student_id.locatio_ids[3].city if lines  >= 4 else False
+            rec.stu_locatio_state_four_id = rec.student_id.locatio_ids[3].state if lines  >= 4 else False
             
             rec.stu_locatio_zip_five = rec.student_id.locatio_ids[4].zip if lines  >= 5 else False
-            rec.stu_locatio_city_five_id = rec.student_id.locatio_ids[4].city_id if lines  >= 5 else False
-            rec.stu_locatio_state_five_id = rec.student_id.locatio_ids[4].state_id if lines  >= 5 else False
+            rec.stu_locatio_city_five_id = rec.student_id.locatio_ids[4].city if lines  >= 5 else False
+            rec.stu_locatio_state_five_id = rec.student_id.locatio_ids[4].state if lines  >= 5 else False
                    
     #-----------------------------------
     hardship_status = fields.Selection([
         ('approved', 'Approved'),
         ('not_approved', 'Not Approved'),
-    ], string='Hardship Status')
+    ], string='Hardship Status', compute='_compute_hardship_status', store=True, precompute=True)
+    
+    
+    @api.depends('student_id', 'student_id.hardship_ids')
+    def _compute_hardship_status(self):
+        for rec in self:
+            if self.parent_state == 'running':
+                hardship_id = rec.student_id.hardship_ids
+                if hardship_id:
+                    rec.hardship_status = 'approved' if hardship_id[0].state == 'confirm' else 'not_approved'
+                else:
+                    rec.hardship_status = False
+            else:
+                if not rec.hardship_status:
+                    rec.hardship_status = False
     
     # Met Rquirements
     cat_one_requirment = fields.Selection([('not_met', 'Not Met'), ('met', 'Met'),], string='CAT 1 Requirment', compute='_compute_cat_one_requirment')
@@ -116,8 +160,8 @@ class Cohort(models.Model):
     ice_setting_id =  fields.Many2one(comodel_name='category.setting', string="Setting")
     ice_site_id = fields.Many2one(comodel_name='site', string='ICE Site Name')
     ice_site_address = fields.Char(related='ice_site_id.address')
-    ice_city_id = fields.Char(related='ice_site_id.city_id')
-    ice_state_id = fields.Char(related='ice_site_id.state_id')
+    ice_city = fields.Char(related='ice_site_id.city')
+    ice_state = fields.Char(related='ice_site_id.state')
     ice_zip = fields.Char(related='ice_site_id.zip')
     
         # SCCE
@@ -137,8 +181,8 @@ class Cohort(models.Model):
     tce1_setting_id =  fields.Many2one(comodel_name='category.setting', string="TCE I Setting")
     tce1_site_id = fields.Many2one(comodel_name='site', string='TCE I Site Name')
     tce1_site_address = fields.Char(related='ice_site_id.address')
-    tce1_city_id = fields.Char(related='ice_site_id.city_id')
-    tce1_state_id = fields.Char(related='ice_site_id.state_id')
+    tce1_city = fields.Char(related='ice_site_id.city')
+    tce1_state = fields.Char(related='ice_site_id.state')
     tce1_zip = fields.Char(related='ice_site_id.zip')
     
         # SCCE
@@ -158,8 +202,8 @@ class Cohort(models.Model):
     tce2_setting_id =  fields.Many2one(comodel_name='category.setting', string="TCE II Setting")
     tce2_site_id = fields.Many2one(comodel_name='site', string='TCE II Site Name')
     tce2_site_address = fields.Char(related='ice_site_id.address')
-    tce2_city_id = fields.Char(related='ice_site_id.city_id')
-    tce2_state_id = fields.Char(related='ice_site_id.state_id')
+    tce2_city = fields.Char(related='ice_site_id.city')
+    tce2_state = fields.Char(related='ice_site_id.state')
     tce2_zip = fields.Char(related='ice_site_id.zip')
     
         # SCCE
@@ -234,6 +278,11 @@ class CPDMTree(models.Model):
     _description = 'Cohort'
     _rec_name = 'name'
     
+    def get_cohort_label(self):
+        cohort_labels = self.env['res.partner'].sudo().search([('is_student', '=', True)]).mapped('cohort_label')
+        selection = [(item, item) for item in list(set(cohort_labels))]
+        return selection
+
     name = fields.Char(string='Name')
     
     # placement_ids = fields.Many2one(comodel_name='placement.setting', string='Placement')
@@ -255,7 +304,36 @@ class CPDMTree(models.Model):
     total_hardships   = fields.Integer(compute='_compute_total_students', string='Total Hardships')
     comment = fields.Html(string='Notes')
     info_ids = fields.One2many('clinic.info.gathering', 'tree_id', string='Clinic Information Gathering')
+    cohort_labels = fields.Selection(selection=get_cohort_label, string='Cohort Labels', required=True)
+    is_bot = fields.Boolean(string='')
+    Ice = fields.Boolean(string='ICE', default=True)
+    Tci1 = fields.Boolean(string='TCI 1')
+    Tci2 = fields.Boolean(string='TCI 2')
+    
+    # avalible_student_ids = fields.Many2many(comodel_name='res.partner', string='Avalible Student', domain=[('is_student', '=', True)], compute='_compute_avalible_student_id', store=True,)
+    # @api.onchange('cohort_ids.student_id', 'cohort_ids')
+    # def get_avalible_student_ids(self):
+    #     for rec in self:
+    #         s= self.env['res.partner'].sudo().search([('is_student', '=', True), ('cohort_label', '=', rec.cohort_labels), ('id', 'not in', rec.cohort_ids.mapped('student_id').ids)])
+    #         rec.write({
+    #             'avalible_student_ids': s.ids
+    #             }) 
+                 
+    @api.onchange('Tci2')
+    def _onchange_Tci2(self):
+        for rec in self:
+            if rec.Tci2 :rec.Tci1 = True
 
+    @api.onchange('Tci1')
+    def _onchange_Tci1(self):
+        for rec in self:
+            if not rec.Tci1: rec.Tci2 = False
+
+    @api.depends('cohort_ids')
+    def _compute_avalible_student_id(self):
+        for rec in self:
+            data  = self.env['res.partner'].sudo().search([('is_student', '=', True), ('cohort_label', '=', rec.cohort_labels), ('id', 'not in', rec.cohort_ids.mapped('student_id').ids)])
+            rec.avalible_student_ids = data
     
     def open_hardship_button(self):
         tree_view_id = self.env.ref('clinical_decision_making.cohort_view_tree').id
@@ -277,13 +355,32 @@ class CPDMTree(models.Model):
             rec.total_hardships = 0
             
     def action_post(self):
-        self.write({
-            'state': 'running',
-        })
+        for rec in self :
+            if not rec.info_ids :
+                raise ValidationError("You Shoul Add Clinic Info")
+            if any(record.state == 'not_confirmed' for record in rec.info_ids):
+                raise ValidationError("You Shoul Confirm all clinic Info or deleted")
+            elif any(record.num_students == 0 for record in rec.info_ids):
+                raise ValidationError("Student number of all Clinck Shoul Be Bigger Than Zero")
+
+            rec.write({
+                'state': 'running',
+            })
     def action_draft(self):
         self.write({
             'state': 'draft',
         })
+    def action_complete(self):
+        self.write({
+            'state': 'done',
+        })
+    
+    def action_processing_by_bot(self):
+        self.write({
+            'is_bot': True,
+        })
+    
+    
         
     # Cron job
     def check_end_date_to_update_status(self):
