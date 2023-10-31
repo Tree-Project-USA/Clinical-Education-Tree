@@ -11,6 +11,7 @@
     'data': [
         'security/ir.model.access.csv',
         'data/cron_servises.xml',
+        'data/cpdm_tree_data.xml',
         'views/setting_views.xml',
         'views/cohort_views.xml',
         'views/res_partner_views.xml',

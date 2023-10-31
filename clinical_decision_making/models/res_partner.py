@@ -20,6 +20,9 @@ class NamaModel(models.Model):
     can_apply_hardship = fields.Boolean(string='Apply Hardship', default=False)
     is_reach_maximum_zip_code = fields.Boolean(string='Reach Maximum Zip Code', default=False)
     deny_show_student = fields.Boolean()
+    is_complete_ice = fields.Boolean(string='Is Complate Ice')
+    is_complete_tce1 = fields.Boolean(string='Is Complate Tec1')
+    is_complete_tce2 = fields.Boolean(string='Is Complate Tec2')
     
     @api.onchange('locatio_ids')
     def _get_state_and_city(self):

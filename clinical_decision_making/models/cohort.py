@@ -15,7 +15,7 @@ class Cohort(models.Model):
     parent_state = fields.Selection(related='cpdm_tree_id.state')
         
     # Student Information
-    student_id = fields.Many2one(comodel_name='res.partner', string='Student', domain=[('is_student', '=', True)])
+    student_id = fields.Many2one(comodel_name='res.partner', string='Student', domain=[('is_student', '=', True)], readonly=True)
     first_name = fields.Char(related='student_id.first_name')
     last_name = fields.Char(related='student_id.last_name')
     cohort_label = fields.Char(related='student_id.cohort_label')
@@ -29,9 +29,6 @@ class Cohort(models.Model):
         return avalible_student_ids
     
     avalible_student_ids = fields.Many2many(comodel_name='res.partner', string='Avalible Student', domain=[('is_student', '=', True)], default=get_default_avalible_student_ids, readonly=True)    
-    _sql_constraints = [
-        ("student_id_unique", "UNIQUE(student_id, cpdm_tree_id)", "Student is already exists"),
-    ]
     stu_setting_one_id = fields.Many2one(comodel_name='category.setting', string="Setting One")
     stu_setting_two_id = fields.Many2one(comodel_name='category.setting', string="Setting Two")
     stu_setting_three_id = fields.Many2one(comodel_name='category.setting', string="Setting Three")
@@ -118,7 +115,7 @@ class Cohort(models.Model):
     @api.depends('student_id', 'student_id.hardship_ids')
     def _compute_hardship_status(self):
         for rec in self:
-            if self.parent_state == 'running':
+            if rec.parent_state == 'running':
                 hardship_id = rec.student_id.hardship_ids
                 if hardship_id:
                     rec.hardship_status = 'approved' if hardship_id[0].state == 'confirm' else 'not_approved'
@@ -171,7 +168,7 @@ class Cohort(models.Model):
     ice_scce_email = fields.Char(related='ice_scce_id.email')
 
         # Accepter
-    ice_placement_status = fields.Selection([('not_met', 'Confirmed'), ('met', 'Met'),], string='ICE Placement Status')
+    ice_placement_status = fields.Selection([('normal', 'Pending'), ('done', 'Confirmed'), ('blocked', 'Not Placed')], default='normal', string='ICE Placement Status')
     ice_accepted_distances = fields.Boolean(string='ICE Accepted Distances', default=False)
     
     # ------------------------------------------------------------------------------
@@ -192,7 +189,7 @@ class Cohort(models.Model):
     tce1_scce_email = fields.Char(related='ice_scce_id.email')
 
         # Accepter
-    tce1_placement_status = fields.Selection([('not_met', 'Confirmed'), ('met', 'Met'),], string='TCE I Placement Status')
+    tce1_placement_status = fields.Selection([('normal', 'Pending'), ('done', 'Confirmed'), ('blocked', 'Not Placed')], default='normal', string='TCE I Placement Status')
     tce1_accepted_distances = fields.Boolean(string='TCE II Accepted Distances', default=False)
     
     # ------------------------------------------------------------------------------
@@ -213,7 +210,7 @@ class Cohort(models.Model):
     tce2_scce_email = fields.Char(related='ice_scce_id.email')
 
         # Accepter
-    tce2_placement_status = fields.Selection([('not_met', 'Confirmed'), ('met', 'Met'),], string='TCE II Placement Status')
+    tce2_placement_status = fields.Selection([('normal', 'Pending'), ('done', 'Confirmed'), ('blocked', 'Not Placed')], default='normal', string='TCE II Placement Status')
     tce2_accepted_distances = fields.Boolean(string='TCE II Accepted Distances', default=False)
     
 
@@ -277,14 +274,17 @@ class CPDMTree(models.Model):
     _name = 'cpdm.tree'
     _description = 'Cohort'
     _rec_name = 'name'
+    _order = 'priority desc, id desc'
     
     def get_cohort_label(self):
         cohort_labels = self.env['res.partner'].sudo().search([('is_student', '=', True)]).mapped('cohort_label')
         selection = [(item, item) for item in list(set(cohort_labels))]
         return selection
 
-    name = fields.Char(string='Name')
-    
+    name = fields.Char(string='Name', required=True)
+    sequence_number = fields.Char(string='Sequence', required=True, index=True, copy=False, default='New')
+    priority = fields.Selection(
+        [('0', 'Normal'), ('1', 'Urgent')], 'Priority', default='0', index=True)
     # placement_ids = fields.Many2one(comodel_name='placement.setting', string='Placement')
     cpdm_date = fields.Date('cpdm Date',default=fields.Date.today())
     
@@ -306,35 +306,19 @@ class CPDMTree(models.Model):
     info_ids = fields.One2many('clinic.info.gathering', 'tree_id', string='Clinic Information Gathering')
     cohort_labels = fields.Selection(selection=get_cohort_label, string='Cohort Labels', required=True)
     is_bot = fields.Boolean(string='')
-    Ice = fields.Boolean(string='ICE', default=True)
-    Tci1 = fields.Boolean(string='TCI 1')
-    Tci2 = fields.Boolean(string='TCI 2')
-    
-    # avalible_student_ids = fields.Many2many(comodel_name='res.partner', string='Avalible Student', domain=[('is_student', '=', True)], compute='_compute_avalible_student_id', store=True,)
-    # @api.onchange('cohort_ids.student_id', 'cohort_ids')
-    # def get_avalible_student_ids(self):
-    #     for rec in self:
-    #         s= self.env['res.partner'].sudo().search([('is_student', '=', True), ('cohort_label', '=', rec.cohort_labels), ('id', 'not in', rec.cohort_ids.mapped('student_id').ids)])
-    #         rec.write({
-    #             'avalible_student_ids': s.ids
-    #             }) 
-                 
-    @api.onchange('Tci2')
-    def _onchange_Tci2(self):
-        for rec in self:
-            if rec.Tci2 :rec.Tci1 = True
+    type = fields.Selection([
+        ('ice', 'ICE'),
+        ('tci1', 'TCI1'),
+        ('tci2', 'TCI2'),
+    ], string='Type')
+    term = fields.Selection([
+        ('fall', 'Fall'),
+        ('spreing', 'Spreing'),
+        ('summer', 'Summer'),
+    ], string='Term')
+    date = fields.Date(string='Year', required=True)
 
-    @api.onchange('Tci1')
-    def _onchange_Tci1(self):
-        for rec in self:
-            if not rec.Tci1: rec.Tci2 = False
 
-    @api.depends('cohort_ids')
-    def _compute_avalible_student_id(self):
-        for rec in self:
-            data  = self.env['res.partner'].sudo().search([('is_student', '=', True), ('cohort_label', '=', rec.cohort_labels), ('id', 'not in', rec.cohort_ids.mapped('student_id').ids)])
-            rec.avalible_student_ids = data
-    
     def open_hardship_button(self):
         tree_view_id = self.env.ref('clinical_decision_making.cohort_view_tree').id
         return {
@@ -345,27 +329,64 @@ class CPDMTree(models.Model):
             "views": [[tree_view_id, "tree"], [False, "form"]],
             "context": {'default_cpdm_tree_id': self.id}
         }
-    @api.depends('cohort_ids')
+        
+    @api.depends('cohort_ids', 'type')
     def _compute_total_students(self):
         for rec in self:
             rec.total_students = len(rec.cohort_ids.mapped('student_id'))
-            rec.total_confirmed = 0
-            rec.total_pending = 0
-            rec.total_not_placed = 0
-            rec.total_hardships = 0
+            rec.total_hardships = len(rec.cohort_ids.filtered(lambda record: record.hardship_status == 'approved'))
+            
+            placement_status_field = ""
+            if rec.type == 'ice':
+                placement_status_field = 'ice_placement_status'
+            elif rec.type == 'tce1':
+                placement_status_field = 'tce1_placement_status'
+            elif rec.type == 'tce2':
+                placement_status_field = 'tce2_placement_status'
+            
+            rec.total_confirmed = len(rec.cohort_ids.filtered(lambda record: getattr(record, placement_status_field) == 'confirmed'))
+            rec.total_pending = len(rec.cohort_ids.filtered(lambda record: getattr(record, placement_status_field) == 'pending'))
+            rec.total_not_placed = len(rec.cohort_ids.filtered(lambda record: getattr(record, placement_status_field) == 'not_placed'))
             
     def action_post(self):
-        for rec in self :
-            if not rec.info_ids :
-                raise ValidationError("You Shoul Add Clinic Info")
-            if any(record.state == 'not_confirmed' for record in rec.info_ids):
-                raise ValidationError("You Shoul Confirm all clinic Info or deleted")
-            elif any(record.num_students == 0 for record in rec.info_ids):
-                raise ValidationError("Student number of all Clinck Shoul Be Bigger Than Zero")
+        self.ensure_one()
+        
+        if not self.info_ids:
+            raise ValidationError("You should add Clinic Info")
+        
+        if any(record.state == 'not_confirmed' for record in self.info_ids):
+            raise ValidationError("You should confirm all Clinic Info or delete them")
+        
+        if any(record.num_students == 0 for record in self.info_ids):
+            raise ValidationError("Student number of all Clinics should be greater than zero")
+        
+        domain = [('is_student', '=', True), ('cohort_label', '=', self.cohort_labels)]
+        
+        if self.type == 'ice':
+            domain += [('is_complete_ice', '=', False)]
+        elif self.type == 'tce1':
+            domain += [('is_complete_tce1', '=', False)]
+        elif self.type == 'tce2':
+            domain += [('is_complete_tce2', '=', False)]
 
-            rec.write({
-                'state': 'running',
+        student_ids = self.env['res.partner'].sudo().search(domain)
+        student_in_progress = self.search([('id', '!=', self.id), ('state', '=', 'running')]).mapped('cohort_ids').mapped('student_id')
+        
+        student_ids -= student_in_progress
+        
+        cohort_vals = []
+        for student_id in student_ids:
+            cohort_vals.append({
+                'student_id': student_id.id,
+                'cpdm_tree_id': self.id
             })
+        
+        self.env['cohort'].sudo().create(cohort_vals)
+        
+        self.write({
+            'state': 'running',
+        })
+            
     def action_draft(self):
         self.write({
             'state': 'draft',
@@ -380,7 +401,12 @@ class CPDMTree(models.Model):
             'is_bot': True,
         })
     
-    
+    @api.model
+    def create(self, vals):
+        if 'sequence_number' not in vals or vals.get('sequence_number', False) == False or vals['sequence_number'] == _('New'):
+            vals['sequence_number'] = self.env['ir.sequence'].next_by_code('cpdm.tree') or _('New')
+        print(vals)
+        return super(CPDMTree, self).create(vals)
         
     # Cron job
     def check_end_date_to_update_status(self):

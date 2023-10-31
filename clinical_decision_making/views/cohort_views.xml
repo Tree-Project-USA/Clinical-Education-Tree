@@ -9,36 +9,33 @@
                 <header>
                     <button name="action_send_email_to_students" string="Send to Update Data" type="object"/>
                 </header>
-                <field name="avalible_student_ids" invisible="1"/>
                 <field name="cpdm_tree_id" invisible="1"/>
-                <field name="parent_state"/>
                 <!-- Student Information -->
-                <field name="student_id" domain="[('id', 'in', avalible_student_ids)]" class="o_fields_col"/>
-                <field name="avalible_student_ids"/>
+                <field name="student_id" class="o_fields_col"/>
                 <field name="first_name" class="o_fields_col"/>
                 <field name="last_name" class="o_fields_col"/>
                 <field name="cohort_label" class="o_fields_col" optional="hide"/>
                 <field name="stu_email" class="o_fields_col" optional="hide"/>
                 <field name="stu_phone" class="o_fields_col" optional="hide"/>
                 <field name="home_address" class="o_fields_col" optional="hide"/>
-                <field name="stu_setting_one_id" class="o_fields_col"/>
-                <field name="stu_setting_two_id" class="o_fields_col"/>
-                <field name="stu_setting_three_id" class="o_fields_col"/>
-                <field name="stu_locatio_city_one_id" class="o_fields_col"/>
-                <field name="stu_locatio_city_two_id" class="o_fields_col"/>
-                <field name="stu_locatio_city_three_id" class="o_fields_col"/>
-                <field name="stu_locatio_city_four_id" class="o_fields_col"/>
-                <field name="stu_locatio_city_five_id" class="o_fields_col"/>
-                <field name="stu_locatio_state_one_id" class="o_fields_col"/>
-                <field name="stu_locatio_state_two_id" class="o_fields_col"/>
-                <field name="stu_locatio_state_three_id" class="o_fields_col"/>
-                <field name="stu_locatio_state_four_id" class="o_fields_col"/>
-                <field name="stu_locatio_state_five_id" class="o_fields_col"/>
-                <field name="stu_locatio_zip_one" class="o_fields_col"/>
-                <field name="stu_locatio_zip_two" class="o_fields_col"/>
-                <field name="stu_locatio_zip_three" class="o_fields_col"/>
-                <field name="stu_locatio_zip_four" class="o_fields_col"/>
-                <field name="stu_locatio_zip_five" class="o_fields_col"/>
+                <field name="stu_setting_one_id" class="o_fields_col" optional="hide"/>
+                <field name="stu_setting_two_id" class="o_fields_col" optional="hide"/>
+                <field name="stu_setting_three_id" class="o_fields_col" optional="hide"/>
+                <field name="stu_locatio_city_one_id" class="o_fields_col" optional="hide"/>
+                <field name="stu_locatio_city_two_id" class="o_fields_col" optional="hide"/>
+                <field name="stu_locatio_city_three_id" class="o_fields_col" optional="hide"/>
+                <field name="stu_locatio_city_four_id" class="o_fields_col" optional="hide"/>
+                <field name="stu_locatio_city_five_id" class="o_fields_col" optional="hide"/>
+                <field name="stu_locatio_state_one_id" class="o_fields_col" optional="hide"/>
+                <field name="stu_locatio_state_two_id" class="o_fields_col" optional="hide"/>
+                <field name="stu_locatio_state_three_id" class="o_fields_col" optional="hide"/>
+                <field name="stu_locatio_state_four_id" class="o_fields_col" optional="hide"/>
+                <field name="stu_locatio_state_five_id" class="o_fields_col" optional="hide"/>
+                <field name="stu_locatio_zip_one" class="o_fields_col" optional="hide"/>
+                <field name="stu_locatio_zip_two" class="o_fields_col" optional="hide"/>
+                <field name="stu_locatio_zip_three" class="o_fields_col" optional="hide"/>
+                <field name="stu_locatio_zip_four" class="o_fields_col" optional="hide"/>
+                <field name="stu_locatio_zip_five" class="o_fields_col" optional="hide"/>
 
                 <!-- Hardship Status -->
                 <field name="hardship_status" class="o_fields_col" widget="badge" decoration-warning="hardship_status=='not_approved'" decoration-success="hardship_status == 'approved'"/>
@@ -60,7 +57,7 @@
                 <field name="ice_scce_first_name" class="o_ice"/>
                 <field name="ice_scce_last_name" class="o_ice"/>
                 <field name="ice_scce_email" class="o_ice"/>
-                <field name="ice_placement_status" class="o_ice"/>
+                <field name="ice_placement_status" widget="state_selection" class="o_ice"/>
                 <field name="ice_accepted_distances" class="o_ice"/>
                 
                 <!-- Placement TCE 1  -->
@@ -74,7 +71,7 @@
                 <field name="tce1_scce_first_name" class="o_tce1"/>
                 <field name="tce1_scce_last_name" class="o_tce1"/>
                 <field name="tce1_scce_email" class="o_tce1"/>
-                <field name="tce1_placement_status" class="o_tce1"/>
+                <field name="tce1_placement_status" widget="state_selection" class="o_tce1"/>
                 <field name="tce1_accepted_distances" class="o_tce1"/>
 
                 <!-- Placement TCE 2  -->
@@ -88,7 +85,7 @@
                 <field name="tce2_scce_first_name" class="o_tce2"/>
                 <field name="tce2_scce_last_name" class="o_tce2"/>
                 <field name="tce2_scce_email" class="o_tce2"/>
-                <field name="tce2_placement_status" class="o_tce2"/>
+                <field name="tce2_placement_status" widget="state_selection" class="o_tce2"/>
                 <field name="tce2_accepted_distances" class="o_tce2"/>
 
             </tree>
@@ -102,7 +99,12 @@
         <field name="model">cpdm.tree</field>
         <field name="arch" type="xml">
             <tree >
+                <field name="priority" optional="show" widget="priority" nolabel="1"/>
+                <field name="sequence_number"/>
                 <field name="name"/>
+                <field name="term" widget="badge"/>
+                <field name="type" widget="badge"/>
+                <field name="date" options="{'datepicker': {'format': 'yyyy'}}"/>
                 <field name="create_date"/>
                 <field name="total_students"/>
                 <field name="total_confirmed"/>
@@ -127,10 +129,10 @@
                     <button name="action_processing_by_bot" string="Processing By Bot" type="object" class="btn btn-secondary" attrs="{'invisible': ['|',('state', '!=', 'draft'),('is_bot', '=',True)]}" data-hotkey="w"/>
                     <field name="state" widget="statusbar" clickable="False"/>
                 </header>
-                <sheet>
-                    <widget name="web_ribbon" title="Bot" bg_color="bg-primary" attrs="{'invisible': [('is_bot', '=', False)]}"/>
 
-                        <div class="oe_button_box" name="button_box">
+                <sheet>
+                <widget name="web_ribbon" title="Bot" bg_color="bg-primary" attrs="{'invisible': [('is_bot', '=', False)]}"/>
+                    <div class="oe_button_box" name="button_box">
                             <button
                                 class="oe_stat_button shake"
                                 type="object"
@@ -140,37 +142,28 @@
                             >
                             Bot Placement
                             </button>
-                            <button
-                                class="oe_stat_button"
-                                type="object"
-                                name="open_hardship_button"
-                                icon="fa-file-text-o"
-                                attrs="{'invisible': ['|',('is_bot', '=', True),('state', '=', 'draft')]}"
-                            >
-                            Placement
-                            </button>
-                        </div>
-                    <div class="oe_title mb24">
-                        <h1>
-                            <field id="name" class="text-break" name="name" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                    </div>
+                    <div class="oe_title">
+                        <span class="o_form_label">Seq </span>
+                        <h1 class="d-flex">
+                            <field name="priority" widget="priority" class="me-3"/>
+                            <field name="sequence_number" readonly="1"/><br/>
+                        </h1>
+                        <span class="o_form_label">Name </span>
+                        <h1 class="d-flex">
+                            <field name="name"/>
                         </h1>
                     </div>
                     <group>
                         <group>
-                            <label for="date_begin" string="Dates"/>
-                            <div class="o_row">
-                                <span class="text-muted">From</span>
-                                <field name="date_begin" class="oe_inline" widget="daterange" options="{'related_end_date': 'date_end'}" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
-                                <span class="text-muted">To</span>
-                                <field name="date_end" class="oe_inline" widget="daterange" options="{'related_end_date': 'date_begin'}" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
-                            </div>
-                            <field name="create_date"/>
+                            <field name="cohort_labels"/>
+                            <field name="date" widget="date" options="{'datepicker': {'format': 'yyyy'}}" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+
                         </group>
                         <group>
-                        <field name="cohort_labels"/>
-                        <field name="Ice" widget="boolean_toggle" readonly="1"/>
-                        <field name="Tci1" widget="boolean_toggle" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
-                        <field name="Tci2" widget="boolean_toggle" attrs="{'readonly': [('state', '!=', 'draft')]}"/>    
+                            <field name="type"/>
+                            <field name="term"/>
+
                         </group>
                     </group>
                     <notebook>
