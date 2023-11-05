@@ -536,6 +536,37 @@ class CPDMTree(models.Model):
             "views": [[tree_view_id, "tree"], [False, "form"]],
             "context": context
         }
+
+    def open_hardship_button_not_Placed(self):
+        tree_view_id = self.env.ref('clinical_decision_making.cohort_view_tree').id
+        return {
+            "type": "ir.actions.act_window",
+            "name": _("Placement"),
+            "res_model": "cohort",
+            "domain": [('cpdm_tree_id', '=', self.id),('cpdm_tree_id.ice_placement_status','=','blocked')],
+            "views": [[tree_view_id, "tree"], [False, "form"]],
+            "context": {'default_cpdm_tree_id': self.id}
+        }
+    def open_hardship_button_confirmed(self):
+        tree_view_id = self.env.ref('clinical_decision_making.cohort_view_tree').id
+        return {
+            "type": "ir.actions.act_window",
+            "name": _("Placement"),
+            "res_model": "cohort",
+            "domain": [('cpdm_tree_id', '=', self.id),('cpdm_tree_id.ice_placement_status','=','done')],
+            "views": [[tree_view_id, "tree"], [False, "form"]],
+            "context": {'default_cpdm_tree_id': self.id}
+        }
+    def open_hardship_button_Pinding(self):
+        tree_view_id = self.env.ref('clinical_decision_making.cohort_view_tree').id
+        return {
+            "type": "ir.actions.act_window",
+            "name": _("Placement"),
+            "res_model": "cohort",
+            "domain": [('cpdm_tree_id', '=', self.id),('cpdm_tree_id.ice_placement_status','=','normal')],
+            "views": [[tree_view_id, "tree"], [False, "form"]],
+            "context": {'default_cpdm_tree_id': self.id}
+        }
         
     @api.depends('cohort_ids', 'type')
     def _compute_total_students(self):

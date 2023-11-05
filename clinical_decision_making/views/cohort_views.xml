@@ -377,6 +377,42 @@
                             >
                             Auto Placement
                             </button>
+                        <button
+                            class="oe_stat_button shake"
+                            type="object"
+                            name="open_hardship_button"
+                            icon="fa-smile-o"
+                            attrs="{'invisible': ['|',('is_bot', '=', False),('state', '=', 'draft')]}"
+                        >
+                        Bot Placement
+                        </button>
+                        <button
+                            class="oe_stat_button shake"
+                            type="object"
+                            name="open_hardship_button_not_Placed"
+                            icon="fa-smile-o"
+                            attrs="{'invisible': [('state', '=', 'draft')]}"
+                        >
+                            Placed
+                        </button>
+                        <button
+                            class="oe_stat_button shake"
+                            type="object"
+                            name="open_hardship_button_Pinding"
+                            icon="fa-smile-o"
+                            attrs="{'invisible': [('state', '=', 'draft')]}"
+                        >
+                        Not Pinding
+                        </button>
+                        <button
+                            class="oe_stat_button shake"
+                            type="object"
+                            name="open_hardship_button_confirmed"
+                            icon="fa-smile-o"
+                            attrs="{'invisible': [('state', '=', 'draft')]}"
+                        >
+                        Confirmed
+                        </button>
                     </div>
                     <div class="oe_title">
                         <span class="o_form_label">Seq </span>
