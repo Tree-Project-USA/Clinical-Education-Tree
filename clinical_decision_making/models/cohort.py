@@ -4,6 +4,7 @@ import requests
 from lxml.etree import LxmlError
 from datetime import date
 from odoo import models, fields, api,_
+from odoo.addons.clinical_decision_making.models.setting import get_distance
 from odoo.exceptions import ValidationError
 
 class Cohort(models.Model):
@@ -11,8 +12,10 @@ class Cohort(models.Model):
     _description = 'Cohort'
     _rec_name = 'cpdm_tree_id'
 
+    active = fields.Boolean(default=True)
     cpdm_tree_id = fields.Many2one(comodel_name='cpdm.tree', string='cpdm Tree')
     parent_state = fields.Selection(related='cpdm_tree_id.state')
+    parent_type = fields.Selection(related='cpdm_tree_id.type')
         
     # Student Information
     student_id = fields.Many2one(comodel_name='res.partner', string='Student', domain=[('is_student', '=', True)], readonly=True)
@@ -33,32 +36,58 @@ class Cohort(models.Model):
     stu_setting_two_id = fields.Many2one(comodel_name='category.setting', string="Setting Two")
     stu_setting_three_id = fields.Many2one(comodel_name='category.setting', string="Setting Three")
     
+    tree_state = fields.Selection([
+        ('approved_pp', 'Approved ++'),
+        ('approved_p', 'Approved +'),
+        ('not_confirm_state', 'not Confirm State'),
+        ('not_accepet_dis', 'Not Accepet Dis'),
+        ('draft', 'Draft'),
+        
+    ], string='tree_prograss', 
+        compute='_compute_tree_state_prograss'
+                                  )
+    @api.depends('parent_state')
+    def _compute_tree_state_prograss(self):
+        for rec in self.cpdm_tree_id.cohort_ids:
+            if rec.parent_state == 'done':
+                if rec.hardship_status == 'approved' and rec.cat_one_requirment == 'met':
+                    rec.tree_state = 'approved_pp'
+                elif rec.cat_one_requirment == 'met':
+                    rec.tree_state = 'approved_p'
+                elif rec.ice_placement_status == 'done':
+                    rec.tree_state = 'not_confirm_state'
+                elif rec.ice_accepted_distances == 'accepted':
+                    rec.tree_state = 'not_accepet_dis'
+                else:
+                    rec.tree_state = 'draft'
+            else:
+                    rec.tree_state = 'draft'
     
     # Student Locations
         # One
-    stu_locatio_zip_one = fields.Char(string='Zip Code One', compute='compute_student_locations')
-    stu_locatio_city_one_id = fields.Char(string='City One', compute='compute_student_locations')
-    stu_locatio_state_one_id =fields.Char(string='State One', compute='compute_student_locations')
+    stu_locatio_zip_one = fields.Char(string='Zip Code One', compute='compute_student_locations', store=True)
+    stu_locatio_city_one_id = fields.Char(string='City One', compute='compute_student_locations', store=True)
+    stu_locatio_state_one_id =fields.Char(string='State One', compute='compute_student_locations', store=True)
         
         # Two
-    stu_locatio_zip_two = fields.Char(string='Zip Code Two', compute='compute_student_locations')
-    stu_locatio_city_two_id = fields.Char(string='City Two', compute='compute_student_locations')
-    stu_locatio_state_two_id =fields.Char(string='State Two', compute='compute_student_locations')
+    stu_locatio_zip_two = fields.Char(string='Zip Code Two', compute='compute_student_locations', store=True)
+    stu_locatio_city_two_id = fields.Char(string='City Two', compute='compute_student_locations', store=True)
+    stu_locatio_state_two_id =fields.Char(string='State Two', compute='compute_student_locations', store=True)
         
         # THREE
-    stu_locatio_zip_three = fields.Char(string='Zip Code Three', compute='compute_student_locations')
-    stu_locatio_city_three_id = fields.Char(string='City Three', compute='compute_student_locations')
-    stu_locatio_state_three_id =fields.Char(string='State Three', compute='compute_student_locations')
+    stu_locatio_zip_three = fields.Char(string='Zip Code Three', compute='compute_student_locations', store=True)
+    stu_locatio_city_three_id = fields.Char(string='City Three', compute='compute_student_locations', store=True)
+    stu_locatio_state_three_id =fields.Char(string='State Three', compute='compute_student_locations', store=True)
         
         # FOUR
-    stu_locatio_zip_four = fields.Char(string='Zip Code Four', compute='compute_student_locations')
-    stu_locatio_city_four_id = fields.Char(string='City Four', compute='compute_student_locations')
-    stu_locatio_state_four_id =fields.Char(string='State Four', compute='compute_student_locations')
+    stu_locatio_zip_four = fields.Char(string='Zip Code Four', compute='compute_student_locations', store=True)
+    stu_locatio_city_four_id = fields.Char(string='City Four', compute='compute_student_locations', store=True)
+    stu_locatio_state_four_id =fields.Char(string='State Four', compute='compute_student_locations', store=True)
         
         # FIVE
-    stu_locatio_zip_five = fields.Char(string='Zip Code Five', compute='compute_student_locations')
-    stu_locatio_city_five_id = fields.Char(string='City Five', compute='compute_student_locations')
-    stu_locatio_state_five_id =fields.Char(string='State Five', compute='compute_student_locations')
+    stu_locatio_zip_five = fields.Char(string='Zip Code Five', compute='compute_student_locations', store=True)
+    stu_locatio_city_five_id = fields.Char(string='City Five', compute='compute_student_locations', store=True)
+    stu_locatio_state_five_id =fields.Char(string='State Five', compute='compute_student_locations', store=True)
     
         
     @api.depends('student_id.locatio_ids')
@@ -112,13 +141,13 @@ class Cohort(models.Model):
     ], string='Hardship Status', compute='_compute_hardship_status', store=True, precompute=True)
     
     
-    @api.depends('student_id', 'student_id.hardship_ids')
+    @api.depends('student_id', 'student_id.hardship_ids', 'student_id.hardship_ids.state')
     def _compute_hardship_status(self):
         for rec in self:
             if rec.parent_state == 'running':
                 hardship_id = rec.student_id.hardship_ids
                 if hardship_id:
-                    rec.hardship_status = 'approved' if hardship_id[0].state == 'confirm' else 'not_approved'
+                    rec.hardship_status = 'approved' if hardship_id.state == 'confirm' else 'not_approved'
                 else:
                     rec.hardship_status = False
             else:
@@ -128,16 +157,18 @@ class Cohort(models.Model):
     # Met Rquirements
     cat_one_requirment = fields.Selection([('not_met', 'Not Met'), ('met', 'Met'),], string='CAT 1 Requirment', compute='_compute_cat_one_requirment')
     met_via = fields.Selection([('not_met', 'Not Met'), ('met_via_ice', 'Met via ICE'), ('met_via_tce_1', 'Met via TCE I'), ('met_via_tce_2', 'Met via TCE II')], string='Via CE', compute='_compute_cat_one_requirment')
-    pta_supervision = fields.Selection([('not_met', 'Not Met'), ('met', 'Met'),], string='PTA Supervision')
-    ipe = fields.Selection([('not_met', 'Not Met'), ('met', 'Met'),], string='IPE')
+    pta_supervision = fields.Selection([('normal', ''), ('done', 'Met'), ('blocked', 'Not Met')], default='normal', string='PTA Supervision')
+    ipe = fields.Selection([('normal', ''), ('done', 'Met'), ('blocked', 'Not Met')], default='normal', string='IPE')
    
         
     @api.depends('stu_setting_one_id', 'stu_setting_two_id', 'stu_setting_three_id', 'ice_setting_id', 'tce1_setting_id', 'tce2_setting_id')
     def _compute_cat_one_requirment(self):
         for rec in self:
-            if rec.stu_setting_one_id in [rec.ice_setting_id, rec.tce1_setting_id, rec.tce2_setting_id] or \
-                rec.stu_setting_two_id in [rec.ice_setting_id, rec.tce1_setting_id, rec.tce2_setting_id] or \
-                rec.stu_setting_three_id in [rec.ice_setting_id, rec.tce1_setting_id, rec.tce2_setting_id]:
+            if rec.parent_type == 'ice' and rec.pta_supervision == 'done' and rec.ipe == 'done' and rec.ice_placement_status == 'done' and rec.ice_accepted_distances == 'accepted':
+                rec.cat_one_requirment = 'met'
+            elif rec.parent_type == 'tce1' and rec.pta_supervision == 'done' and rec.ipe == 'done' and rec.tce1_placement_status == 'done' and rec.tce1_accepted_distances == 'accepted':
+                rec.cat_one_requirment = 'met'
+            elif rec.parent_type == 'tce2' and rec.pta_supervision == 'done' and rec.ipe == 'done' and rec.tce2_placement_status == 'done' and rec.tce2_accepted_distances == 'accepted':
                 rec.cat_one_requirment = 'met'
             else:
                 rec.cat_one_requirment = 'not_met'
@@ -154,7 +185,10 @@ class Cohort(models.Model):
 
     # Placement ICE
         # Site Setting
+    aval_ice_setting_ids = fields.Many2many(comodel_name='category.setting', compute='_compute_aval_ice_setting_ids')
     ice_setting_id =  fields.Many2one(comodel_name='category.setting', string="Setting")
+    ice_setting_code = fields.Selection(related='ice_setting_id.code')
+    aval_ice_site_id = fields.Many2many(comodel_name='site', compute='_compute_aval_ice_site_id')
     ice_site_id = fields.Many2one(comodel_name='site', string='ICE Site Name')
     ice_site_address = fields.Char(related='ice_site_id.address')
     ice_city = fields.Char(related='ice_site_id.city')
@@ -162,20 +196,70 @@ class Cohort(models.Model):
     ice_zip = fields.Char(related='ice_site_id.zip')
     
         # SCCE
+    aval_ice_scce_ids = fields.Many2many(comodel_name='scce', compute='_compute_aval_ice_scce_ids')
     ice_scce_id = fields.Many2one('scce', string='ICE SCCE')
+    
     ice_scce_first_name = fields.Char(related='ice_scce_id.first_name')
     ice_scce_last_name = fields.Char(related='ice_scce_id.last_name')
     ice_scce_email = fields.Char(related='ice_scce_id.email')
 
         # Accepter
     ice_placement_status = fields.Selection([('normal', 'Pending'), ('done', 'Confirmed'), ('blocked', 'Not Placed')], default='normal', string='ICE Placement Status')
-    ice_accepted_distances = fields.Boolean(string='ICE Accepted Distances', default=False)
+    ice_accepted_distances = fields.Selection([
+        ('accepted', 'Accepted Dist'),
+        ('not_accepted', 'Not Accepted Dist'),
+    ], string='ICE Accepted Distances', compute='_compute_accepted_distances', store=True)
     
+    @api.onchange('ice_site_id')
+    def ice_setting_id_domain(self):
+        self.ice_setting_id = False
+        self.ice_scce_id = False
+        return {
+            'domain':
+                {
+                    'ice_setting_id': [('id', 'in', self.ice_site_id.setting_ids.ids)],
+                    'ice_scce_id': [('id', 'in', self.ice_site_id.scce_ids.ids)],
+                },
+        }
+
+    @api.depends('ice_site_id', 'ice_setting_id')
+    def _compute_aval_ice_setting_ids(self):
+        for rec in self:
+            if rec.ice_site_id:
+                rec.aval_ice_setting_ids = rec.ice_site_id.setting_ids
+            else:
+                rec.aval_ice_setting_ids = False 
+                
+    @api.depends('ice_site_id', 'ice_scce_id')
+    def _compute_aval_ice_scce_ids(self):
+        for rec in self:
+            if rec.ice_site_id:
+                ip_setting = self.search([('student_id', '=', rec.student_id.id), ('parent_state', '=', 'done'), '|', ('tce1_setting_code', '=', 'ip'), ('tce2_setting_code', '=', 'ip'), ])
+                if ip_setting:
+                    rec.aval_ice_scce_ids = rec.ice_site_id.setting_ids.filtered(lambda x: x.code == 'op')
+                else:
+                    rec.aval_ice_scce_ids = rec.ice_site_id.scce_ids
+            else:
+                rec.aval_ice_scce_ids = False 
+        
+    @api.depends('student_id')
+    def _compute_aval_ice_site_id(self):
+        for rec in self:
+            site_ids = self.search([('student_id', '=', rec.student_id.id), ('parent_state', '=', 'done')])
+            # ice_site_ids = site_ids.mapped('ice_site_id').ids
+            tce1_site_ids = site_ids.mapped('tce1_site_id').ids
+            tce2_site_ids = site_ids.mapped('tce2_site_id').ids
+            ids = list(set(tce1_site_ids + tce2_site_ids))
+            rec.aval_ice_site_id = self.env['site'].search([('id', 'not in', ids)])
+            
     # ------------------------------------------------------------------------------
     
     # Placement TCE 1
         # Site Setting
+    aval_tce1_setting_id = fields.Many2many(comodel_name='category.setting', compute='_compute_aval_tce1_setting_id')
     tce1_setting_id =  fields.Many2one(comodel_name='category.setting', string="TCE I Setting")
+    tce1_setting_code = fields.Selection(related='tce1_setting_id.code')
+    aval_tce1_site_id = fields.Many2many(comodel_name='site', string='Aval tce1' ,compute='_compute_aval_tce1_site_id')
     tce1_site_id = fields.Many2one(comodel_name='site', string='TCE I Site Name')
     tce1_site_address = fields.Char(related='ice_site_id.address')
     tce1_city = fields.Char(related='ice_site_id.city')
@@ -183,6 +267,7 @@ class Cohort(models.Model):
     tce1_zip = fields.Char(related='ice_site_id.zip')
     
         # SCCE
+    aval_tce1_scce_ids = fields.Many2many(comodel_name='scce', compute='_compute_aval_tce1_scce_ids')
     tce1_scce_id = fields.Many2one('scce', string='TCE I SCCE')
     tce1_scce_first_name = fields.Char(related='ice_scce_id.first_name')
     tce1_scce_last_name = fields.Char(related='ice_scce_id.last_name')
@@ -190,13 +275,63 @@ class Cohort(models.Model):
 
         # Accepter
     tce1_placement_status = fields.Selection([('normal', 'Pending'), ('done', 'Confirmed'), ('blocked', 'Not Placed')], default='normal', string='TCE I Placement Status')
-    tce1_accepted_distances = fields.Boolean(string='TCE II Accepted Distances', default=False)
+    tce1_accepted_distances = fields.Selection([
+        ('accepted', 'Accepted Dist'),
+        ('not_accepted', 'Not Accepted Dist'),
+    ], string='TCE II Accepted Distances', compute='_compute_accepted_distances', store=True)
     
+    @api.onchange('tce1_site_id')
+    def tce1_setting_id_domain(self):
+        self.tce1_setting_id = False
+        self.tce1_scce_id = False
+        return {
+            'domain':
+                {
+                    'tce1_setting_id': [('id', 'in', self.tce1_site_id.setting_ids.ids)],
+                    'tce1_scce_id': [('id', 'in', self.tce1_site_id.scce_ids.ids)],
+                },
+        }
+
+    @api.depends('tce1_site_id', 'tce1_setting_id')
+    def _compute_aval_tce1_setting_id(self):
+        for rec in self:
+            if rec.tce1_site_id:
+                ip_setting = self.search([('student_id', '=', rec.student_id.id), ('parent_state', '=', 'done'), '|', ('ice_setting_code', '=', 'ip'), ('tce2_setting_code', '=', 'ip'), ])
+                if ip_setting:
+                    rec.aval_tce1_setting_id = rec.tce1_site_id.setting_ids.filtered(lambda x: x.code == 'op')
+                else:
+                    rec.aval_tce1_setting_id = rec.tce1_site_id.setting_ids
+                    
+            else:
+                rec.aval_tce1_setting_id = False 
+                
+    @api.depends('tce1_site_id', 'tce1_scce_id')
+    def _compute_aval_tce1_scce_ids(self):
+        for rec in self:
+            if rec.tce1_site_id:
+                rec.aval_tce1_scce_ids = rec.tce1_site_id.scce_ids
+            else:
+                rec.aval_tce1_scce_ids = False 
+                
+    @api.depends('student_id')
+    def _compute_aval_tce1_site_id(self):
+        for rec in self:
+            site_ids = self.search([('student_id', '=', rec.student_id.id), ('parent_state', '=', 'done')])
+            ice_site_ids = site_ids.mapped('ice_site_id').ids
+            # tce1_site_ids = site_ids.mapped('tce1_site_id').ids
+            tce2_site_ids = site_ids.mapped('tce2_site_id').ids
+            ids = list(set(ice_site_ids + tce2_site_ids))
+            rec.aval_tce1_site_id = self.env['site'].search([('id', 'not in', ids)])
+            
+                
     # ------------------------------------------------------------------------------
     
     # Placement TCE 2
         # Site Setting
+    aval_tce2_setting_id = fields.Many2many(comodel_name='category.setting', compute='_compute_aval_tce2_setting_id')
     tce2_setting_id =  fields.Many2one(comodel_name='category.setting', string="TCE II Setting")
+    tce2_setting_code = fields.Selection(related='tce2_setting_id.code')
+    aval_tce2_site_id = fields.Many2many(comodel_name='site', compute='_compute_aval_tce2_site_id')
     tce2_site_id = fields.Many2one(comodel_name='site', string='TCE II Site Name')
     tce2_site_address = fields.Char(related='ice_site_id.address')
     tce2_city = fields.Char(related='ice_site_id.city')
@@ -204,6 +339,7 @@ class Cohort(models.Model):
     tce2_zip = fields.Char(related='ice_site_id.zip')
     
         # SCCE
+    aval_tce2_scce_ids = fields.Many2many(comodel_name='scce', compute='_compute_aval_tce2_scce_ids')
     tce2_scce_id = fields.Many2one('scce', string='TCE II SCCE')
     tce2_scce_first_name = fields.Char(related='ice_scce_id.first_name')
     tce2_scce_last_name = fields.Char(related='ice_scce_id.last_name')
@@ -211,44 +347,104 @@ class Cohort(models.Model):
 
         # Accepter
     tce2_placement_status = fields.Selection([('normal', 'Pending'), ('done', 'Confirmed'), ('blocked', 'Not Placed')], default='normal', string='TCE II Placement Status')
-    tce2_accepted_distances = fields.Boolean(string='TCE II Accepted Distances', default=False)
+    tce2_accepted_distances = fields.Selection([
+        ('accepted', 'Accepted Dist'),
+        ('not_accepted', 'Not Accepted Dist'),
+    ], string='TCE II Accepted Distances', compute='_compute_accepted_distances', store=True)
     
+    @api.onchange('tce2_site_id')
+    def tce2_setting_id_domain(self):
+        self.tce2_setting_id = False
+        self.tce2_scce_id = False
+        return {
+            'domain':
+                {
+                    'tce2_setting_id': [('id', 'in', self.tce2_site_id.setting_ids.ids)],
+                    'tce2_scce_id': [('id', 'in', self.tce2_site_id.scce_ids.ids)],
+                },
+        }
 
-    @api.depends('stu_locatio_zip_two', 'stu_locatio_zip_three', 'stu_locatio_zip_four', 'stu_locatio_zip_five', 'ice_setting_id', 'tce1_setting_id', 'tce2_setting_id')
-    def get_price_total(self):
-        clinical_distance_mel = self.env['ir.config_parameter'].sudo(
-        ).get_param('zip_code_token')
+    @api.depends('tce2_site_id', 'tce1_setting_id')
+    def _compute_aval_tce2_setting_id(self):
         for rec in self:
-            rec.ice_accepted_distances = False
-            rec.tce1_accepted_distances = False
-            rec.tce2_accepted_distances = False
-            r = [rec.stu_locatio_zip_one,
-            rec.stu_locatio_zip_two,
-            rec.stu_locatio_zip_three,
-            rec.stu_locatio_zip_four,
-            rec.stu_locatio_zip_five]
-            for zip in r:
-                if zip:
-                    distance = self.get_distance(rec.ice_setting_id, zip)
-                    if distance <= clinical_distance_mel:
-                        rec.ice_accepted_distances = True
-                        break
-            for zip in r:
-                if zip:
-                    distance = self.get_distance(rec.tce1_setting_id, zip)
-                    if distance <= clinical_distance_mel:
-                        rec.tce1_accepted_distances = True
-                        break
-            for zip in r:
-                if zip:
-                    distance = self.get_distance(rec.tce2_setting_id, zip)
-                    if distance <= clinical_distance_mel:
-                        rec.tce2_accepted_distances = True
-                        break
-                    
+            if rec.tce2_site_id:
+                ip_setting = self.search([('student_id', '=', rec.student_id.id), ('parent_state', '=', 'done'), '|', ('ice_setting_code', '=', 'ip'), ('tce1_setting_code', '=', 'ip')])
+                if ip_setting:
+                    rec.aval_tce2_setting_id = rec.tce2_site_id.setting_ids.filtered(lambda x: x.code == 'op')
+                else:
+                    rec.aval_tce2_setting_id = rec.tce2_site_id.setting_ids
+            else:
+                rec.aval_tce2_setting_id = False 
+                
+    @api.depends('tce2_site_id', 'tce2_scce_id')
+    def _compute_aval_tce2_scce_ids(self):
+        for rec in self:
+            if rec.tce2_site_id:
+                rec.aval_tce2_scce_ids = rec.tce2_site_id.scce_ids
+            else:
+                rec.aval_tce2_scce_ids = False 
+                
+    @api.depends('student_id')
+    def _compute_aval_tce2_site_id(self):
+        for rec in self:
+            site_ids = self.search([('student_id', '=', rec.student_id.id), ('parent_state', '=', 'done')])
+            ice_site_ids = site_ids.mapped('ice_site_id').ids
+            tce1_site_ids = site_ids.mapped('tce1_site_id').ids
+            # tce2_site_ids = site_ids.mapped('tce2_site_id').ids
+            ids = list(set(ice_site_ids + tce1_site_ids))
+            rec.aval_tce2_site_id = self.env['site'].search([('id', 'not in', ids)])
+            
+    # ------------------------------------------------------------------------------
 
-        self.price_total = self.quantity * self.price
-    
+    @api.depends(
+        'stu_locatio_zip_one',
+        'stu_locatio_zip_two',
+        'stu_locatio_zip_three',
+        'stu_locatio_zip_four',
+        'stu_locatio_zip_five',
+        'ice_site_id', 
+        'tce1_site_id', 
+        'tce2_site_id')
+    def _compute_accepted_distances(self):
+        clinical_distance_mel = self.env['ir.config_parameter'].sudo().get_param('clinical_distance_mel')
+        def check_accepted_distance(zip_code_one, zip_code_two):
+            if zip_code_one and zip_code_two:
+                distance = get_distance(zip_code_one, zip_code_two)
+                print(clinical_distance_mel, type(clinical_distance_mel))
+                print(distance, type(distance))
+                return float(distance) <= float(clinical_distance_mel)
+            return False
+
+        for rec in self:
+            rec.ice_accepted_distances = 'not_accepted'
+            rec.tce1_accepted_distances = 'not_accepted'
+            rec.tce2_accepted_distances = 'not_accepted'
+
+            ice_zip_code = rec.ice_site_id.zip if rec.ice_site_id else False
+            tce1_zip_code = rec.tce1_site_id.zip if rec.tce1_site_id else False
+            tce2_zip_code = rec.tce2_site_id.zip if rec.tce2_site_id else False
+            stu_codes = [rec.stu_locatio_zip_one,
+                        rec.stu_locatio_zip_two,
+                        rec.stu_locatio_zip_three,
+                        rec.stu_locatio_zip_four,
+                        rec.stu_locatio_zip_five]
+            
+            for code in stu_codes:
+                print('--------------------------------1', code, ice_zip_code)
+                if code and code != '0' and ice_zip_code and check_accepted_distance(code, ice_zip_code):
+                    rec.ice_accepted_distances = 'accepted'
+                    break
+                
+            for code in stu_codes:
+                print('--------------------------------2')
+                if code and code != '0' and tce1_zip_code and check_accepted_distance(code, tce1_zip_code):
+                    rec.tce1_accepted_distances = 'accepted'
+                    break
+            for code in stu_codes:
+                print('--------------------------------3')
+                if code and code != '0' and tce2_zip_code and check_accepted_distance(code, tce2_zip_code):
+                    rec.tce2_accepted_distances = 'accepted'
+                    break
     
     
     def action_send_email_to_students(self):
@@ -308,8 +504,8 @@ class CPDMTree(models.Model):
     is_bot = fields.Boolean(string='')
     type = fields.Selection([
         ('ice', 'ICE'),
-        ('tci1', 'TCI1'),
-        ('tci2', 'TCI2'),
+        ('tce1', 'TCE1'),
+        ('tce2', 'TCE2'),
     ], string='Type')
     term = fields.Selection([
         ('fall', 'Fall'),
@@ -320,14 +516,25 @@ class CPDMTree(models.Model):
 
 
     def open_hardship_button(self):
-        tree_view_id = self.env.ref('clinical_decision_making.cohort_view_tree').id
+        context = {'default_cpdm_tree_id': self.id, 'create': False, 'delete': False}
+        if self.state == 'done':
+            context.update({'edite': False})
+        if self.type == 'ice':
+            tree_view_id = self.env.ref('clinical_decision_making.cohort_view_tree_ice').id
+            
+        elif self.type == 'tce1':
+            tree_view_id = self.env.ref('clinical_decision_making.cohort_view_tree_tce1').id
+        elif self.type == 'tce2':
+            tree_view_id = self.env.ref('clinical_decision_making.cohort_view_tree_tce2').id
+        else:
+            tree_view_id = self.env.ref('clinical_decision_making.cohort_view_tree').id
         return {
             "type": "ir.actions.act_window",
             "name": _("Placement"),
             "res_model": "cohort",
             "domain": [['cpdm_tree_id', '=', self.id]],
             "views": [[tree_view_id, "tree"], [False, "form"]],
-            "context": {'default_cpdm_tree_id': self.id}
+            "context": context
         }
         
     @api.depends('cohort_ids', 'type')
@@ -339,23 +546,20 @@ class CPDMTree(models.Model):
             placement_status_field = ""
             if rec.type == 'ice':
                 placement_status_field = 'ice_placement_status'
-            elif rec.type == 'tce1':
+            elif rec.type == 'tce1' or rec.type == 'tci1':
                 placement_status_field = 'tce1_placement_status'
-            elif rec.type == 'tce2':
+            elif rec.type == 'tce2' or rec.type == 'tci2':
                 placement_status_field = 'tce2_placement_status'
             
-            rec.total_confirmed = len(rec.cohort_ids.filtered(lambda record: getattr(record, placement_status_field) == 'confirmed'))
-            rec.total_pending = len(rec.cohort_ids.filtered(lambda record: getattr(record, placement_status_field) == 'pending'))
-            rec.total_not_placed = len(rec.cohort_ids.filtered(lambda record: getattr(record, placement_status_field) == 'not_placed'))
+            rec.total_confirmed = len(rec.cohort_ids.filtered(lambda record: getattr(record, placement_status_field) == 'done'))
+            rec.total_pending = len(rec.cohort_ids.filtered(lambda record: getattr(record, placement_status_field) == 'normal'))
+            rec.total_not_placed = len(rec.cohort_ids.filtered(lambda record: getattr(record, placement_status_field) == 'blocked'))
             
     def action_post(self):
         self.ensure_one()
         
         if not self.info_ids:
             raise ValidationError("You should add Clinic Info")
-        
-        if any(record.state == 'not_confirmed' for record in self.info_ids):
-            raise ValidationError("You should confirm all Clinic Info or delete them")
         
         if any(record.num_students == 0 for record in self.info_ids):
             raise ValidationError("Student number of all Clinics should be greater than zero")
@@ -382,7 +586,10 @@ class CPDMTree(models.Model):
             })
         
         self.env['cohort'].sudo().create(cohort_vals)
-        
+        # for rec in data:...
+        # data = self.env['cohort'].sudo().create(cohort_vals)
+        # for rec in data:...
+            
         self.write({
             'state': 'running',
         })
