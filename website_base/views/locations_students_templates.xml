@@ -3,6 +3,14 @@
     <template id="locations_students_template" name="Locations Students Template">
         <t t-call="website.layout">
             <div id="form_temp">
+                <div class="alert alert-success text-center shadow-sm" t-if="hardship">
+                    <div class="d-flex justify-content-center">
+                      <p>
+                        A disability application requires an amendment
+                      </p>
+                      <a class="mx-2" href="/update/hardship/request">hear</a>
+                    </div>
+                </div>
                 <div id="wrap" class="oe_structure oe_empty my-4">
                     <div class="alert alert-danger w-10 mx-auto text-center" t-if="error" role="alert">
                         <strong>

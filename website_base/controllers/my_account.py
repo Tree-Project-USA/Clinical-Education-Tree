@@ -12,12 +12,26 @@ class CustomerPortals(CustomerPortal):
     
     @route([])
     def home(self):
+        values = {}
         res_partner_id = request.env.user.partner_id
-        return request.render("website_base.user_profile_templates", {'partner': res_partner_id})
+        hardship_id = request.env["hardship.request"].sudo().search([
+            ('student_id', '=', res_partner_id.id),
+            ('state', '=', 'update')
+        ])
+        values["partner"] = res_partner_id
+        values["hardship"] = hardship_id
+        return request.render("website_base.user_profile_templates", values)
     
     @http.route("/add/location", type="http", website=True, auth="user", Methods=["POST"])
     def add_location(self, **kw):
+        values = {}
         res_partner_id = request.env.user.partner_id
+        hardship_id = request.env["hardship.request"].sudo().search([
+            ('student_id', '=', res_partner_id.id),
+            ('state', '=', 'update')
+        ])
+        values["partner"] = res_partner_id
+        values["hardship"] = hardship_id
         if kw and request.httprequest.method == "POST":
             data = json.loads(kw["data_line_ids"])
             val = [(0, 0, line) for line in data]
@@ -41,15 +55,14 @@ class CustomerPortals(CustomerPortal):
                 error = str(msg.args[0])
                 if error:
                     kw["error"] = error
-        value = kw 
         if res_partner_id.can_apply_hardship:
             can_apply_hardship = 3
         else:
             can_apply_hardship = 5
-        value.update({
+        values.update({
             'rw': can_apply_hardship
         })
-        return request.render("website_base.locations_students_template", value)
+        return request.render("website_base.locations_students_template", values)
     
     @http.route(['/get/locstion/infor'], type='json', auth="public", methods=['POST'], website=True)
     def get_locstion_infor(self,**post):
