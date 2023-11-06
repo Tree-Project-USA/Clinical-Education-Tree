@@ -204,7 +204,7 @@ class Cohort(models.Model):
     ice_scce_email = fields.Char(related='ice_scce_id.email')
 
         # Accepter
-    ice_placement_status = fields.Selection([('normal', 'Pending'), ('done', 'Confirmed'), ('blocked', 'Not Placed')], default='normal', string='ICE Placement Status')
+    ice_placement_status = fields.Selection([('normal', 'Pending'), ('done', 'Confirmed'), ('blocked', 'Not Placed')], default='blocked', string='ICE Placement Status')
     ice_accepted_distances = fields.Selection([
         ('accepted', 'Accepted Dist'),
         ('not_accepted', 'Not Accepted Dist'),
@@ -226,7 +226,11 @@ class Cohort(models.Model):
     def _compute_aval_ice_setting_ids(self):
         for rec in self:
             if rec.ice_site_id:
-                rec.aval_ice_setting_ids = rec.ice_site_id.setting_ids
+                f_code = rec.cpdm_tree_id.info_ids.filtered(lambda x : x.clinc_id == rec.ice_site_id).mapped('setting_type')
+                print(f_code)
+                print(rec.ice_site_id.setting_ids)
+                print(rec.ice_site_id.setting_ids.filtered(lambda x : x.code in f_code))
+                rec.aval_ice_setting_ids = rec.ice_site_id.setting_ids.filtered(lambda x : x.code in f_code)
             else:
                 rec.aval_ice_setting_ids = False 
                 
@@ -250,7 +254,8 @@ class Cohort(models.Model):
             tce1_site_ids = site_ids.mapped('tce1_site_id').ids
             tce2_site_ids = site_ids.mapped('tce2_site_id').ids
             ids = list(set(tce1_site_ids + tce2_site_ids))
-            rec.aval_ice_site_id = self.env['site'].search([('id', 'not in', ids)])
+            
+            rec.aval_ice_site_id = self.env['site'].search([('id', 'in', rec.cpdm_tree_id.info_ids.mapped('clinc_id').ids), ('id', 'not in', ids)])
             
     # ------------------------------------------------------------------------------
     
@@ -274,7 +279,7 @@ class Cohort(models.Model):
     tce1_scce_email = fields.Char(related='ice_scce_id.email')
 
         # Accepter
-    tce1_placement_status = fields.Selection([('normal', 'Pending'), ('done', 'Confirmed'), ('blocked', 'Not Placed')], default='normal', string='TCE I Placement Status')
+    tce1_placement_status = fields.Selection([('normal', 'Pending'), ('done', 'Confirmed'), ('blocked', 'Not Placed')], default='blocked', string='TCE I Placement Status')
     tce1_accepted_distances = fields.Selection([
         ('accepted', 'Accepted Dist'),
         ('not_accepted', 'Not Accepted Dist'),
@@ -309,7 +314,8 @@ class Cohort(models.Model):
     def _compute_aval_tce1_scce_ids(self):
         for rec in self:
             if rec.tce1_site_id:
-                rec.aval_tce1_scce_ids = rec.tce1_site_id.scce_ids
+                f_code = rec.cpdm_tree_id.info_ids.filtered(lambda x : x.clinc_id == rec.tce1_site_id).mapped('setting_type')
+                rec.aval_tce1_scce_ids = rec.tce1_site_id.scce_ids.filtered(lambda x : x.code in f_code)
             else:
                 rec.aval_tce1_scce_ids = False 
                 
@@ -321,7 +327,7 @@ class Cohort(models.Model):
             # tce1_site_ids = site_ids.mapped('tce1_site_id').ids
             tce2_site_ids = site_ids.mapped('tce2_site_id').ids
             ids = list(set(ice_site_ids + tce2_site_ids))
-            rec.aval_tce1_site_id = self.env['site'].search([('id', 'not in', ids)])
+            rec.aval_tce1_site_id = self.env['site'].search([('id', 'in', rec.cpdm_tree_id.info_ids.mapped('clinc_id').ids), ('id', 'not in', ids)])
             
                 
     # ------------------------------------------------------------------------------
@@ -346,7 +352,7 @@ class Cohort(models.Model):
     tce2_scce_email = fields.Char(related='ice_scce_id.email')
 
         # Accepter
-    tce2_placement_status = fields.Selection([('normal', 'Pending'), ('done', 'Confirmed'), ('blocked', 'Not Placed')], default='normal', string='TCE II Placement Status')
+    tce2_placement_status = fields.Selection([('normal', 'Pending'), ('done', 'Confirmed'), ('blocked', 'Not Placed')], default='blocked', string='TCE II Placement Status')
     tce2_accepted_distances = fields.Selection([
         ('accepted', 'Accepted Dist'),
         ('not_accepted', 'Not Accepted Dist'),
@@ -380,7 +386,8 @@ class Cohort(models.Model):
     def _compute_aval_tce2_scce_ids(self):
         for rec in self:
             if rec.tce2_site_id:
-                rec.aval_tce2_scce_ids = rec.tce2_site_id.scce_ids
+                f_code = rec.cpdm_tree_id.info_ids.filtered(lambda x : x.clinc_id == rec.tce2_site_id).mapped('setting_type')
+                rec.aval_tce2_scce_ids = rec.tce2_site_id.scce_ids.filtered(lambda x : x.code in f_code)
             else:
                 rec.aval_tce2_scce_ids = False 
                 
@@ -392,7 +399,7 @@ class Cohort(models.Model):
             tce1_site_ids = site_ids.mapped('tce1_site_id').ids
             # tce2_site_ids = site_ids.mapped('tce2_site_id').ids
             ids = list(set(ice_site_ids + tce1_site_ids))
-            rec.aval_tce2_site_id = self.env['site'].search([('id', 'not in', ids)])
+            rec.aval_tce2_site_id = self.env['site'].search([('id', 'in', rec.cpdm_tree_id.info_ids.mapped('clinc_id').ids), ('id', 'not in', ids)])
             
     # ------------------------------------------------------------------------------
 
@@ -410,8 +417,6 @@ class Cohort(models.Model):
         def check_accepted_distance(zip_code_one, zip_code_two):
             if zip_code_one and zip_code_two:
                 distance = get_distance(zip_code_one, zip_code_two)
-                print(clinical_distance_mel, type(clinical_distance_mel))
-                print(distance, type(distance))
                 return float(distance) <= float(clinical_distance_mel)
             return False
 
@@ -616,6 +621,9 @@ class CPDMTree(models.Model):
                 'cpdm_tree_id': self.id
             })
         
+        if len(cohort_vals) == 0:
+            raise ValidationError("Ther is no student to be matched")
+        
         self.env['cohort'].sudo().create(cohort_vals)
         # for rec in data:...
         # data = self.env['cohort'].sudo().create(cohort_vals)
@@ -715,4 +723,31 @@ class ClinicInfoGathering(models.Model):
                             )
                             )
                 mail.send()
+                
                 rec.is_confirmed_send = True
+                if rec.tree_id.type == 'ice':
+                    rec.tree_id.cohort_ids.filtered(lambda x : x.ice_site_id.id == rec.clinc_id.id).write({
+                        'ice_placement_status': 'done'
+                    })
+                elif rec.tree_id.type == 'tce1':
+                    rec.tree_id.cohort_ids.filtered(lambda x : x.tce1_site_id.id == rec.clinc_id.id).write({
+                        'tce1_placement_status': 'done'
+                    })
+                elif rec.tree_id.type == 'tce2':
+                    rec.tree_id.cohort_ids.filtered(lambda x : x.tce2_site_id.id == rec.clinc_id.id).write({
+                        'tce2_placement_status': 'done'
+                    })
+    def action_pending(self):
+        for rec in self:               
+            if rec.tree_id.type == 'ice':
+                rec.tree_id.cohort_ids.filtered(lambda x : x.ice_site_id.id == rec.clinc_id.id).write({
+                    'ice_placement_status': 'normal'
+                })
+            elif rec.tree_id.type == 'tce1':
+                rec.tree_id.cohort_ids.filtered(lambda x : x.tce1_site_id.id == rec.clinc_id.id).write({
+                    'tce1_placement_status': 'normal'
+                })
+            elif rec.tree_id.type == 'tce2':
+                rec.tree_id.cohort_ids.filtered(lambda x : x.tce2_site_id.id == rec.clinc_id.id).write({
+                    'tce2_placement_status': 'normal'
+                })

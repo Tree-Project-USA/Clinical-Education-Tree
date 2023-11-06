@@ -49,7 +49,7 @@
 
                 <!-- Hardship Status -->
                 <field name="cat_one_requirment" widget="badge" decoration-warning="cat_one_requirment=='not_met'" decoration-success="cat_one_requirment == 'met'"/>
-                <field name="met_via"/>
+                <!-- <field name="met_via"/> -->
                 <field name="pta_supervision" widget="state_selection"/>
                 <field name="ipe" widget="state_selection"/>
 
@@ -156,7 +156,7 @@
 
                 <!-- Hardship Status -->
                 <field name="cat_one_requirment" widget="badge" decoration-warning="cat_one_requirment=='not_met'" decoration-success="cat_one_requirment == 'met'"/>
-                <field name="met_via"/>
+                <!-- <field name="met_via"/> -->
                 <field name="pta_supervision" widget="state_selection"/>
                 <field name="ipe" widget="state_selection"/>
 
@@ -229,7 +229,7 @@
 
                 <!-- Hardship Status -->
                 <field name="cat_one_requirment" widget="badge" decoration-warning="cat_one_requirment=='not_met'" decoration-success="cat_one_requirment == 'met'"/>
-                <field name="met_via"/>
+                <!-- <field name="met_via"/> -->
                 <field name="pta_supervision" widget="state_selection"/>
                 <field name="ipe" widget="state_selection"/>
 
@@ -303,7 +303,7 @@
 
                 <!-- Hardship Status -->
                 <field name="cat_one_requirment" widget="badge" decoration-warning="cat_one_requirment=='not_met'" decoration-success="cat_one_requirment == 'met'"/>
-                <field name="met_via"/>
+                <!-- <field name="met_via"/> -->
                 <field name="pta_supervision" widget="state_selection"/>
                 <field name="ipe" widget="state_selection"/>
 
@@ -368,16 +368,16 @@
                 <sheet>
                 <!-- <widget name="web_ribbon" title="Bot" bg_color="bg-primary" attrs="{'invisible': [('is_bot', '=', False)]}"/> -->
                     <div class="oe_button_box" name="button_box">
-                            <button
-                                class="oe_stat_button shake"
-                                type="object"
-                                name="open_hardship_button"
-                                icon="fa-smile-o"
-                                attrs="{'invisible': [('state', '=', 'draft')]}"
-                            >
-                            Auto Placement
-                            </button>
                         <button
+                            class="oe_stat_button shake"
+                            type="object"
+                            name="open_hardship_button"
+                            icon="fa-smile-o"
+                            attrs="{'invisible': [('state', '=', 'draft')]}"
+                        >
+                        Auto Placement
+                        </button>
+                        <!-- <button
                             class="oe_stat_button shake"
                             type="object"
                             name="open_hardship_button"
@@ -412,7 +412,7 @@
                             attrs="{'invisible': [('state', '=', 'draft')]}"
                         >
                         Confirmed
-                        </button>
+                        </button> -->
                     </div>
                     <div class="oe_title">
                         <span class="o_form_label">Seq </span>
@@ -453,7 +453,7 @@
                                     decoration-success="state == 'open'"
                                 />
                                 <button string="Confirm" name="action_confirm" type="object" class="oe_highlight" attrs="{'invisible': [('state', '=', 'confirmed')]}"/>
-                                <button string="Confirm" name="action_confirm" type="object" class="oe_highlight" attrs="{'invisible': [('state', '=', 'confirmed')]}"/>
+                                <button string="Pending" name="action_pending" type="object" class="btn btn-warning" attrs="{'invisible': [('state', '=', 'confirmed')]}"/>
                                 <button name="action_send_email_to_clinck" string="Send Mail" type="object" icon="fa-paper-plane" attrs="{'invisible': ['|', ('state', '=', 'confirmed'), ('is_confirmed_send', '!=', False)]}"/>
                                 <button name="action_send_email_to_clinck" string="Resend" type="object" icon="fa-repeat" attrs="{'invisible': ['|', ('state', '=', 'confirmed'), ('is_confirmed_send', '=', False)]}"/>
                               </tree>

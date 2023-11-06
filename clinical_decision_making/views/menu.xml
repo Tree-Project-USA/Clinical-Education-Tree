@@ -139,7 +139,7 @@
         id="hardship_request_menu"
         name="Hardship"
         action="hardship_request_action"
-        parent="menu_root_cpdm"
+        parent="student_details_menu"
         sequence="2"/>
     
     <menuitem
