@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from datetime import date
 
 from odoo import models, fields, api,_
 
@@ -8,7 +9,7 @@ class HardshipRequest(models.Model):
     _description = 'Hardship Request'
     _rec_name = 'student_id'
     
-    student_id = fields.Many2one(comodel_name='res.partner', string='Student', domain=[('is_student', '=', True),('deny_show_student', '=', False)], tracking=True)
+    student_id = fields.Many2one(comodel_name='res.partner', string='Student', domain=[('is_student', '=', True),('deny_show_student', '=', False)], tracking=True, required=True)
     attachment_ids = fields.Many2many(
         comodel_name='ir.attachment',
         string="Attachments",
@@ -84,22 +85,29 @@ class HardshipRequest(models.Model):
         self.student_id.can_apply_hardship = True
         
     def action_update(self):
-        self.write({
-            'state': 'update',
-        })
-        mail = (
-                    self.env["mail.mail"]
-                    .sudo()
-                    .create(
-                        {
-                            "subject": _("Test Student Update HardShip"),
-                            "email_from": self.env.company.email,
-                            "body_html": "Dear :- {},<br/>Your hardship request needed to update. <br/><br/>Thank you,<br/>".format(
-                                self.student_id.name
-                            ),
-                            "email_to": self.student_id.email,
-                        }
-                    )
-                    )
-        mail.send()
-        self.student_id.can_apply_hardship = True
+        for rec in self:
+            rec.write({
+                'state': 'update',
+            })
+            mail = (
+                        self.env["mail.mail"]
+                        .sudo()
+                        .create(
+                            {
+                                "subject": _("Test Student Update HardShip"),
+                                "email_from": self.env.company.email,
+                                "body_html": "Dear :- {},<br/>Your hardship request needed to update. <br/><br/>Thank you,<br/>".format(
+                                    rec.student_id.name
+                                ),
+                                "email_to": rec.student_id.email,
+                            }
+                        )
+                        )
+            mail.send()
+            rec.student_id.can_apply_hardship = True
+    
+    # Cron job
+    def check_end_date_of_hardship(self):
+        hardship_ids = self.sudo().search([("state","=","confirm"), ('expiration_date', '!=', False), ("expiration_date" , "<", date.today())])
+        for hardship_id in hardship_ids:
+            hardship_id.action_update()
