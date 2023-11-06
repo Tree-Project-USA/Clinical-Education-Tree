@@ -3,7 +3,7 @@
   <template id="inherit_submenu" inherit_id="website.submenu">
     <xpath expr="//li[@t-if='submenu.is_visible and not (submenu.child_id or submenu.is_mega_menu)']" position="attributes">
 
-       <attribute name="t-if" add="and submenu.check_menu_hardship() and submenu.check_menu_update_hardship()" separator=" "/>
+       <attribute name="t-if" add="and submenu.check_menu_hardship()" separator=" "/>
     </xpath>
   </template>
   <template id="update_hardship_request_template" name="Hardship Request Template">

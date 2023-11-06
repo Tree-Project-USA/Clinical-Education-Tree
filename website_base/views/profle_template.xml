@@ -5,6 +5,14 @@
 <!-- ================================================================ user_information ===================================================================== -->
       <t t-call="website.layout">
         <div class="delegate_profile">
+          <div class="alert alert-success text-center shadow-sm" t-if="hardship">
+            <div class="d-flex justify-content-center">
+              <p>
+                A disability application requires an amendment
+              </p>
+              <a class="mx-2" href="/update/hardship/request">hear</a>
+            </div>
+          </div>
           <div class="container">
               <div class="row mt-4">
                 <div class="col-12">

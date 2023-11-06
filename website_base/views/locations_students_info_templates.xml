@@ -4,6 +4,14 @@
         <t t-call="website.layout">
             <div id="form_temp">
                 <div id="wrap" class="oe_structure oe_empty my-4">
+                    <div class="alert alert-success text-center shadow-sm" t-if="">
+                        <div class="d-flex justify-content-center">
+                          <p>
+                            A disability application requires an amendment
+                          </p>
+                          <a class="mx-2" href="/update/hardship/request">hear</a>
+                        </div>
+                    </div>
                     <div class="container">
                         <div id="form_template">
                             <div class="form-group">

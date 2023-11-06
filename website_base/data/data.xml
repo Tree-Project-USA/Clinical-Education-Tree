@@ -8,11 +8,5 @@
             <field name="parent_id" ref="website.main_menu"/>
             <field name="sequence" type="int">22</field>
         </record>
-        <record id="menu_update_hardship_request" model="website.menu">
-            <field name="name">Update Hardship Request</field>
-            <field name="url">/update/hardship/request</field>
-            <field name="parent_id" ref="website.main_menu"/>
-            <field name="sequence" type="int">23</field>
-        </record>
     </data>
 </odoo>
