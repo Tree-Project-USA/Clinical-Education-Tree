@@ -251,13 +251,21 @@ class Site(models.Model):
     @api.depends('zip')
     def _compute_state_and_city(self):
         for rec in self:
-            result = get_locstion_infor(rec.zip)
-            if result:
-                rec.state = result['state']
-                rec.city = result['city']
-            else:
-                rec.state = ''
-                rec.city = ''
+            state = ''
+            city = ''
+            try:
+                if rec.zip:
+                    result = get_locstion_infor(rec.zip)
+                    if result:
+                        state = result.get('state', '')
+                        city = result.get('city', '')
+                    
+            except Exception as e:
+                print(e)
+            finally:
+                rec.state = state
+                rec.city = city
+                    
 
     
     @api.depends('contract_id', 'contract_id.state')
