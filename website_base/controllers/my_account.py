@@ -70,7 +70,7 @@ class CustomerPortals(CustomerPortal):
         token = self.env['ir.config_parameter'].sudo(
         ).get_param('zip_code_token')
         if token:
-            token= 'DemoOnly00gH8wbb344Ca9wRlS2B9Btt3Nqg7g6GkvvSswAhCSX2jtqxzmK8kWuM'
+            token= 'DemoOnly00IN3PMSW0KhgXn6FcGUXZu7dSsK48xqtw0JZA6MTR2dc7PIIgay5dYM'
             url = "https://www.zipcodeapi.com/rest/%s/info.json/%s/degrees" % (token, zip)
             res = requests.get(url)
             if res.status_code == 200:
