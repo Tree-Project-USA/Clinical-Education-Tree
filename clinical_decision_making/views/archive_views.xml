@@ -12,6 +12,8 @@
                 <field name="student_id"/>
                 <field name="site_id"/>
                 <field name="tree_id"/>
+                <field name="date_begin"/>
+                <field name="date_end"/>
                 <field name="cohort_id"/>
                 <field name="date"/>
             </tree>
@@ -37,6 +39,8 @@
                         <group>
                             <field name="cohort_id"/>
                             <field name="date"/>
+                            <field name="date_begin"/>
+                            <field name="date_end"/>
                         </group>
                     </group>
                 </sheet>

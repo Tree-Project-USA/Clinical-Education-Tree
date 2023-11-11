@@ -15,7 +15,6 @@ def get_distance(zip_one, zip_two):
     ).get_param('zip_code_token')
     try:
         if token:
-            token= 'DemoOnly00IN3PMSW0KhgXn6FcGUXZu7dSsK48xqtw0JZA6MTR2dc7PIIgay5dYM'
             url = 'https://www.zipcodeapi.com/rest/%s/distance.json/%s/%s/mile'% (token, zip_one, zip_two)
             res = requests.get(url)
             if res.status_code == 200:
@@ -32,9 +31,9 @@ def get_locstion_infor(zip):
     ).get_param('zip_code_token')
     try:
         if token:
-            token= 'DemoOnly00IN3PMSW0KhgXn6FcGUXZu7dSsK48xqtw0JZA6MTR2dc7PIIgay5dYM'
             url = "https://www.zipcodeapi.com/rest/%s/info.json/%s/degrees" % (token, zip)
-            res = requests.get(url)
+            print(url)
+            res = requests.request("GET", url)
             if res.status_code == 200:
                 return res.json()
             else:
@@ -52,8 +51,10 @@ class Archive(models.Model):
     tree_id = fields.Many2one(comodel_name='cpdm.tree', string='Clinc Placement Tree', readonly=True)
     cohort_id = fields.Many2one(comodel_name='cohort', string='Cohort', readonly=True)
     date = fields.Date(string='Date',default=fields.Date.today(), readonly=True)
+    date_begin = fields.Date('Start Date')
+    date_end = fields.Date('End Date')
     setting_id = fields.Many2one(comodel_name='category.setting', string="Setting Intership", required=True)
-    zip = fields.Char(string='Zip Code', required=True)
+    zip = fields.Char(string='Zip Code')
     
     intership_period = fields.Selection([
         ('ice', 'ICE'),
@@ -348,21 +349,31 @@ class LocationSetting(models.Model):
     zip = fields.Char(string='Zip Code', size=5, required=True)
     city = fields.Char(string='City')
     state = fields.Char(string='State')
-    
+    active = fields.Boolean(default=True)
     def get_locstion_infor(self, zip):
         token = request.env['ir.config_parameter'].sudo(
         ).get_param('zip_code_token')
         try:
             if token:
-                token= 'DemoOnly00IN3PMSW0KhgXn6FcGUXZu7dSsK48xqtw0JZA6MTR2dc7PIIgay5dYM'
                 url = "https://www.zipcodeapi.com/rest/%s/info.json/%s/degrees" % (token, zip)
-                res = requests.get(url)
+                res = requests.request("GET", url)
                 if res.status_code == 200:
                     return res.json()
                 else:
                     raise ValidationError(res.json().get('error_msg', ''))
         except Exception as e:
             raise ValidationError(str(e))
+    # def get_locstion_infor(self,zip):
+    #     try:
+    #         token = self.env['ir.config_parameter'].sudo(
+    #         ).get_param('zip_code_token')
+    #         if token:
+    #             url = "https://www.zipcodeapi.com/rest/%s/info.json/%s/degrees" % (token, zip)
+    #             res = requests.get(url)
+    #             if res.status_code == 200:
+    #                 return res.json()
+    #     except Exception as e:
+    #         return False
         
     @api.constrains('zip', 'student_id')
     def _check_product_uom_category_id(self):
@@ -378,9 +389,7 @@ class LocationSetting(models.Model):
                     distance = get_distance(rec.zip, location_id.zip)
                     if distance and distance < float(max_distance_mel):
                         raise ValidationError(_('The Distance Between zip codes (%s) and (%s) is too small that the distance required to (%s) miles'% (rec.zip , location_id.zip, max_distance_mel)))
-    
-
-        
+            
     @api.onchange('zip')
     def _get_state_and_city(self):
         for rec in self:

@@ -3,6 +3,7 @@
 import requests
 from lxml.etree import LxmlError
 from datetime import date
+import datetime
 from odoo import models, fields, api,_
 from odoo.addons.clinical_decision_making.models.setting import get_distance
 from odoo.exceptions import ValidationError
@@ -13,7 +14,7 @@ class Cohort(models.Model):
     _rec_name = 'cpdm_tree_id'
 
     active = fields.Boolean(default=True)
-    cpdm_tree_id = fields.Many2one(comodel_name='cpdm.tree', string='cpdm Tree')
+    cpdm_tree_id = fields.Many2one(comodel_name='cpdm.tree', string='cpdm Tree', ondelete='cascade')
     parent_state = fields.Selection(related='cpdm_tree_id.state')
     parent_type = fields.Selection(related='cpdm_tree_id.type')
         
@@ -42,14 +43,13 @@ class Cohort(models.Model):
         ('not_confirm_state', 'not Confirm State'),
         ('not_accepet_dis', 'Not Accepet Dis'),
         ('draft', 'Draft'),
-        
-    ], string='tree_prograss', 
-        compute='_compute_tree_state_prograss'
-                                  )
+
+    ], string='tree_prograss',
+        compute='_compute_tree_state_prograss',
+    )
     @api.depends('parent_state')
     def _compute_tree_state_prograss(self):
         for rec in self.cpdm_tree_id.cohort_ids:
-            if rec.parent_state == 'done':
                 if rec.hardship_status == 'approved' and rec.cat_one_requirment == 'met':
                     rec.tree_state = 'approved_pp'
                 elif rec.cat_one_requirment == 'met':
@@ -59,8 +59,6 @@ class Cohort(models.Model):
                 elif rec.ice_accepted_distances == 'accepted':
                     rec.tree_state = 'not_accepet_dis'
                 else:
-                    rec.tree_state = 'draft'
-            else:
                     rec.tree_state = 'draft'
     
     # Student Locations
@@ -150,38 +148,35 @@ class Cohort(models.Model):
                     rec.hardship_status = 'approved' if hardship_id.state == 'confirm' else 'not_approved'
                 else:
                     rec.hardship_status = False
-            else:
-                if not rec.hardship_status:
-                    rec.hardship_status = False
     
     # Met Rquirements
-    cat_one_requirment = fields.Selection([('not_met', 'Not Met'), ('met', 'Met'),], string='CAT 1 Requirment', compute='_compute_cat_one_requirment')
-    met_via = fields.Selection([('not_met', 'Not Met'), ('met_via_ice', 'Met via ICE'), ('met_via_tce_1', 'Met via TCE I'), ('met_via_tce_2', 'Met via TCE II')], string='Via CE', compute='_compute_cat_one_requirment')
+    cat_one_requirment = fields.Selection([('not_met', 'Not Met'), ('met', 'Met'),], string='CAT 1 Requirment', compute='_compute_cat_one_requirment', store=True)
+    met_via = fields.Selection([('not_met', 'Not Met'), ('met_via_ice', 'Met via ICE'), ('met_via_tce_1', 'Met via TCE I'), ('met_via_tce_2', 'Met via TCE II')], string='Via CE', compute='_compute_cat_one_requirment', store=True)
     pta_supervision = fields.Selection([('normal', ''), ('done', 'Met'), ('blocked', 'Not Met')], default='normal', string='PTA Supervision')
     ipe = fields.Selection([('normal', ''), ('done', 'Met'), ('blocked', 'Not Met')], default='normal', string='IPE')
    
         
-    @api.depends('stu_setting_one_id', 'stu_setting_two_id', 'stu_setting_three_id', 'ice_setting_id', 'tce1_setting_id', 'tce2_setting_id')
+    @api.depends('stu_setting_one_id', 'stu_setting_two_id', 'stu_setting_three_id', 'ice_setting_id', 'tce1_setting_id', 'tce2_setting_id', 'pta_supervision', 'ipe', 'ice_placement_status', 'tce1_placement_status', 'tce2_placement_status', 'ice_accepted_distances', 'tce1_accepted_distances', 'tce2_accepted_distances')
     def _compute_cat_one_requirment(self):
         for rec in self:
-            if rec.parent_type == 'ice' and rec.pta_supervision == 'done' and rec.ipe == 'done' and rec.ice_placement_status == 'done' and rec.ice_accepted_distances == 'accepted':
-                rec.cat_one_requirment = 'met'
-            elif rec.parent_type == 'tce1' and rec.pta_supervision == 'done' and rec.ipe == 'done' and rec.tce1_placement_status == 'done' and rec.tce1_accepted_distances == 'accepted':
-                rec.cat_one_requirment = 'met'
-            elif rec.parent_type == 'tce2' and rec.pta_supervision == 'done' and rec.ipe == 'done' and rec.tce2_placement_status == 'done' and rec.tce2_accepted_distances == 'accepted':
-                rec.cat_one_requirment = 'met'
-            else:
-                rec.cat_one_requirment = 'not_met'
+            if rec.parent_state == 'running':
+                if rec.parent_type == 'ice' and rec.pta_supervision == 'done' and rec.ipe == 'done' and rec.ice_placement_status == 'done' and rec.ice_accepted_distances == 'accepted':
+                    rec.cat_one_requirment = 'met'
+                elif rec.parent_type == 'tce1' and rec.pta_supervision == 'done' and rec.ipe == 'done' and rec.tce1_placement_status == 'done' and rec.tce1_accepted_distances == 'accepted':
+                    rec.cat_one_requirment = 'met'
+                elif rec.parent_type == 'tce2' and rec.pta_supervision == 'done' and rec.ipe == 'done' and rec.tce2_placement_status == 'done' and rec.tce2_accepted_distances == 'accepted':
+                    rec.cat_one_requirment = 'met'
+                else:
+                    rec.cat_one_requirment = 'not_met'
 
-            if rec.ice_setting_id and rec.ice_setting_id in [rec.stu_setting_one_id, rec.stu_setting_two_id, rec.stu_setting_three_id]:
-                rec.met_via = 'met_via_ice'
-            elif rec.tce1_setting_id and rec.tce1_setting_id in [rec.stu_setting_one_id, rec.stu_setting_two_id, rec.stu_setting_three_id]:
-                rec.met_via = 'met_via_tce_1'
-            elif rec.tce2_setting_id and rec.tce2_setting_id in [rec.stu_setting_one_id, rec.stu_setting_two_id, rec.stu_setting_three_id]:
-                rec.met_via = 'met_via_tce_2'
-            else:
-                rec.met_via = 'not_met'
-                
+                if rec.ice_setting_id and rec.ice_setting_id in [rec.stu_setting_one_id, rec.stu_setting_two_id, rec.stu_setting_three_id]:
+                    rec.met_via = 'met_via_ice'
+                elif rec.tce1_setting_id and rec.tce1_setting_id in [rec.stu_setting_one_id, rec.stu_setting_two_id, rec.stu_setting_three_id]:
+                    rec.met_via = 'met_via_tce_1'
+                elif rec.tce2_setting_id and rec.tce2_setting_id in [rec.stu_setting_one_id, rec.stu_setting_two_id, rec.stu_setting_three_id]:
+                    rec.met_via = 'met_via_tce_2'
+                else:
+                    rec.met_via = 'not_met'                
 
     # Placement ICE
         # Site Setting
@@ -196,7 +191,7 @@ class Cohort(models.Model):
     ice_zip = fields.Char(related='ice_site_id.zip')
     
         # SCCE
-    aval_ice_scce_ids = fields.Many2many(comodel_name='scce', compute='_compute_aval_ice_scce_ids')
+    aval_ice_scce_ids = fields.Many2many(comodel_name='scce', compute='_compute_aval_ice_scce_ids', store=True)
     ice_scce_id = fields.Many2one('scce', string='ICE SCCE')
     
     ice_scce_first_name = fields.Char(related='ice_scce_id.first_name')
@@ -228,6 +223,7 @@ class Cohort(models.Model):
             if rec.ice_site_id:
                 f_code = rec.cpdm_tree_id.info_ids.filtered(lambda x : x.clinc_id == rec.ice_site_id).mapped('setting_type')
                 print(f_code)
+                print(rec.ice_site_id)
                 print(rec.ice_site_id.setting_ids)
                 print(rec.ice_site_id.setting_ids.filtered(lambda x : x.code in f_code))
                 rec.aval_ice_setting_ids = rec.ice_site_id.setting_ids.filtered(lambda x : x.code in f_code)
@@ -238,11 +234,7 @@ class Cohort(models.Model):
     def _compute_aval_ice_scce_ids(self):
         for rec in self:
             if rec.ice_site_id:
-                ip_setting = self.search([('student_id', '=', rec.student_id.id), ('parent_state', '=', 'done'), '|', ('tce1_setting_code', '=', 'ip'), ('tce2_setting_code', '=', 'ip'), ])
-                if ip_setting:
-                    rec.aval_ice_scce_ids = rec.ice_site_id.setting_ids.filtered(lambda x: x.code == 'op')
-                else:
-                    rec.aval_ice_scce_ids = rec.ice_site_id.scce_ids
+                rec.aval_ice_scce_ids = rec.ice_site_id.scce_ids
             else:
                 rec.aval_ice_scce_ids = False 
         
@@ -314,8 +306,7 @@ class Cohort(models.Model):
     def _compute_aval_tce1_scce_ids(self):
         for rec in self:
             if rec.tce1_site_id:
-                f_code = rec.cpdm_tree_id.info_ids.filtered(lambda x : x.clinc_id == rec.tce1_site_id).mapped('setting_type')
-                rec.aval_tce1_scce_ids = rec.tce1_site_id.scce_ids.filtered(lambda x : x.code in f_code)
+                rec.aval_tce1_scce_ids = rec.tce1_site_id.scce_ids
             else:
                 rec.aval_tce1_scce_ids = False 
                 
@@ -386,8 +377,7 @@ class Cohort(models.Model):
     def _compute_aval_tce2_scce_ids(self):
         for rec in self:
             if rec.tce2_site_id:
-                f_code = rec.cpdm_tree_id.info_ids.filtered(lambda x : x.clinc_id == rec.tce2_site_id).mapped('setting_type')
-                rec.aval_tce2_scce_ids = rec.tce2_site_id.scce_ids.filtered(lambda x : x.code in f_code)
+                rec.aval_tce2_scce_ids = rec.tce2_site_id.scce_ids
             else:
                 rec.aval_tce2_scce_ids = False 
                 
@@ -419,7 +409,6 @@ class Cohort(models.Model):
                 distance = get_distance(zip_code_one, zip_code_two)
                 return float(distance) <= float(clinical_distance_mel)
             return False
-
         for rec in self:
             rec.ice_accepted_distances = 'not_accepted'
             rec.tce1_accepted_distances = 'not_accepted'
@@ -435,22 +424,19 @@ class Cohort(models.Model):
                         rec.stu_locatio_zip_five]
             
             for code in stu_codes:
-                print('--------------------------------1', code, ice_zip_code)
                 if code and code != '0' and ice_zip_code and check_accepted_distance(code, ice_zip_code):
                     rec.ice_accepted_distances = 'accepted'
                     break
                 
             for code in stu_codes:
-                print('--------------------------------2')
                 if code and code != '0' and tce1_zip_code and check_accepted_distance(code, tce1_zip_code):
                     rec.tce1_accepted_distances = 'accepted'
                     break
             for code in stu_codes:
-                print('--------------------------------3')
                 if code and code != '0' and tce2_zip_code and check_accepted_distance(code, tce2_zip_code):
                     rec.tce2_accepted_distances = 'accepted'
                     break
-    
+        
     
     def action_send_email_to_students(self):
         for rec in self:
@@ -489,10 +475,10 @@ class CPDMTree(models.Model):
     # placement_ids = fields.Many2one(comodel_name='placement.setting', string='Placement')
     cpdm_date = fields.Date('cpdm Date',default=fields.Date.today())
     
-    date_begin = fields.Datetime('Start Date', required=True)
-    date_end = fields.Datetime('End Date', required=True)
+    date_begin = fields.Datetime('Start Date')
+    date_end = fields.Datetime('End Date')
         
-    cohort_ids = fields.One2many(comodel_name='cohort', inverse_name='cpdm_tree_id', string='Cpdm Tree')
+    cohort_ids = fields.One2many(comodel_name='cohort', inverse_name='cpdm_tree_id', string='Cpdm Tree', ondelete='cascade')
     state = fields.Selection([
         ('draft', 'Draft'),
         ('running', 'Running'),
@@ -511,12 +497,12 @@ class CPDMTree(models.Model):
         ('ice', 'ICE'),
         ('tce1', 'TCE1'),
         ('tce2', 'TCE2'),
-    ], string='Type')
+    ], string='Type', required=True)
     term = fields.Selection([
         ('fall', 'Fall'),
-        ('spreing', 'Spreing'),
+        ('spring', 'Spring'),
         ('summer', 'Summer'),
-    ], string='Term')
+    ], string='Term', required=True)
     date = fields.Date(string='Year', required=True)
 
 
@@ -586,7 +572,6 @@ class CPDMTree(models.Model):
                 placement_status_field = 'tce1_placement_status'
             elif rec.type == 'tce2' or rec.type == 'tci2':
                 placement_status_field = 'tce2_placement_status'
-            
             rec.total_confirmed = len(rec.cohort_ids.filtered(lambda record: getattr(record, placement_status_field) == 'done'))
             rec.total_pending = len(rec.cohort_ids.filtered(lambda record: getattr(record, placement_status_field) == 'normal'))
             rec.total_not_placed = len(rec.cohort_ids.filtered(lambda record: getattr(record, placement_status_field) == 'blocked'))
@@ -608,9 +593,8 @@ class CPDMTree(models.Model):
             domain += [('is_complete_tce1', '=', False)]
         elif self.type == 'tce2':
             domain += [('is_complete_tce2', '=', False)]
-
         student_ids = self.env['res.partner'].sudo().search(domain)
-        student_in_progress = self.search([('id', '!=', self.id), ('state', '=', 'running')]).mapped('cohort_ids').mapped('student_id')
+        student_in_progress = self.search([('id', '!=', self.id), ('type', '=', self.type), ('state', '=', 'running')]).mapped('cohort_ids').mapped('student_id')
         
         student_ids -= student_in_progress
         
@@ -624,20 +608,133 @@ class CPDMTree(models.Model):
         if len(cohort_vals) == 0:
             raise ValidationError("Ther is no student to be matched")
         
-        self.env['cohort'].sudo().create(cohort_vals)
+        cohort_ids = self.env['cohort'].sudo().create(cohort_vals)
+        self.write({
+            'state': 'running',
+        })
+        if self.is_bot:
+            self.run_automatching_process()
         # for rec in data:...
         # data = self.env['cohort'].sudo().create(cohort_vals)
         # for rec in data:...
             
-        self.write({
-            'state': 'running',
-        })
-            
+    def run_automatching_process(self):
+        clinical_distance_mel = self.env['ir.config_parameter'].sudo().get_param('clinical_distance_mel')
+        
+        def check_accepted_distance(zip_code_one, zip_code_two):
+            if zip_code_one and zip_code_two:
+                distance = get_distance(zip_code_one, zip_code_two)
+                return float(distance) <= float(clinical_distance_mel)
+            return False
+
+        def get_setting_id(site, code):
+            if code == 'ip':
+                return site.setting_ids.filtered(lambda x: x.code == 'ip')
+            elif code == 'op':
+                return site.setting_ids.filtered(lambda x: x.code == 'op')
+            return False
+
+        def get_scce_id(site):
+            return site.scce_ids[0] if site.scce_ids else False
+
+        for cohort_id in self.cohort_ids:
+            site_ids = self.info_ids.mapped('clinc_id')
+
+            if self.type == 'ice':
+                for s_zip in cohort_id.student_id.locatio_ids.mapped('zip'):
+                    for site_id in site_ids:
+                        if check_accepted_distance(s_zip, site_id.zip):
+                            cohort_id.ice_site_id = site_id
+                            ip_setting = self.env['cohort'].search([('student_id', '=', cohort_id.student_id.id), ('parent_state', '=', 'done'), '|', ('tce1_setting_code', '=', 'ip'), ('tce2_setting_code', '=', 'ip'), ])
+                            if ip_setting:
+                                cohort_id.ice_setting_id = get_setting_id(cohort_id.ice_site_id, 'op') or False
+                            else:
+                                cohort_id.ice_setting_id = get_setting_id(cohort_id.ice_site_id, 'ip') or get_setting_id(cohort_id.ice_site_id, 'op') or False
+                            cohort_id.ice_scce_id = get_scce_id(cohort_id.ice_site_id)
+                            break
+
+            elif self.type == 'tce1':
+                for s_zip in cohort_id.student_id.locatio_ids.mapped('zip'):
+                    for site_id in site_ids:
+                        if check_accepted_distance(s_zip, site_id.zip):
+                            cohort_id.tce1_site_id = site_id
+                            ip_setting = self.env['cohort'].search([('student_id', '=', cohort_id.student_id.id), ('parent_state', '=', 'done'), '|', ('ice_setting_code', '=', 'ip'), ('tce2_setting_code', '=', 'ip'), ])
+                            if ip_setting:
+                                cohort_id.tce1_setting_id = get_setting_id(cohort_id.tce1_site_id, 'op') or False
+                            else:
+                                cohort_id.tce1_setting_id = get_setting_id(cohort_id.tce1_site_id, 'ip') or get_setting_id(cohort_id.tce1_site_id, 'op') or False
+                            cohort_id.tce1_scce_id = get_scce_id(cohort_id.tce1_site_id)
+                            break
+
+            elif self.type == 'tce2':
+                for s_zip in cohort_id.student_id.locatio_ids.mapped('zip'):
+                    for site_id in site_ids:
+                        if check_accepted_distance(s_zip, site_id.zip):
+                            cohort_id.tce2_site_id = site_id
+                            ip_setting = self.env['cohort'].search([('student_id', '=', cohort_id.student_id.id), ('parent_state', '=', 'done'), '|', ('ice_setting_code', '=', 'ip'), ('tce1_setting_code', '=', 'ip'), ])
+                            if ip_setting:
+                                cohort_id.tce2_setting_id = get_setting_id(cohort_id.tce2_site_id, 'op') or False
+                            else:
+                                cohort_id.tce2_setting_id = get_setting_id(cohort_id.tce2_site_id, 'ip') or get_setting_id(cohort_id.tce2_site_id, 'op') or False
+                            cohort_id.tce2_scce_id = get_scce_id(cohort_id.tce2_site_id)
+                            break
+    
     def action_draft(self):
         self.write({
             'state': 'draft',
         })
+    
+    def get_data_from_type(self, record, ttype, dtype):
+        field = ""
+        if dtype == 'setting_id':
+            if ttype == 'ice':
+                field = 'ice_setting_id'
+            elif ttype == 'tce1' or ttype == 'tci1':
+                field = 'tce1_setting_id'
+            elif ttype == 'tce2' or ttype == 'tci2':
+                field = 'tce1_setting_id'
+            
+        if dtype == 'site_id':
+            if ttype == 'ice':
+                field = 'ice_site_id'
+            elif ttype == 'tce1' or ttype == 'tci1':
+                field = 'tce1_site_id'
+            elif ttype == 'tce2' or ttype == 'tci2':
+                field = 'tce2_site_id'
+        if field != '':
+            return getattr(record, field)
+        else:
+            return False
+        
     def action_complete(self):
+        for rec in self.cohort_ids.filtered(lambda tree_id : tree_id.tree_state in ['approved_pp', 'approved_p']):            
+            date_begin, date_end = self.compute_season_period(self.date.year, rec.cpdm_tree_id.term)
+            print(self.get_data_from_type(rec, rec.cpdm_tree_id.type, 'setting_id').id)
+            print(self.get_data_from_type(rec, rec.cpdm_tree_id.type, 'site_id').id)
+            archive_id = self.env["archive"].create({
+                'student_id': rec.student_id.id,
+                'site_id': self.get_data_from_type(rec, rec.cpdm_tree_id.type, 'site_id').id,
+                'tree_id': rec.cpdm_tree_id.id,
+                'cohort_id': rec.id,
+                'date_begin': date_begin,
+                'date_end': date_end,
+                'setting_id': self.get_data_from_type(rec, rec.cpdm_tree_id.type, 'setting_id').id,
+                'intership_period': rec.cpdm_tree_id.type,
+            })
+            rec.student_id.locatio_ids.write({
+                'archive_id': archive_id.id,
+                'active': False,
+            })
+            ttype = rec.cpdm_tree_id.type
+            data = {}
+            if ttype == 'ice':
+                data = {'is_complete_ice': True}
+            elif ttype == 'tce1':
+                data = {'is_complete_tce1': True}
+            elif ttype == 'tce2':
+                data = {'is_complete_tce2': True}
+
+            rec.student_id.write(data)
         self.write({
             'state': 'done',
         })
@@ -651,8 +748,33 @@ class CPDMTree(models.Model):
     def create(self, vals):
         if 'sequence_number' not in vals or vals.get('sequence_number', False) == False or vals['sequence_number'] == _('New'):
             vals['sequence_number'] = self.env['ir.sequence'].next_by_code('cpdm.tree') or _('New')
-        print(vals)
         return super(CPDMTree, self).create(vals)
+    
+    def compute_season_period(self, year, season):
+        if season == 'summer':
+            start_month = 6  # June
+            end_month = 8  # August
+        elif season == 'spring':
+            start_month = 3  # March
+            end_month = 5  # May
+        elif season == 'fall':
+            start_month = 9  # September
+            end_month = 11  # November
+        else:
+            raise ValueError("Invalid season")
+
+        start_date = datetime.date(year, start_month, 1)
+        next_month = end_month + 1
+
+        if next_month > 12:
+            next_month = 1  # Wrap around to January of next year
+            next_year = year + 1
+        else:
+            next_year = year
+
+        end_date = datetime.date(next_year, next_month, 1) - datetime.timedelta(days=1)
+
+        return start_date, end_date
         
     # Cron job
     def check_end_date_to_update_status(self):
@@ -699,8 +821,20 @@ class ClinicInfoGathering(models.Model):
                 rec.date_end = rec.clinc_id.contract_id.date_end or False
 
     def action_confirm(self):
-        for rec in self:
-            rec.write({
+        for rec in self:               
+            if rec.tree_id.type == 'ice':
+                rec.tree_id.cohort_ids.filtered(lambda x : x.ice_site_id.id == rec.clinc_id.id).write({
+                    'ice_placement_status': 'done'
+                })
+            elif rec.tree_id.type == 'tce1':
+                rec.tree_id.cohort_ids.filtered(lambda x : x.tce1_site_id.id == rec.clinc_id.id).write({
+                    'tce1_placement_status': 'done'
+                })
+            elif rec.tree_id.type == 'tce2':
+                rec.tree_id.cohort_ids.filtered(lambda x : x.tce2_site_id.id == rec.clinc_id.id).write({
+                    'tce2_placement_status': 'done'
+                })
+        self.write({
                 'state': 'confirmed'
             })
             
@@ -737,6 +871,7 @@ class ClinicInfoGathering(models.Model):
                     rec.tree_id.cohort_ids.filtered(lambda x : x.tce2_site_id.id == rec.clinc_id.id).write({
                         'tce2_placement_status': 'done'
                     })
+                    
     def action_pending(self):
         for rec in self:               
             if rec.tree_id.type == 'ice':
