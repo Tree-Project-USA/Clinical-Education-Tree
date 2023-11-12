@@ -10,6 +10,7 @@ class CustomerPortals(http.Controller):
     @http.route("/hardship/request", type="http", website=True, auth="user")
     def hardship_request(self):
         return request.render("website_base.hardship_request_template")
+    
     @http.route("/update/hardship/request", type="http", website=True, auth="user", Methods=["POST"])
     def update_hardship_request(self, hardship=None, **post):
         partner_id = request.env.user.partner_id
@@ -35,11 +36,11 @@ class CustomerPortals(http.Controller):
                 "attachment_ids": file_list,
                 "state": "draft",
             })
-            return request.redirect("/")
+            return request.render("websit_base.success_request_template")
         if hardship_id:
             return request.render("website_base.update_hardship_request_template",{'hardship_id': hardship_id})
         else:
-            return request.redirect("/")
+            return request.redirect("/my/home")
 
     @http.route("/create/hardship/request", type="http", website=True, auth="user", Methods=["POST"])
     def create_hardship_request(self, **kw):

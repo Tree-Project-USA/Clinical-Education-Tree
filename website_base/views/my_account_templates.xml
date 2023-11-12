@@ -5,9 +5,9 @@
             <div class="alert alert-success text-center shadow-sm" t-if="hardship">
                 <div class="d-flex justify-content-center">
                   <p>
-                    A disability application requires an amendment
+                    Your hardship information need to be updated
                   </p>
-                  <a class="mx-2" href="/update/hardship/request">hear</a>
+                  <a class="mx-2" href="/update/hardship/request">here</a>
                 </div>
             </div>
             <t t-set="additional_title">Contact Details</t>
