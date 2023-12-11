@@ -10,14 +10,20 @@
     'depends': ['base', 'base_address_extended', 'mail'],
     'data': [
         'security/ir.model.access.csv',
-        'data/cron_servises.xml',
-        'data/cpdm_tree_data.xml',
-        'views/setting_views.xml',
-        'views/cohort_views.xml',
-        'views/res_partner_views.xml',
-        'views/site_contract_views.xml',
-        'views/hardship_request_views.xml',
+        # 'data/cron_servises.xml',
+        # 'data/cpdm_tree_data.xml',
+        
+        
         'views/archive_views.xml',
+        'views/facility_contract_views.xml',
+        'views/geographical_history_views.xml',
+        'views/geographical_views.xml',
+        'views/hardship_request_views.xml',
+        'views/medical_facility_views.xml',
+        'views/placement_offer_views.xml',
+        # 'views/placement_request_views.xml',
+        'views/res_partner_views.xml',
+        'views/scce_views.xml',
         'views/res_config_views.xml',
         'views/menu.xml',
 

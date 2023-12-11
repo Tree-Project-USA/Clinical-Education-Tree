@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <!-- SCCE Views -->
+    <record id="scce_view_tree" model="ir.ui.view">
+        <field name="name">scce.view.tree</field>
+        <field name="model">scce</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="first_name"/>
+                <field name="last_name"/>
+                <field name="email"/>
+            </tree>
+        </field>
+    </record>
+    <record id="scce_view_form" model="ir.ui.view">
+        <field name="name">scce.view.form</field>
+        <field name="model">scce</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                <div class="oe_button_box" name="button_box">
+                    <button class="oe_stat_button" type="object" 
+                        string="Medical Facility" 
+                        name="action_open_facility" 
+                        icon="fa-hospital-o">
+                        <span>
+                            <field name="facility_count"/>
+                            Facility
+                        </span>
+                    </button>
+                </div>
+                    <group>
+                        <field name="first_name"/>
+                        <field name="last_name"/>
+                        <field name="email"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

@@ -3,7 +3,7 @@
 
     <!-- Student Views -->
     <record id="student_view_tree" model="ir.ui.view">
-        <field name="name">Student.view.tree</field>
+        <field name="name">student.view.tree</field>
         <field name="model">res.partner</field>
         <field name="mode">primary</field>
         <field name="priority">0</field>
@@ -15,7 +15,6 @@
                 <field name="phone"/>
                 <field name="home_address"/>
                 <field name="contact_address"/>
-                <field name="archive_ids" widget="many2many_tags"/>
             </tree>
         </field>
     </record>
@@ -53,17 +52,33 @@
                             <field name="home_address"/>
                             <field name="phone"/>
                             <field name="email"/>
-                            <field name="archive_ids" widget="many2many_tags"/>
                         </group>
                     </group>
 
                     <notebook colspan="4">
-                        <page string="Locations" name="student_locations" autofocus="autofocus">
-                            <field name="locatio_ids" mode="tree">
+                        <page string="Geographical" name="student_geographical" autofocus="autofocus">
+                            <field name="geographical_ids" mode="tree">
                                 <tree editable="bottom">
+                                    <field name="zip_code"/>
                                     <field name="state"/>
                                     <field name="city"/>
-                                    <field name="zip"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Archive" name="student_archive">
+                            <field name="archive_ids" mode="tree">
+                                <tree edit="false" create="false" delete="false">
+                                    <field name="student_id"/>
+                                    <field name="facility_id"/>
+                                    <field name="date"/>
+                                    <field name="placement_type"/>
+                                    <field name="placement_term"/>
+                                    <field name="code"/>
+                                    <field name="zip_code"/>
+                                    <field name="city"/>
+                                    <field name="state"/>
+                                    <field name="date_begin"/>
+                                    <field name="date_end"/>
                                 </tree>
                             </field>
                         </page>

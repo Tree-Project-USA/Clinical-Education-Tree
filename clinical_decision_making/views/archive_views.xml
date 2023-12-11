@@ -8,14 +8,18 @@
         <field name="mode">primary</field>
         <field name="priority">0</field>
         <field name="arch" type="xml">
-            <tree string="Students Placement Archive">
+            <tree string="Students Placement Archive" edit="false" create="false" delete="false">
                 <field name="student_id"/>
-                <field name="site_id"/>
-                <field name="tree_id"/>
+                <field name="facility_id"/>
+                <field name="date"/>
+                <field name="placement_type"/>
+                <field name="placement_term"/>
+                <field name="code"/>
+                <field name="zip_code"/>
+                <field name="city"/>
+                <field name="state"/>
                 <field name="date_begin"/>
                 <field name="date_end"/>
-                <field name="cohort_id"/>
-                <field name="date"/>
             </tree>
         </field>
     </record>
@@ -26,18 +30,23 @@
         <field name="mode">primary</field>
         <field name="priority">0</field>
         <field name="arch" type="xml">
-            <form string="Student Placement Archive">
+            <form string="Student Placement Archive" edit="false" create="false" delete="false">
                 <sheet>
                     <div class="oe_button_box" name="button_box"/>
                     <widget name="web_ribbon" title="Archived" bg_color="bg-danger"/>
                     <group>
                         <group>
                             <field name="student_id"/>
-                            <field name="site_id"/>
-                            <field name="tree_id"/>
+                            <field name="facility_id"/>
+                            <field name="offer_line_id" invisible="1"/>
+                            <field name="offer_id"/>
+                            <field name="code"/>
                         </group>
                         <group>
-                            <field name="cohort_id"/>
+                            <field name="geographical_id" invisible="1"/>
+                            <field name="city"/>
+                            <field name="state"/>
+                            <field name="zip_code"/>
                             <field name="date"/>
                             <field name="date_begin"/>
                             <field name="date_end"/>

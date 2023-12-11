@@ -32,6 +32,24 @@
                                     <field name="zip_code_token" class="oe_inline"/>
                                 </div>
                             </div>
+                            <div class="content-group">
+                                <div class="mt16">
+                                    <label for="max_hardship_zipcodes" string="Number of Hardship Zipcodes"/>
+                                    <field name="max_hardship_zipcodes" class="oe_inline"/>
+                                </div>
+                            </div>
+                            <div class="content-group">
+                                <div class="mt16">
+                                    <label for="normal_number_zipcodes" string="Normal of number Student zipcodes"/>
+                                    <field name="normal_number_zipcodes" class="oe_inline"/>
+                                </div>
+                            </div>
+                            <div class="content-group">
+                                <div class="mt16">
+                                    <label for="max_zipcodes_state" string="Maximum Zip code in State"/>
+                                    <field name="max_zipcodes_state" class="oe_inline"/>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </xpath>

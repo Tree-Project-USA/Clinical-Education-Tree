@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <!-- List View -->
+        <record model="ir.ui.view" id="geographical_history_view_tree">
+            <field name="name">geographical.history.tree</field>
+            <field name="model">geographical.history</field>
+            <field name="arch" type="xml">
+                <tree create='0' edit='0' delete='0'>
+                    <field name="student_id" invisible="1"/>
+                    <field name="archive_id" invisible="1"/>
+                    <field name="geographical_id"/>
+                    <field name="city"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        
+        <!-- Form View -->
+        <record model="ir.ui.view" id="geographical_history_view_form">
+            <field name="name">geographical.history.form</field>
+            <field name="model">geographical.history</field>
+            <field name="arch" type="xml">
+                <form create='0' edit='0' delete='0'>
+                    <header>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="student_id"/>
+                                <field name="archive_id" invisible="1"/>
+                                <field name="geographical_id"/>
+                                <field name="city"/>
+                                <field name="state"/>
+                            </group>
+                            <group>
+
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

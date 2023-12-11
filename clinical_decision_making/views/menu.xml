@@ -24,20 +24,20 @@
         <field name="act_window_id" ref="student_action"/>
     </record>
 
-    <record id="cpdm_tree_action" model="ir.actions.act_window">
+    <!-- <record id="cpdm_tree_action" model="ir.actions.act_window">
         <field name="type">ir.actions.act_window</field>
         <field name="name">Internship</field>
         <field name="res_model">cpdm.tree</field>
         <field name="view_mode">tree,form</field>
-    </record>
+    </record> -->
 
-    <record id="cohort_action" model="ir.actions.act_window">
+    <!-- <record id="cohort_action" model="ir.actions.act_window">
         <field name="type">ir.actions.act_window</field>
         <field name="name">Placement</field>
         <field name="res_model">cohort</field>
         <field name="context">{'group_by': 'cpdm_tree_id', 'create': False}</field>
         <field name="view_mode">tree,form</field>
-    </record>
+    </record> -->
 
     <record id="scce_action" model="ir.actions.act_window">
         <field name="type">ir.actions.act_window</field>
@@ -45,36 +45,33 @@
         <field name="res_model">scce</field>
         <field name="view_mode">tree,form</field>
     </record>
-    <record id="site_action" model="ir.actions.act_window">
+
+    <record id="medical_facility_action" model="ir.actions.act_window">
         <field name="type">ir.actions.act_window</field>
-        <field name="name">Clinic</field>
-        <field name="res_model">site</field>
+        <field name="name">Clinics</field>
+        <field name="res_model">medical.facility</field>
         <field name="view_mode">tree,form</field>
     </record>
-    <record id="category_setting_action" model="ir.actions.act_window">
+
+    <record id="placement_offer_action" model="ir.actions.act_window">
         <field name="type">ir.actions.act_window</field>
-        <field name="name">Category Setting</field>
-        <field name="res_model">category.setting</field>
+        <field name="name">Placement Offer</field>
+        <field name="res_model">placement.offer</field>
         <field name="view_mode">tree,form</field>
     </record>
-    <record id="location_setting_action" model="ir.actions.act_window">
+
+    <!-- <record id="placement_request_action" model="ir.actions.act_window">
         <field name="type">ir.actions.act_window</field>
-        <field name="name">Location Setting</field>
-        <field name="res_model">location.setting</field>
+        <field name="name">Placement request</field>
+        <field name="res_model">placement.request</field>
         <field name="view_mode">tree,form</field>
-    </record>
-    <record id="placement_setting_action" model="ir.actions.act_window">
-        <field name="type">ir.actions.act_window</field>
-        <field name="name">Placement Setting</field>
-        <field name="res_model">placement.setting</field>
-        <field name="view_mode">tree,form</field>
-    </record>
+    </record> -->
 
     <record id="archive_action" model="ir.actions.act_window">
         <field name="type">ir.actions.act_window</field>
         <field name="name">Archive</field>
         <field name="res_model">archive</field>
-        <field name="context">{'group_by': 'site_id', 'create': False, 'edit': False}</field>
+        <field name="context">{'group_by': 'facility_id', 'create': False, 'edit': False}</field>
         <field name="view_mode">tree,form</field>
     </record>
 
@@ -85,17 +82,17 @@
         <field name="view_mode">tree,form</field>
     </record>
 
-    <record id="site_contract_history_view_form_action" model="ir.actions.act_window">
+    <record id="facility_contract_history_view_form_action" model="ir.actions.act_window">
         <field name="name">Contracts</field>
-        <field name="res_model">site.contract.history</field>
+        <field name="res_model">facility.contract.history</field>
         <field name="view_mode">form</field>
     </record>
 
-    <record id="action_site_contract" model="ir.actions.act_window">
+    <record id="action_facility_contract" model="ir.actions.act_window">
         <field name="name">Contracts</field>
-        <field name="res_model">site.contract</field>
+        <field name="res_model">facility.contract</field>
         <field name="view_mode">tree,form</field>
-        <field name="domain">[('site_id', '!=', False)]</field>
+        <field name="domain">[('facility_id', '!=', False)]</field>
         <field name="context">{'search_default_group_by_state': 1, 'create': False}</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
@@ -110,19 +107,19 @@
         parent="menu_root_cpdm"
         sequence="1"/>
 
-    <menuitem
+    <!-- <menuitem
         id="cpdm_menu"
         name="Internship"
         action="cpdm_tree_action"
         parent="cpdm_tree_menu"
-        sequence="1"/>
+        sequence="1"/> -->
     
-    <menuitem
+    <!-- <menuitem
         id="cohort_menu"
         name="Internship Placement"
         action="cohort_action"
         parent="cpdm_tree_menu"
-        sequence="2"/>
+        sequence="2"/> -->
 
     <menuitem
         id="student_details_menu"
@@ -154,30 +151,41 @@
         parent="menu_root_cpdm"
         sequence="5"/>
         
+
     <menuitem
-        id="site_menu"
-        name="Clinics"
-        action="site_action"
+        id="placement_offer_menu"
+        name="Placement Offer"
+        action="placement_offer_action"
         parent="clinic_details_menu"
         sequence="1"/>
+
+    <menuitem
+        id="facility_menu"
+        name="Clinics"
+        action="medical_facility_action"
+        parent="clinic_details_menu"
+        sequence="2"/>
+
     <menuitem
         id="scce_menu"
         name="Scces"
         action="scce_action"
         parent="clinic_details_menu"
         sequence="3"/>
+
     <menuitem
-        id="category_setting_menu"
-        name="Categories Setting"
-        action="category_setting_action"
+        id="geographical_menu"
+        name="Geographical Data"
+        action="geographical_action"
         parent="configuration_menu"
-        sequence="3"/>
-    <menuitem
+        sequence="99"/>
+    
+    <!-- <menuitem
         id="location_setting_menu"
         name="Locations"
         action="location_setting_action"
         parent="student_details_menu"
-        sequence="2"/>
+        sequence="2"/> -->
 
     <menuitem
         id="archive_menu"
@@ -186,9 +194,9 @@
         parent="student_details_menu"
         sequence="3"/>
     <menuitem
-        id="site_contract_menu"
+        id="facility_contract_menu"
         name="Contract"
-        action="action_site_contract"
+        action="action_facility_contract"
         parent="clinic_details_menu"
         sequence="2"/>
 

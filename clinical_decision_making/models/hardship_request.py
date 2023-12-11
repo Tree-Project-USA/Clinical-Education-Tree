@@ -34,14 +34,15 @@ class HardshipRequest(models.Model):
         ("student_id_unique", "UNIQUE(student_id)", "You Can Not Add Hardship For student more than one"),
     ]
     expiration_date = fields.Date(string='Expiration Date')
-    
+    geographical_ids = fields.Many2many(comodel_name='geographical', string='Geographical')
     
     def action_confirm(self):
         self.write({
             'state': 'confirm',
         })
-        self.student_id.write({
+        self.student_id.with_context(has_hardship=True).write({
             'deny_show_student': True,
+            'geographical_ids': self.geographical_ids.ids
         })
         mail = (
                     self.env["mail.mail"]

@@ -2,7 +2,7 @@
 <odoo>
 
 
-    <record id="ir_cron_check_end_date_cpdm_tree_to_update_status" model="ir.cron">
+    <!-- <record id="ir_cron_check_end_date_cpdm_tree_to_update_status" model="ir.cron">
             <field name="name">Check End Date To Update Status</field>
             <field name="interval_number">1</field>
             <field name="interval_type">days</field>
@@ -23,5 +23,5 @@
             <field name="model_id" ref="model_hardship_request"/>
             <field name="code">model.check_end_date_of_hardship()</field>
             <field name="state">code</field>
-        </record>
+        </record> -->
 </odoo>

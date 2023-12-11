@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+    <!-- Medical Facility Views -->
+    <record id="medical_facility_view_tree" model="ir.ui.view">
+        <field name="name">medical.facility.view.tree</field>
+        <field name="model">medical.facility</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="email"/>
+                <field name="address"/>
+                <field name="geographical_id"/>
+                <field name="city"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+    <record id="medical_facility_view_form" model="ir.ui.view">
+        <field name="name">medical.facility.view.form</field>
+        <field name="model">medical.facility</field>
+        <field name="arch" type="xml">
+            <form>
+                <field name="contract_attachment" invisible="1"/>
+                <sheet>
+                    <div name="button_box" position="inside">
+                        <field name="contract_warning" invisible="1"/>
+                        <button name="action_open_contract_history"
+                            class="oe_stat_button"
+                            icon="fa-book"
+                            type="object">
+                            <div attrs="{'invisible' : [('first_contract_date', '=', False)]}" class="o_stat_info">
+                                <span class="o_stat_text text-success" attrs="{'invisible' : [('contract_warning', '=', True)]}" title="In Contract Since"> In Contract Since</span>
+                                <span class="o_stat_value text-success" attrs="{'invisible' : [('contract_warning', '=', True)]}">
+                                    <field name="first_contract_date" readonly="1"/>
+                                </span>
+                                <span class="o_stat_text text-danger" attrs="{'invisible' : [('contract_warning', '=', False)]}" title="In Contract Since">
+                                    In Contract Since
+                                </span>
+                                <span class="o_stat_value text-danger" attrs="{'invisible' : [('contract_warning', '=', False)]}">
+                                    <field name="first_contract_date" readonly="1"/>
+                                </span>
+                            </div>
+                            <div attrs="{'invisible' : [('first_contract_date', '!=', False)]}" class="o_stat_info">
+                                <span class="o_stat_value text-danger">
+                                   <field name="contracts_count"/>
+                                </span>
+                                <span attrs="{'invisible' : [('contracts_count', '!=', 1)]}" class="o_stat_text text-danger" >
+                                    Contract
+                                </span>
+                                <span attrs="{'invisible' : [('contracts_count', '=', 1)]}" class="o_stat_text text-danger">
+                                    Contracts
+                                </span>
+                            </div>
+                        </button>
+                        <button
+                            name="print_report"
+                            type="object"
+                            string="Contact Attachment File"
+                            class="oe_highlight"
+                            icon="fa-download"
+                            attrs="{'invisible' : [('contract_attachment', '=', False)]}"
+                            >
+                        </button>
+                        <button
+                            name="action_open_placement_offer"
+                            type="object"
+                            string="Offers"
+                            class="oe_highlight"
+                            icon="fa-ticket"
+                            >
+                        </button>
+                    </div>
+                    <group>
+                        <label for="name"/>
+                        <field name="name"/>
+                        <group>
+                            <field name="email"/>
+                            <field name="address"/>
+                            <field name="geographical_id"/>
+                        </group>
+                        <group>
+                            <field name="city"/>
+                            <field name="state"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="SCCE">
+                            <field name="scce_ids"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    </data>
+</odoo>
