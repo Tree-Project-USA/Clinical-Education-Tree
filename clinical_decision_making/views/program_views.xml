@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+        <!-- List View -->
+        <record model="ir.ui.view" id="program_tree">
+            <field name="name">program.tree</field>
+            <field name="model">program</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom" decoration-muted="(not active)">
+                    <field name="name"/>
+                    <field name="num_terms"/>
+                    <field name="ice_term"/>
+                    <field name="tce1_term"/>
+                    <field name="tce2_term"/>
+                    <field name="active" widget="boolean_toggle"/>
+                </tree>
+            </field>
+        </record>
+
+</odoo>

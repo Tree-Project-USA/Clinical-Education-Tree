@@ -46,7 +46,12 @@
                                 <field name="first_name" placeholder="First Name" class="o_address_city"/>
                                 <field name="last_name" class="o_address_state" placeholder="Last Name"/>
                             </div>
+                            <field name="program_id"/>
+                            <field name="start_year"/>
+                            <field name="start_term_type"/>
                             <field name="cohort_label"/>
+                            <field name="start_term"/>
+                            <field name="graduation_term"/>
                         </group>
                         <group>
                             <field name="home_address"/>

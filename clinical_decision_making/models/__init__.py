@@ -11,4 +11,5 @@ from . import placement_offer
 from . import placement_request
 from . import archivement
 from . import scce
+from . import student_program
 

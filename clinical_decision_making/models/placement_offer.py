@@ -3,8 +3,7 @@
 from odoo import models, fields, api
 
 
-def SELECTION_YEAR_RANGE():
-    return [(str(i),str(i)) for i in range(1999, 2500)]
+SELECTION_YEAR_RANGE = [(str(i),str(i)) for i in range(1999, 2500)]
 class PlacementOffer(models.Model):
     _name = 'placement.offer'
     _inherit = ['mail.thread']

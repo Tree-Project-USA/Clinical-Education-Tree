@@ -101,12 +101,29 @@
         </field>
     </record>
 
+    <record model="ir.actions.act_window" id="program_action">
+        <field name="name">Student Programs</field>
+        <field name="res_model">program</field>
+        <field name="context">{'active_test': False}</field>
+        <field name="view_mode">tree</field>
+    </record>
+
     <menuitem
         id="cpdm_tree_menu"
         name="Decisions Making Tree"
         parent="menu_root_cpdm"
         sequence="1"/>
 
+    <record id="action_placement_request" model="ir.actions.act_window">
+        <field name="name">Placement Requests</field>
+        <field name="res_model">placement.request</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to create a new placement request.
+            </p>
+        </field>
+    </record>
     <!-- <menuitem
         id="cpdm_menu"
         name="Internship"
@@ -120,6 +137,17 @@
         action="cohort_action"
         parent="cpdm_tree_menu"
         sequence="2"/> -->
+
+    <menuitem 
+        id="menu_placement_request" 
+        name="Placement Requests" 
+        parent="cpdm_tree_menu" 
+        action="action_placement_request"/>
+    <menuitem 
+        id="menu_placement_request1" 
+        name="Placement Requests" 
+        parent="configuration_menu" 
+        action="action_placement_request"/>
 
     <menuitem
         id="student_details_menu"
@@ -177,6 +205,13 @@
         id="geographical_menu"
         name="Geographical Data"
         action="geographical_action"
+        parent="configuration_menu"
+        sequence="99"/>
+
+    <menuitem
+        id="program_menu"
+        name="Students Program"
+        action="program_action"
         parent="configuration_menu"
         sequence="99"/>
     

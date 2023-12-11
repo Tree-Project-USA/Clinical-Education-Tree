@@ -86,6 +86,9 @@ class Geographical(models.Model):
             geographical_and_distances.update(dis_and_geo)
         return distances, geographical_and_distances
     
+    def get_zip_codes_state(self, zip_codes):
+        return zip_codes.filtered(lambda zip_code: zip_code.state == self.state)
+    
 class geographicalHistory(models.Model):
     _name = 'geographical.history'
     _description = 'Geographical History'
