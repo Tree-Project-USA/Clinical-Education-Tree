@@ -10,6 +10,8 @@
                 <field name="placement_term"/>
                 <field name="student_ids" widget="many2many_tags"/>
                 <field name="facility_ids" widget="many2many_tags"/>
+                <field name="create_date"/>
+                <field name="create_uid"/>
             </tree>
         </field>
     </record>
@@ -19,6 +21,11 @@
         <field name="model">placement.request</field>
         <field name="arch" type="xml">
             <form string="Placement Request">
+                <header>
+                    <button name="action_post" string="Confirm" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'draft')]}" data-hotkey="v"/>
+                    <button name="action_complete" string="Complete" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'running')]}" data-hotkey="w"/>
+                    <field name="state" widget="statusbar" clickable="False"/>
+                </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
                         <button class="oe_stat_button" name="action_view_students" type="object" icon="fa-users">
@@ -26,39 +33,99 @@
                             <field name="student_ids" invisible="1"/>
                         </button>
                         <button class="oe_stat_button" name="action_view_lines" type="object" icon="fa-list">
-                            <field name="line_count" widget="statinfo"/>
-                            <field name="line_ids" invisible="1"/>
+                            <field name="offer_count" widget="statinfo"/>
+                            <field name="offer_ids" invisible="1"/>
                         </button>
                         <button class="oe_stat_button" name="action_view_facilities" type="object" icon="fa-building">
                             <field name="facility_count" widget="statinfo"/>
-                            <field name="facility_ids" invisible="1"/>
+                            <field name="facility_ids" invisible="1" force_save="1" readonly="1"/>
                         </button>
+                    </div>
+                    <div class="oe_title">
+                        <span class="o_form_label">Name </span>
+                        <h1 class="d-flex">
+                            <field name="name" required="1"/>
+                        </h1>
                     </div>
                     <group>
                         <group>
-                            <field name="name"/>
                             <field name="placement_type"/>
                             <field name="placement_term"/>
-                            <field name="facility_ids" widget="many2many_tags"/>
+                            <field name="year"/>
+                            <field name="filter_by_hardship"/>
                         </group>
                         <group>
-                            <field name="student_ids" widget="many2many_tags"/>
-                            <field name="line_ids" widget="many2many_tags" attrs="{'invisible': [('filter_by_offer', '=', False)]}"/>
+                            <field name="code"/>
+                            <field name="program_id"/>
+                            <field name="student_id"/>
+                            <field name="facility_id"/>
                         </group>
                     </group>
                     <notebook>
-                        <page string="Filters">
-                            <group>
-                                <field name="filter_by_hardship"/>
-                                <field name="filter_by_offer"/>
-                                <field name="placement_offer_id" attrs="{'invisible': [('filter_by_offer', '=', False)]}"/>
-                                <field name="filter_by_program"/>
-                                <field name="program_id" attrs="{'invisible': [('filter_by_program', '=', False)]}"/>
-                                <field name="filter_by_student"/>
-                                <field name="student_id" attrs="{'invisible': [('filter_by_student', '=', False)]}"/>
-                                <field name="filter_by_facility"/>
-                                <field name="facility_id" attrs="{'invisible': [('filter_by_facility', '=', False)]}"/>
-                            </group>
+                        <page string="Matching">
+                            <field name="tree_ids" nolabel="1">
+                                <tree editable="bottom" js_class="o_fields_col" decoration-primary="tree_state=='approved_pp'" decoration-success="tree_state == 'approved_p'" decoration-warning="tree_state=='not_confirm_state'" decoration-muted="tree_state=='not_accepet_dis'">
+                                    <header>
+                                        <!-- <button name="action_send_email_to_students" string="Send to Update Data" type="object"/> -->
+                                    </header>
+                                    <field name="request_id" invisible="1"/>
+                                    <field name="parent_state" invisible="1"/>
+                                    <field name="tree_state" invisible="1"/>
+                                    <!-- Student Information -->
+                                    <field name="student_id" class="o_fields_col" readonly="1"/>
+                                    <field name="first_name" class="o_fields_col" readonly="1"/>
+                                    <field name="last_name" class="o_fields_col" readonly="1"/>
+                                    <field name="cohort_label" class="o_fields_col" optional="hide" readonly="1"/>
+                                    <field name="stu_email" class="o_fields_col" optional="hide" readonly="1"/>
+                                    <field name="stu_phone" class="o_fields_col" optional="hide" readonly="1"/>
+                                    <field name="home_address" class="o_fields_col" optional="hide" readonly="1"/>
+                                    <field name="stu_locatio_zip_one" class="o_fields_col" optional="hide" readonly="1"/>
+                                    <field name="stu_locatio_zip_two" class="o_fields_col" optional="hide" readonly="1"/>
+                                    <field name="stu_locatio_zip_three" class="o_fields_col" optional="hide" readonly="1"/>
+                                    <field name="stu_locatio_zip_four" class="o_fields_col" optional="hide" readonly="1"/>
+                                    <field name="stu_locatio_zip_five" class="o_fields_col" optional="hide" readonly="1"/>
+                                    <field name="stu_locatio_city_one_id" class="o_fields_col" optional="hide" readonly="1"/>
+                                    <field name="stu_locatio_city_two_id" class="o_fields_col" optional="hide" readonly="1"/>
+                                    <field name="stu_locatio_city_three_id" class="o_fields_col" optional="hide" readonly="1"/>
+                                    <field name="stu_locatio_city_four_id" class="o_fields_col" optional="hide" readonly="1"/>
+                                    <field name="stu_locatio_city_five_id" class="o_fields_col" optional="hide" readonly="1"/>
+                                    <field name="stu_locatio_state_one_id" class="o_fields_col" optional="hide" readonly="1"/>
+                                    <field name="stu_locatio_state_two_id" class="o_fields_col" optional="hide" readonly="1"/>
+                                    <field name="stu_locatio_state_three_id" class="o_fields_col" optional="hide" readonly="1"/>
+                                    <field name="stu_locatio_state_four_id" class="o_fields_col" optional="hide" readonly="1"/>
+                                    <field name="stu_locatio_state_five_id" class="o_fields_col" optional="hide" readonly="1"/>
+
+                                    <!-- Hardship Status -->
+                                    <field name="hardship_status" class="o_fields_col" widget="badge" decoration-warning="hardship_status=='not_approved'" decoration-success="hardship_status == 'approved'"/>
+
+                                    <!-- Hardship Status -->
+                                    <!-- <field name="cat_one_requirment" widget="badge" decoration-warning="cat_one_requirment=='not_met'" decoration-success="cat_one_requirment == 'met'"/> -->
+                                    <!-- <field name="met_via"/> -->
+                                    <field name="pta_supervision" widget="state_selection" attrs="{'readonly': [('parent_state', '=', 'done')]}"/>
+                                    <field name="ipe" widget="state_selection" attrs="{'readonly': [('parent_state', '=', 'done')]}"/>
+
+
+                                    <!-- Placement  -->
+                                    <field name="aval_scce_ids" invisible="1"/>
+                                    <field name="aval_facility_id" invisible="1"/>
+                                    <field name="facility_id" domain="[('id', 'in', aval_facility_id)]" options="{'no_quick_create': 1, 'no_create': 1, 'no_edit': 1, 'no_open': 1}" attrs="{'readonly': [('parent_state', '=', 'done')]}"/>
+                                    <field name="address" optional="hide"/>
+                                    <field name="email" optional="hide"/>
+                                    <field name="geographical_id" optional="hide"/>
+                                    <field name="state" optional="hide"/>
+                                    <field name="city" optional="hide"/>
+                                    <field name="scce_id" domain="[('id', 'in', aval_scce_ids)]" options="{'no_quick_create': 1, 'no_create': 1, 'no_edit': 1, 'no_open': 1}" attrs="{'readonly': [('parent_state', '=', 'done')]}"/>
+                                    <field name="scce_first_name" optional="hide"/>
+                                    <field name="scce_last_name" optional="hide"/>
+                                    <field name="scce_email" optional="hide"/>
+                                    <field name="placement_status" widget="state_selection" attrs="{'readonly': [('parent_state', '=', 'done')]}"/>
+
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Line">
+                            <field name="facility_ids" force_save="1" readonly="1"/>
+
                         </page>
                     </notebook>
                 </sheet>

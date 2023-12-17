@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from lxml import etree
+import json
 
 from odoo import models, fields, api
 
@@ -18,7 +20,8 @@ class PlacementOffer(models.Model):
     student_ids = fields.Many2many(comodel_name='res.partner', string='Students',domain=[('is_student', '=', True)], compute='_compute_offer_student_ids')
     state = fields.Selection([
             ('draft', 'Draft'),
-            ('post', 'Placement Intership'),
+            ('progress', 'Progress'),
+            ('done', 'Done'),
         ], string='Status', default='draft')
     placement_type = fields.Selection([
         ('ice', 'ICE'),
@@ -30,15 +33,39 @@ class PlacementOffer(models.Model):
         ('spring', 'Spring'),
         ('summer', 'Summer'),
     ], string='Term', required=True)
-        
     year = fields.Selection(selection=SELECTION_YEAR_RANGE, string='Year', required=True)
-    date = fields.Date(string='Year', required=True)
     
     @api.depends('line_ids')
     def _compute_offer_student_ids(self):
         for rec in self:
             rec.student_ids = rec.line_ids.mapped('student_ids')
 
+    def action_prograss(self):
+        self.write({
+            'state': 'progress'
+        })
+    def action_complete(self):
+        self.write({
+            'state': 'done'
+        })
+        
+    # #------------------------------------------------------------------------------
+    # @api.model
+    # def get_view(self, view_id=None, view_type='form', **options):
+    #     res = super().get_view(view_id=view_id, view_type=view_type, options=options)
+    #     if view_type == 'form':
+    #         doc = etree.fromstring(res['arch'])
+    #         for field in self._fields:
+    #                 # print(field)
+    #                 field_xpath = "//field[@name='%s']" % field
+    #                 nodes = doc.xpath(field_xpath)
+    #                 for node in nodes:
+    #                     modifiers = json.loads(node.get('modifiers') or '{}')
+
+    #                     modifiers['readonly'] = [['state', '!=', 'draft']]
+    #                     node.set('modifiers', json.dumps(modifiers))
+    #         res['arch'] = etree.tostring(doc, encoding='unicode')
+    #     return res
 
 class PlacementOfferLine(models.Model):
     _name = 'placement.offer.line'
@@ -64,4 +91,5 @@ class PlacementOfferLine(models.Model):
             student_count = len(rec.student_ids)
             rec.avalible_stu_count = 0 if student_count - student_count < 0 else student_count - student_count
     
+
     

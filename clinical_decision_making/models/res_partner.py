@@ -17,7 +17,6 @@ class NamaModel(models.Model):
     hardship_ids = fields.One2many('hardship.request', 'student_id', string='Hardship')
     home_address = fields.Char(string='Home Address')
     archive_ids = fields.One2many(comodel_name='archive', inverse_name='student_id', string='Archive')
-    geographical_history_ids = fields.One2many(comodel_name='geographical.history', inverse_name='student_id', string='geographical')
     can_apply_hardship = fields.Boolean(string='Apply Hardship', default=False)
     is_reach_maximum_zip_code = fields.Boolean(string='Reach Maximum Zip Code', default=False)
     deny_show_student = fields.Boolean()
@@ -34,8 +33,17 @@ class NamaModel(models.Model):
     start_year = fields.Selection(selection=SELECTION_YEAR_RANGE, string='Year', )
     start_term = fields.Char(string='Start Term', compute='_compute_term_fields', store=True)
     graduation_term = fields.Char(string='Graduation Term', compute='_compute_term_fields', store=True)
-    is_with_hardship = fields.Boolean(string='is_with_hardship', compute='_compute_is_with_hardship')
+    is_with_hardship = fields.Boolean(string='is_with_hardship', compute='_compute_is_with_hardship', store=True,)
+    ice_term = fields.Char(string='ICE Term', compute='_compute_term_fields', store=True)
+    tce1_term = fields.Char(string='TCE1 Term', compute='_compute_term_fields', store=True)
+    tce2_term = fields.Char(string='TCE2 Term', compute='_compute_term_fields', store=True)
+    is_take_ip = fields.Boolean(compute='_compute_is_take_ip', string='Is Take IP', store=True)
     
+    @api.depends('archive_ids')
+    def _compute_is_take_ip(self):
+        for rec in self:
+            rec.is_take_ip = True if rec.archive_ids.filtered(lambda x: x.code == 'ip') else False
+        
     @api.depends('hardship_ids')
     def _compute_is_with_hardship(self):
         for rec in self:
@@ -48,9 +56,22 @@ class NamaModel(models.Model):
                 rec.start_term = self.convert_term_year(rec.start_term_type, rec.start_year)
                 graduation_t, graduation_y = rec.calculate_end_term(rec.start_term_type, rec.start_year, rec.program_id.num_terms)
                 rec.graduation_term = self.convert_term_year(graduation_t, graduation_y)
+                
+                
+                print(self.get_specific_term_year(rec.start_term_type, rec.start_year, rec.program_id.num_terms, rec.program_id.ice_term))
+                ice_term_t, ice_term_y = self.get_specific_term_year(rec.start_term_type, rec.start_year, rec.program_id.num_terms, rec.program_id.ice_term)
+                rec.ice_term = self.convert_term_year(ice_term_t, ice_term_y)
+                
+                tce1_term_t, tce1_term_y = self.get_specific_term_year(rec.start_term_type, rec.start_year, rec.program_id.num_terms, rec.program_id.tce1_term)
+                rec.tce1_term = self.convert_term_year(tce1_term_t, tce1_term_y)
+                
+                tce2_term_t, tce2_term_y = self.get_specific_term_year(rec.start_term_type, rec.start_year, rec.program_id.num_terms, rec.program_id.tce2_term)
+                rec.tce2_term = self.convert_term_year(tce2_term_t, tce2_term_y)
+                
             else:
                 rec.start_term = ''
                 rec.graduation_term = ''
+                
     
     # @api.onchange('geographical_ids')
     # def _onchange_geographical_ids(self):
@@ -84,18 +105,19 @@ class NamaModel(models.Model):
 
         for geographical_id in geographical_ids:
             zipcoe_ids = geographical_id.get_zip_codes_state(geographical_ids - geographical_id)
-            if len(zipcoe_ids) < max_zipcodes_state:
-                    raise ValidationError(_('You can only add maximum (%s) zip code in same state' % max_zipcodes_state))
+            if len(zipcoe_ids) < max_zipcodes_state:...
+                    # raise ValidationError(_('You can only add maximum (%s) zip code in same state' % max_zipcodes_state))
     
     @api.constrains('geographical_ids')
     def _check_geographical_ids(self):
         self.ensure_one()
-        if not self.env.context.get('has_hardship') or not self.is_with_hardship:
+        print()
+        if not self.env.context.get('has_hardship', False) or not self.is_with_hardship:
             normal_number_zipcodes = self.env['ir.config_parameter'].sudo().get_param('normal_number_zipcodes') or 5
             normal_number_zipcodes = int(normal_number_zipcodes)
            
             if len(self.geographical_ids) < normal_number_zipcodes or len(self.geographical_ids) > normal_number_zipcodes:
-                    raise ValidationError(_('Lenth of zip codes shuld be %s' % normal_number_zipcodes))
+                    raise ValidationError(_('Count of zip codes shuld be %s' % normal_number_zipcodes))
                 
             for rec in self.geographical_ids:
                 if rec.id in self.geographical_ids.filtered(lambda x : x.id != rec.id).mapped('id'):
@@ -119,6 +141,23 @@ class NamaModel(models.Model):
 
         return terms[current_index], current_year
     
+    def get_specific_term_year(self, start_term, start_year, num_terms, target_term_index):
+        terms = ["spring", "summer", "fall"]
+
+        start_index = terms.index(start_term)
+        current_index = start_index
+        current_year = int(start_year)
+        counter = 1
+        # Calculate the end term
+        for _ in range(num_terms):
+            current_index += 1
+            if current_index == len(terms):
+                current_index = 0
+                current_year += 1
+            counter += 1
+            if counter == target_term_index:
+                return terms[current_index], current_year
+    
     def convert_term_year(self, term, year):
         term_abbr = ""
         if term.lower() == "fall":
@@ -134,3 +173,21 @@ class NamaModel(models.Model):
 
         return term_year
 
+    def get_accepted_distance_facility(self, facility_ids):
+        facility_distance_mel = float(self.env['ir.config_parameter'].sudo().get_param('clinical_distance_mel'))
+        accepted_facility_ids = set()
+
+        geographical_ids = self.mapped('geographical_ids')
+        for geographical_id in geographical_ids:
+            distances = geographical_id.get_distance_with_multi_zip_codes([f.geographical_id for f in facility_ids])[0]
+            accepted_facility_ids.update([f.id for f, distance in zip(facility_ids, distances) if distance <= facility_distance_mel])
+
+        return list(accepted_facility_ids)
+    
+    def get_nearby_facility_zipcode(self, facility_id):
+        facility_distance_mel = float(self.env['ir.config_parameter'].sudo().get_param('clinical_distance_mel'))
+        geographical_ids = self.mapped('geographical_ids')        
+        for geographical_id in geographical_ids:
+            distance, dis_and_geo = geographical_id.self.get_distance_with_zip_code(facility_id.geographical_id)
+            if distance <= facility_distance_mel:
+                return geographical_id

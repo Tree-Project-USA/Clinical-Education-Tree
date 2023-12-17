@@ -10,6 +10,8 @@
                 <tree>
                     <field name="priority" optional="show" widget="priority" nolabel="1"/>
                     <field name="name" />
+                    <field name="create_date"/>
+                    <field name="create_uid"/>
                     <field name="facility_id"/>
                     <field name="year"/>
                     <field name="placement_type"/>
@@ -26,10 +28,8 @@
             <field name="arch" type="xml">
                 <form>
                 <header>
-                    <!-- <field name="is_bot" invisible="1"/>
-                    <button name="action_post" string="Confirm" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'draft')]}" data-hotkey="v"/>
-                    <button name="action_complete" string="Complete" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'running')]}" data-hotkey="w"/>
-                    <button name="action_processing_by_bot" string="Processing By Bot" type="object" class="btn btn-secondary" attrs="{'invisible': ['|',('state', '!=', 'draft'),('is_bot', '=',True)]}" data-hotkey="w"/> -->
+                    <button name="action_prograss" string="Confirm" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'draft')]}" data-hotkey="v"/>
+                    <button name="action_complete" string="Complete" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'progress')]}" data-hotkey="w"/>
                     <field name="state" widget="statusbar" clickable="False"/>
                 </header>
 
@@ -51,10 +51,10 @@
                                 <field name="priority" widget="priority" class="me-3"/>
                                 <field name="name" readonly="1"/><br/>
                             </h1>
-                            <span class="o_form_label">Name </span>
+                            <!-- <span class="o_form_label">Name </span>
                             <h1 class="d-flex">
                                 <field name="name"/>
-                            </h1>
+                            </h1> -->
                         </div>
                         <group>
                             <group>
@@ -75,7 +75,7 @@
                                     <field name="name"/>
                                     <field name="code"/>
                                     <field name="student_count"/>
-                                    <field name="avalible_stu_count"/>
+                                    <!-- <field name="avalible_stu_count"/> -->
                                     <!-- <field name="status" widget="badge" decoration-muted="state=='draft'" decoration-success="state == 'post'"/> -->
                                 </tree>
                             </field>

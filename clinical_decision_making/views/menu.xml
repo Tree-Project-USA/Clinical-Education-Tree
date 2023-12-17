@@ -143,11 +143,6 @@
         name="Placement Requests" 
         parent="cpdm_tree_menu" 
         action="action_placement_request"/>
-    <menuitem 
-        id="menu_placement_request1" 
-        name="Placement Requests" 
-        parent="configuration_menu" 
-        action="action_placement_request"/>
 
     <menuitem
         id="student_details_menu"

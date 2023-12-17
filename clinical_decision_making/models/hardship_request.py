@@ -20,7 +20,9 @@ class HardshipRequest(models.Model):
         selection=[
             ('draft', 'Draft'),
             ('update', 'Required Update'),
+            ('under_review', 'Under Review'),
             ('confirm', 'Validate'),
+            ('expired', 'Expired'),
             ('cancel', 'Cancelled'),
         ],
         string='Status',
@@ -35,6 +37,8 @@ class HardshipRequest(models.Model):
     ]
     expiration_date = fields.Date(string='Expiration Date')
     geographical_ids = fields.Many2many(comodel_name='geographical', string='Geographical')
+    update_message = fields.Html(string='Message')
+    
     
     def action_confirm(self):
         self.write({
@@ -85,27 +89,47 @@ class HardshipRequest(models.Model):
         mail.send()
         self.student_id.can_apply_hardship = True
         
+    def action_open_update_view(self):
+        self.update_message = False
+        return {
+            'name': _('Update Message'),
+            'view_mode': 'form',
+            'res_model': 'hardship.request',
+            'view_id': self.env.ref('clinical_decision_making.hardship_request_update_view_form').id,
+            'type': 'ir.actions.act_window',
+            'res_id': self.id,
+            'target': 'new'
+        }
+    
+    
+    
     def action_update(self):
-        for rec in self:
-            rec.write({
-                'state': 'update',
-            })
-            mail = (
-                        self.env["mail.mail"]
-                        .sudo()
-                        .create(
-                            {
-                                "subject": _("Test Student Update HardShip"),
-                                "email_from": self.env.company.email,
-                                "body_html": "Dear :- {},<br/>Your hardship request needed to update. <br/><br/>Thank you,<br/>".format(
-                                    rec.student_id.name
-                                ),
-                                "email_to": rec.student_id.email,
-                            }
-                        )
-                        )
-            mail.send()
-            rec.student_id.can_apply_hardship = True
+        self.ensure_one()
+        message = """We kindly request you to update your information as follows <br/> <div>%s</div>""" % self.update_message
+        print(message)
+        self.message_post(body=message,
+                message_type='comment',
+                subtype_xmlid='mail.mt_note',
+                parent_id=self.student_id.id,
+                author_id=self.env.user.partner_id.id)
+        message = """We kindly request you to update your information as follows <br/> <div style='color: #F8AC3D;'>%s</div>""" % self.update_message
+        self.write({
+            'state': 'update',
+        })
+        mail = (
+            self.env["mail.mail"]
+            .sudo()
+            .create(
+                {
+                    "subject": _("Update Hardship Request"),
+                    "email_from": self.env.company.email,
+                    "body_html": self.update_message,
+                    "email_to": self.student_id.email,
+                }
+            )
+            )
+        mail.send()
+        self.student_id.can_apply_hardship = True
     
     # Cron job
     def check_end_date_of_hardship(self):

@@ -98,3 +98,16 @@ class MedicalFacility(models.Model):
             'domain': [('id', 'in', offer_ids.ids)],
             'context': {'default_facility_id': self.id, 'delete': False}
         }
+        
+    def get_accepted_distance_students(self, student_ids):
+        facility_distance_mel = float(self.env['ir.config_parameter'].sudo().get_param('clinical_distance_mel'))
+        students = []
+        
+        for student_id in student_ids:
+            geographical_ids = student_id.mapped('geographical_ids')
+            if geographical_ids:
+                distances, dis_and_geo = self.geographical_id.get_distance_with_multi_zip_codes(geographical_ids)
+                if any(distance <= facility_distance_mel for distance in distances):
+                    students.append(student_id.id)
+        
+        return students
