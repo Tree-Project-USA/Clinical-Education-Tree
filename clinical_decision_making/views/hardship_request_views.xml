@@ -16,6 +16,18 @@
         </field>
     </record>
 
+    <record id="hardship_view_search" model="ir.ui.view">
+        <field name="name">hardship.request.view.search</field>
+        <field name="model">hardship.request</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="student_id"/>
+                <field name="create_date"/>
+                <field name="state"/>
+            </search>
+        </field>
+    </record>
+
     <record id="hardship_request_view_form" model="ir.ui.view">
         <field name="name">hardship.request.view.form</field>
         <field name="model">hardship.request</field>

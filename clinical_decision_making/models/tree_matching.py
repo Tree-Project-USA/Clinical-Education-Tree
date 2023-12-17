@@ -123,12 +123,6 @@ class TreeMatching(models.Model):
                 else:
                     rec.hardship_status = False
     
-    # Met Rquirements
-    # cat_one_requirment = fields.Selection([('not_met', 'Not Met'), ('met', 'Met'),], string='CAT 1 Requirment', compute='_compute_cat_one_requirment', store=True)
-    # met_via = fields.Selection([('not_met', 'Not Met'), ('met_via_ice', 'Met via ICE'), ('met_via_tce_1', 'Met via TCE I'), ('met_via_tce_2', 'Met via TCE II')], string='Via CE', compute='_compute_cat_one_requirment', store=True)
-    pta_supervision = fields.Selection([('normal', ''), ('done', 'Met'), ('blocked', 'Not Met')], default='normal', string='PTA Supervision')
-    ipe = fields.Selection([('normal', ''), ('done', 'Met'), ('blocked', 'Not Met')], default='normal', string='IPE')
-
     # ------------------------------------------------------------------------------
     
     # Placement 
@@ -138,7 +132,7 @@ class TreeMatching(models.Model):
     facility_id = fields.Many2one(comodel_name='medical.facility', string='Medical Facility')
     offer_id = fields.Many2one(comodel_name='placement.offer', realted='offer_line_id.offer_id')
     offer_line_id = fields.Many2one(comodel_name='placement.offer.line', string="Setting Intership")
-    code = fields.Selection(related='offer_line_id.code')
+    setting = fields.Selection(related='offer_line_id.setting')
     
     
     address = fields.Char(related='facility_id.address')

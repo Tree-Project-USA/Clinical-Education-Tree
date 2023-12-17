@@ -98,13 +98,6 @@
                                     <!-- Hardship Status -->
                                     <field name="hardship_status" class="o_fields_col" widget="badge" decoration-warning="hardship_status=='not_approved'" decoration-success="hardship_status == 'approved'"/>
 
-                                    <!-- Hardship Status -->
-                                    <!-- <field name="cat_one_requirment" widget="badge" decoration-warning="cat_one_requirment=='not_met'" decoration-success="cat_one_requirment == 'met'"/> -->
-                                    <!-- <field name="met_via"/> -->
-                                    <field name="pta_supervision" widget="state_selection" attrs="{'readonly': [('parent_state', '=', 'done')]}"/>
-                                    <field name="ipe" widget="state_selection" attrs="{'readonly': [('parent_state', '=', 'done')]}"/>
-
-
                                     <!-- Placement  -->
                                     <field name="aval_scce_ids" invisible="1"/>
                                     <field name="aval_facility_id" invisible="1"/>

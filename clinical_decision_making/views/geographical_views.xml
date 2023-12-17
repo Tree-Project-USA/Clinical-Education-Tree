@@ -17,6 +17,21 @@
             </field>
         </record>
         
+
+        <record id="geographical_view_search" model="ir.ui.view">
+            <field name="name">geographical.view.search</field>
+            <field name="model">geographical</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="zip_code"/>
+                    <field name="state"/>
+                    <field name="city"/>
+                    <field name="latitude"/>
+                    <field name="longitude"/>
+                </search>
+            </field>
+        </record>
+
         <!-- Form View -->
         <record model="ir.ui.view" id="geographical_view_form">
             <field name="name">geographical.form</field>

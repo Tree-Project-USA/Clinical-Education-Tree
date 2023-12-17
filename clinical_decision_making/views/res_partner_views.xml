@@ -22,6 +22,26 @@
         </field>
     </record>
 
+    <record id="partner_view_search" model="ir.ui.view">
+        <field name="name">res.partner.view.search</field>
+        <field name="model">res.partner</field>
+        <field name="mode">primary</field>
+        <field name="priority">0</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="cohort_label"/>
+                <field name="email"/>
+                <field name="phone"/>
+                <field name="home_address"/>
+                <field name="contact_address"/>
+                <field name="ice_term"/>
+                <field name="tce1_term"/>
+                <field name="tce2_term"/>
+            </search>
+        </field>
+    </record>
+
     <record id="student_view_form" model="ir.ui.view">
         <field name="name">student.view.form</field>
         <field name="model">res.partner</field>

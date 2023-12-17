@@ -40,8 +40,7 @@ class PlacementRequest(models.Model):
     # Filters
     placement_type = fields.Selection([
         ('ice', 'ICE'),
-        ('tce1', 'TCE1'),
-        ('tce2', 'TCE2'),
+        ('tce', 'TCE')
         ], string='Type', default='ice', required=True)
     year = fields.Selection(selection=SELECTION_YEAR_RANGE, string='Year', default='2000', required=True)
     placement_term = fields.Selection([

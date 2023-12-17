@@ -16,75 +16,73 @@
                     <field name="year"/>
                     <field name="placement_type"/>
                     <field name="placement_term"/>
-                    <field name="state" widget="badge" decoration-muted="state=='draft'" decoration-success="state == 'post'"/>
-                </tree>
-            </field>
-        </record>
-        
-        <!-- Form View -->
-        <record model="ir.ui.view" id="placement_offer_view_form">
-            <field name="name">placement.offer.form</field>
-            <field name="model">placement.offer</field>
-            <field name="arch" type="xml">
-                <form>
-                <header>
-                    <button name="action_prograss" string="Confirm" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'draft')]}" data-hotkey="v"/>
-                    <button name="action_complete" string="Complete" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'progress')]}" data-hotkey="w"/>
-                    <field name="state" widget="statusbar" clickable="False"/>
-                </header>
+                    <field name="state" widget="badge" 
+                        decoration-primary="state == 'done'" 
+                        decoration-success="state == 'placementing'" 
+                        decoration-warning="state == 'cancel'" 
+                        decoration-muted="state == 'draft'"/>
+                    </tree>
+                </field>
+            </record>
 
-                <sheet>
-                        <div class="oe_button_box" name="button_box">
-                            <!-- <button
-                                class="oe_stat_button shake"
-                                type="object"
-                                name="open_hardship_button"
-                                icon="fa-smile-o"
-                                attrs="{'invisible': [('state', '=', 'draft')]}"
-                            >
+            <!-- Form View -->
+            <record model="ir.ui.view" id="placement_offer_view_form">
+                <field name="name">placement.offer.form</field>
+                <field name="model">placement.offer</field>
+                <field name="arch" type="xml">
+                    <form>
+                        <header>
+                            <button name="action_prograss" string="Confirm" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'draft')]}" data-hotkey="v"/>
+                            <button name="action_draft" string="Draft" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'cancel')]}" data-hotkey="w"/>
+                            <button name="action_cancel" string="Cancel" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'placementing')]}" data-hotkey="c"/>
+                            <field name="state" widget="statusbar" clickable="False"/>
+                        </header>
+
+                        <sheet>
+                            <div class="oe_button_box" name="button_box">
+                                <!-- <button class="oe_stat_button shake" type="object" name="open_hardship_button" icon="fa-smile-o" attrs="{'invisible': [('state', '=', 'draft')]}">
                             Auto Placement
                             </button> -->
-                        </div>
-                        <div class="oe_title">
-                            <span class="o_form_label">Seq </span>
-                            <h1 class="d-flex">
-                                <field name="priority" widget="priority" class="me-3"/>
-                                <field name="name" readonly="1"/><br/>
-                            </h1>
-                            <!-- <span class="o_form_label">Name </span>
-                            <h1 class="d-flex">
-                                <field name="name"/>
-                            </h1> -->
-                        </div>
-                        <group>
+                            </div>
+                            <div class="oe_title">
+                                <span class="o_form_label">Seq </span>
+                                <h1 class="d-flex">
+                                    <field name="priority" widget="priority" class="me-3"/>
+                                    <field name="name" readonly="1"/>
+                                    <br/>
+                                </h1>
+                            </div>
                             <group>
-                                <!-- <field name="student_id"/> -->
-                                <field name="facility_id"/>
-                                <field name="placement_type"/>
-                                <field name="placement_term"/>
-                                <field name="year" force_save="1"/>
-                            </group>
-                            <group>
+                                <group>
+                                    <!-- <field name="student_id"/> -->
+                                    <field name="facility_id" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="placement_type" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="placement_term" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="year" force_save="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                </group>
+                                <group>
 
+                                </group>
                             </group>
-                        </group>
-                    <notebook>
-                        <page string="Offer Lines">
-                            <field name="line_ids">
-                                <tree editable="bottom">
-                                    <field name="name"/>
-                                    <field name="code"/>
-                                    <field name="student_count"/>
-                                    <!-- <field name="avalible_stu_count"/> -->
-                                    <!-- <field name="status" widget="badge" decoration-muted="state=='draft'" decoration-success="state == 'post'"/> -->
-                                </tree>
-                            </field>
-                        </page>
-                    </notebook>
-                    </sheet>
-                </form>
-            </field>
-        </record>
+                            <notebook>
+                                <page string="Offer Lines">
+                                    <field name="line_ids" attrs="{'readonly': [('state', '!=', 'draft')]}">
+                                        <tree editable="bottom">
+                                            <field name="name" required="1"/>
+                                            <field name="setting"/>
+                                            <field name="offers"/>
+                                        </tree>
+                                    </field>
+                                </page>
+                            </notebook>
+                        </sheet>
+                        <div class="oe_chatter">
+                            <field name="message_follower_ids" groups="base.group_user"/>
+                            <field name="message_ids"/>
+                        </div>
+                    </form>
+                </field>
+            </record>
 
-    </data>
-</odoo>
+        </data>
+    </odoo>

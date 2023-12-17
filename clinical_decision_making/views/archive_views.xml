@@ -11,7 +11,6 @@
             <tree string="Students Placement Archive" edit="false" create="false" delete="false">
                 <field name="student_id"/>
                 <field name="facility_id"/>
-                <!-- <field name="date"/> -->
                 <field name="placement_type"/>
                 <field name="placement_term"/>
                 <field name="year"/>
@@ -19,9 +18,26 @@
                 <field name="zip_code"/>
                 <field name="city"/>
                 <field name="state"/>
-                <!-- <field name="date_begin"/>
-                <field name="date_end"/> -->
+
             </tree>
+        </field>
+    </record>
+
+    <record id="archive_view_search" model="ir.ui.view">
+        <field name="name">archive.view.search</field>
+        <field name="model">archive</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="student_id"/>
+                <field name="facility_id"/>
+                <field name="placement_type"/>
+                <field name="placement_term"/>
+                <field name="year"/>
+                <field name="code"/>
+                <field name="zip_code"/>
+                <field name="city"/>
+                <field name="state"/>
+            </search>
         </field>
     </record>
 

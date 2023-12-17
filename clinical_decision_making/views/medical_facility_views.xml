@@ -17,6 +17,22 @@
             </tree>
         </field>
     </record>
+
+    <record id="medical_facility_view_search" model="ir.ui.view">
+        <field name="name">medical.facility.view.search</field>
+        <field name="model">medical.facility</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="email"/>
+                <field name="address"/>
+                <field name="geographical_id"/>
+                <field name="city"/>
+                <field name="state"/>
+            </search>
+        </field>
+    </record>
+
     <record id="medical_facility_view_form" model="ir.ui.view">
         <field name="name">medical.facility.view.form</field>
         <field name="model">medical.facility</field>
