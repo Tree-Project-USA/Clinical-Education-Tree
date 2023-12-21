@@ -580,10 +580,10 @@ class CPDMTree(models.Model):
         self.ensure_one()
         
         if not self.info_ids:
-            raise ValidationError("You should add Clinic Info")
+            raise ValidationError("You should add Facility Info")
         
         if any(record.num_students == 0 for record in self.info_ids):
-            raise ValidationError("Student number of all Clinics should be greater than zero")
+            raise ValidationError("Student number of all Facility should be greater than zero")
         
         domain = [('is_student', '=', True), ('cohort_label', '=', self.cohort_labels)]
         

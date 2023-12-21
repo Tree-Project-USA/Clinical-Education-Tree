@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api
+from odoo.exceptions import ValidationError
 
 
 SELECTION_YEAR_RANGE = [(str(i),str(i)) for i in range(1999, 2500)]
@@ -10,13 +11,12 @@ class Archive(models.Model):
     _description = 'Archive Placement'
     _rec_name = 'facility_id'
     
-    student_id = fields.Many2one(comodel_name='res.partner', string='Student', )
-    facility_id = fields.Many2one('medical.facility', string='Medical Facility', )
-    date = fields.Date(string='Date',default=fields.Date.today(), )
-    date_begin = fields.Date('Start Date')
-    date_end = fields.Date('End Date')
-    offer_line_id = fields.Many2one(comodel_name='placement.offer.line', string="Offer line")
+    student_id = fields.Many2one(comodel_name='res.partner', string='Student')
+    first_name = fields.Char(related='student_id.first_name')
+    last_name = fields.Char(related='student_id.last_name')
+    facility_id = fields.Many2one('medical.facility', string='Matching Facility')
     offer_id = fields.Many2one(comodel_name='placement.offer', string="Offer")
+    request_id = fields.Many2one(comodel_name='placement.request', string="Placement Request")
     geographical_id = fields.Many2one(comodel_name='geographical', string='Geographical')
     city = fields.Char(related='geographical_id.city')
     state = fields.Char(related='geographical_id.state')
@@ -26,20 +26,82 @@ class Archive(models.Model):
         ('tce1', 'TCE1'),
         ('tce2', 'TCE2'),
     ], string='Type',)
-    code = fields.Selection([
+    setting = fields.Selection([
         ('op', 'OP'),
         ('ip', 'IP'),
-    ], string='Code',)
+    ], string='Setting',)
     placement_term = fields.Selection([
         ('fall', 'Fall'),
         ('spring', 'Spring'),
         ('summer', 'Summer'),
     ], string='Term',)
     year = fields.Selection(selection=SELECTION_YEAR_RANGE, string='Year',)
+    placement_status = fields.Selection([
+        ('went_out', 'Went Out'),
+        ('approved', 'Approved'),
+        ('completed', 'Completed'),
+        ('pending', 'Pending'),
+        ('not_placed', 'Not Placed')
+    ], default='pending', string='placement status')
+    
+    hardship_status = fields.Selection([
+        ('approved', 'Approved'),
+        ('not_approved', 'Not Approved'),
+    ], string='Hardship Status', compute='_compute_hardship_status', store=True, precompute=True)
+    archive_state = fields.Selection([
+        ('draft', 'Draft'),
+        ('done', 'Done'),
+    ], string='Term',)
+    criteria = fields.Html(string='Criteria')
+    match_state = fields.Selection([
+        ('approve', 'Approved'),
+        ('decline', 'Declined'),
+    ], string='Match State',)
+    archive_offer_id = fields.Many2one('archive.offer', string='Archive Offer')
+    
+    @api.constrains('placement_type')
+    def _check_placement_type(self):
+        for rec in self:
+            print(rec.placement_type)
+            print(self.env['archive'].search([('student_id', '=', rec.student_id.id), ('placement_type', '=', rec.placement_type), ('placement_status', 'in', ['approved', 'completed']), ('id', '!=', rec.id)]))
+            if self.env['archive'].search([('student_id', '=', rec.student_id.id), ('placement_type', '=', rec.placement_type), ('placement_status', 'in', ['approved', 'completed']), ('id', '!=', rec.id)]):
+                raise ValidationError("Student %s is already taken in %s term before" % (rec.student_id.name, rec.placement_type))
+            
+            if rec.placement_type == 'ice':
+                archive_id = self.env['archive'].search([('student_id', '=', rec.student_id.id), ('placement_type', '=', 'ice'), ('placement_status', 'in', ['approved', 'completed']), ('id', '!=', rec.id)])
+                if archive_id:
+                    raise ValidationError("Term ICE Pass")
+            
+            if rec.placement_type == 'tce1':
+                archive_id = self.env['archive'].search([('student_id', '=', rec.student_id.id), ('placement_type', '=', 'ice'), ('placement_status', 'in', ['approved', 'completed']), ('id', '!=', rec.id)])
+                if not archive_id:
+                    raise ValidationError("Student %s is Shuld Take ICE term before TCE2" % (rec.student_id.name))
+            
+            if rec.placement_type == 'tce2':
+                archive_id = self.env['archive'].search([('student_id', '=', rec.student_id.id), ('placement_type', '=', 'tce1'), ('placement_status', 'in', ['approved', 'completed']), ('id', '!=', rec.id)])
+                if not archive_id:
+                    raise ValidationError("Student %s is Shuld Take TCE1 term before TCE2" % (rec.student_id.name))
+            
+    def action_approve(self):
+        self.write({
+         'match_state': 'approve',
+        })
+        
+    def action_decline(self):
+        self.write({
+         'match_state': 'decline',
+        })
+        if self.archive_offer_id:
+            self.archive_offer_id.is_linked = False
     
     
-    _sql_constraints = [
-        ('uniq_student_period', 'unique(student_id, placement_type)', 'The student period is already present. ')
-    ]
-    
+    @api.depends('student_id', 'student_id.hardship_ids', 'student_id.hardship_ids.state')
+    def _compute_hardship_status(self):
+        for rec in self:
+            if rec.archive_state == 'draft':
+                hardship_id = rec.student_id.hardship_ids
+                if hardship_id:
+                    rec.hardship_status = 'approved' if hardship_id.state == 'confirm' else 'not_approved'
+                else:
+                    rec.hardship_status = False
  

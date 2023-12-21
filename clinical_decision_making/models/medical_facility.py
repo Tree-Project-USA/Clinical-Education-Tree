@@ -26,7 +26,14 @@ class MedicalFacility(models.Model):
     contract_warning = fields.Boolean(string='Contract Warning', store=True, compute='_compute_contract_warning')
     first_contract_date = fields.Date(compute='_compute_first_contract_date', store=True)
     contracts_count = fields.Integer(compute='_compute_contracts_count', string='Contract Count', tracking=True)
-    scce_ids = fields.Many2many(comodel_name='scce', string='SCCES', tracking=True) 
+    scce_ids = fields.Many2many(comodel_name='scce', string='SCCES', tracking=True)
+    offer_ids = fields.One2many(comodel_name='placement.offer', inverse_name='facility_id', string='Offers')
+    archive_offer_count = fields.Float(compute='_compute_archive_offer_count', string='Archive Offer Count')
+    
+    @api.depends('offer_ids')
+    def _compute_archive_offer_count(self):
+        for rec in self:
+            rec.archive_offer_count = len(rec.offer_ids.mapped('archive_offer_ids'))
         
     @api.depends('contract_id', 'contract_id.state')
     def _compute_contract_warning(self):
@@ -98,6 +105,18 @@ class MedicalFacility(models.Model):
             'domain': [('id', 'in', offer_ids.ids)],
             'context': {'default_facility_id': self.id, 'delete': False}
         }
+    
+    def action_open_placement_archive_offer(self):
+        archive_offer_ids = self.offer_ids.mapped('archive_offer_ids')
+        action = self.env['ir.actions.actions']._for_xml_id('clinical_decision_making.action_archive_offer')
+        action.update({
+            'view_mode': 'tree',
+            'view_id': self.env.ref('clinical_decision_making.archive_offer_view_tree').id,
+            'views': [(self.env.ref('clinical_decision_making.archive_offer_view_tree').id, 'tree')],
+            'res_id': self.id,
+            'domin': [('id', 'in', archive_offer_ids.ids)],
+        })
+        return action
         
     def get_accepted_distance_students(self, student_ids):
         facility_distance_mel = float(self.env['ir.config_parameter'].sudo().get_param('clinical_distance_mel'))

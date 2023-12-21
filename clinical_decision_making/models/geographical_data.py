@@ -89,6 +89,14 @@ class Geographical(models.Model):
     def get_zip_codes_state(self, zip_codes):
         return zip_codes.filtered(lambda zip_code: zip_code.state == self.state)
     
+    def get_all_zip_code_state(self, zip_codes):
+        return list(set(zip_codes.mapped('state')))
+    
+    @api.model
+    def create(self, vals):
+        vals['zip_code'] = str(int(vals['zip_code']))
+        return super(Geographical, self).create(vals)
+    
 class geographicalHistory(models.Model):
     _name = 'geographical.history'
     _description = 'Geographical History'

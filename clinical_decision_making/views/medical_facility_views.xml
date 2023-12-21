@@ -87,6 +87,9 @@
                             icon="fa-ticket"
                             >
                         </button>
+                        <button name="action_open_placement_archive_offer" type="object" class="oe_stat_button" icon="fa-bullhorn" string="Avalible Offers">
+                            <field name="archive_offer_count" widget="statinfo" string="Offers"/>
+                        </button>
                     </div>
                     <group>
                         <label for="name"/>

@@ -48,7 +48,7 @@
 
     <record id="medical_facility_action" model="ir.actions.act_window">
         <field name="type">ir.actions.act_window</field>
-        <field name="name">Clinics</field>
+        <field name="name">Medical Facility</field>
         <field name="res_model">medical.facility</field>
         <field name="view_mode">tree,form</field>
     </record>
@@ -184,7 +184,7 @@
 
     <menuitem
         id="facility_menu"
-        name="Clinics"
+        name="Medical Facility"
         action="medical_facility_action"
         parent="clinic_details_menu"
         sequence="2"/>

@@ -22,8 +22,9 @@
         <field name="arch" type="xml">
             <form string="Placement Request">
                 <header>
-                    <button name="action_post" string="Confirm" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'draft')]}" data-hotkey="v"/>
-                    <button name="action_complete" string="Complete" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'running')]}" data-hotkey="w"/>
+                    <!-- <button name="action_post" string="Confirm" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'draft')]}" data-hotkey="v"/> -->
+                    <button name="apply_filter" string="Apply Filter" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'draft')]}" data-hotkey="v"/>
+                    <!-- <button name="action_complete" string="Complete" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'running')]}" data-hotkey="w"/> -->
                     <field name="state" widget="statusbar" clickable="False"/>
                 </header>
                 <sheet>
@@ -63,42 +64,33 @@
                     </group>
                     <notebook>
                         <page string="Matching">
+                            <field name="archive_ids">
+                                <tree edit="false" create="false" delete="false">
+                                    <field name="student_id" invisible="1"/>
+                                    <field name="first_name"/>
+                                    <field name="last_name"/>
+                                    <field name="hardship_status"/>
+                                    <field name="facility_id"/>
+                                    <field name="criteria"/>
+                                    <button name="action_approve" type="object" string="Approve" class="btn btn-outline-success" attrs="{'invisible': [('match_state', '!=', False)]}"/>
+                                    <button name="action_decline" type="object" string="Decline" class="btn btn-outline-danger" attrs="{'invisible': [('match_state', '!=', False)]}"/>
+                                    <field name="match_state" widget="badge" decoration-danger="match_state == 'decline'" decoration-success="match_state  == 'approve'"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <!-- <page string="Matching">
                             <field name="tree_ids" nolabel="1">
                                 <tree editable="bottom" js_class="o_fields_col" decoration-primary="tree_state=='approved_pp'" decoration-success="tree_state == 'approved_p'" decoration-warning="tree_state=='not_confirm_state'" decoration-muted="tree_state=='not_accepet_dis'">
                                     <header>
-                                        <!-- <button name="action_send_email_to_students" string="Send to Update Data" type="object"/> -->
                                     </header>
                                     <field name="request_id" invisible="1"/>
                                     <field name="parent_state" invisible="1"/>
                                     <field name="tree_state" invisible="1"/>
-                                    <!-- Student Information -->
                                     <field name="student_id" class="o_fields_col" readonly="1"/>
-                                    <field name="first_name" class="o_fields_col" readonly="1"/>
                                     <field name="last_name" class="o_fields_col" readonly="1"/>
-                                    <field name="cohort_label" class="o_fields_col" optional="hide" readonly="1"/>
-                                    <field name="stu_email" class="o_fields_col" optional="hide" readonly="1"/>
-                                    <field name="stu_phone" class="o_fields_col" optional="hide" readonly="1"/>
-                                    <field name="home_address" class="o_fields_col" optional="hide" readonly="1"/>
-                                    <field name="stu_locatio_zip_one" class="o_fields_col" optional="hide" readonly="1"/>
-                                    <field name="stu_locatio_zip_two" class="o_fields_col" optional="hide" readonly="1"/>
-                                    <field name="stu_locatio_zip_three" class="o_fields_col" optional="hide" readonly="1"/>
-                                    <field name="stu_locatio_zip_four" class="o_fields_col" optional="hide" readonly="1"/>
-                                    <field name="stu_locatio_zip_five" class="o_fields_col" optional="hide" readonly="1"/>
-                                    <field name="stu_locatio_city_one_id" class="o_fields_col" optional="hide" readonly="1"/>
-                                    <field name="stu_locatio_city_two_id" class="o_fields_col" optional="hide" readonly="1"/>
-                                    <field name="stu_locatio_city_three_id" class="o_fields_col" optional="hide" readonly="1"/>
-                                    <field name="stu_locatio_city_four_id" class="o_fields_col" optional="hide" readonly="1"/>
-                                    <field name="stu_locatio_city_five_id" class="o_fields_col" optional="hide" readonly="1"/>
-                                    <field name="stu_locatio_state_one_id" class="o_fields_col" optional="hide" readonly="1"/>
-                                    <field name="stu_locatio_state_two_id" class="o_fields_col" optional="hide" readonly="1"/>
-                                    <field name="stu_locatio_state_three_id" class="o_fields_col" optional="hide" readonly="1"/>
-                                    <field name="stu_locatio_state_four_id" class="o_fields_col" optional="hide" readonly="1"/>
-                                    <field name="stu_locatio_state_five_id" class="o_fields_col" optional="hide" readonly="1"/>
 
-                                    <!-- Hardship Status -->
                                     <field name="hardship_status" class="o_fields_col" widget="badge" decoration-warning="hardship_status=='not_approved'" decoration-success="hardship_status == 'approved'"/>
 
-                                    <!-- Placement  -->
                                     <field name="aval_scce_ids" invisible="1"/>
                                     <field name="aval_facility_id" invisible="1"/>
                                     <field name="facility_id" domain="[('id', 'in', aval_facility_id)]" options="{'no_quick_create': 1, 'no_create': 1, 'no_edit': 1, 'no_open': 1}" attrs="{'readonly': [('parent_state', '=', 'done')]}"/>
@@ -118,8 +110,7 @@
                         </page>
                         <page string="Line">
                             <field name="facility_ids" force_save="1" readonly="1"/>
-
-                        </page>
+                        </page> -->
                     </notebook>
                 </sheet>
             </form>

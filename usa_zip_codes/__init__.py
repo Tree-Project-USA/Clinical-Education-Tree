@@ -14,7 +14,7 @@ def add_geographical_data(cr, re):
 
     for row in range(1, sheet.nrows):  # Skip header row (if any)
         record_data = {
-            'zip_code': sheet.cell_value(row, 0),
+            'zip_code': str(int(sheet.cell_value(row, 0))),
             'city': sheet.cell_value(row, 1),
             'state': sheet.cell_value(row, 2),
             'latitude': sheet.cell_value(row, 3),

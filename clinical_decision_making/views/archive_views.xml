@@ -14,7 +14,7 @@
                 <field name="placement_type"/>
                 <field name="placement_term"/>
                 <field name="year"/>
-                <field name="code"/>
+                <field name="geographical_id"/>
                 <field name="zip_code"/>
                 <field name="city"/>
                 <field name="state"/>
@@ -33,7 +33,7 @@
                 <field name="placement_type"/>
                 <field name="placement_term"/>
                 <field name="year"/>
-                <field name="code"/>
+                <field name="geographical_id"/>
                 <field name="zip_code"/>
                 <field name="city"/>
                 <field name="state"/>
@@ -50,23 +50,19 @@
             <form string="Student Placement Archive" edit="false" create="false" delete="false">
                 <sheet>
                     <div class="oe_button_box" name="button_box"/>
-                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger"/>
+                    <!-- <widget name="web_ribbon" title="Archived" bg_color="bg-danger"/> -->
                     <group>
                         <group>
                             <field name="student_id"/>
                             <field name="facility_id"/>
-                            <field name="offer_line_id" invisible="1"/>
                             <field name="offer_id"/>
-                            <field name="code"/>
+                            <field name="geographical_id"/>
                         </group>
                         <group>
-                            <field name="geographical_id" invisible="1"/>
+                            <field name="geographical_id"/>
                             <field name="city"/>
                             <field name="state"/>
                             <field name="zip_code"/>
-                            <field name="date"/>
-                            <field name="date_begin"/>
-                            <field name="date_end"/>
                         </group>
                     </group>
                 </sheet>

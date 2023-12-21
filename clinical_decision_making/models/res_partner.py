@@ -20,9 +20,6 @@ class NamaModel(models.Model):
     can_apply_hardship = fields.Boolean(string='Apply Hardship', default=False)
     is_reach_maximum_zip_code = fields.Boolean(string='Reach Maximum Zip Code', default=False)
     deny_show_student = fields.Boolean()
-    is_complete_ice = fields.Boolean(string='Is Complate Ice')
-    is_complete_tce1 = fields.Boolean(string='Is Complate Tec1')
-    is_complete_tce2 = fields.Boolean(string='Is Complate Tec2')
     geographical_ids = fields.Many2many(comodel_name='geographical', string='Geographical')
     program_id = fields.Many2one(comodel_name='program', string='Program', )
     start_term_type = fields.Selection([
@@ -38,11 +35,21 @@ class NamaModel(models.Model):
     tce1_term = fields.Char(string='TCE1 Term', compute='_compute_term_fields', store=True)
     tce2_term = fields.Char(string='TCE2 Term', compute='_compute_term_fields', store=True)
     is_take_ip = fields.Boolean(compute='_compute_is_take_ip', string='Is Take IP', store=True)
+    is_complete_ice = fields.Boolean(compute='_compute_term',string='Is Complate Ice', store=True)
+    is_complete_tce1 = fields.Boolean(compute='_compute_term', string='Is Complate Tec1', store=True)
+    is_complete_tce2 = fields.Boolean(compute='_compute_term', string='Is Complate Tec2', store=True)
     
     @api.depends('archive_ids')
     def _compute_is_take_ip(self):
         for rec in self:
-            rec.is_take_ip = True if rec.archive_ids.filtered(lambda x: x.code == 'ip') else False
+            rec.is_take_ip = True if rec.archive_ids.filtered(lambda x: x.setting == 'ip') else False
+    
+    @api.depends('archive_ids')
+    def _compute_term(self):
+        for rec in self:
+            rec.is_complete_ice = True if self.env['archive'].search([('placement_type', '=', 'ice'), ('placement_status', 'in', ['pending', 'completed', 'approved'])]) else False
+            rec.is_complete_tce1 = True if self.env['archive'].search([('placement_type', '=', 'tce1'), ('placement_status', 'in', ['pending', 'completed', 'approved'])]) else False
+            rec.is_complete_tce2 = True if self.env['archive'].search([('placement_type', '=', 'tce2'), ('placement_status', 'in', ['pending', 'completed', 'approved'])]) else False
         
     @api.depends('hardship_ids')
     def _compute_is_with_hardship(self):
@@ -104,24 +111,33 @@ class NamaModel(models.Model):
         max_zipcodes_state = int(max_zipcodes_state)
 
         for geographical_id in geographical_ids:
-            zipcoe_ids = geographical_id.get_zip_codes_state(geographical_ids - geographical_id)
-            if len(zipcoe_ids) < max_zipcodes_state:...
-                    # raise ValidationError(_('You can only add maximum (%s) zip code in same state' % max_zipcodes_state))
+            zipcoe_ids = geographical_id.get_zip_codes_state(geographical_ids)
+            all_states = geographical_id.get_all_zip_code_state(geographical_ids)
+            if len(zipcoe_ids) > max_zipcodes_state:
+                    raise ValidationError(_('You can only add maximum (%s) zip code in same state' % max_zipcodes_state))
+
+            if len(all_states) < 3:
+                    raise ValidationError('You Should add at least 3 different state.')
     
     @api.constrains('geographical_ids')
     def _check_geographical_ids(self):
         self.ensure_one()
         print()
+        print(not self.is_with_hardship)
+        print(self.env.context.get('has_hardship', False))
+        print(self.is_with_hardship)
+        print(not self.env.context.get('has_hardship', False))
         if not self.env.context.get('has_hardship', False) or not self.is_with_hardship:
             normal_number_zipcodes = self.env['ir.config_parameter'].sudo().get_param('normal_number_zipcodes') or 5
             normal_number_zipcodes = int(normal_number_zipcodes)
-           
+            print(normal_number_zipcodes)
             if len(self.geographical_ids) < normal_number_zipcodes or len(self.geographical_ids) > normal_number_zipcodes:
                     raise ValidationError(_('Count of zip codes shuld be %s' % normal_number_zipcodes))
                 
             for rec in self.geographical_ids:
                 if rec.id in self.geographical_ids.filtered(lambda x : x.id != rec.id).mapped('id'):
                     raise ValidationError(_('Zip code must be unique. '))
+            print('********************')
             self.check_zip_code_distance(self.geographical_ids)
             self.check_validation_zip_code_state(self.geographical_ids)
             
@@ -174,6 +190,7 @@ class NamaModel(models.Model):
         return term_year
 
     def get_accepted_distance_facility(self, facility_ids):
+        
         facility_distance_mel = float(self.env['ir.config_parameter'].sudo().get_param('clinical_distance_mel'))
         accepted_facility_ids = set()
 
@@ -183,6 +200,15 @@ class NamaModel(models.Model):
             accepted_facility_ids.update([f.id for f, distance in zip(facility_ids, distances) if distance <= facility_distance_mel])
 
         return list(accepted_facility_ids)
+    
+    def get_nearest_facility(self, facility_ids):
+        data = []
+        geographical_ids = self.mapped('geographical_ids')
+        for geographical_id in geographical_ids:
+            for facility_id in facility_ids:
+                distance, dis_and_geo = geographical_id.get_distance_with_zip_code(facility_id.geographical_id)
+                data.append((facility_id, distance))
+        return  min(data, key=lambda x: x[1])[0] if min(data, key=lambda x: x[1]) else False
     
     def get_nearby_facility_zipcode(self, facility_id):
         facility_distance_mel = float(self.env['ir.config_parameter'].sudo().get_param('clinical_distance_mel'))
