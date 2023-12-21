@@ -38,7 +38,7 @@
                 </div>
               </div>
               <div class="row mt-4">
-                <div class="col-lg-6 col-12">
+                <div class="col-lg-4 col-12">
                     <label for="name">Name</label>
                     <div class="form-group mt-1" style="background-color: #e0e0e0;
                     padding: 0.5rem;
@@ -47,7 +47,7 @@
                       <span t-field="partner.name" />
                     </div>
                 </div>
-                <div class="col-lg-6 col-12">
+                <div class="col-lg-4 col-12">
                     <label for="first_name">First name</label>
                     <div class="form-group mt-1" style="background-color: #e0e0e0;
                     padding: 0.5rem;
@@ -56,9 +56,7 @@
                     <span t-field="partner.first_name" />
                     </div>
                 </div>
-              </div>
-              <div class="row mt-4">
-                <div class="col-lg-6 col-12">
+                <div class="col-lg-4 col-12">
                   <label for="last_name">Last name</label>
                   <div class="form-group mt-1" style="background-color: #e0e0e0;
                   padding: 0.5rem;
@@ -67,7 +65,9 @@
                   <span t-field="partner.last_name" />
                   </div>
                 </div>
-                <div class="col-lg-6 col-12">
+              </div>
+              <div class="row mt-4">
+                <div class="col-lg-4 col-12">
                   <label for="phone">Phone</label>
                   <div class="form-group mt-1" style="background-color: #e0e0e0;
                   padding: 0.5rem;
@@ -76,9 +76,7 @@
                   <span t-field="partner.phone" />
                   </div>
                 </div>
-              </div>
-              <div class="row mt-4">
-                <div class="col-lg-6 col-12">
+                <div class="col-lg-4 col-12">
                   <label for="email">Email</label>
                   <div class="form-group mt-1" style="background-color: #e0e0e0;
                   padding: 0.5rem;
@@ -87,13 +85,71 @@
                   <span t-field="partner.email" />
                   </div>
                 </div>
-                <div class="col-lg-6 col-12">
+                <div class="col-lg-4 col-12">
                   <label for="home_address">Home address</label>
                   <div class="form-group mt-1" style="background-color: #e0e0e0;
                   padding: 0.5rem;
                   color: #4b4a4a;
                   border-bottom: 2px solid #716d6d;">
                   <span t-field="partner.home_address" />
+                  </div>
+                </div>
+              </div>
+              <div class="row mt-4">
+                <div class="col-lg-4 col-12">
+                  <label for="email">Program</label>
+                  <div class="form-group mt-1" style="background-color: #e0e0e0;
+                  padding: 0.5rem;
+                  color: #4b4a4a;
+                  border-bottom: 2px solid #716d6d;">
+                  <span t-field="partner.program_id.name" />
+                  </div>
+                </div>
+                <div class="col-lg-4 col-12">
+                  <label for="home_address">Start Year</label>
+                  <div class="form-group mt-1" style="background-color: #e0e0e0;
+                  padding: 0.5rem;
+                  color: #4b4a4a;
+                  border-bottom: 2px solid #716d6d;">
+                  <span t-field="partner.start_year" />
+                  </div>
+                </div>
+                <div class="col-lg-4 col-12">
+                  <label for="email">Start Term Type</label>
+                  <div class="form-group mt-1" style="background-color: #e0e0e0;
+                  padding: 0.5rem;
+                  color: #4b4a4a;
+                  border-bottom: 2px solid #716d6d;">
+                  <span t-field="partner.start_term_type" />
+                  </div>
+                </div>
+              </div>
+              <div class="row mt-4">
+                <div class="col-lg-4 col-12">
+                  <label for="home_address">Cohort Label</label>
+                  <div class="form-group mt-1" style="background-color: #e0e0e0;
+                  padding: 0.5rem;
+                  color: #4b4a4a;
+                  border-bottom: 2px solid #716d6d;">
+                  <span t-field="partner.cohort_label" />
+                  </div>
+                </div>
+                <div class="col-lg-4 col-12">
+                  <label for="email">Start Term</label>
+                  <div class="form-group mt-1" style="background-color: #e0e0e0;
+                  padding: 0.5rem;
+                  color: #4b4a4a;
+                  border-bottom: 2px solid #716d6d;">
+                  <span t-field="partner.start_term" />
+                  </div>
+                </div>
+                <div class="col-lg-4 col-12">
+                  <label for="home_address">Graduation Term</label>
+                  <div class="form-group mt-1" style="background-color: #e0e0e0;
+                  padding: 0.5rem;
+                  color: #4b4a4a;
+                  border-bottom: 2px solid #716d6d;">
+                  <span t-field="partner.graduation_term" />
                   </div>
                 </div>
               </div>

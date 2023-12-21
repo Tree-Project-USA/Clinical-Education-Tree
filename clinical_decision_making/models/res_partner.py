@@ -30,7 +30,7 @@ class NamaModel(models.Model):
     start_year = fields.Selection(selection=SELECTION_YEAR_RANGE, string='Year', )
     start_term = fields.Char(string='Start Term', compute='_compute_term_fields', store=True)
     graduation_term = fields.Char(string='Graduation Term', compute='_compute_term_fields', store=True)
-    is_with_hardship = fields.Boolean(string='is_with_hardship', compute='_compute_is_with_hardship', store=True,)
+    is_with_hardship = fields.Boolean(string='is_with_hardship', compute='_compute_is_with_hardship', )
     ice_term = fields.Char(string='ICE Term', compute='_compute_term_fields', store=True)
     tce1_term = fields.Char(string='TCE1 Term', compute='_compute_term_fields', store=True)
     tce2_term = fields.Char(string='TCE2 Term', compute='_compute_term_fields', store=True)
@@ -78,6 +78,9 @@ class NamaModel(models.Model):
             else:
                 rec.start_term = ''
                 rec.graduation_term = ''
+                rec.ice_term = ''
+                rec.tce1_term = ''
+                rec.tce2_term = ''
                 
     
     # @api.onchange('geographical_ids')

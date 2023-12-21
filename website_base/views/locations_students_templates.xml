@@ -5,101 +5,124 @@
             <div id="form_temp">
                 <div class="alert alert-success text-center shadow-sm" t-if="hardship">
                     <div class="d-flex justify-content-center">
-                      <p>
-                        Your hardship information need to be updated
-                      </p>
-                      <a class="mx-2" href="/update/hardship/request">here</a>
+                        <p>
+                            Your hardship information need to be updated
+                        </p>
+                        <a class="mx-2" href="/update/hardship/request">here</a>
                     </div>
                 </div>
                 <div id="wrap" class="oe_structure oe_empty my-4">
-                    <div class="alert alert-danger w-10 mx-auto text-center" t-if="error" role="alert">
+                    <div class="alert alert-danger w-10 mx-auto text-center" t-if="error"
+                        role="alert">
                         <strong>
                             <t t-esc="error" />
                         </strong>
                     </div>
                     <div class="row text-center" style="padding: 0 15px;margin-bottom: 7px;">
-                        <strong class="zip_code_error"/>
+                        <strong class="zip_code_error" />
                     </div>
                     <div class="container">
-                        <div  id="bk_n_res_loader" style="display:none;"/>
-                        <form method="post" action="/add/location">
-                            <div id="form_template">
-                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
-                                <div class="form-group">
-                                    <div class='row ml-1' style="width:99%;">
-                                        <div class="form-group col-12 show_total_project">
-                                            <div class="row s_col_no_resize s_col_no_bgcolor">
-                                                <table class="table table-borderless mt-3 total_project_costs">
-                                                    <thead>
-                                                        <tr>
-                                                            <td>
-                                                                <strong>
-                                                                    #
-                                                                </strong>
-                                                            </td>
-                                                            <td>
-                                                                <strong>
-                                                                    State
-                                                                </strong>
-                                                            </td>
-                                                            <td>
-                                                                <strong>
-                                                                    City
-                                                                </strong>
-                                                            </td>
-                                                            <td>
-                                                                <strong>
-                                                                    Zip code
-                                                                </strong>
-                                                            </td>
-                                                        </tr>
-                                                    </thead>
-                                                    <div class="collapse">
-                                                        <tbody>
-                                                            <t t-if="data_line_ids">
-                                                                <t t-set="variable" t-value="json.loads(data_line_ids)"/>
-                                                            </t>
-                                                            <t t-else="">
-                                                                <t t-set="variable" t-value="rw"/>
-                                                            </t>
-                                                                <tr  t-foreach="variable" t-as="val" class="project_cost_line">
-                                                                    <td>
-                                                                        <div class="form-group">
-                                                                            <span t-esc="val_index + 1"/>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td>
-                                                                        <div class="form-group">
-                                                                            <input type="text" id="state" name="state" readonly="readonly"  required="required"  class="form-control" t-att-value="val['state'] if data_line_ids else ' ' " />
-                                                                        </div>
-                                                                    </td>
-                                                                    <td>
-                                                                        <div class="form-group">
-                                                                            <input type="text" id="city" name="city" required="required" readonly="readonly" class="form-control" t-att-value="val['city'] if data_line_ids else '' " />
-                                                                        </div>
-                                                                    </td>
-                                                                    <td>
-                                                                        <div class="form-group">
-                                                                            <div class="input-group mb-2">
-                                                                                <input type="text" id="zip" name="zip" required="required" maxlength="9" class="form-control" t-att-value="val['zip'] if data_line_ids else ''" />
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                        </tbody>
-                                                    </div>
-                                                </table>
-                                            </div>
-                                            <textarea class="d-none" name="data_line_ids">
-                                            </textarea>
+                        <input type="hidden" name="len_course" t-att-value="rw" />
+                        <form
+                            action="/add/location"
+                            class="locations_student"
+                            method="post"
+                            enctype="multipart/form-data"
+                        >
+                            <input type="hidden" name="csrf_token"
+                                t-att-value="request.csrf_token()" />
+                            <input type="hidden" name="list_zip_code" id="list_zip_code"/>  
+
+                            <div class="row mt-4">
+                                <div>
+                                    <table class="table table-borderless mt-3 total_project_costs">
+                                        <thead>
+                                            <tr>
+                                                <td>
+                                                    <strong>
+                                                        #
+                                                    </strong>
+                                                </td>
+                                                <td>
+                                                    <strong>
+                                                        Zip code
+                                                    </strong>
+                                                </td>
+                                                <td>
+                                                    <strong>
+                                                        State
+                                                    </strong>
+                                                </td>
+                                                <td>
+                                                    <strong>
+                                                        City
+                                                    </strong>
+                                                </td>
+                                            </tr>
+                                        </thead>
+                                        <div class="collapse">
+                                            <tbody>
+                                                <t t-if="geographical_ids">
+                                                    <t t-set="variable"
+                                                        t-value="geographical_ids" />
+                                                </t>
+                                                <t t-else="">
+                                                    <t t-set="variable" t-value="rw" />
+                                                </t>
+                                                <tr t-foreach="variable" t-as="val"
+                                                    class="project_cost_line">
+                                                    <t t-set="geographical"
+                                                        t-value="request.env['geographical'].sudo().search([('id', '=', val)])"
+                                                    />
+                                                    <td>
+                                                        <div class="form-group">
+                                                            <span t-esc="val_index + 1" />
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="form-group">
+                                                            <div class="input-group mb-2">
+                                                                <input type="text" id="zip"
+                                                                    name="zip" required="required"
+                                                                    maxlength="5"
+                                                                    class="form-control"
+                                                                    t-att-value="geographical.zip_code if geographical_ids else ''" 
+                                                                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="form-group">
+                                                            <input type="text" id="state"
+                                                                name="state"
+                                                                required="required"
+                                                                class="form-control"
+                                                                style="pointer-events: none;"
+                                                                t-att-value="geographical.state if geographical_ids else '' " />
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="form-group">
+                                                            <input type="text" id="city" name="city"
+                                                                required="required"
+                                                                style="pointer-events: none;"
+                                                                class="form-control"
+                                                                t-att-value="geographical.city if geographical_ids else '' " />
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
                                         </div>
-                                    </div>
+                                    </table>
                                 </div>
-                                <div class="clearfix oe_login_buttons">
-                                    <button type="submit" class="custom_create btn btn-block" style="background-color:#ab8631;color:#fff;">
-                                        Confirm
-                                    </button>
-                                </div>
+                            </div>
+                            <div class="clearfix oe_login_buttons mt-4">
+                                <button type="submit"
+                                    class="custom_create btn btn-block"
+                                    style="background-color:#ab8631;color:#fff;">
+                                    Submit
+                                </button>
                             </div>
                         </form>
                     </div>

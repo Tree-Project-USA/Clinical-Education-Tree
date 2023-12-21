@@ -1,0 +1,24 @@
+<odoo>
+    <template id="error_request" name="Election Error Request">
+        <t t-call="website.layout">
+            <div class="error-request">
+                <div class="container" style="padding: 10%;">
+                    <div class="row" style="place-content: center;">
+                        <div class="text-center col-12">
+                            <span class="far fa-frown" style="font-size: 96px;color: burlywood;"></span>
+                        </div>
+                        <div class="col-12 text-center pt-5" style="color: indianred;">
+                            <h3>We've Faced an Issue, Please Check Entries and Try Again</h3>
+                            <div class="col-12 text-center pt-5">
+                                <a href="/membership/profile" class="error-return-btn" style="color: white;padding: 2%;border-radius: 25px;background: #1F8E93;">
+                                    <span class="fa fa-arrow-left"></span>
+                                    <strong style="white">Previous</strong>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

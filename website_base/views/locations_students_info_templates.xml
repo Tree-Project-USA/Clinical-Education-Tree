@@ -81,7 +81,7 @@
                                                                             type="text" 
                                                                             readonly="1"
                                                                             class="form-control" 
-                                                                            t-att-value="val.zip"
+                                                                            t-att-value="val.zip_code"
                                                                         />
                                                                     </div>
                                                                 </div>

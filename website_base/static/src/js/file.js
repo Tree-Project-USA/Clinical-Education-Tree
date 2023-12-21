@@ -1,11 +1,11 @@
-odoo.define("wbsite_base.file", function(require) {
+odoo.define("website_base.file", function(require) {
     "use strict";
     var publicWidget = require("web.public.widget");
 
     var counter_files = 0;
 
     publicWidget.registry.Course = publicWidget.Widget.extend({
-        selector: ".files",
+        selector: ".file, .hard_ship_update",
         events: {
             'click #add_files': '_onClickAddCourses',
         },
@@ -20,10 +20,10 @@ odoo.define("wbsite_base.file", function(require) {
         },
 
         _onClickAddCourses: function(ev) {
-            const file_id = "#" + $(".file-list:last").attr("id");
+            const file_id = "#" + $(".file-list1:last").attr("id");
             // add row for file
             const file_new_tag =
-                `<tr class="file-list" id="course_` + counter_files + `">
+                `<tr class="file-list1" id="course_` + counter_files + `">
                 <td class="row-index" colspan="5">
                     <div class="row">
                         <div class="col-12">
@@ -47,7 +47,7 @@ odoo.define("wbsite_base.file", function(require) {
                     </i>
                 </td>`
 
-            if ($(".file-list:last").attr("id") !== undefined) {
+            if ($(".file-list1:last").attr("id") !== undefined) {
                 $(file_id).after(file_new_tag);
             } else {
                 $("#add_file").append(file_new_tag);
@@ -58,8 +58,8 @@ odoo.define("wbsite_base.file", function(require) {
             var removerow = '#remove_file_' + counter_files;
             $(removerow).click(function(ev) {
                 var el = $(ev.target);
-                if (el.closest('.file-list').index() >= $('.file-list:last').index()) {
-                    el.closest('.file-list').remove();
+                if (el.closest('.file-list1').index() >= $('.file-list1:last').index()) {
+                    el.closest('.file-list1').remove();
                     counter_files--
                     $('input[name="len_file"]').attr('value', counter_files)
                 }
