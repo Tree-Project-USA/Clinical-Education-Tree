@@ -59,11 +59,12 @@ class Archive(models.Model):
     ], string='Match State',)
     archive_offer_id = fields.Many2one('archive.offer', string='Archive Offer')
     
-    @api.constrains('placement_type')
+    @api.constrains('placement_type', 'facility_id')
     def _check_placement_type(self):
         for rec in self:
-            print(rec.placement_type)
-            print(self.env['archive'].search([('student_id', '=', rec.student_id.id), ('placement_type', '=', rec.placement_type), ('placement_status', 'in', ['approved', 'completed']), ('id', '!=', rec.id)]))
+            if self.env['archive'].search([('student_id', '=', rec.student_id.id), ('facility_id', '=', rec.facility_id.id), ('placement_status', 'in', ['approved', 'completed', 'pending']), ('id', '!=', rec.id)]):
+                raise ValidationError("Student %s is already placed to %s facility" % (rec.student_id.name, rec.facility_id.name))    
+            
             if self.env['archive'].search([('student_id', '=', rec.student_id.id), ('placement_type', '=', rec.placement_type), ('placement_status', 'in', ['approved', 'completed']), ('id', '!=', rec.id)]):
                 raise ValidationError("Student %s is already taken in %s term before" % (rec.student_id.name, rec.placement_type))
             
