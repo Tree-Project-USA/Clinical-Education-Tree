@@ -324,6 +324,16 @@ class PlacementRequest(models.Model):
                         s = offer_id
                         s_f=offer_id.facility_id
                 type_tce1 = self.env['archive'].sudo().search([('student_id', '=', n_stu.id), ('facility_id', '=', s_f.id), ('state', 'in', ['approved', 'completed']), ('placement_type', '=', 'tce1')])
+                criteria = f"""
+                        <ul>
+                            <li><strong>Experience Type:</strong> {self.placement_type}</li>
+                            <li><strong>Placement Status:</strong> Pending</li>
+                            <li><strong>Term:</strong>{self.placement_term} {self.year}</li>
+                            <li><strong>Setting Type:</strong> {str(self.code)}</li>
+                            <li><strong>Site Name:</strong> {str(s_f.name)}</li>
+                            <li><strong>CI Contact Information:</strong> {str(s_f.address)}</li>
+                        </ul>
+                """
                 self.env["archive"].create({
                             'student_id': n_stu.id,
                             'facility_id': s_f.id,
@@ -332,6 +342,7 @@ class PlacementRequest(models.Model):
                             'placement_term': self.placement_term,
                             'year': self.year,
                             'archive_offer_id': s.id,
+                            'criteria': criteria,
                             'request_id': self.id,
                         })
                 s.is_linked = True

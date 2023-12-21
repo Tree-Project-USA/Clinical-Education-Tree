@@ -56,7 +56,7 @@
                             <field name="filter_by_hardship"/>
                         </group>
                         <group>
-                            <field name="code"/>
+                            <field name="code" string="Category"/>
                             <field name="program_id"/>
                             <field name="student_id"/>
                             <field name="facility_id"/>
