@@ -211,7 +211,7 @@ class PlacementRequest(models.Model):
             student_domain += [('id', '=', self.student_id.id)]
 
         print(student_domain)
-        student_ids = self.env["res.partner"].sudo().search(student_domain)
+        student_ids = self.env["res.partner"].sudo().search(student_domain).filtered(lambda x: len(x.geographical_ids) > 0)
         # if self.placement_type == 'ice':
         #     student_ids = student_ids.filtered(lambda x: x.is_complete_ice == False)
         # elif self.placement_type == 'tce':...
