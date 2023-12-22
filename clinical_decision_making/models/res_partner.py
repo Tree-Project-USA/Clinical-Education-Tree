@@ -7,7 +7,7 @@ from odoo.exceptions import ValidationError
 SELECTION_YEAR_RANGE = [(str(i),str(i)) for i in range(1999, 2500)]
 
 
-class NamaModel(models.Model):
+class ResPartner(models.Model):
     _inherit = 'res.partner'
     
     is_student = fields.Boolean(string='Is Student', default=False)
@@ -59,29 +59,35 @@ class NamaModel(models.Model):
     @api.depends('start_year', 'start_term_type', 'program_id')
     def _compute_term_fields(self):
         for rec in self:
-            if rec.start_year and rec.start_term_type  and rec.program_id:
-                rec.start_term = self.convert_term_year(rec.start_term_type, rec.start_year)
-                graduation_t, graduation_y = rec.calculate_end_term(rec.start_term_type, rec.start_year, rec.program_id.num_terms)
-                rec.graduation_term = self.convert_term_year(graduation_t, graduation_y)
-                
-                
-                print(self.get_specific_term_year(rec.start_term_type, rec.start_year, rec.program_id.num_terms, rec.program_id.ice_term))
-                ice_term_t, ice_term_y = self.get_specific_term_year(rec.start_term_type, rec.start_year, rec.program_id.num_terms, rec.program_id.ice_term)
-                rec.ice_term = self.convert_term_year(ice_term_t, ice_term_y)
-                
-                tce1_term_t, tce1_term_y = self.get_specific_term_year(rec.start_term_type, rec.start_year, rec.program_id.num_terms, rec.program_id.tce1_term)
-                rec.tce1_term = self.convert_term_year(tce1_term_t, tce1_term_y)
-                
-                tce2_term_t, tce2_term_y = self.get_specific_term_year(rec.start_term_type, rec.start_year, rec.program_id.num_terms, rec.program_id.tce2_term)
-                rec.tce2_term = self.convert_term_year(tce2_term_t, tce2_term_y)
-                
-            else:
-                rec.start_term = ''
-                rec.graduation_term = ''
-                rec.ice_term = ''
-                rec.tce1_term = ''
-                rec.tce2_term = ''
-                
+            try:
+                if rec.start_year and rec.start_term_type  and rec.program_id:
+                    rec.start_term = self.convert_term_year(rec.start_term_type, rec.start_year)
+                    graduation_t, graduation_y = rec.calculate_end_term(rec.start_term_type, rec.start_year, rec.program_id.num_terms)
+                    rec.graduation_term = self.convert_term_year(graduation_t, graduation_y)
+                    
+                    
+                    print(self.get_specific_term_year(rec.start_term_type, rec.start_year, rec.program_id.num_terms, rec.program_id.ice_term))
+                    ice_term_t, ice_term_y = self.get_specific_term_year(rec.start_term_type, rec.start_year, rec.program_id.num_terms, rec.program_id.ice_term)
+                    rec.ice_term = self.convert_term_year(ice_term_t, ice_term_y)
+                    
+                    tce1_term_t, tce1_term_y = self.get_specific_term_year(rec.start_term_type, rec.start_year, rec.program_id.num_terms, rec.program_id.tce1_term)
+                    rec.tce1_term = self.convert_term_year(tce1_term_t, tce1_term_y)
+                    
+                    tce2_term_t, tce2_term_y = self.get_specific_term_year(rec.start_term_type, rec.start_year, rec.program_id.num_terms, rec.program_id.tce2_term)
+                    rec.tce2_term = self.convert_term_year(tce2_term_t, tce2_term_y)
+                    
+                else:
+                    rec.start_term = ''
+                    rec.graduation_term = ''
+                    rec.ice_term = ''
+                    rec.tce1_term = ''
+                    rec.tce2_term = ''
+            except:
+                    rec.start_term = ''
+                    rec.graduation_term = ''
+                    rec.ice_term = ''
+                    rec.tce1_term = ''
+                    rec.tce2_term = ''
     
     # @api.onchange('geographical_ids')
     # def _onchange_geographical_ids(self):
@@ -125,7 +131,8 @@ class NamaModel(models.Model):
     @api.constrains('geographical_ids')
     def _check_geographical_ids(self):
         self.ensure_one()
-        print()
+        if self.env.context.get('pass_validation', False):
+            return
         print(not self.is_with_hardship)
         print(self.env.context.get('has_hardship', False))
         print(self.is_with_hardship)
@@ -144,6 +151,9 @@ class NamaModel(models.Model):
             self.check_zip_code_distance(self.geographical_ids)
             self.check_validation_zip_code_state(self.geographical_ids)
             
+    def create(self, vals):
+        return super(ResPartner, self.with_context(pass_validation=True)).create(vals)
+    
     
     def calculate_end_term(self, start_term, start_year, num_terms):
         terms = ["spring", "summer", "fall"]
