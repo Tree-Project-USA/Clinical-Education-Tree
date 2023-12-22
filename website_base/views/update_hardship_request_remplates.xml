@@ -28,10 +28,10 @@
                       >
                           <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                           <input type="hidden" name="len_file" value="1" />
-                          <input type="hidden" name="list_zip_code_h_u" id="list_zip_code_h_u"/> 
-                          <div class="row mt-4">
+                          <input type="hidden" name="len_zip_code" value="1" />
+                          <div class="file row mt-4">
                             <div>
-                                <table class="table table-borderless mt-3 total_project_costs">
+                                <table class="table add_file table-bordered">
                                     <thead>
                                         <tr>
                                             <td>
@@ -54,63 +54,29 @@
                                                     City
                                                 </strong>
                                             </td>
+                                            <td>
+                                            </td>
                                         </tr>
                                     </thead>
-                                    <div class="collapse">
-                                        <tbody>
-                                            <t t-if="geographical_ids">
-                                                <t t-set="variable"
-                                                    t-value="geographical_ids" />
-                                            </t>
-                                            <t t-else="">
-                                                <t t-set="variable" t-value="3" />
-                                            </t>
-                                            <tr t-foreach="variable" t-as="val"
-                                                class="project_cost_line">
-                                                <t t-set="geographical"
-                                                    t-value="request.env['geographical'].sudo().search([('id', '=', val)])"
-                                                />
-                                                <td>
-                                                    <div class="form-group">
-                                                        <span t-esc="val_index + 1" />
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-group">
-                                                        <div class="input-group mb-2">
-                                                            <input type="text" id="zip"
-                                                                name="zip" required="required"
-                                                                maxlength="9"
-                                                                class="form-control"
-                                                                t-att-value="geographical.zip_code if geographical_ids else ''" />
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-group">
-                                                        <input type="text" id="state"
-                                                            name="state"
-                                                            style="pointer-events: none;"
-                                                            required="required"
-                                                            class="form-control"
-                                                            t-att-value="geographical.state if geographical_ids else '' " />
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-group">
-                                                        <input type="text" id="city" name="city"
-                                                            required="required"
-                                                            style="pointer-events: none;"
-                                                            class="form-control"
-                                                            t-att-value="geographical.city if geographical_ids else '' " />
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </div>
+                                    <tbody id="add_zip_code">
+                                        
+                                    </tbody>
+                                    <tfooter class="footer">
+                                        <tr>
+                                            <td colspan="5">
+                                                <a 
+                                                id="add_zip" 
+                                                class="btn m-2"
+                                                style="background-color:#ab8631;color:#fff;" 
+                                                >
+                                                <h6>Add Zip Code</h6>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tfooter>
                                 </table>
                             </div>
-                          </div>
+                        </div>
                           <div class="row mt-4">
                               <div>
                                 <table class="table add_file table-bordered">

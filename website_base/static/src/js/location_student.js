@@ -27,36 +27,46 @@ odoo.define("website_base.location_student", function(require) {
             var City = $('.total_project_costs > tbody > tr.project_cost_line div > input[name="city"]');
             _.each(zip, function(value, index) {
                 var remove_zip = 0;
+                remove_zip = index
+                ids.splice(remove_zip, 1);
                 var zip_code = zip[index].value
                 if (zip_code){
                     ajax.jsonRpc("/show/locations", 'call', { zip_code }).then(function(data) {
                         State[index].value = data['state']
                         City[index].value = data['city']
                         if (ids.includes(data.id) || data.id == false){
-                            console.log("alrady found")
+                            $(".zip_code_error").removeClass("d-none")
+                            $(".oe_login_buttons").addClass("d-none")
+                            console.log("alrady found 1")
                         }else{
+                            $(".zip_code_error").addClass("d-none")
+                            $(".oe_login_buttons").removeClass("d-none")
                             ids.push(data.id) 
                             $('#list_zip_code').val(ids);
                         }
                     });
                 }
-                zip[index].onblur = function() {
-                    console.log(index)
-                    remove_zip = index
-                    ids.splice(remove_zip, 1);
-                    if (zip_code){
-                        ajax.jsonRpc("/show/locations", 'call', { zip_code }).then(function(data) {
-                            State[index].value = data['state']
-                            City[index].value = data['city']
-                            if (ids.includes(data.id) || data.id == false){
-                                console.log("alrady found")
-                            }else{
-                                ids.push(data.id) 
-                                $('#list_zip_code').val(ids);
-                            }
-                        });
-                    }
-                }
+                // zip[index].onblur = function() {
+                //     console.log(index)
+                //     remove_zip = index
+                //     ids.splice(remove_zip, 1);
+                //     console.log(ids)
+                //     console.log("----------------------------")
+                //     if (zip_code){
+                //         ajax.jsonRpc("/show/locations", 'call', { zip_code }).then(function(data) {
+                //             State[index].value = data['state']
+                //             City[index].value = data['city']
+                //             ids.push(data.id)
+                //             if (ids.includes(data.id) || data.id == false){
+                //                 console.log("alrady found")
+                //             }else{
+                //                 ids.push(data.id) 
+                //                 console.log(ids)
+                //                 $('#list_zip_code').val(ids);
+                //             }
+                //         });
+                //     }
+                // }
             })
         },
     })

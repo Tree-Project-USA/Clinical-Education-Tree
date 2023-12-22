@@ -2,7 +2,7 @@
 <odoo>
     <template id="locations_students_template" name="Locations Students Template">
         <t t-call="website.layout">
-            <div id="form_temp">
+            <div id="form_temp" class="locations_student">
                 <div class="alert alert-success text-center shadow-sm" t-if="hardship">
                     <div class="d-flex justify-content-center">
                         <p>
@@ -18,14 +18,16 @@
                             <t t-esc="error" />
                         </strong>
                     </div>
-                    <div class="row text-center" style="padding: 0 15px;margin-bottom: 7px;">
-                        <strong class="zip_code_error" />
+                    <div class="zip_code_error alert alert-danger w-10 mx-auto text-center d-none"
+                        role="alert">
+                        <strong>
+                            You cannot duplicate the zip code.
+                        </strong>
                     </div>
                     <div class="container">
                         <input type="hidden" name="len_course" t-att-value="rw" />
                         <form
                             action="/add/location"
-                            class="locations_student"
                             method="post"
                             enctype="multipart/form-data"
                         >

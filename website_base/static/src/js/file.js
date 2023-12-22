@@ -5,7 +5,7 @@ odoo.define("website_base.file", function(require) {
     var counter_files = 0;
 
     publicWidget.registry.Course = publicWidget.Widget.extend({
-        selector: ".file, .hard_ship_update",
+        selector: ".hardship, .hard_ship_update",
         events: {
             'click #add_files': '_onClickAddCourses',
         },

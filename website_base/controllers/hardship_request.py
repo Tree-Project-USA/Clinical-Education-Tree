@@ -20,20 +20,23 @@ class CustomerPortals(http.Controller):
             ])
         if post and request.httprequest.method == "POST":
             try:
-                zip_code_list_h = [int(i) for i in post.get('list_zip_code_h_u').split(",") if i != ','] if post.get('list_zip_code_h_u', False) else []
+                zip_code_list = []
                 file_list = []
+                for zip in range(0, int(post.get("len_zip_code"))):
+                    zip_code = request.env["geographical"].sudo().search([("zip_code", "=", post.get("zip_code_" + str(zip)))])
+                    zip_code_list.append(zip_code.id)
                 for files in range(0, int(post.get("len_file"))):
-                    line= (0,0,{
+                    line_file= (0,0,{
                         'name': post.get("datas_" + str(files)).filename,
                         'datas': base64.b64encode(post.get("datas_" + str(files), False).read()),
                     })
-                file_list.append(line)
+                file_list.append(line_file)
                 hardship_id.attachment_ids.unlink()
                 hardship_id.sudo().write({
                     "note":  post.get("note") if post.get("note") else False,
                     "attachment_ids": file_list,
                     "state": "draft",
-                    "geographical_ids": [(6, 0, zip_code_list_h)],
+                    "geographical_ids": [(6, 0, zip_code_list)],
                 })
                 return request.redirect("/success/hardship/request")
             except Exception as e:
@@ -48,21 +51,24 @@ class CustomerPortals(http.Controller):
         partner_id = request.env.user.partner_id
         if kw and request.httprequest.method == "POST":
             try:
-                zip_code_list_h = [int(i) for i in kw.get('list_zip_code_h').split(",") if i != ','] if kw.get('list_zip_code_h', False) else []
+                zip_code_list = []
                 file_list = []
+                for zip in range(0, int(kw.get("len_zip_code"))):
+                    zip_code = request.env["geographical"].sudo().search([("zip_code", "=", kw.get("zip_code_" + str(zip)))])
+                    zip_code_list.append(zip_code.id)
                 for files in range(0, int(kw.get("len_file"))):
-                    line= (0,0,{
+                    line_file= (0,0,{
                         'name': kw.get("datas_" + str(files)).filename,
                         'datas': base64.b64encode(kw.get("datas_" + str(files), False).read()),
                     })
-                    file_list.append(line)
+                    file_list.append(line_file)
                 HardshipRequest = request.env["hardship.request"].sudo().create(
                     {
                         "student_id": partner_id.id,
                         "note":  kw.get("note") if kw.get("note") else False,
                         "attachment_ids": file_list,
                         "state": "draft",
-                        "geographical_ids": zip_code_list_h,
+                        "geographical_ids": [(6, 0, zip_code_list)],
                     }
                 )
                 partner_id.sudo().write({

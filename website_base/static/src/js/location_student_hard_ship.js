@@ -1,13 +1,17 @@
-odoo.define("wbsite_base.location_student_hard_ship", function(require) {
+odoo.define("website_base.location_student_hard_ship", function(require) {
     "use strict";
     var publicWidget = require("web.public.widget");
+
     var ajax = require('web.ajax');
-    var ids = []
-    publicWidget.registry.locationStudentHardShip = publicWidget.Widget.extend({
-        selector: ".files",
+    var counter_zip = 0;
+    var zip_cod = 0;
+    var state;
+    var city;
+    publicWidget.registry.LocationStudentHardShip = publicWidget.Widget.extend({
+        selector: ".hardship",
         events: {
-            'click #add_zip_code': '_onClickZipCode',
-            'change input[name="zip"]': "_onZipChanges",
+            'change input[type="text"]': '_onZipChanges',
+            'click #add_zip': '_onClickAddzip',
         },
 
         /**
@@ -16,48 +20,128 @@ odoo.define("wbsite_base.location_student_hard_ship", function(require) {
         init: function() {
             this._super.apply(this, arguments);
             this._popoverRPC = null;
+            this._onClickAddzip();
         },
-
-         /**
+          /**
         * @private
         */
-         _onZipChanges: function () {
-            var zip = $('.total_project_costs > tbody > tr.project_cost_line div > input[name="zip"]');
-            var State = $('.total_project_costs > tbody > tr.project_cost_line div > input[name="state"]');
-            var City = $('.total_project_costs > tbody > tr.project_cost_line div > input[name="city"]');
-            _.each(zip, function(value, index) {
-                var remove_zip = 0;
-                var zip_code = zip[index].value
-                if (zip_code){
-                    ajax.jsonRpc("/show/locations", 'call', { zip_code }).then(function(data) {
-                        State[index].value = data['state']
-                        City[index].value = data['city']
-                        if (ids.includes(data.id) || data.id == false){
-                            console.log("alrady found")
-                        }else{
-                            ids.push(data.id) 
-                            $('#list_zip_code_h').val(ids);
+        _onClickAddzip: function(ev) {
+            console.log("ahmed +++++++++++++++++++++++++")
+            const zip_id = "#" + $(".file-list:last").attr("id");
+            const zip_new_tag =
+                `<tr class="file-list" id="zip_` + counter_zip + `">
+                <td>
+                    
+                </td>
+                <td class="row-index">
+                    <div class="row">
+                        <div class="col-12">
+                            <div>
+								<input
+									type="text"
+									class="form-control"
+                                    required="required"
+									name="zip_code_` + counter_zip + `" 
+									id="zip_code_` + counter_zip + `"
+								/>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                <td class="row-index">
+                    <div class="row">
+                        <div class="col-12">
+                            <div>
+								<input
+									type="text"
+									class="form-control"
+                                    required="required"
+                                    style="pointer-events: none;"
+									name="state_` + counter_zip + `" 
+									id="state_` + counter_zip + `"
+								/>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                <td class="row-index">
+                    <div class="row">
+                        <div class="col-12">
+                            <div>
+								<input
+									type="text"
+									class="form-control"
+                                    style="pointer-events: none;"
+                                    required="required"
+									name="city_` + counter_zip + `" 
+									id="city_` + counter_zip + `"
+								/>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                <td class="text-center" >
+                    <i class="btn fa fa-trash fa_custom" 
+                    id="remove_zip_` + counter_zip + `" type="button" 
+                        style="color:#dc3545;font-size:18px">
+                    </i>
+                </td>`
+
+            if ($(".file-list:last").attr("id") !== undefined) {
+                $(zip_id).after(zip_new_tag);
+            } else {
+                $("#add_zip_code").append(zip_new_tag);
+            }
+            zip_cod = "#zip_code_" + counter_zip 
+            state = "#state_" + counter_zip 
+            city = "#city_" + counter_zip 
+
+            // delete row in  row of files
+            var removerow = '#remove_zip_' + counter_zip;
+            $(removerow).click(function(ev) {
+                var el = $(ev.target);
+                if(counter_zip > 1){
+                    if (el.closest('.file-list').index() >= $('.file-list:last').index()) {
+                        el.closest('.file-list').remove();
+                        counter_zip--
+                        if (counter_zip < 3){
+                            $("#add_zip").removeClass("d-none")
                         }
-                    });
-                }
-                zip[index].onblur = function() {
-                    remove_zip = index
-                    ids.splice(remove_zip, 1);
-                    if (zip_code){
-                        ajax.jsonRpc("/show/locations", 'call', { zip_code }).then(function(data) {
-                            State[index].value = data['state']
-                            City[index].value = data['city']
-                            if (ids.includes(data.id) || data.id == false){
-                                console.log("alrady found")
-                            }else{
-                                ids.push(data.id) 
-                                $('#list_zip_code_h').val(ids);
-                            }
-                        });
+                        console.log(counter_zip)
+                        $('input[name="len_zip_code"]').attr('value', counter_zip)
                     }
                 }
-            })
+            });
+
+            Array.prototype.remove = function() {
+                var what, a = arguments,
+                    L = a.length,
+                    ax;
+                while (L && this.length) {
+                    what = a[--L];
+                    while ((ax = this.indexOf(what)) !== -1) {
+                        this.splice(ax, 2);
+                    }
+                }
+                return this;
+            };
+            counter_zip++
+            console.log(counter_zip)
+            $('input[name="len_zip_code"]').attr('value', counter_zip)
+            if (counter_zip >= 3){
+                $("#add_zip").addClass("d-none")
+            }
+        },
+
+        /**
+        * @private
+        */
+        _onZipChanges: function () {
+            var zip_code = $(zip_cod).val();
+            ajax.jsonRpc("/show/locations", 'call', { zip_code }).then(function(data) {
+                $(state).val(data.state)
+                $(city).val(data.city)
+            });
         },
     })
-
 })
