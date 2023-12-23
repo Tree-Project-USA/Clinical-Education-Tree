@@ -22,9 +22,7 @@
         <field name="arch" type="xml">
             <form string="Placement Request">
                 <header>
-                    <!-- <button name="action_post" string="Confirm" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'draft')]}" data-hotkey="v"/> -->
                     <button name="apply_filter" string="Apply Filter" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'draft')]}" data-hotkey="v"/>
-                    <!-- <button name="action_complete" string="Complete" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'running')]}" data-hotkey="w"/> -->
                     <field name="state" widget="statusbar" clickable="False"/>
                 </header>
                 <sheet>

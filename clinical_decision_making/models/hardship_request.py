@@ -44,7 +44,7 @@ class HardshipRequest(models.Model):
         self.write({
             'state': 'confirm',
         })
-        self.student_id.with_context(has_hardship=True).write({
+        self.student_id.with_context(pass_validation=True).write({
             'deny_show_student': True,
             'geographical_ids': self.geographical_ids.ids
         })

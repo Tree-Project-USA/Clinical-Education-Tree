@@ -34,26 +34,32 @@ class ResPartner(models.Model):
     ice_term = fields.Char(string='ICE Term', compute='_compute_term_fields', store=True)
     tce1_term = fields.Char(string='TCE1 Term', compute='_compute_term_fields', store=True)
     tce2_term = fields.Char(string='TCE2 Term', compute='_compute_term_fields', store=True)
-    is_take_ip = fields.Boolean(compute='_compute_is_take_ip', string='Is Take IP', store=True)
+    is_take_ip = fields.Boolean(compute='_compute_is_take_ip', string='Is Take IP')
     is_complete_ice = fields.Boolean(compute='_compute_term',string='Is Complate Ice', store=True)
     is_complete_tce1 = fields.Boolean(compute='_compute_term', string='Is Complate Tec1', store=True)
     is_complete_tce2 = fields.Boolean(compute='_compute_term', string='Is Complate Tec2', store=True)
     
     @api.depends('archive_ids')
     def _compute_is_take_ip(self):
+        print('----------------------------------------------------------------')
+        print('----------------------------------------------------------------')
+        print('----------------------------------------------------------------')
+        print('----------------------------------------------------------------')
+        print('----------------------------------------------------------------')
         for rec in self:
-            rec.is_take_ip = True if rec.archive_ids.filtered(lambda x: x.setting == 'ip') else False
+            rec.is_take_ip = True if rec.archive_ids.filtered(lambda x: x.setting == 'ip' and x.placement_status in ['approved', 'completed']) else False
     
     @api.depends('archive_ids')
     def _compute_term(self):
         for rec in self:
-            rec.is_complete_ice = True if self.env['archive'].search([('placement_type', '=', 'ice'), ('placement_status', 'in', ['pending', 'completed', 'approved'])]) else False
-            rec.is_complete_tce1 = True if self.env['archive'].search([('placement_type', '=', 'tce1'), ('placement_status', 'in', ['pending', 'completed', 'approved'])]) else False
-            rec.is_complete_tce2 = True if self.env['archive'].search([('placement_type', '=', 'tce2'), ('placement_status', 'in', ['pending', 'completed', 'approved'])]) else False
+            rec.is_complete_ice = True if self.env['archive'].search([('student_id', '=', rec.id), ('placement_type', '=', 'ice'), ('placement_status', 'in', ['completed',])]) else False
+            rec.is_complete_tce1 = True if self.env['archive'].search([('student_id', '=', rec.id), ('placement_type', '=', 'tce1'), ('placement_status', 'in', ['completed',])]) else False
+            rec.is_complete_tce2 = True if self.env['archive'].search([('student_id', '=', rec.id), ('placement_type', '=', 'tce2'), ('placement_status', 'in', ['completed',])]) else False
         
-    @api.depends('hardship_ids')
     def _compute_is_with_hardship(self):
+        print('********************************')
         for rec in self:
+            print(self.env['hardship.request'].search([('student_id', '=', rec.id), ('state', '=', 'confirm')]))
             rec.is_with_hardship = True if self.env['hardship.request'].search([('student_id', '=', rec.id), ('state', '=', 'confirm')]) else False
             
     @api.depends('start_year', 'start_term_type', 'program_id')
@@ -92,7 +98,7 @@ class ResPartner(models.Model):
     # @api.onchange('geographical_ids')
     # def _onchange_geographical_ids(self):
     #     self.ensure_one()
-    #     if not self.env.context.get('has_hardship', False) or not self.is_with_hardship:
+    #     if not self.env.context.get('pass_validation', False) or not self.is_with_hardship:
     #         print(self.geographical_ids)
     #         for rec in self.geographical_ids:
     #             if rec.id in self.geographical_ids.filtered(lambda x : x.id != rec.id).mapped('id'):
@@ -131,13 +137,13 @@ class ResPartner(models.Model):
     @api.constrains('geographical_ids')
     def _check_geographical_ids(self):
         self.ensure_one()
-        if self.env.context.get('pass_validation', False):
+        if self.env.context.get('pass_validation', False) or self.is_with_hardship:
             return
-        print(not self.is_with_hardship)
-        print(self.env.context.get('has_hardship', False))
+        print('************************is_with_hardship', self.is_with_hardship)
+        print(self.env.context.get('pass_validation', False))
         print(self.is_with_hardship)
-        print(not self.env.context.get('has_hardship', False))
-        if not self.env.context.get('has_hardship', False) or not self.is_with_hardship:
+        print(not self.env.context.get('pass_validation', False))
+        if not self.env.context.get('pass_validation', False) or not self.is_with_hardship:
             normal_number_zipcodes = self.env['ir.config_parameter'].sudo().get_param('normal_number_zipcodes') or 5
             normal_number_zipcodes = int(normal_number_zipcodes)
             print(normal_number_zipcodes)
@@ -220,8 +226,8 @@ class ResPartner(models.Model):
         for geographical_id in geographical_ids:
             for facility_id in facility_ids:
                 distance, dis_and_geo = geographical_id.get_distance_with_zip_code(facility_id.geographical_id)
-                data.append((facility_id, distance))
-        return  min(data, key=lambda x: x[1])[0] if min(data, key=lambda x: x[1]) else False
+                data.append((facility_id, distance, geographical_id))
+        return  (min(data, key=lambda x: x[1])[0], min(data, key=lambda x: x[1])[2]) if min(data, key=lambda x: x[1]) else (False, False)
     
     def get_nearby_facility_zipcode(self, facility_id):
         facility_distance_mel = float(self.env['ir.config_parameter'].sudo().get_param('clinical_distance_mel'))

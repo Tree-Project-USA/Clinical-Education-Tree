@@ -59,10 +59,18 @@ class Archive(models.Model):
     ], string='Match State',)
     archive_offer_id = fields.Many2one('archive.offer', string='Archive Offer')
     
+    @api.constrains('placement_status')
+    def _check_placement_status(self):
+        for rec in self:
+            if self.env['archive'].search([('student_id', '=', rec.student_id.id), ('placement_type', '=', rec.placement_type), ('placement_status', 'in', ['approved', 'completed', 'pending']), ('id', '!=', rec.id)]):
+                raise ValidationError("Student (%s) is already Matching (%s) for (%s)" % (rec.student_id.name, rec.facility_id.name,rec.placement_type))
+                
+        
     @api.constrains('placement_type', 'facility_id')
     def _check_placement_type(self):
         for rec in self:
-            if self.env['archive'].search([('student_id', '=', rec.student_id.id), ('facility_id', '=', rec.facility_id.id), ('placement_status', 'in', ['approved', 'completed', 'pending']), ('id', '!=', rec.id)]):
+            print('_check_placement_type', rec)
+            if self.env['archive'].search([('student_id', '=', rec.student_id.id), ('facility_id', '=', rec.facility_id.id), ('placement_status', 'in', ['approved', 'completed', 'pending']), ('id', '!=', rec.id)]) and not rec.student_id.is_with_hardship:
                 raise ValidationError("Student %s is already placed to %s facility" % (rec.student_id.name, rec.facility_id.name))    
             
             if self.env['archive'].search([('student_id', '=', rec.student_id.id), ('placement_type', '=', rec.placement_type), ('placement_status', 'in', ['approved', 'completed']), ('id', '!=', rec.id)]):
@@ -76,7 +84,7 @@ class Archive(models.Model):
             if rec.placement_type == 'tce1':
                 archive_id = self.env['archive'].search([('student_id', '=', rec.student_id.id), ('placement_type', '=', 'ice'), ('placement_status', 'in', ['approved', 'completed']), ('id', '!=', rec.id)])
                 if not archive_id:
-                    raise ValidationError("Student %s is Shuld Take ICE term before TCE2" % (rec.student_id.name))
+                    raise ValidationError("Student %s is Shuld Take ICE term before TCE1" % (rec.student_id.name))
             
             if rec.placement_type == 'tce2':
                 archive_id = self.env['archive'].search([('student_id', '=', rec.student_id.id), ('placement_type', '=', 'tce1'), ('placement_status', 'in', ['approved', 'completed']), ('id', '!=', rec.id)])
@@ -92,9 +100,7 @@ class Archive(models.Model):
         self.write({
          'match_state': 'decline',
         })
-        if self.archive_offer_id:
-            self.archive_offer_id.is_linked = False
-    
+        self.unlink_offer()
     
     @api.depends('student_id', 'student_id.hardship_ids', 'student_id.hardship_ids.state')
     def _compute_hardship_status(self):
@@ -106,3 +112,10 @@ class Archive(models.Model):
                 else:
                     rec.hardship_status = False
  
+    def unlink_offer(self):
+        if self.archive_offer_id:
+            self.archive_offer_id.is_linked = False
+            self.archive_offer_id.student_id = False
+        self.placement_status = 'not_placed'
+            
+    
