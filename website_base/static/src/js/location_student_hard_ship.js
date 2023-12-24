@@ -10,7 +10,7 @@ odoo.define("website_base.location_student_hard_ship", function(require) {
     publicWidget.registry.LocationStudentHardShip = publicWidget.Widget.extend({
         selector: ".hardship",
         events: {
-            'change input[type="text"]': '_onZipChanges',
+            'input input[type="text"]': '_onZipChanges',
             'click #add_zip': '_onClickAddzip',
         },
 
@@ -26,7 +26,6 @@ odoo.define("website_base.location_student_hard_ship", function(require) {
         * @private
         */
         _onClickAddzip: function(ev) {
-            console.log("ahmed +++++++++++++++++++++++++")
             const zip_id = "#" + $(".file-list:last").attr("id");
             const zip_new_tag =
                 `<tr class="file-list" id="zip_` + counter_zip + `">
@@ -40,7 +39,7 @@ odoo.define("website_base.location_student_hard_ship", function(require) {
 								<input
 									type="text"
 									class="form-control"
-                                    required="required"
+                                    ${counter_zip === 0 ? 'required' : ''}
 									name="zip_code_` + counter_zip + `" 
 									id="zip_code_` + counter_zip + `"
 								/>
@@ -55,7 +54,7 @@ odoo.define("website_base.location_student_hard_ship", function(require) {
 								<input
 									type="text"
 									class="form-control"
-                                    required="required"
+                                    ${counter_zip === 0 ? 'required' : ''}
                                     style="pointer-events: none;"
 									name="state_` + counter_zip + `" 
 									id="state_` + counter_zip + `"
@@ -72,7 +71,7 @@ odoo.define("website_base.location_student_hard_ship", function(require) {
 									type="text"
 									class="form-control"
                                     style="pointer-events: none;"
-                                    required="required"
+                                    ${counter_zip === 0 ? 'required' : ''}
 									name="city_` + counter_zip + `" 
 									id="city_` + counter_zip + `"
 								/>
@@ -107,7 +106,6 @@ odoo.define("website_base.location_student_hard_ship", function(require) {
                         if (counter_zip < 3){
                             $("#add_zip").removeClass("d-none")
                         }
-                        console.log(counter_zip)
                         $('input[name="len_zip_code"]').attr('value', counter_zip)
                     }
                 }
