@@ -10,7 +10,7 @@ odoo.define("website_base.location_student_update_hard_ship", function(require) 
     publicWidget.registry.LocationStudentHardShipUpdate = publicWidget.Widget.extend({
         selector: ".hard_ship_update",
         events: {
-            'change input[type="text"]': '_onZipChanges',
+            'input input[type="text"]': '_onZipChanges',
             'click #add_zip': '_onClickAddzip',
         },
 
@@ -39,7 +39,7 @@ odoo.define("website_base.location_student_update_hard_ship", function(require) 
 								<input
 									type="text"
 									class="form-control"
-                                    required="required"
+                                    ${counter_zip === 0 ? 'required' : ''}
 									name="zip_code_` + counter_zip + `" 
 									id="zip_code_` + counter_zip + `"
 								/>
@@ -54,7 +54,7 @@ odoo.define("website_base.location_student_update_hard_ship", function(require) 
 								<input
 									type="text"
 									class="form-control"
-                                    required="required"
+                                    ${counter_zip === 0 ? 'required' : ''}
                                     style="pointer-events: none;"
 									name="state_` + counter_zip + `" 
 									id="state_` + counter_zip + `"
@@ -71,7 +71,7 @@ odoo.define("website_base.location_student_update_hard_ship", function(require) 
 									type="text"
 									class="form-control"
                                     style="pointer-events: none;"
-                                    required="required"
+                                    ${counter_zip === 0 ? 'required' : ''}
 									name="city_` + counter_zip + `" 
 									id="city_` + counter_zip + `"
 								/>
