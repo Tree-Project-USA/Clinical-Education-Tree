@@ -2,7 +2,16 @@
 <odoo>
     <template id="locations_students_template" name="Locations Students Template">
         <t t-call="website.layout">
-            <div id="form_temp" class="locations_student">
+            <!-- <div class="spinner"></div> -->
+            <div class="container">
+                <div class="loading-indicator text-center"
+                     style="display: flex;flex-direction: column;align-items: center;justify-content: center;height: 90vh;">
+                    <div class="spinner-border" style ="width:15vh; height:15vh; color:#1F8E93" role="status">
+                        <span class="visually-hidden"></span>
+                    </div>
+                </div>
+            </div>
+          <div id="form_temp" class="locations_student d-none">
                 <div class="alert alert-success text-center shadow-sm" t-if="hardship">
                     <div class="d-flex justify-content-center">
                         <p>
@@ -125,6 +134,13 @@
                                     style="background-color:#ab8631;color:#fff;">
                                     Submit
                                 </button>
+                                <a href="/my/home"
+                                    class="float-end custom_create btn btn-block"
+                                    style="background-color:#ab8631;color:#fff;">
+                                    Back
+                                </a>
+                            </div>
+                            <div class="float-end">
                             </div>
                         </form>
                     </div>

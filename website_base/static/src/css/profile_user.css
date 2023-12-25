@@ -36,3 +36,88 @@
 textarea.form-control {
     min-height: calc(10.5em + 0.75rem + 2px) !important;
 }
+
+.loading {
+    position: relative;
+    width: 100%;
+    height: 50vh;
+    z-index: 99999;
+    /* background: url(/website_booking_system/static/src/img/bk_loader.gif) center no-repeat rgba(255, 255, 255, 0.5); */
+}
+
+.ring {
+    margin-top: 1.3rem;
+    border: 10px solid rgb(211, 211, 211);
+    position: absolute;
+    left: 45%;
+    top: 25%;
+    border-radius: 50%;
+    border-top: 10px solid #00659C;
+    width: 110px;
+    height: 110px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.spinner {
+    width: 56px;
+    height: 56px;
+    display: grid;
+    animation: spinner-plncf9 4s infinite;
+}
+
+.spinner::before,
+.spinner::after {
+    content: "";
+    grid-area: 1/1;
+    border: 9px solid;
+    border-radius: 50%;
+    border-color: #474bff #474bff #0000 #0000;
+    mix-blend-mode: darken;
+    animation: spinner-plncf9 1s infinite linear;
+}
+
+.spinner::after {
+    border-color: #0000 #0000 #dbdcef #dbdcef;
+    animation-direction: reverse;
+}
+
+@keyframes spinner-plncf9 {
+    100% {
+        transform: rotate(1turn);
+    }
+}
+
+.loader {
+    -webkit-animation: spin 1s linear infinite;
+    animation: spin 1s linear infinite;
+    border: 3px solid #ddd;
+    border-top: 3px solid #42a5f5;
+    border-radius: 50%;
+    height: 75px;
+    width: 75px;
+}
+
+@-webkit-keyframes spin {
+    to {
+        border-top-color: #ec407a;
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    to {
+        border-top-color: #ec407a;
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
