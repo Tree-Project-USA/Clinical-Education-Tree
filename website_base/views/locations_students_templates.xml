@@ -43,7 +43,7 @@
                             <input type="hidden" name="csrf_token"
                                 t-att-value="request.csrf_token()" />
                             <input type="hidden" name="list_zip_code" id="list_zip_code"/>  
-
+                            
                             <div class="row mt-4">
                                 <div>
                                     <table class="table table-borderless mt-3 total_project_costs">
@@ -72,57 +72,10 @@
                                             </tr>
                                         </thead>
                                         <div class="collapse">
-                                            <tbody>
-                                                <t t-if="geographical_ids">
-                                                    <t t-set="variable"
-                                                        t-value="geographical_ids" />
-                                                </t>
-                                                <t t-else="">
-                                                    <t t-set="variable" t-value="rw" />
-                                                </t>
-                                                <tr t-foreach="variable" t-as="val"
-                                                    class="project_cost_line">
-                                                    <t t-set="geographical"
-                                                        t-value="request.env['geographical'].sudo().search([('id', '=', val)])"
-                                                    />
-                                                    <td>
-                                                        <div class="form-group">
-                                                            <span t-esc="val_index + 1" />
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="form-group">
-                                                            <div class="input-group mb-2">
-                                                                <input type="text" id="zip"
-                                                                    name="zip" required="required"
-                                                                    maxlength="5"
-                                                                    class="form-control"
-                                                                    t-att-value="geographical.zip_code if geographical_ids else ''" 
-                                                                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="form-group">
-                                                            <input type="text" id="state"
-                                                                name="state"
-                                                                required="required"
-                                                                class="form-control"
-                                                                style="pointer-events: none;"
-                                                                t-att-value="geographical.state if geographical_ids else '' " />
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="form-group">
-                                                            <input type="text" id="city" name="city"
-                                                                required="required"
-                                                                style="pointer-events: none;"
-                                                                class="form-control"
-                                                                t-att-value="geographical.city if geographical_ids else '' " />
-                                                        </div>
-                                                    </td>
-                                                </tr>
+                                            <tbody id="locations_zip_code">
+                                                <input type="hidden" t-att-value="rw" name="variable" id="variable" />  
+                                                <input type="hidden" t-att-value="locations_zips" name="locations_zip" id="locations_zip" />  
+                                                
                                             </tbody>
                                         </div>
                                     </table>
