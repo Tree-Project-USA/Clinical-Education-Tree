@@ -12,17 +12,20 @@ class Location(http.Controller):
         res_partner_id = request.env.user.partner_id
         if request.httprequest.method == "GET":
             values = {}
+            max_hardship_zipcodes = int(request.env['ir.config_parameter'].sudo(
+                    ).get_param('max_hardship_zipcodes'))
+            normal_number_zipcodes = int(request.env['ir.config_parameter'].sudo(
+                    ).get_param('normal_number_zipcodes'))
             hardship_id = request.env["hardship.request"].sudo().search([
                 ('student_id', '=', res_partner_id.id),
-                ('state', '=', 'update')
             ])
+
             values["partner"] = res_partner_id
             values["hardship"] = hardship_id
-            
-            if res_partner_id.can_apply_hardship:
-                can_apply_hardship = 3
+            if hardship_id.state == 'confirm':
+                can_apply_hardship = max_hardship_zipcodes or 3
             else:
-                can_apply_hardship = 5
+                can_apply_hardship = normal_number_zipcodes or 5
             values.update({
                 'rw': can_apply_hardship
             })
@@ -39,10 +42,10 @@ class Location(http.Controller):
                 res_partner_id.sudo().write(values)
                 return request.redirect("/my/home")
             except ValidationError as msg:
-                if res_partner_id.can_apply_hardship:
-                    can_apply_hardship = 3
+                if hardship_id.state == 'confirm':
+                    can_apply_hardship = max_hardship_zipcodes or 3
                 else:
-                    can_apply_hardship = 5
+                    can_apply_hardship = normal_number_zipcodes or 5
                 values.update({
                     'rw': can_apply_hardship
                 })

@@ -10,7 +10,7 @@
                         <div class="col-12 text-center pt-5" style="color: indianred;">
                             <h3>We've Faced an Issue, Please Check Entries and Try Again</h3>
                             <div class="col-12 text-center pt-5">
-                                <a href="/membership/profile" class="error-return-btn" style="color: white;padding: 2%;border-radius: 25px;background: #1F8E93;">
+                                <a href="/muy/home" class="error-return-btn" style="color: white;padding: 2%;border-radius: 25px;background: #1F8E93;">
                                     <span class="fa fa-arrow-left"></span>
                                     <strong style="white">Previous</strong>
                                 </a>

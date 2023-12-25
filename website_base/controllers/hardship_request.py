@@ -9,6 +9,12 @@ class CustomerPortals(http.Controller):
 
     @http.route("/hardship/request", type="http", website=True, auth="user")
     def hardship_request(self):
+        partner_id = request.env.user.partner_id
+        hardship_id = request.env["hardship.request"].sudo().search([
+            ('student_id', '=', partner_id.id),
+            ])
+        if hardship_id:
+            return request.redirect("/my/home")
         return request.render("website_base.hardship_request_template")
     
     @http.route("/update/hardship/request", type="http", website=True, auth="user", Methods=["POST"])
@@ -25,19 +31,22 @@ class CustomerPortals(http.Controller):
                 for zip in range(0, int(post.get("len_zip_code"))):
                     zip_code = request.env["geographical"].sudo().search([("zip_code", "=", post.get("zip_code_" + str(zip)))])
                     zip_code_list.append(zip_code.id)
+                
                 for files in range(0, int(post.get("len_file"))):
                     line_file= (0,0,{
                         'name': post.get("datas_" + str(files)).filename,
                         'datas': base64.b64encode(post.get("datas_" + str(files), False).read()),
+                        'res_model': 'hardship.request',
+                        'res_id': hardship_id.id,
                     })
-                file_list.append(line_file)
-                hardship_id.attachment_ids.unlink()
+                    file_list.append(line_file)
                 hardship_id.sudo().write({
-                    "note":  post.get("note") if post.get("note") else False,
+                    "note":  post.get("note") if post.get("note") else False,                    
+                    "state": "under_review",
                     "attachment_ids": file_list,
-                    "state": "draft",
                     "geographical_ids": [(6, 0, zip_code_list)],
                 })
+                    
                 return request.redirect("/success/hardship/request")
             except Exception as e:
                 return request.render("website_base.error_request", {'exception': e})
@@ -49,6 +58,12 @@ class CustomerPortals(http.Controller):
     @http.route("/create/hardship/request", type="http", website=True, auth="user", Methods=["POST"])
     def create_hardship_request(self, **kw):
         partner_id = request.env.user.partner_id
+        hardship_id = request.env["hardship.request"].sudo().search([
+            ('student_id', '=', partner_id.id),
+            ])
+        if hardship_id:
+            return request.redirect("/my/home")
+        
         if kw and request.httprequest.method == "POST":
             try:
                 zip_code_list = []
@@ -56,21 +71,26 @@ class CustomerPortals(http.Controller):
                 for zip in range(0, int(kw.get("len_zip_code"))):
                     zip_code = request.env["geographical"].sudo().search([("zip_code", "=", kw.get("zip_code_" + str(zip)))])
                     zip_code_list.append(zip_code.id)
-                for files in range(0, int(kw.get("len_file"))):
-                    line_file= (0,0,{
-                        'name': kw.get("datas_" + str(files)).filename,
-                        'datas': base64.b64encode(kw.get("datas_" + str(files), False).read()),
-                    })
-                    file_list.append(line_file)
                 HardshipRequest = request.env["hardship.request"].sudo().create(
                     {
                         "student_id": partner_id.id,
                         "note":  kw.get("note") if kw.get("note") else False,
-                        "attachment_ids": file_list,
                         "state": "draft",
                         "geographical_ids": [(6, 0, zip_code_list)],
                     }
                 )
+                for files in range(0, int(kw.get("len_file"))):
+                    line_file= (0,0,{
+                        'name': kw.get("datas_" + str(files)).filename,
+                        'datas': base64.b64encode(kw.get("datas_" + str(files), False).read()),
+                        'res_model': 'hardship.request',
+                        'res_id': HardshipRequest.id,
+                    })
+                    file_list.append(line_file)
+                    
+                HardshipRequest.sudo().write({
+                    "attachment_ids": file_list,
+                })
                 partner_id.sudo().write({
                     "can_apply_hardship": True,
                 })

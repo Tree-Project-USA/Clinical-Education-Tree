@@ -41,11 +41,6 @@ class ResPartner(models.Model):
     
     @api.depends('archive_ids')
     def _compute_is_take_ip(self):
-        print('----------------------------------------------------------------')
-        print('----------------------------------------------------------------')
-        print('----------------------------------------------------------------')
-        print('----------------------------------------------------------------')
-        print('----------------------------------------------------------------')
         for rec in self:
             rec.is_take_ip = True if rec.archive_ids.filtered(lambda x: x.setting == 'ip' and x.placement_status in ['approved', 'completed']) else False
     

@@ -71,6 +71,7 @@ class HardshipRequest(models.Model):
         })
         self.student_id.write({
             'deny_show_student': False,
+            'can_apply_hardship': False
         })
         mail = (
                     self.env["mail.mail"]
