@@ -110,7 +110,7 @@ class HardshipRequest(models.Model):
         self.message_post(body=message,
                 message_type='comment',
                 subtype_xmlid='mail.mt_note',
-                parent_id=self.student_id.id,
+                partner_ids=self.student_id.ids,
                 author_id=self.env.user.partner_id.id)
         message = """We kindly request you to update your information as follows <br/> <div style='color: #F8AC3D;'>%s</div>""" % self.update_message
         self.write({
