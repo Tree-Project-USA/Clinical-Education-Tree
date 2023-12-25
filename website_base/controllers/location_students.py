@@ -10,16 +10,16 @@ class Location(http.Controller):
     @http.route("/add/location", type="http", website=True, auth="user", Methods=["POST"])
     def add_location(self, **kw):
         res_partner_id = request.env.user.partner_id
+        values = {}
+        max_hardship_zipcodes = int(request.env['ir.config_parameter'].sudo(
+                ).get_param('max_hardship_zipcodes'))
+        normal_number_zipcodes = int(request.env['ir.config_parameter'].sudo(
+                ).get_param('normal_number_zipcodes'))
+        hardship_id = request.env["hardship.request"].sudo().search([
+            ('student_id', '=', res_partner_id.id),
+        ])
         if request.httprequest.method == "GET":
-            values = {}
-            max_hardship_zipcodes = int(request.env['ir.config_parameter'].sudo(
-                    ).get_param('max_hardship_zipcodes'))
-            normal_number_zipcodes = int(request.env['ir.config_parameter'].sudo(
-                    ).get_param('normal_number_zipcodes'))
-            hardship_id = request.env["hardship.request"].sudo().search([
-                ('student_id', '=', res_partner_id.id),
-            ])
-
+    
             values["partner"] = res_partner_id
             values["hardship"] = hardship_id
             if hardship_id.state == 'confirm':

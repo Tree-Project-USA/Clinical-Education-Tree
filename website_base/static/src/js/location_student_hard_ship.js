@@ -26,11 +26,14 @@ odoo.define("website_base.location_student_hard_ship", function(require) {
         * @private
         */
         _onClickAddzip: function(ev) {
+            var count = counter_zip +1
             const zip_id = "#" + $(".file-list:last").attr("id");
             const zip_new_tag =
                 `<tr class="file-list" id="zip_` + counter_zip + `">
                 <td>
-                    
+                    <div class="form-group">
+                        <span>` + count  + ` </span>
+                    </div>
                 </td>
                 <td class="row-index">
                     <div class="row">
