@@ -4,12 +4,13 @@
         <field name="name">placement.request.tree</field>
         <field name="model">placement.request</field>
         <field name="arch" type="xml">
-            <tree string="Placement Requests" decoration-info="placement_type == 'ice'">
+            <tree string="Placement Requests" decoration-info="placement_type == 'ice'" decoration-primary="placement_type == 'tce'">
                 <field name="name"/>
                 <field name="placement_type"/>
                 <field name="placement_term"/>
-                <field name="student_ids" widget="many2many_tags"/>
-                <field name="facility_ids" widget="many2many_tags"/>
+                <field name="year"/>
+                <field name="student_ids" widget="many2many_tags" optional="hide"/>
+                <field name="facility_ids" widget="many2many_tags" optional="hide"/>
                 <field name="create_date"/>
                 <field name="create_uid"/>
             </tree>

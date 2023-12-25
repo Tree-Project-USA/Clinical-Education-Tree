@@ -25,7 +25,7 @@ class Archive(models.Model):
         ('ice', 'ICE'),
         ('tce1', 'TCE1'),
         ('tce2', 'TCE2'),
-    ], string='Type',)
+    ], string='Type', store=True)
     setting = fields.Selection([
         ('op', 'OP'),
         ('ip', 'IP'),
@@ -34,15 +34,15 @@ class Archive(models.Model):
         ('fall', 'Fall'),
         ('spring', 'Spring'),
         ('summer', 'Summer'),
-    ], string='Term',)
-    year = fields.Selection(selection=SELECTION_YEAR_RANGE, string='Year',)
+    ], string='Term', store=True)
+    year = fields.Selection(selection=SELECTION_YEAR_RANGE, string='Year', store=True)
     placement_status = fields.Selection([
         ('went_out', 'Went Out'),
         ('approved', 'Approved'),
         ('completed', 'Completed'),
         ('pending', 'Pending'),
         ('not_placed', 'Not Placed')
-    ], default='pending', string='placement status')
+    ], default='pending', string='placement status', store=True)
     
     hardship_status = fields.Selection([
         ('approved', 'Approved'),

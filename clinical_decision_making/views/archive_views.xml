@@ -8,7 +8,7 @@
         <field name="mode">primary</field>
         <field name="priority">0</field>
         <field name="arch" type="xml">
-            <tree string="Students Placement Archive" edit="false" create="false" delete="false">
+            <tree string="Students Placement Archive" delete="false">
                 <field name="student_id"/>
                 <field name="facility_id"/>
                 <field name="placement_type"/>
@@ -18,8 +18,39 @@
                 <field name="zip_code"/>
                 <field name="city"/>
                 <field name="state"/>
-
             </tree>
+        </field>
+    </record>
+
+    <record id="archive_view_form" model="ir.ui.view">
+        <field name="name">archive.view.form</field>
+        <field name="model">archive</field>
+        <field name="mode">primary</field>
+        <field name="priority">0</field>
+        <field name="arch" type="xml">
+            <form string="Students Placement Archive" delete="false">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="student_id"/>
+                            <field name="facility_id"/>
+                        </group>
+                        <group>
+                            <field name="placement_type"/>
+                            <field name="placement_term"/>
+                        </group>
+                        <group>
+                            <field name="year"/>
+                            <field name="geographical_id"/>
+                        </group>
+                        <group>
+                            <field name="zip_code"/>
+                            <field name="city"/>
+                            <field name="state"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
         </field>
     </record>
 
@@ -41,33 +72,5 @@
         </field>
     </record>
 
-    <record id="archive_view_form" model="ir.ui.view">
-        <field name="name">archive.view.form</field>
-        <field name="model">archive</field>
-        <field name="mode">primary</field>
-        <field name="priority">0</field>
-        <field name="arch" type="xml">
-            <form string="Student Placement Archive" edit="false" create="false" delete="false">
-                <sheet>
-                    <div class="oe_button_box" name="button_box"/>
-                    <!-- <widget name="web_ribbon" title="Archived" bg_color="bg-danger"/> -->
-                    <group>
-                        <group>
-                            <field name="student_id"/>
-                            <field name="facility_id"/>
-                            <field name="offer_id"/>
-                            <field name="geographical_id"/>
-                        </group>
-                        <group>
-                            <field name="geographical_id"/>
-                            <field name="city"/>
-                            <field name="state"/>
-                            <field name="zip_code"/>
-                        </group>
-                    </group>
-                </sheet>
-            </form>
-        </field>
-    </record>
 
 </odoo>
