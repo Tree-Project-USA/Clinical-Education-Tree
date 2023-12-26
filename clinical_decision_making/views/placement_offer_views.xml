@@ -61,7 +61,9 @@
                                     <field name="year" force_save="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
                                 </group>
                                 <group>
-
+                                    <field name="zip_code"/>
+                                    <field name="geographical_state"/>
+                                    <field name="city"/>
                                 </group>
                             </group>
                             <notebook>

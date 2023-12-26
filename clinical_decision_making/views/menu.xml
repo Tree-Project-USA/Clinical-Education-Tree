@@ -108,11 +108,11 @@
         <field name="view_mode">tree</field>
     </record>
 
-    <menuitem
+    <!-- <menuitem
         id="cpdm_tree_menu"
         name="Decisions Making Tree"
         parent="menu_root_cpdm"
-        sequence="1"/>
+        sequence="1"/> -->
 
     <record id="action_placement_request" model="ir.actions.act_window">
         <field name="name">Placement Requests</field>
@@ -141,7 +141,8 @@
     <menuitem 
         id="menu_placement_request" 
         name="Placement Requests" 
-        parent="cpdm_tree_menu" 
+        parent="menu_root_cpdm"
+        sequence="0"
         action="action_placement_request"/>
 
     <menuitem

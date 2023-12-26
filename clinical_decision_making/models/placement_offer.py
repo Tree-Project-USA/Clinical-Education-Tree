@@ -16,6 +16,10 @@ class PlacementOffer(models.Model):
     priority = fields.Selection(
         [('0', 'Normal'), ('1', 'Urgent')], 'Priority', default='0', index=True)
     facility_id = fields.Many2one(comodel_name='medical.facility', string='Medical Facility', required=True)
+    geographical_id = fields.Many2one(comodel_name='geographical', related='facility_id.geographical_id')
+    city = fields.Char(related='geographical_id.city')
+    geographical_state = fields.Char(related='geographical_id.state')
+    zip_code = fields.Char(related='geographical_id.zip_code')
     line_ids = fields.One2many(comodel_name='placement.offer.line', inverse_name='offer_id', string='Placement Lines')
     student_ids = fields.Many2many(comodel_name='res.partner', string='Students',domain=[('is_student', '=', True)], compute='_compute_offer_student_ids')
     state = fields.Selection([
