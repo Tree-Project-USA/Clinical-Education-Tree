@@ -31,9 +31,16 @@ class Location(http.Controller):
             })
             return request.render("website_base.locations_students_template", values)
         elif request.httprequest.method == "POST":
-            zip_code_list = [int(i) for i in kw.get('list_zip_code').split(",") if i != ','] if kw.get('list_zip_code', False) else []
+            zip_code_list = []
+            list_locations = []
+            for x in range(int(kw.get('variable'))):
+                val_id =  "id_%s" % (x)
+                val_zip= "zip_%s" % (x)
+
+                list_locations.append(int(kw.get(val_id)))
+                zip_code_list.append(int(kw.get(val_zip)))
             values = {
-                "geographical_ids": zip_code_list,
+                "geographical_ids": list_locations,
                 "is_reach_maximum_zip_code": True,
             }
             try:
@@ -47,7 +54,8 @@ class Location(http.Controller):
                 else:
                     can_apply_hardship = normal_number_zipcodes or 5
                 values.update({
-                    'rw': can_apply_hardship
+                    'rw': can_apply_hardship,
+                    "locations_zips":  zip_code_list,
                 })
                 error = str(msg.args[0])
                 if error:
@@ -55,7 +63,7 @@ class Location(http.Controller):
                     return request.render("website_base.locations_students_template", values)
     
     @http.route(
-        ["/show/locations"], type="json", auth="user", website=True, csrf=False
+        ["/show/locations"], type="json", auth="user", methods=['POST'], website=True, csrf=False
     )
     def show_locations(self, zip_code=None, **post):
         values = {}
@@ -63,7 +71,7 @@ class Location(http.Controller):
         res_provider_treatment = (
             request.env["geographical"]
             .sudo()
-            .search([("zip_code", "=", zip_code)])
+           .search([("zip_code", "=", post.get('zip_code'))])
         )
         values["city"] = res_provider_treatment.city if res_provider_treatment.city else '' 
         values["state"] = res_provider_treatment.state if res_provider_treatment.state else ''
