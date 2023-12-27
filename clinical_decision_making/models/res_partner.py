@@ -2,6 +2,7 @@
 import requests
 import json
 from odoo.tools import email_normalize
+import re
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
 
@@ -12,17 +13,22 @@ class ResPartner(models.Model):
     _inherit = 'res.partner'
     
     is_student = fields.Boolean(string='Is Student', default=False)
-    first_name = fields.Char(string='First Name', )
-    last_name = fields.Char(string='Last Name', )
-    cohort_label = fields.Char(string='Cohort Label')# TODO: Remoove this line
+    name = fields.Char(string='Student Name', compute='_compute_name', store=True, default='new')
+    first_name = fields.Char(string='Student First Name', required=True)
+    last_name = fields.Char(string='Student Last Name', )
+    cohort_label = fields.Char(string='Cohort Label', compute='_compute_term_fields', store=True)# TODO: Remoove this line
     hardship_ids = fields.One2many('hardship.request', 'student_id', string='Hardship')
     home_address = fields.Char(string='Home Address')
+    personal_phone = fields.Char(string='Personal Phone')
+    usahs_email_address = fields.Char(string='USAHS Email Address')
+    campus = fields.Char(string='Campus', default='Austin, TX')
     archive_ids = fields.One2many(comodel_name='archive', inverse_name='student_id', string='Archive')
     can_apply_hardship = fields.Boolean(string='Apply Hardship', default=False)
     is_reach_maximum_zip_code = fields.Boolean(string='Reach Maximum Zip Code', default=False)
     deny_show_student = fields.Boolean()
     geographical_ids = fields.Many2many(comodel_name='geographical', string='Geographical')
-    program_id = fields.Many2one(comodel_name='program', string='Program', )
+    program_id = fields.Many2one(comodel_name='program', string='Program Duration', )
+    program_type = fields.Char(string='Program Type', default='DPT')
     start_term_type = fields.Selection([
         ('fall', 'Fall'),
         ('spring', 'Spring'),
@@ -113,7 +119,8 @@ class ResPartner(models.Model):
                     
                     tce2_term_t, tce2_term_y = self.get_specific_term_year(rec.start_term_type, rec.start_year, rec.program_id.num_terms, rec.program_id.tce2_term)
                     rec.tce2_term = self.convert_term_year(tce2_term_t, tce2_term_y)
-                    
+
+                    rec.cohort_label = f"{tce2_term_y}-04-{rec.campus}-{rec.program_type}"
                 else:
                     rec.start_term = ''
                     rec.graduation_term = ''
@@ -138,10 +145,10 @@ class ResPartner(models.Model):
     #         self.check_zip_code_distance(self.geographical_ids)
     #         self.check_validation_zip_code_state(self.geographical_ids)
 
-    @api.onchange('first_name', 'last_name')
+    @api.depends('first_name', 'last_name')
     def _compute_name(self):
-        for rec in self:
-            rec.name = rec.first_name if rec.first_name else '' + ', ' + rec.last_name if rec.last_name else ''
+        for record in self:
+            record.name = f"{record.first_name if record.first_name else ''} {record.last_name if record.last_name else ''}"
     
     def check_zip_code_distance(self, geographical_ids):
         max_distance_mel = self.env['ir.config_parameter'].sudo(
@@ -165,6 +172,12 @@ class ResPartner(models.Model):
 
             if len(all_states) < 3:
                     raise ValidationError('You Should add at least 3 different state.')
+    
+    @api.constrains('usahs_email_address')
+    def validate_mail(self):
+        if self.usahs_email_address:
+            if not re.match('^[_A-Za-z0-9-]+(\.[_A-Za-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', self.usahs_email_address):
+                raise ValidationError(_('The personal email address must be valid ( example@example.com )'))
     
     @api.constrains('geographical_ids')
     def _check_geographical_ids(self):

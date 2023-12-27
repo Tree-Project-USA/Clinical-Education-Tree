@@ -158,7 +158,7 @@
         sequence="1"/>
     <menuitem
         id="hardship_request_menu"
-        name="Hardship"
+        name="Hardships"
         action="hardship_request_action"
         parent="student_details_menu"
         sequence="2"/>

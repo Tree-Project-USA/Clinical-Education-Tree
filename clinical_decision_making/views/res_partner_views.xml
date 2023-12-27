@@ -54,26 +54,22 @@
                 <sheet>
                     <div class="oe_button_box" name="button_box"/>
                     <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
-                    <div class="oe_title mb24">
-                        <h1>
-                            <field name="name" required="1"/>
-                        </h1>
-                    </div>
-
                     <group>
                         <group>
                             <span class="o_form_label o_td_label" name="address_name">
-                                <b >Name</b>
+                                <b >Student Name</b>
                             </span>
                             <div class="o_address_format">
-                                <field name="first_name" placeholder="First Name" class="o_address_city"/>
-                                <field name="last_name" class="o_address_state" placeholder="Last Name"/>
+                                <field name="first_name" placeholder="Student First Name" required="1" class="o_address_city"/>
+                                <field name="last_name" class="o_address_state" placeholder="Student Last Name"/>
                             </div>
                             <field name="is_with_hardship"/>
                             <field name="is_complete_ice"/>
                             <field name="is_complete_tce1"/>
                             <field name="is_complete_tce2"/>
+                            <field name="campus" readonly="1"/>
                             <field name="program_id"/>
+                            <field name="program_type" readonly="1"/>
                             <field name="start_year"/>
                             <field name="start_term_type"/>
                             <field name="cohort_label"/>
@@ -82,8 +78,10 @@
                         </group>
                         <group>
                             <field name="home_address"/>
-                            <field name="phone"/>
-                            <field name="email"/>
+                            <field name="phone" string="Home Phone"/>
+                            <field name="personal_phone"/>
+                            <field name="email" string="Personal Email Address"/>
+                            <field name="usahs_email_address"/>
                             <field name="ice_term"/>
                             <field name="tce1_term"/>
                             <field name="tce2_term"/>
@@ -117,6 +115,8 @@
                                     <button name="unlink_offer" type="object" string="Cancel Placement" class="btn btn-outline-danger" attrs="{'invisible': [('placement_status', 'not in', ['approved', 'pending'])]}"/>
                                 </tree>
                             </field>
+                        </page>
+                        <page name='preferred_settings' string="Preferred Settings">
                         </page>
                         <page name='internal_notes' string="Internal Notes">
                             <field name="comment" placeholder="Internal notes..."/>
