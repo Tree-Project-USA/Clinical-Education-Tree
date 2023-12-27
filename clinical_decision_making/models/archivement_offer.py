@@ -13,9 +13,10 @@ class ArchiveOffer(models.Model):
     facility_id = fields.Many2one(comodel_name='medical.facility', string='Facility')
     offer_id = fields.Many2one(comodel_name='placement.offer', string='Offer')
     offer_line_id = fields.Many2one(comodel_name='placement.offer.line', string='Line')
-    setting = fields.Selection(related='offer_line_id.setting')
-    placement_type = fields.Selection(related='offer_id.placement_type')
-    placement_term = fields.Selection(related='offer_id.placement_term')
+    setting = fields.Selection(related='offer_line_id.setting', store=True)
+    placement_type = fields.Selection(related='offer_id.placement_type', store=True)
+    placement_term = fields.Selection(related='offer_id.placement_term', store=True)
+    year = fields.Selection(related='offer_id.year', store=True)
     
 
     

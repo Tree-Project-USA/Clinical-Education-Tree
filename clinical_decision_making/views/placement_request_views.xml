@@ -52,13 +52,8 @@
                             <field name="placement_type"/>
                             <field name="placement_term"/>
                             <field name="year"/>
-                            <field name="filter_by_hardship"/>
                         </group>
                         <group>
-                            <field name="code" string="Category"/>
-                            <field name="program_id"/>
-                            <field name="student_id"/>
-                            <field name="facility_id"/>
                         </group>
                     </group>
                     <notebook>
@@ -74,42 +69,10 @@
                                     <button name="action_approve" type="object" string="Approve" class="btn btn-outline-success" attrs="{'invisible': [('match_state', '!=', False)]}"/>
                                     <button name="action_decline" type="object" string="Decline" class="btn btn-outline-danger" attrs="{'invisible': [('match_state', '!=', False)]}"/>
                                     <field name="match_state" widget="badge" decoration-danger="match_state == 'decline'" decoration-success="match_state  == 'approve'"/>
+                                    <button name="action_view_student" type="object" string="View Student" class="btn btn-outline-secondary" icon="fa-address-card"/>
                                 </tree>
                             </field>
                         </page>
-                        <!-- <page string="Matching">
-                            <field name="tree_ids" nolabel="1">
-                                <tree editable="bottom" js_class="o_fields_col" decoration-primary="tree_state=='approved_pp'" decoration-success="tree_state == 'approved_p'" decoration-warning="tree_state=='not_confirm_state'" decoration-muted="tree_state=='not_accepet_dis'">
-                                    <header>
-                                    </header>
-                                    <field name="request_id" invisible="1"/>
-                                    <field name="parent_state" invisible="1"/>
-                                    <field name="tree_state" invisible="1"/>
-                                    <field name="student_id" class="o_fields_col" readonly="1"/>
-                                    <field name="last_name" class="o_fields_col" readonly="1"/>
-
-                                    <field name="hardship_status" class="o_fields_col" widget="badge" decoration-warning="hardship_status=='not_approved'" decoration-success="hardship_status == 'approved'"/>
-
-                                    <field name="aval_scce_ids" invisible="1"/>
-                                    <field name="aval_facility_id" invisible="1"/>
-                                    <field name="facility_id" domain="[('id', 'in', aval_facility_id)]" options="{'no_quick_create': 1, 'no_create': 1, 'no_edit': 1, 'no_open': 1}" attrs="{'readonly': [('parent_state', '=', 'done')]}"/>
-                                    <field name="address" optional="hide"/>
-                                    <field name="email" optional="hide"/>
-                                    <field name="geographical_id" optional="hide"/>
-                                    <field name="state" optional="hide"/>
-                                    <field name="city" optional="hide"/>
-                                    <field name="scce_id" domain="[('id', 'in', aval_scce_ids)]" options="{'no_quick_create': 1, 'no_create': 1, 'no_edit': 1, 'no_open': 1}" attrs="{'readonly': [('parent_state', '=', 'done')]}"/>
-                                    <field name="scce_first_name" optional="hide"/>
-                                    <field name="scce_last_name" optional="hide"/>
-                                    <field name="scce_email" optional="hide"/>
-                                    <field name="placement_status" widget="state_selection" attrs="{'readonly': [('parent_state', '=', 'done')]}"/>
-
-                                </tree>
-                            </field>
-                        </page>
-                        <page string="Line">
-                            <field name="facility_ids" force_save="1" readonly="1"/>
-                        </page> -->
                     </notebook>
                 </sheet>
             </form>

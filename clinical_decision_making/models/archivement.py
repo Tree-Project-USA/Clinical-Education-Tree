@@ -37,12 +37,13 @@ class Archive(models.Model):
     ], string='Term', store=True)
     year = fields.Selection(selection=SELECTION_YEAR_RANGE, string='Year', store=True)
     placement_status = fields.Selection([
-        ('went_out', 'Went Out'),
+        ('not_placed', 'Not Placed'),
+        ('matched', 'Matched'),
         ('approved', 'Approved'),
-        ('completed', 'Completed'),
         ('pending', 'Pending'),
-        ('not_placed', 'Not Placed')
-    ], default='pending', string='placement status', store=True)
+        ('confirmed', 'Confirmed'),
+        ('completed', 'Completed'),
+    ], default='matched', string='placement status', store=True)
     
     hardship_status = fields.Selection([
         ('approved', 'Approved'),
@@ -70,26 +71,26 @@ class Archive(models.Model):
     def _check_placement_type(self):
         for rec in self:
             print('_check_placement_type', rec)
-            if self.env['archive'].search([('student_id', '=', rec.student_id.id), ('facility_id', '=', rec.facility_id.id), ('placement_status', 'in', ['approved', 'completed', 'pending']), ('id', '!=', rec.id)]) and not rec.student_id.is_with_hardship:
-                raise ValidationError("Student %s is already placed to %s facility" % (rec.student_id.name, rec.facility_id.name))    
+            # if self.env['archive'].search([('student_id', '=', rec.student_id.id), ('facility_id', '=', rec.facility_id.id), ('placement_status', 'in', ['approved', 'completed', 'pending']), ('id', '!=', rec.id)]) and not rec.student_id.is_with_hardship:
+            #     raise ValidationError("Student %s is already placed to %s facility" % (rec.student_id.name, rec.facility_id.name))    
             
-            if self.env['archive'].search([('student_id', '=', rec.student_id.id), ('placement_type', '=', rec.placement_type), ('placement_status', 'in', ['approved', 'completed']), ('id', '!=', rec.id)]):
-                raise ValidationError("Student %s is already taken in %s term before" % (rec.student_id.name, rec.placement_type))
+            # if self.env['archive'].search([('student_id', '=', rec.student_id.id), ('placement_type', '=', rec.placement_type), ('placement_status', 'in', ['approved', 'completed']), ('id', '!=', rec.id)]):
+            #     raise ValidationError("Student %s is already taken in %s term before" % (rec.student_id.name, rec.placement_type))
             
-            if rec.placement_type == 'ice':
-                archive_id = self.env['archive'].search([('student_id', '=', rec.student_id.id), ('placement_type', '=', 'ice'), ('placement_status', 'in', ['approved', 'completed']), ('id', '!=', rec.id)])
-                if archive_id:
-                    raise ValidationError("Term ICE Pass")
+            # if rec.placement_type == 'ice':
+            #     archive_id = self.env['archive'].search([('student_id', '=', rec.student_id.id), ('placement_type', '=', 'ice'), ('placement_status', 'in', ['approved', 'completed']), ('id', '!=', rec.id)])
+            #     if archive_id:
+            #         raise ValidationError("Term ICE Pass")
             
-            if rec.placement_type == 'tce1':
-                archive_id = self.env['archive'].search([('student_id', '=', rec.student_id.id), ('placement_type', '=', 'ice'), ('placement_status', 'in', ['approved', 'completed']), ('id', '!=', rec.id)])
-                if not archive_id:
-                    raise ValidationError("Student %s is Shuld Take ICE term before TCE1" % (rec.student_id.name))
+            # if rec.placement_type == 'tce1':
+            #     archive_id = self.env['archive'].search([('student_id', '=', rec.student_id.id), ('placement_type', '=', 'ice'), ('placement_status', 'in', ['approved', 'completed']), ('id', '!=', rec.id)])
+            #     if not archive_id:
+            #         raise ValidationError("Student %s is Shuld Take ICE term before TCE1" % (rec.student_id.name))
             
-            if rec.placement_type == 'tce2':
-                archive_id = self.env['archive'].search([('student_id', '=', rec.student_id.id), ('placement_type', '=', 'tce1'), ('placement_status', 'in', ['approved', 'completed']), ('id', '!=', rec.id)])
-                if not archive_id:
-                    raise ValidationError("Student %s is Shuld Take TCE1 term before TCE2" % (rec.student_id.name))
+            # if rec.placement_type == 'tce2':
+            #     archive_id = self.env['archive'].search([('student_id', '=', rec.student_id.id), ('placement_type', '=', 'tce1'), ('placement_status', 'in', ['approved', 'completed']), ('id', '!=', rec.id)])
+            #     if not archive_id:
+            #         raise ValidationError("Student %s is Shuld Take TCE1 term before TCE2" % (rec.student_id.name))
             
     def action_approve(self):
         self.write({
@@ -118,4 +119,13 @@ class Archive(models.Model):
             self.archive_offer_id.student_id = False
         self.placement_status = 'not_placed'
             
-    
+    def action_view_student(self):
+        action = self.env.ref('clinical_decision_making.student_action').read()[0]
+        action['domain'] = [('id', 'in', self.student_id.ids)]
+        action.update({
+            'view_mode': 'form',
+            'res_id': self.student_id.id,
+            'view_id': self.env.ref('clinical_decision_making.student_view_form').id,
+            'views': [(self.env.ref('clinical_decision_making.student_view_form').id, 'form')],
+        })
+        return action

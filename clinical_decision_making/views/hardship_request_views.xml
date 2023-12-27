@@ -55,6 +55,9 @@
                     <page string="Geographical" name="geographical_ids">
                         <field name="geographical_ids" attrs="{'readonly': [('state', 'in', ('cancel', 'confirm'))]}"/>
                     </page>
+                    <page string="Attachment" name="attachment_ids">
+                        <field name="attachment_ids" widget="many2many_binary" string="Attach a file" nolabel="1" colspan="2" attrs="{'readonly': [('state', 'in', ('cancel', 'confirm'))]}"/>
+                    </page>
                     <page string="Notes" name="notes">
                         <field name="note" attrs="{'readonly': [('state', 'in', ('cancel', 'confirm'))]}"/>
                     </page>

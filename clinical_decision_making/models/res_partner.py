@@ -44,8 +44,10 @@ class ResPartner(models.Model):
     is_take_ip = fields.Boolean(compute='_compute_is_take_ip', string='Is Take IP')
     is_complete_ice = fields.Boolean(compute='_compute_term',string='Is Complate Ice', store=True)
     is_complete_tce1 = fields.Boolean(compute='_compute_term', string='Is Complate Tec1', store=True)
-    is_complete_tce2 = fields.Boolean(compute='_compute_term', string='Is Complate Tec2', store=True)
+    is_complete_tce2 = fields.Boolean(compute='_compute_term', string='Is Complate Tec2', store=True)   
+    aval_archive_ids = fields.Many2many(comodel_name='archive', string='Archive', compute='get_aval_archive_ids', readonly=False)
     
+<<<<<<< Updated upstream
     def _create_user(self,partner_id):
         """ create a new user for wizard_user.partner_id
             :returns record of res.users
@@ -82,10 +84,18 @@ class ResPartner(models.Model):
                 user_sudo.partner_id.signup_prepare()
        
     
+=======
+    
+    @api.depends('archive_ids')
+    def get_aval_archive_ids(self):
+        for rec in self:
+            rec.aval_archive_ids = rec.archive_ids.filtered(lambda x: x.placement_status != 'not_placed')
+            
+>>>>>>> Stashed changes
     @api.depends('archive_ids')
     def _compute_is_take_ip(self):
         for rec in self:
-            rec.is_take_ip = True if rec.archive_ids.filtered(lambda x: x.setting == 'ip' and x.placement_status in ['approved', 'completed']) else False
+            rec.is_take_ip = True if rec.archive_ids.filtered(lambda x: x.setting == 'ip' and x.placement_status != 'not_placed') else False
     
     @api.depends('archive_ids')
     def _compute_term(self):
@@ -94,8 +104,8 @@ class ResPartner(models.Model):
             rec.is_complete_tce1 = True if self.env['archive'].search([('student_id', '=', rec.id), ('placement_type', '=', 'tce1'), ('placement_status', 'in', ['completed',])]) else False
             rec.is_complete_tce2 = True if self.env['archive'].search([('student_id', '=', rec.id), ('placement_type', '=', 'tce2'), ('placement_status', 'in', ['completed',])]) else False
         
+    @api.depends('hardship_ids')
     def _compute_is_with_hardship(self):
-        print('********************************')
         for rec in self:
             print(self.env['hardship.request'].search([('student_id', '=', rec.id), ('state', '=', 'confirm')]))
             rec.is_with_hardship = True if self.env['hardship.request'].search([('student_id', '=', rec.id), ('state', '=', 'confirm')]) else False
