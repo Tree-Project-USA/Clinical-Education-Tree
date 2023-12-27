@@ -140,6 +140,7 @@ odoo.define("website_base.location_student_hard_ship", function(require) {
         _onZipChanges: function () {
             var zip_code = $(zip_cod).val();
             ajax.jsonRpc("/show/locations", 'call', { zip_code }).then(function(data) {
+                console.log(data.id)
                 $(state).val(data.state)
                 $(city).val(data.city)
             });

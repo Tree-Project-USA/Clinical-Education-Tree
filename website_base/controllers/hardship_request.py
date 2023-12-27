@@ -61,9 +61,6 @@ class CustomerPortals(http.Controller):
         hardship_id = request.env["hardship.request"].sudo().search([
             ('student_id', '=', partner_id.id),
             ])
-        if hardship_id:
-            return request.redirect("/my/home")
-        
         if kw and request.httprequest.method == "POST":
             try:
                 zip_code_list = []
