@@ -4,8 +4,12 @@
 
 <!-- ================================================================ user_information ===================================================================== -->
       <t t-call="website.layout">
-        <div class="delegate_profile">
-          <div class="alert alert-success text-center shadow-sm" t-if="hardship">
+        <div class="student_profile">
+          <t
+            t-set="hardship_request"
+            t-value="request.env['hardship.request'].sudo().search([('student_id', '=', request.env.user.partner_id.id)])"
+          />
+          <div class="alert alert-success text-center shadow-sm" t-if="hardship_request.state == 'update'">
             <div class="d-flex justify-content-center">
               <p>
                 Your hardship information need to be updated
@@ -37,146 +41,263 @@
                   </div>
                 </div>
               </div>
-              <div class="row mt-4">
-                <div class="col-lg-4 col-12">
-                    <label for="name">Name</label>
-                    <div class="form-group mt-1" style="background-color: #e0e0e0;
-                    padding: 0.5rem;
-                    color: #4b4a4a;
-                    border-bottom: 2px solid #716d6d;">
-                      <span t-field="partner.name" />
+              <form
+                action="/update/information"
+                method="post"
+                enctype="multipart/form-data"
+              >
+              <input type="hidden" name="csrf_token"
+                                t-att-value="request.csrf_token()" />
+                <div class="row mt-4">
+                  <div class="col-lg-6">
+                    <div class="form-group row">
+                      <label for="staticEmail" class="col-form-label">First Name</label>
+                      <div>
+                        <input
+                          type="text"
+                          id="first_name"
+                          class="form-control"
+                          name="first_name"
+                          t-att-value="partner.first_name"
+                          readonly="readonly"
+                        />
+                      </div>
                     </div>
-                </div>
-                <div class="col-lg-4 col-12">
-                    <label for="first_name">First name</label>
-                    <div class="form-group mt-1" style="background-color: #e0e0e0;
-                    padding: 0.5rem;
-                    color: #4b4a4a;
-                    border-bottom: 2px solid #716d6d;">
-                    <span t-field="partner.first_name" />
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="form-group row">
+                      <label for="staticEmail" class="col-form-label">Last name</label>
+                      <div>
+                        <input
+                          type="text"
+                          id="last_name"
+                          class="form-control"
+                          name="last_name"
+                          t-att-value="partner.last_name"
+                          readonly="readonly"
+                        />
+                      </div>
                     </div>
-                </div>
-                <div class="col-lg-4 col-12">
-                  <label for="last_name">Last name</label>
-                  <div class="form-group mt-1" style="background-color: #e0e0e0;
-                  padding: 0.5rem;
-                  color: #4b4a4a;
-                  border-bottom: 2px solid #716d6d;">
-                  <span t-field="partner.last_name" />
                   </div>
                 </div>
-              </div>
-              <div class="row mt-4">
-                <div class="col-lg-4 col-12">
-                  <label for="phone">Phone</label>
-                  <div class="form-group mt-1" style="background-color: #e0e0e0;
-                  padding: 0.5rem;
-                  color: #4b4a4a;
-                  border-bottom: 2px solid #716d6d;">
-                  <span t-field="partner.phone" />
+                <div class="row mt-2">
+                  <div class="col-lg-6">
+                    <div class="form-group row">
+                      <label for="staticEmail" class="col-form-label">Home Address <i class="fa fa-pencil"/></label>
+                      <div>
+                        <input
+                          type="text"
+                          id="home_address"
+                          name="home_address"
+                          class="form-control updated"
+                          t-att-value="partner.home_address"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div class="col-lg-4 col-12">
-                  <label for="email">Email</label>
-                  <div class="form-group mt-1" style="background-color: #e0e0e0;
-                  padding: 0.5rem;
-                  color: #4b4a4a;
-                  border-bottom: 2px solid #716d6d;">
-                  <span t-field="partner.email" />
+                <div class="row mt-2">
+                  <div class="col-lg-6">
+                    <div class="form-group row">
+                      <label for="staticEmail" class="col-form-label">Personal Phone <i class="fa fa-pencil"/></label>
+                      <div>
+                        <input
+                          type="text"
+                          id="mobile"
+                          name="mobile"
+                          class="form-control updated"
+                          t-att-value="partner.mobile"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div class="col-lg-4 col-12">
-                  <label for="home_address">Home address</label>
-                  <div class="form-group mt-1" style="background-color: #e0e0e0;
-                  padding: 0.5rem;
-                  color: #4b4a4a;
-                  border-bottom: 2px solid #716d6d;">
-                  <span t-field="partner.home_address" />
+                <div class="row mt-2">
+                  <div class="col-lg-6">
+                    <div class="form-group row">
+                      <label for="staticEmail" class="col-form-label">Home Phone <i class="fa fa-pencil"/></label>
+                      <div>
+                        <input
+                          type="text"
+                          id="phone"
+                          name="phone"
+                          class="form-control updated"
+                          t-att-value="partner.phone"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="row mt-4">
-                <div class="col-lg-4 col-12">
-                  <label for="email">Program</label>
-                  <div class="form-group mt-1" style="background-color: #e0e0e0;
-                  padding: 0.5rem;
-                  color: #4b4a4a;
-                  border-bottom: 2px solid #716d6d;">
-                  <span t-field="partner.program_id.name" />
+                <div class="row mt-2">
+                  <div class="col-lg-6">
+                    <div class="form-group row">
+                      <label for="staticEmail" class="col-form-label">Personal Email Address <i class="fa fa-pencil"/></label>
+                      <div>
+                        <input
+                          type="text"
+                          id="email"
+                          name="email"
+                          class="form-control updated"
+                          t-att-value="partner.email"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div class="col-lg-4 col-12">
-                  <label for="home_address">Start Year</label>
-                  <div class="form-group mt-1" style="background-color: #e0e0e0;
-                  padding: 0.5rem;
-                  color: #4b4a4a;
-                  border-bottom: 2px solid #716d6d;">
-                  <span t-field="partner.start_year" />
+                <div class="row mt-2">
+                  <div class="col-lg-6">
+                    <div class="form-group row">
+                      <label for="staticEmail" class="col-form-label">USAHS Email Address</label>
+                      <div>
+                        <input
+                          type="text"
+                          id="email"
+                          name="email"
+                          class="form-control"
+                          readonly="readonly"
+                          t-att-value="partner.email"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div class="col-lg-4 col-12">
-                  <label for="email">Start Term Type</label>
-                  <div class="form-group mt-1" style="background-color: #e0e0e0;
-                  padding: 0.5rem;
-                  color: #4b4a4a;
-                  border-bottom: 2px solid #716d6d;">
-                  <span t-field="partner.start_term_type" />
+                <div class="row mt-2">
+                  <div class="col-lg-6">
+                    <div class="form-group row">
+                      <label for="staticEmail" class="col-form-label">Campus</label>
+                      <div>
+                        <input
+                          type="text"
+                          id="email"
+                          name="email"
+                          class="form-control"
+                          readonly="readonly"
+                          t-att-value="partner.email"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="row mt-4">
-                <div class="col-lg-4 col-12">
-                  <label for="home_address">Cohort Label</label>
-                  <div class="form-group mt-1" style="background-color: #e0e0e0;
-                  padding: 0.5rem;
-                  color: #4b4a4a;
-                  border-bottom: 2px solid #716d6d;">
-                  <span t-field="partner.cohort_label" />
+                <div class="row mt-2">
+                  <div class="col-lg-6">
+                    <div class="form-group row">
+                      <label for="staticEmail" class="col-form-label">Program Duratin</label>
+                      <div>
+                        <input
+                          type="text"
+                          id="email"
+                          name="email"
+                          class="form-control"
+                          readonly="readonly"
+                          t-att-value="partner.email"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div class="col-lg-4 col-12">
-                  <label for="email">Start Term</label>
-                  <div class="form-group mt-1" style="background-color: #e0e0e0;
-                  padding: 0.5rem;
-                  color: #4b4a4a;
-                  border-bottom: 2px solid #716d6d;">
-                  <span t-field="partner.start_term" />
+                <div class="row mt-2">
+                  <div class="col-lg-6">
+                    <div class="form-group row">
+                      <label for="staticEmail" class="col-form-label">Program Type</label>
+                      <div>
+                        <input
+                          type="text"
+                          id="program_id"
+                          name="program_id"
+                          class="form-control"
+                          readonly="readonly"
+                          t-att-value="partner.program_id.name"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div class="col-lg-4 col-12">
-                  <label for="home_address">Graduation Term</label>
-                  <div class="form-group mt-1" style="background-color: #e0e0e0;
-                  padding: 0.5rem;
-                  color: #4b4a4a;
-                  border-bottom: 2px solid #716d6d;">
-                  <span t-field="partner.graduation_term" />
+                <div class="row mt-2">
+                  <div class="col-lg-6">
+                    <div class="form-group row">
+                      <label for="staticEmail" class="col-form-label">Graduation Data</label>
+                      <div>
+                        <input
+                          type="text"
+                          id="graduation_term"
+                          name="graduation_term"
+                          class="form-control"
+                          readonly="readonly"
+                          t-att-value="partner.graduation_term"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="row mt-4 mb-4 text-center">
-                <div class="col-12 mr-2">
-                  <a
-                    t-if="partner.is_reach_maximum_zip_code == False"
-                    type="button"
-                    class="btn"
-                    role="button" 
-                    href="/add/location"
-                    style="background-color:  #ab8631; !important; color: #fff"
-                  >
-                    <i class="fa fa-pencil"/> Add Location 
-                  </a>
-                  <a
-                    t-if="partner.is_reach_maximum_zip_code == True"
-                    type="button"
-                    class="btn"
-                    role="button" 
-                    href="/info/hardship/request"
-                    style="background-color:  #ab8631; !important; color: #fff"
-                  >
-                    Show your Location 
-                  </a>
+                <div class="row mt-2">
+                  <div class="col-lg-6">
+                    <div class="form-group row">
+                      <label for="staticEmail" class="col-form-label">Cohort</label>
+                      <div>
+                        <input
+                          type="text"
+                          id="cohort_label"
+                          name="cohort_label"
+                          class="form-control"
+                          readonly="readonly"
+                          t-att-value="partner.cohort_label"
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
+                <div class="row mt-4 mt-4 mb-4 text-center">
+                  <div class="col-12 mr-2">
+                    <a
+                      t-if="not partner.geographical_ids or hardship_request.state in ['cancel','expired']"
+                      type="button"
+                      class="btn"
+                      role="button" 
+                      href="/add/location"
+                      style="background-color:  #ab8631; !important; color: #fff"
+                    >
+                      <i class="fa fa-pencil"/> Submit Preferred Addresses 
+                    </a>
+                    <a
+                      t-if="not hardship_request or hardship_request.state in ['cancel','expired']"
+                      type="button"
+                      class="btn"
+                      role="button" 
+                      href="/hardship/request"
+                      style="background-color:  #ab8631; !important; color: #fff"
+                    >
+                      <i class="fa fa-pencil"/> Submit Hardship/Accommodation request
+                    </a>
+                    <button
+                      type="submit"
+                      class="btn save_changes d-none"
+                      role="button" 
+                      style="background-color:  #ab8631; !important; color: #fff"
+                    >
+                      Save Changes
+                    </button>
+                    <a
+                      type="button"
+                      class="btn refuse d-none"
+                      role="button" 
+                      href="/my"
+                      style="background-color: red; !important; color: #fff"
+                    >
+                      Refuse
+                    </a>
+                    <a
+                      t-if="partner.geographical_ids or hardship_request.state == 'confirm'"
+                      type="button"
+                      class="btn"
+                      role="button" 
+                      href="/info/hardship/request"
+                      style="background-color:  #ab8631; !important; color: #fff"
+                    >
+                      Show your Location 
+                    </a>
+                  </div>
+                </div>
+              </form>
           </div>
         </div>
       </t>

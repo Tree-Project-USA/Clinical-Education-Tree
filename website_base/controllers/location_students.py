@@ -71,7 +71,7 @@ class Location(http.Controller):
         res_provider_treatment = (
             request.env["geographical"]
             .sudo()
-           .search([("zip_code", "=", post.get('zip_code'))])
+           .search([("zip_code", "=", zip_code)])
         )
         values["city"] = res_provider_treatment.city if res_provider_treatment.city else '' 
         values["state"] = res_provider_treatment.state if res_provider_treatment.state else ''

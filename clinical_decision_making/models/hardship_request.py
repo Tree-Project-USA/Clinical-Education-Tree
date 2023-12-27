@@ -73,6 +73,7 @@ class HardshipRequest(models.Model):
             'deny_show_student': False,
             'can_apply_hardship': False
         })
+        self.student_id.geographical_ids.unlink()
         mail = (
                     self.env["mail.mail"]
                     .sudo()

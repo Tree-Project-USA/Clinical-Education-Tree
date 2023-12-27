@@ -36,6 +36,7 @@
             "website_base/static/src/js/location_student_hard_ship.js",
             "website_base/static/src/js/location_student_update_hard_ship.js",
             "website_base/static/src/js/file.js",
+            "website_base/static/src/js/website_update_information.js",
         ],
     },
     "installable": True,

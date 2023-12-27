@@ -12,7 +12,11 @@
                 </div>
             </div>
           <div id="form_temp" class="locations_student d-none">
-                <div class="alert alert-success text-center shadow-sm" t-if="hardship">
+            <t
+                t-set="hardship_request"
+                t-value="request.env['hardship.request'].sudo().search([('student_id', '=', request.env.user.partner_id.id)])"
+            />
+                <div class="alert alert-success text-center shadow-sm" t-if="hardship_request.state == 'update'">
                     <div class="d-flex justify-content-center">
                         <p>
                             Your hardship information need to be updated
