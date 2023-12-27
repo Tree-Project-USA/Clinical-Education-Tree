@@ -102,11 +102,12 @@
                       <label for="staticEmail" class="col-form-label">Personal Phone <i class="fa fa-pencil"/></label>
                       <div>
                         <input
-                          type="text"
-                          id="mobile"
-                          name="mobile"
+                          type="number"
+                          id="personal_phone"
+                          oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                          name="personal_phone"
                           class="form-control updated"
-                          t-att-value="partner.mobile"
+                          t-att-value="partner.personal_phone"
                         />
                       </div>
                     </div>
@@ -120,6 +121,7 @@
                         <input
                           type="text"
                           id="phone"
+                          oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
                           name="phone"
                           class="form-control updated"
                           t-att-value="partner.phone"
@@ -134,7 +136,7 @@
                       <label for="staticEmail" class="col-form-label">Personal Email Address <i class="fa fa-pencil"/></label>
                       <div>
                         <input
-                          type="text"
+                          type="email"
                           id="email"
                           name="email"
                           class="form-control updated"
@@ -168,11 +170,11 @@
                       <div>
                         <input
                           type="text"
-                          id="email"
-                          name="email"
+                          id="campus"
+                          name="campus"
                           class="form-control"
                           readonly="readonly"
-                          t-att-value="partner.email"
+                          t-att-value="partner.campus"
                         />
                       </div>
                     </div>
@@ -181,15 +183,15 @@
                 <div class="row mt-2">
                   <div class="col-lg-6">
                     <div class="form-group row">
-                      <label for="staticEmail" class="col-form-label">Program Duratin</label>
+                      <label for="staticEmail" class="col-form-label">Program Duration</label>
                       <div>
                         <input
                           type="text"
-                          id="email"
-                          name="email"
+                          id="program_id"
+                          name="program_id"
                           class="form-control"
                           readonly="readonly"
-                          t-att-value="partner.email"
+                          t-att-value="partner.program_id.name"
                         />
                       </div>
                     </div>
@@ -215,7 +217,7 @@
                 <div class="row mt-2">
                   <div class="col-lg-6">
                     <div class="form-group row">
-                      <label for="staticEmail" class="col-form-label">Graduation Data</label>
+                      <label for="staticEmail" class="col-form-label">Graduation Term</label>
                       <div>
                         <input
                           type="text"
