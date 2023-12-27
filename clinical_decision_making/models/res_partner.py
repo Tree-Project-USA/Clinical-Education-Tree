@@ -47,7 +47,6 @@ class ResPartner(models.Model):
     is_complete_tce2 = fields.Boolean(compute='_compute_term', string='Is Complate Tec2', store=True)   
     aval_archive_ids = fields.Many2many(comodel_name='archive', string='Archive', compute='get_aval_archive_ids', readonly=False)
     
-<<<<<<< Updated upstream
     def _create_user(self,partner_id):
         """ create a new user for wizard_user.partner_id
             :returns record of res.users
@@ -84,14 +83,12 @@ class ResPartner(models.Model):
                 user_sudo.partner_id.signup_prepare()
        
     
-=======
     
     @api.depends('archive_ids')
     def get_aval_archive_ids(self):
         for rec in self:
             rec.aval_archive_ids = rec.archive_ids.filtered(lambda x: x.placement_status != 'not_placed')
             
->>>>>>> Stashed changes
     @api.depends('archive_ids')
     def _compute_is_take_ip(self):
         for rec in self:
