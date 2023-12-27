@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import requests
 import json
+from odoo.tools import email_normalize
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
 
@@ -38,6 +39,42 @@ class ResPartner(models.Model):
     is_complete_ice = fields.Boolean(compute='_compute_term',string='Is Complate Ice', store=True)
     is_complete_tce1 = fields.Boolean(compute='_compute_term', string='Is Complate Tec1', store=True)
     is_complete_tce2 = fields.Boolean(compute='_compute_term', string='Is Complate Tec2', store=True)
+    
+    def _create_user(self,partner_id):
+        """ create a new user for wizard_user.partner_id
+            :returns record of res.users
+        """
+        return self.env['res.users'].with_context(no_reset_password=True)._create_user_from_template({
+            'email': email_normalize(partner_id.email),
+            'login': email_normalize(partner_id.email),
+            'partner_id': partner_id.id,
+            'company_id': partner_id.env.company.id,
+            'company_ids': [(6, 0, self.env.company.ids)],
+        })
+
+    
+    def action_send_account_creation_invitation(self):
+        group_portal = self.env.ref('base.group_portal')
+        group_public = self.env.ref('base.group_public')
+        partner_ids = self.env['res.partner'].search([('email', '!=', False),('is_student', '=', True)])
+        for partner_id in partner_ids:
+            user_sudo = self.env['res.users'].search([('partner_id', '=', partner_id.id)])
+            if not user_sudo:
+                # create a user if necessary and make sure it is in the portal group
+                company = partner_id.company_id or self.env.company
+                user_sudo = self.sudo().with_company(company.id)._create_user(partner_id)
+                template = self.env.ref('clinical_decision_making.mail_template_send_account_creation_invitation')
+                lang = user_sudo.sudo().lang
+                partner = user_sudo.sudo().partner_id
+
+                portal_url = partner.with_context(signup_force_type_in_url='', lang=lang)._get_signup_url_for_action()[partner.id]
+                partner.signup_prepare()
+                template.with_context(dbname=partner_id._cr.dbname, portal_url=portal_url, lang=lang).send_mail(user_sudo.id, force_send=True)
+
+            if not user_sudo.active:
+                user_sudo.write({'active': True, 'groups_id': [(4, group_portal.id), (3, group_public.id)]})
+                user_sudo.partner_id.signup_prepare()
+       
     
     @api.depends('archive_ids')
     def _compute_is_take_ip(self):
