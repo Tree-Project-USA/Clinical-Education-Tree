@@ -266,7 +266,7 @@
                       href="/hardship/request"
                       style="background-color:  #ab8631; !important; color: #fff"
                     >
-                      <i class="fa fa-pencil"/> Submit Hardship/Accommodation request
+                      <i class="fa fa-pencil"/>Submit Hardship/Accommodation request
                     </a>
                     <button
                       type="submit"
@@ -283,7 +283,7 @@
                       href="/my"
                       style="background-color: red; !important; color: #fff"
                     >
-                      Refuse
+                      Cancel
                     </a>
                     <a
                       t-if="partner.geographical_ids or hardship_request.state == 'confirm'"
