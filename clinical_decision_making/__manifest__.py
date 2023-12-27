@@ -10,8 +10,9 @@
     'depends': ['base', 'base_address_extended', 'mail'],
     'data': [
         'security/ir.model.access.csv',
-        # 'data/cron_servises.xml',
+        'data/cron_servises.xml',
         'data/tree_data.xml',
+        'data/mail_data.xml',
         
         
         'views/archive_views.xml',

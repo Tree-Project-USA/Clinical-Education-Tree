@@ -24,4 +24,16 @@
             <field name="code">model.check_end_date_of_hardship()</field>
             <field name="state">code</field>
         </record> -->
+
+        <record id="cron_account_creation_invitation" model="ir.cron">
+            <field name="name">Account Creation Invitation Cron Job</field>
+            <field name="model_id" ref="base.model_res_partner"/>
+            <field name="state">code</field>
+            <field name="code">model.action_send_account_creation_invitation()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+            <field name="nextcall" eval="(DateTime.now() + timedelta(days=1)).strftime('%Y-01-02 00:00:00')"/>
+        </record>
 </odoo>

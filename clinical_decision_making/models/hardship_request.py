@@ -48,21 +48,8 @@ class HardshipRequest(models.Model):
             'deny_show_student': True,
             'geographical_ids': self.geographical_ids.ids
         })
-        mail = (
-                    self.env["mail.mail"]
-                    .sudo()
-                    .create(
-                        {
-                            "subject": _("Test Student Confirmation HardShip"),
-                            "email_from": self.env.company.email,
-                            "body_html": "Dear :- {},<br/>Your hardship request monfirmated <br/><br/>Thank you,<br/>".format(
-                                self.student_id.name
-                            ),
-                            "email_to": self.student_id.email,
-                        }
-                    )
-                    )
-        mail.send()
+        template = self.env.ref('clinical_decision_making.mail_template_send_hardship_request_approved')
+        template.send_mail(self.student_id.id, force_send=True)
         self.student_id.can_apply_hardship = False
         
     def action_cancel(self):
@@ -73,22 +60,8 @@ class HardshipRequest(models.Model):
             'deny_show_student': False,
             'can_apply_hardship': False
         })
-        self.student_id.geographical_ids.unlink()
-        mail = (
-                    self.env["mail.mail"]
-                    .sudo()
-                    .create(
-                        {
-                            "subject": _("Test Student Cancel HardShip"),
-                            "email_from": self.env.company.email,
-                            "body_html": "Dear :- {},<br/>Your hardship request was canceled <br/><br/>Thank you,<br/>".format(
-                                self.student_id.name
-                            ),
-                            "email_to": self.student_id.email,
-                        }
-                    )
-                    )
-        mail.send()
+        template = self.env.ref('clinical_decision_making.mail_template_send_hardship_request_declined')
+        template.send_mail(self.student_id.id, force_send=True)
         self.student_id.can_apply_hardship = True
         
     def action_open_update_view(self):
@@ -107,34 +80,25 @@ class HardshipRequest(models.Model):
     
     def action_update(self):
         self.ensure_one()
-        message = """We kindly request you to update your information as follows <br/> <div>%s</div>""" % self.update_message
-        print(message)
-        self.message_post(body=message,
-                message_type='comment',
-                subtype_xmlid='mail.mt_note',
-                partner_ids=self.student_id.ids,
-                author_id=self.env.user.partner_id.id)
-        message = """We kindly request you to update your information as follows <br/> <div style='color: #F8AC3D;'>%s</div>""" % self.update_message
         self.write({
             'state': 'update',
         })
-        mail = (
-            self.env["mail.mail"]
-            .sudo()
-            .create(
-                {
-                    "subject": _("Update Hardship Request"),
-                    "email_from": self.env.company.email,
-                    "body_html": self.update_message,
-                    "email_to": self.student_id.email,
-                }
-            )
-            )
-        mail.send()
+        template = self.env.ref('clinical_decision_making.mail_template_send_hardship_information_missing')
+        template.send_mail(self.id, force_send=True)
         self.student_id.can_apply_hardship = True
+       
     
     # Cron job
     def check_end_date_of_hardship(self):
         hardship_ids = self.sudo().search([("state","=","confirm"), ('expiration_date', '!=', False), ("expiration_date" , "<", date.today())])
         for hardship_id in hardship_ids:
             hardship_id.action_update()
+            
+    
+    @api.model
+    def create(self, values):
+        result = super(HardshipRequest, self).create(values)
+        template = self.env.ref('clinical_decision_making.mail_template_send_hardship_request_received')
+        template.send_mail(result.student_id.id, force_send=True)
+        return result
+    
