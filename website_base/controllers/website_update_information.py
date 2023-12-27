@@ -14,6 +14,7 @@ class UpdateInformation(http.Controller):
                     "mobile": post.get("mobile") if post.get("mobile") else False,
                     "phone": post.get("phone") if post.get("phone") else False,
                     "email": post.get("email") if post.get("email") else False,
+                    "personal_phone": post.get("personal_phone") if post.get("personal_phone") else False,
                 })
                     
                 return request.redirect("/my")
