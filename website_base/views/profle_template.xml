@@ -99,23 +99,6 @@
                 <div class="row mt-2">
                   <div class="col-lg-6">
                     <div class="form-group row">
-                      <label for="staticEmail" class="col-form-label">Personal Phone <i class="fa fa-pencil"/></label>
-                      <div>
-                        <input
-                          type="number"
-                          id="personal_phone"
-                          oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
-                          name="personal_phone"
-                          class="form-control updated"
-                          t-att-value="partner.personal_phone"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row mt-2">
-                  <div class="col-lg-6">
-                    <div class="form-group row">
                       <label for="staticEmail" class="col-form-label">Home Phone <i class="fa fa-pencil"/></label>
                       <div>
                         <input
@@ -125,6 +108,23 @@
                           name="phone"
                           class="form-control updated"
                           t-att-value="partner.phone"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row mt-2">
+                  <div class="col-lg-6">
+                    <div class="form-group row">
+                      <label for="staticEmail" class="col-form-label">Personal Phone <i class="fa fa-pencil"/></label>
+                      <div>
+                        <input
+                          type="text"
+                          id="personal_phone"
+                          oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                          name="personal_phone"
+                          class="form-control updated"
+                          t-att-value="partner.personal_phone"
                         />
                       </div>
                     </div>
@@ -208,7 +208,7 @@
                           name="program_id"
                           class="form-control"
                           readonly="readonly"
-                          t-att-value="partner.program_id.name"
+                          t-att-value="partner.program_type"
                         />
                       </div>
                     </div>
