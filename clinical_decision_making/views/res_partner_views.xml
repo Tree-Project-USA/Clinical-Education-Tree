@@ -63,18 +63,11 @@
                                 <field name="first_name" placeholder="Student First Name" required="1" class="o_address_city"/>
                                 <field name="last_name" class="o_address_state" placeholder="Student Last Name"/>
                             </div>
-<<<<<<< Updated upstream
-                            <field name="is_with_hardship"/>
-                            <field name="is_complete_ice"/>
-                            <field name="is_complete_tce1"/>
-                            <field name="is_complete_tce2"/>
-                            <field name="campus" readonly="1"/>
-=======
                             <field name="is_with_hardship" invisible="1"/>
                             <field name="is_complete_ice"  invisible="1"/>
                             <field name="is_complete_tce1" invisible="1"/>
                             <field name="is_complete_tce2" invisible="1"/>
->>>>>>> Stashed changes
+                            <field name="campus" readonly="1"/>
                             <field name="program_id"/>
                             <field name="program_type" readonly="1"/>
                             <field name="start_year"/>
