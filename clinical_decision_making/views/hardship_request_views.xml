@@ -38,7 +38,7 @@
                 <header>
                     <button name="action_confirm" string="Confirm" type="object" class="oe_highlight" attrs="{'invisible': ['|',('state', '=', 'confirm'), ('state', '=', 'cancel')]}" data-hotkey="c"/>
                     <button name="action_open_update_view" string="Update Information" type="object" class="btn btn-warning" data-hotkey="u"/>
-                    <button name="action_return_draft" string="Return To Draft" type="object" class="btn btn-primary" attrs="{'invisible': [('state', 'in', ('draft', 'update', 'under_review'))]}" data-hotkey="c"/>
+                    <button name="action_return_draft" string="Return To Draft" type="object" class="btn btn-primary" attrs="{'invisible': [('state', 'in', ['draft', 'placementing'])]}" data-hotkey="c"/>
                     <button name="action_cancel" string="Cancel" type="object" class="btn btn-danger" attrs="{'invisible': ['|',('state', '=', 'confirm'), ('state', '=', 'cancel')]}" data-hotkey="c"/>
                     <field name="state" widget="statusbar" readonly="1"/>
                 </header>
