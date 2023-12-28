@@ -1,0 +1,43 @@
+odoo.define("website_base.state_hardship", function(require) {
+    "use strict";
+    var publicWidget = require("web.public.widget");
+
+    var counter_files = 0;
+
+    publicWidget.registry.HardShipInformation = publicWidget.Widget.extend({
+        selector: ".hardship_information",
+        /**
+         * @class
+         */
+        init: function() {
+            this._super.apply(this, arguments);
+            this._popoverRPC = null;
+            this._check_request_stage();
+        },
+        _check_request_stage: function() {
+            var stage = $("#state").val();
+            if (stage == "draft") {
+                $("#draft").css({
+                    "background-color": "#000000",
+                    color: "#b4904f",
+                });
+            } else if (stage == "update") {
+                $("#update").css({
+                    "background-color": "#000000",
+                    color: "#b4904f",
+                });
+            } else if (stage == "under_review") {
+                $("#under_review").css({
+                    "background-color": "#000000",
+                    color: "#b4904f",
+                });
+            } else if (stage == "confirm") {
+                $("#confirm").css({
+                    "background-color": "#000000",
+                    color: "#b4904f",
+                });
+            }
+        }
+    })
+
+})

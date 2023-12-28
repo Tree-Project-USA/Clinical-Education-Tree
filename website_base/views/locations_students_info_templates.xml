@@ -27,17 +27,17 @@
                                                         </td>
                                                         <td>
                                                             <strong>
+                                                                Zip code
+                                                            </strong>
+                                                        </td>
+                                                        <td>
+                                                            <strong>
                                                                 State
                                                             </strong>
                                                         </td>
                                                         <td>
                                                             <strong>
                                                                 City
-                                                            </strong>
-                                                        </td>
-                                                        <td>
-                                                            <strong>
-                                                                Zip code
                                                             </strong>
                                                         </td>
                                                     </tr>
@@ -48,6 +48,18 @@
                                                             <td>
                                                                 <div class="form-group">
                                                                     <span t-esc="val_index + 1"/>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <div class="input-group mb-2">
+                                                                        <input 
+                                                                            type="text" 
+                                                                            readonly="1"
+                                                                            class="form-control" 
+                                                                            t-att-value="val.zip_code"
+                                                                        />
+                                                                    </div>
                                                                 </div>
                                                             </td>
                                                             <td>
@@ -74,18 +86,6 @@
                                                                     </div>
                                                                 </div>
                                                             </td>
-                                                            <td>
-                                                                <div class="form-group">
-                                                                    <div class="input-group mb-2">
-                                                                        <input 
-                                                                            type="text" 
-                                                                            readonly="1"
-                                                                            class="form-control" 
-                                                                            t-att-value="val.zip_code"
-                                                                        />
-                                                                    </div>
-                                                                </div>
-                                                            </td>
                                                         </tr>
                                                     </tbody>
                                                 </div>
@@ -96,6 +96,19 @@
                                         </textarea>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="row mt-4 mt-4 mb-4 text-left">
+                            <div class="col-12 mr-2">
+                                <a
+                                    type="button"
+                                    class="btn my-2"
+                                    role="button" 
+                                    href="/my/home"
+                                    style="background-color:  #ab8631; !important; color: #fff"
+                                >
+                                    Back
+                                </a>
                             </div>
                         </div>
                     </div>

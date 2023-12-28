@@ -104,6 +104,7 @@
                         <input
                           type="text"
                           id="phone"
+                          max="10"
                           oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
                           name="phone"
                           class="form-control updated"
@@ -121,6 +122,7 @@
                         <input
                           type="text"
                           id="personal_phone"
+                          max="10"
                           oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
                           name="personal_phone"
                           class="form-control updated"
@@ -271,6 +273,16 @@
                       <i class="fa fa-pencil"/> Submit Preferred Setting 
                     </a>
                     <a
+                      t-if="hardship_request and hardship_request.state not in ['cancel','expired']"
+                      type="button"
+                      class="btn my-2"
+                      role="button" 
+                      href="/hardship/request/inforamtion"
+                      style="background-color:  #ab8631; !important; color: #fff"
+                    >
+                    <i class="fa fa-eye mx-2"/>My hardship details
+                    </a>
+                    <a
                       t-if="not hardship_request or hardship_request.state in ['cancel','expired']"
                       type="button"
                       class="btn my-2"
@@ -305,7 +317,7 @@
                       href="/info/hardship/request"
                       style="background-color:  #ab8631; !important; color: #fff"
                     >
-                      Show your Location 
+                    <i class="fa fa-eye mx-2"/>Show your Location 
                     </a>
                   </div>
                 </div>

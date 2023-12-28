@@ -26,6 +26,7 @@
         "views/locations_students_info_templates.xml",
         "views/error_request_template.xml",
         "views/preferred_setting_template.xml",
+        "views/hardship_inforamtion_templates.xml",
 
     ],
     # only loaded in demonstration mode
@@ -33,11 +34,13 @@
     "assets": {
         "web.assets_frontend": [
             "website_base/static/src/css/profile_user.css",
+            "website_base/static/src/css/hardship_information.css",
             "website_base/static/src/scss/style.scss",
             "website_base/static/src/js/location_student.js",
             "website_base/static/src/js/location_student_hard_ship.js",
             "website_base/static/src/js/location_student_update_hard_ship.js",
             "website_base/static/src/js/file.js",
+            "website_base/static/src/js/state_hardship.js",
             "website_base/static/src/js/website_update_information.js",
         ],
     },
