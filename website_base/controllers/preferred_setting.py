@@ -12,7 +12,7 @@ def split_data_into_groups(data, group_size):
 class PreferredSetting(http.Controller):
     
     @http.route("/add/preferred/setting", type="http", website=True, auth="user", Methods=["POST"])
-    def add_location(self, **kw):
+    def add_setting(self, **kw):
         res_partner_id = request.env.user.partner_id
         values = {}
 
@@ -20,8 +20,6 @@ class PreferredSetting(http.Controller):
             setting_ip_ids = request.env["preferred.setting"].sudo().search([("type_setting", "=", 'ip')])
             setting_op_ids = request.env["preferred.setting"].sudo().search([("type_setting", "=", 'op')])
             preferred_setting_ids = request.env["preferred.setting"].sudo().search([])
-            # t = 
-            # categs = lazy(lambda: request.env["preferred.setting"].sudo().search([]))
             data_fields = [i.read(['name'])[0] for i in preferred_setting_ids]
             categorys = split_data_into_groups(data_fields, 6)
             categor = split_data_into_groups(preferred_setting_ids, 6)
