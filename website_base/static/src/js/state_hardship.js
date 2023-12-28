@@ -33,8 +33,18 @@ odoo.define("website_base.state_hardship", function(require) {
                 });
             } else if (stage == "confirm") {
                 $("#confirm").css({
+                    "background-color": "#08a05c",
+                    color: "#fff",
+                });
+            }else if (stage == "expired") {
+                $("#expired").css({
                     "background-color": "#000000",
                     color: "#b4904f",
+                });
+            }else if (stage == "cancel") {
+                $("#cancel").css({
+                    "background-color": "red",
+                    color: "#fff",
                 });
             }
         }
