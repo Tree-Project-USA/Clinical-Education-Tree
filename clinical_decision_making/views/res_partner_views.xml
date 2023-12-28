@@ -61,7 +61,7 @@
                             </span>
                             <div class="o_address_format">
                                 <field name="first_name" placeholder="Student First Name" required="1" class="o_address_city"/>
-                                <field name="last_name" class="o_address_state" placeholder="Student Last Name"/>
+                                <field name="last_name" class="o_address_state" required="1" placeholder="Student Last Name"/>
                             </div>
                             <field name="is_with_hardship" invisible="1"/>
                             <field name="is_complete_ice"  invisible="1"/>
@@ -81,7 +81,7 @@
                             <field name="phone" string="Home Phone"/>
                             <field name="personal_phone"/>
                             <field name="email" string="Personal Email Address"/>
-                            <field name="usahs_email_address"/>
+                            <field name="usahs_email_address" required="1"/>
                             <field name="ice_term"/>
                             <field name="tce1_term"/>
                             <field name="tce2_term"/>

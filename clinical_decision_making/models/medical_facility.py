@@ -9,7 +9,7 @@ class MedicalFacility(models.Model):
     _rec_name = 'name'
 
     
-    name = fields.Char(string='Name', required=True)
+    name = fields.Char(string='Medical Facility Name', required=True)
     offer_id = fields.One2many('placement.offer', 'facility_id',string='Placement Offers')
     address = fields.Char(string='Address')
     email = fields.Char(string='Email Address')

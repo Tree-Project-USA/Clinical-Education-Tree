@@ -33,7 +33,7 @@
                     <form>
                         <header>
                             <button name="action_prograss" string="Confirm" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'draft')]}" data-hotkey="v"/>
-                            <button name="action_draft" string="Draft" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'cancel')]}" data-hotkey="w"/>
+                            <button name="action_draft" string="Return To Draft" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'cancel')]}" data-hotkey="w"/>
                             <button name="action_cancel" string="Cancel" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'placementing')]}" data-hotkey="c"/>
                             <field name="state" widget="statusbar" clickable="False"/>
                         </header>

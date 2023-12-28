@@ -25,7 +25,7 @@ class PlacementOffer(models.Model):
     state = fields.Selection([
             ('draft', 'Draft'),
             ('placementing', 'Placementing'),
-            ('done', 'Done'),
+            ('done', 'Confirmed'),
             ('cancel', 'Canceled'),
         ], string='Status', default='draft')
     placement_type = fields.Selection([
