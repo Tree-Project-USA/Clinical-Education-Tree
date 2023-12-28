@@ -12,6 +12,9 @@ odoo.define("website_base.website_update_information", function(require) {
             'input .updated': '_ShowButton',
             'click .refuse': '_CloseButton',
         },
+        // 
+
+
 
         /**
          * @class
@@ -36,6 +39,10 @@ odoo.define("website_base.website_update_information", function(require) {
             $(".save_changes").addClass("d-inline-block");
             $(".refuse").removeClass("d-none");
             $(".refuse").addClass("d-inline-block");
+            $("#home_address").prop({ "required": true, })
+            $("#mobile").prop({ "required": true, })
+            $("#phone").prop({ "required": true, })
+            $("#email").prop({ "required": true, })
         },
         /**
          * @private

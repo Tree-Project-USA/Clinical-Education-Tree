@@ -117,6 +117,12 @@
                             </field>
                         </page>
                         <page name='preferred_settings' string="Preferred Settings">
+                            <field name="preferred_setting_ids" mode="tree">
+                                <tree editable="bottom" create="false">
+                                    <field name="name"/>
+                                    <field name="type_setting"/>
+                                </tree>
+                            </field>
                         </page>
                         <page name='internal_notes' string="Internal Notes">
                             <field name="comment" placeholder="Internal notes..."/>

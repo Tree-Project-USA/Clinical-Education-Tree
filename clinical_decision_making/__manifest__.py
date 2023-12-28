@@ -13,6 +13,7 @@
         'data/cron_servises.xml',
         'data/tree_data.xml',
         'data/mail_data.xml',
+        'data/preferred_setting_data.xml',
         
         
         'views/archive_views.xml',
@@ -28,6 +29,7 @@
         'views/scce_views.xml',
         'views/tree_matching_views.xml',
         'views/res_config_views.xml',
+        'views/preferred_setting.xml',
         'views/menu.xml',
 
     ],

@@ -14,4 +14,5 @@ from . import scce
 from . import student_program
 from . import tree_matching
 from . import archivement_offer
+from . import preferred_setting
 

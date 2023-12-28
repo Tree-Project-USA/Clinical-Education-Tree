@@ -46,6 +46,7 @@ class ResPartner(models.Model):
     is_complete_tce1 = fields.Boolean(compute='_compute_term', string='Is Complate Tec1', store=True)
     is_complete_tce2 = fields.Boolean(compute='_compute_term', string='Is Complate Tec2', store=True)   
     aval_archive_ids = fields.Many2many(comodel_name='archive', string='Archive', compute='get_aval_archive_ids', readonly=False)
+    preferred_setting_ids = fields.Many2many(comodel_name='preferred.setting', string='Preferred Setting')
     
     def _create_user(self,partner_id):
         """ create a new user for wizard_user.partner_id

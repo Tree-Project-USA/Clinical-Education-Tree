@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+        <!-- List View -->
+        <record model="ir.ui.view" id="preferred_setting_tree">
+            <field name="name">preferred.setting.tree</field>
+            <field name="model">preferred.setting</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="name"/>
+                    <field name="type_setting"/>
+                </tree>
+            </field>
+        </record>
+
+</odoo>

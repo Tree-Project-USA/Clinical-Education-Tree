@@ -253,7 +253,7 @@
                     <a
                       t-if="not partner.geographical_ids or hardship_request.state in ['cancel','expired']"
                       type="button"
-                      class="btn"
+                      class="btn my-2"
                       role="button" 
                       href="/add/location"
                       style="background-color:  #ab8631; !important; color: #fff"
@@ -261,9 +261,19 @@
                       <i class="fa fa-pencil"/> Submit Preferred Addresses 
                     </a>
                     <a
+                      t-if="not partner.geographical_ids or hardship_request.state in ['cancel','expired']"
+                      type="button"
+                      class="btn my-2"
+                      role="button" 
+                      href="/add/preferred/setting"
+                      style="background-color:  #ab8631; !important; color: #fff"
+                    >
+                      <i class="fa fa-pencil"/> Submit Preferred Setting 
+                    </a>
+                    <a
                       t-if="not hardship_request or hardship_request.state in ['cancel','expired']"
                       type="button"
-                      class="btn"
+                      class="btn my-2"
                       role="button" 
                       href="/hardship/request"
                       style="background-color:  #ab8631; !important; color: #fff"
@@ -274,7 +284,7 @@
                       type="submit"
                       class="btn save_changes d-none"
                       role="button" 
-                      style="background-color:  #ab8631; !important; color: #fff"
+                      style="background-color:  #1fa33b; !important; color: #fff"
                     >
                       Save Changes
                     </button>
@@ -285,7 +295,7 @@
                       href="/my"
                       style="background-color: red; !important; color: #fff"
                     >
-                      Cancel
+                    Cancel
                     </a>
                     <a
                       t-if="partner.geographical_ids or hardship_request.state == 'confirm'"

@@ -124,6 +124,24 @@
             </p>
         </field>
     </record>
+
+    <record id="action_preferred_setting" model="ir.actions.act_window">
+        <field name="name">Preferred Setting</field>
+        <field name="res_model">preferred.setting</field>
+        <field name="view_mode">tree</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to create a new Preferred Setting.
+            </p>
+        </field>
+    </record>
+
+    <record id="preferred_setting_action_view" model="ir.actions.act_window.view">
+        <field eval="1" name="sequence"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="clinical_decision_making.preferred_setting_tree"/>
+        <field name="act_window_id" ref="action_preferred_setting"/>
+    </record>
     <!-- <menuitem
         id="cpdm_menu"
         name="Internship"
@@ -239,5 +257,12 @@
         action="placement_setting_action"
         parent="setting_menu"
         sequence="5"/> -->
+
+    <menuitem
+        id="preferred_setting_menu"
+        name="Preferred Setting"
+        action="action_preferred_setting"
+        parent="configuration_menu"
+        sequence="99"/>
 
 </odoo>

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="preferred_setting_template" name="Add Preferred Setting">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure preferred_setting">
+                <div class="container">
+                    <div class="popup-card-error">
+                        <div class="content">
+                          <h3>Erorr</h3>
+                          <p id="content-p">
+                            There is currently no Technician
+                          </p>
+                        </div>
+                    </div>
+                    <form
+                            action="/add/preferred/setting"
+                            method="post"
+                            enctype="multipart/form-data"
+                        >
+                            <input type="hidden" name="csrf_token"
+                                t-att-value="request.csrf_token()" />
+                            <input type="hidden" name="list_setting" id="list_setting"/>
+                            <div class="row mt-4">
+                                <t t-foreach='preferred_setting_ids' t-as='setting'>
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <div class="input-group mb-2">
+                                                <div class="form-check mb-3">
+                                                    <input  class="multiple_choice setting" type="checkbox" t-attf-name="setting_#{setting.id}" t-attf-id="#{setting.id}"
+                                                           t-att-value='setting.name'/>
+                                                    <label t-attf-for="setting_#{setting.id}">
+                                                        <span t-field="setting.name"/>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </t>
+                                <!-- <div>
+                                    <table class="table table-borderless mt-3 total_project_costs">
+                                        <thead>
+                                            <tr>
+                                                <td>
+                                                    <strong>
+                                                        #
+                                                    </strong>
+                                                </td>
+                                                <td>
+                                                    <strong>
+                                                        Zip code
+                                                    </strong>
+                                                </td>
+                                            </tr>
+                                        </thead>
+                                        <div class="collapse">
+                                            <tbody id="locations_zip_code">
+                                                <tr >
+                                                        <td>
+                                                            <div class="form-group">
+                                                                <span>0 </span>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            
+                                                        </td>
+                                                    </tr>
+                                                <tr >
+                                                        <td>
+                                                            <div class="form-group">
+                                                                <span>0 </span>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="form-group">
+                                                                <div class="input-group mb-2">
+                                                                    <input type="text" id="zip_"
+                                                                        name="zip_" required="required"
+                                                                        class="form-control"
+                                                                        maxlength="5"
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                <tr >
+                                                        <td>
+                                                            <div class="form-group">
+                                                                <span>0 </span>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="form-group">
+                                                                <div class="input-group mb-2">
+                                                                    <input type="text" id="zip_"
+                                                                        name="zip_" required="required"
+                                                                        class="form-control"
+                                                                        maxlength="5"
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                
+                                            </tbody>
+                                        </div>
+                                    </table>
+                                </div> -->
+                            </div>
+                            <div class="clearfix oe_login_buttons  my-3">
+                                <button type="button"
+                                    class="custom_create btn btn-block new-setting-submit "
+                                    style="background-color:#ab8631;color:#fff;">
+                                    Submit
+                                </button>
+                                <a href="/my/home"
+                                    class="float-end custom_create btn btn-block "
+                                    style="background-color:#ab8631;color:#fff;">
+                                    Back My Profile
+                                </a>
+                            </div>
+                            <div class="float-end">
+                            </div>
+                        </form>
+                </div>
+            </div>
+        </t>
+    </template>
+
+</odoo>

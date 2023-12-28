@@ -150,4 +150,60 @@ odoo.define("website_base.location_student", function(require) {
         },
     })
 
+
+    $(document).ready(function() {
+        $('input[type=checkbox]').change(function(e) {
+            let popup = $(".popup-card-error")[0]
+            let content = $("#content-p")
+                if ($('input[type=checkbox]:checked').length > 5) {
+                    $(this).prop('checked', false)
+                    $(content).text('Allowed only 5')
+                        $(popup).css("transform", "translateX(0)");
+                                setTimeout(function() {
+                                    $(popup).css("transform", "translateX(500px)");
+                                }, 4000); 
+                }
+            }),
+
+        /**
+         * @private
+         * @param {Event} ev
+         */
+        $('.preferred_setting').on('click', '.new-setting-submit', function(event) {
+            var $this = $(this);
+            var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            var list = []
+            let popup = $(".popup-card-error")[0]
+            let content = $("#content-p")
+            console.log(checkboxes, '<<<<<<<<<<<ids>>>>>>>>>>>');
+            checkboxes.forEach(boxes => {
+                if (boxes.checked == true) {
+                    list.push(boxes.id)
+                }
+            })
+            if (list.length < 5) {} else {
+                $('#list_setting').val(list)
+                ajax.jsonRpc("/check/preferred/setting", 'call', {
+                    'list_setting': list,
+                }).then(function(result) {
+                    if (result == true) {
+                        event.preventDefault();
+                        $this.closest('form').submit();
+                    } else {
+                        $(content).text('dfsdfsdfsdfdsf')
+                        $(popup).css("transform", "translateX(0)");
+                                setTimeout(function() {
+                                    $(popup).css("transform", "translateX(500px)");
+                                }, 4000); 
+                    }
+                })
+            }
+
+
+
+        })
+    })
+
+
+
 })

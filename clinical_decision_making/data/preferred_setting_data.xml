@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="preferred_setting_ip_acut" model="preferred.setting">
+            <field name="name">IP-Acut (General, Neuro, Ortho, Critical Care)</field>
+            <field name="type_setting">ip</field>
+        </record>
+
+        <record id="preferred_setting_ip_ltac" model="preferred.setting">
+            <field name="name">IP-LTAC (long term acute care)</field>
+            <field name="type_setting">ip</field>
+        </record>
+
+        <record id="preferred_setting_ip_neuro" model="preferred.setting">
+            <field name="name">IP-Neuro Rehab or Neuro SCI</field>
+            <field name="type_setting">ip</field>
+        </record>
+
+        <record id="preferred_setting_ip_snf" model="preferred.setting">
+            <field name="name">IP-SNF (skilled nursing facility)</field>
+            <field name="type_setting">ip</field>
+        </record>
+
+        <record id="preferred_setting_ip_home" model="preferred.setting">
+            <field name="name">Home Health (Medicare Part A)</field>
+            <field name="type_setting">ip</field>
+        </record>
+
+        <record id="preferred_setting_ip_combination" model="preferred.setting">
+            <field name="name">Combination - IP and OP</field>
+            <field name="type_setting">ip</field>
+        </record>
+
+        <record id="preferred_setting_ip_peds" model="preferred.setting">
+            <field name="name">IP-Peds (TCE 1 &#38; TCE || only)</field>
+            <field name="type_setting">ip</field>
+        </record>
+
+        <record id="preferred_setting_op_general" model="preferred.setting">
+            <field name="name">OP-General may include ortho, neuro, cardiopulm</field>
+            <field name="type_setting">op</field>
+        </record>
+
+        <record id="preferred_setting_op_ortho" model="preferred.setting">
+            <field name="name">OP-Ortho</field>
+            <field name="type_setting">op</field>
+        </record>
+
+        <record id="preferred_setting_op_neuro" model="preferred.setting">
+            <field name="name">OP-Neuro</field>
+            <field name="type_setting">op</field>
+        </record>
+
+        <record id="preferred_setting_op_home" model="preferred.setting">
+            <field name="name">Home Health (OP/Medicare Part B)</field>
+            <field name="type_setting">op</field>
+        </record>
+
+        <record id="preferred_setting_op_specialties_aquatic" model="preferred.setting">
+            <field name="name">OP Specialties Aquatic, Burn, Hippotherapy</field>
+            <field name="type_setting">op</field>
+        </record>
+
+        <record id="preferred_setting_op_specialties_lymphedema" model="preferred.setting">
+            <field name="name">OP Specialties Lymphedema, Pelvic Health, Sports</field>
+            <field name="type_setting">op</field>
+        </record>
+
+        <record id="preferred_setting_op_specialties_vestibular" model="preferred.setting">
+            <field name="name">OP Specialties Vestibular, Wound Care</field>
+            <field name="type_setting">op</field>
+        </record>
+
+        <record id="preferred_setting_op_peds" model="preferred.setting">
+            <field name="name">OP-Peds (TCE I &#38; TCE II only)</field>
+            <field name="type_setting">op</field>
+        </record>
+
+        <record id="preferred_setting_op_peds_school" model="preferred.setting">
+            <field name="name">OP-Peds School Based (TCE I &#38; TCE II only)</field>
+            <field name="type_setting">op</field>
+        </record>
+
+        <record id="preferred_setting_op_health" model="preferred.setting">
+            <field name="name">Home Health Peds (TCE I &#38; TCE II only)</field>
+            <field name="type_setting">op</field>
+        </record>
+
+    </data>
+</odoo>
