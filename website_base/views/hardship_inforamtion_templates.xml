@@ -11,9 +11,11 @@
                 />
                 <div class="d-flex align-items-center flex-wrap text-center style_stage mt-4">
                     <span id="draft" class="draft">Draft</span>
-                    <span id="update" class="update" >Update</span>
+                    <span id="update" class="update" >Required Update</span>
                     <span id="under_review" class="under_review">Under Review</span>
                     <span id="confirm" class="confirm">Validate</span>
+                    <span id="expired" class="expired">Expired</span>
+                    <span id="cancel" class="cancel">Cancelled</span>
                 </div>
                 <div class="row mt-4">
                     <div class="col-lg-6">
