@@ -39,6 +39,7 @@ class HardshipRequest(models.Model):
     geographical_ids = fields.Many2many('geographical', 'geographical_ids', string='Geographical')
     student_geographical_ids = fields.Many2many('geographical', 'student_geographical_ids', string='Student Geographical')
     update_message = fields.Html(string='Message')
+    attachment_cancel = fields.Binary(attachment=True)
     
     
     def action_confirm(self):
@@ -64,6 +65,17 @@ class HardshipRequest(models.Model):
         })
         self.student_id.can_apply_hardship = True
         
+    def action_attachment_file_cancel(self):
+        self.attachment_cancel_id = False
+        return {
+            'name': _('Attachment File Cancel'),
+            'view_mode': 'form',
+            'res_model': 'hardship.request',
+            'view_id': self.env.ref('clinical_decision_making.hardship_request_attachment_file_cancel_view_form').id,
+            'type': 'ir.actions.act_window',
+            'res_id': self.id,
+            'target': 'new'
+        }
     def action_cancel(self):
         self.write({
             'state': 'cancel',

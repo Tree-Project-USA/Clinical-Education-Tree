@@ -18,7 +18,7 @@
         <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
             <tr><td valign="top" style="font-size: 13px;">
                 <div>
-                    Dear <span style="font-weight: bold;">Student</span> <t t-out="object.name or ''">Marc Demo</t>,<br /><br />
+                    Dear <span style="font-weight: bold;"> <t t-out="object.name or ''">Marc Demo</t></span>,<br /><br />
                     We hope this message finds you well. As part of our clinical placement process, we kindly request you to create an account by clicking on the following link:
                      <!-- [Account Creation Link].  -->
                      <div style="margin: 16px 0px 16px 0px;">
@@ -82,7 +82,7 @@
         <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
             <tr><td valign="top" style="font-size: 13px;">
                 <div>
-                     Dear <span style="font-weight: bold;">Student</span> <t t-out="object.name or ''">Marc Demo</t>,<br /><br />
+                     Dear <span style="font-weight: bold;"> <t t-out="object.name or ''">Marc Demo</t></span>,<br /><br />
                      Fantastic news! Your clinical placements account has been successfully set up. Please log in to add your preferred addresses using the provided link below:
                     <div style="margin: 16px 0px 16px 0px;">
                         <a href="/my"
@@ -93,14 +93,6 @@
                     Should you encounter any difficulties or have questions, don't hesitate to contact me.
                     <br /><br />
                     Best regards,
-                    <br /><br />
-                    <p style="color:#e3224b">
-                        In the imminent future, our aim is to enhance the student portal, providing visibility into their:
-                        1. placement status for ICE, TCE I, and TCE II.
-                        2. allow students to enter preferred settings.
-    
-                        from the backend, going beyond the current functionality limited to entering addresses and zip codes.
-                    </p>
                     <br /><br />
                 </div>
             </td></tr>
@@ -155,7 +147,7 @@
         <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
             <tr><td valign="top" style="font-size: 13px;">
                 <div>
-                     Dear <span style="font-weight: bold;">Student</span> <t t-out="object.name or ''">Marc Demo</t>,<br /><br />
+                     Dear <span style="font-weight: bold;"> <t t-out="object.name or ''">Marc Demo</t></span>,<br /><br />
                      We want to inform you that your personal information, including email address, phone number, and home address, has been updated in our system. This ensures that we have the most accurate and up-to-date information for communication and placement purposes.
                     <br /><br />
                     If you have any changes or concerns, please let us know.
@@ -213,7 +205,7 @@
         <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
             <tr><td valign="top" style="font-size: 13px;">
                 <div>
-                     Dear <span style="font-weight: bold;">Student</span> <t t-out="object.name or ''">Marc Demo</t>,<br /><br />
+                     Dear <span style="font-weight: bold;"> <t t-out="object.name or ''">Marc Demo</t></span>,<br /><br />
                      We are pleased to inform you that your preferred addresses have been added to our system. These addresses align with the placement rules of engagement. This ensures a smoother placement process that meets your preferences.
                     <br /><br />
                     Should you encounter any difficulties or have questions, don't hesitate to contact me.
@@ -273,7 +265,7 @@
         <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
             <tr><td valign="top" style="font-size: 13px;">
                 <div>
-                     Dear <span style="font-weight: bold;">Student</span> <t t-out="object.name or ''">Marc Demo</t>,<br /><br />
+                     Dear <span style="font-weight: bold;"> <t t-out="object.name or ''">Marc Demo</t></span>,<br /><br />
                      We have received your hardship request, and we appreciate your communication. Our team will review the request thoroughly before rendering a decision. You will be notified of the outcome once the review process is complete.
                     <br /><br />
                     Thank you for your understanding.
@@ -335,7 +327,7 @@
         <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
             <tr><td valign="top" style="font-size: 13px;">
                 <div>
-                     Dear <span style="font-weight: bold;">Student</span> <t t-out="object.student_id.name or ''">Marc Demo</t>,<br /><br />
+                     Dear <span style="font-weight: bold;"> <t t-out="object.student_id.name or ''">Marc Demo</t></span>,<br /><br />
                      Your hardship request is currently incomplete as it is missing some required information <t style="font-weight: 700;" t-out="object.update_message or ''"/>. 
                      Kindly log in using the link provided to update and provide the necessary details.
                     <div style="margin: 16px 0px 16px 0px;">
@@ -403,7 +395,7 @@
         <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
             <tr><td valign="top" style="font-size: 13px;">
                 <div>
-                     Dear <span style="font-weight: bold;">Student</span> <t t-out="object.name or ''">Marc Demo</t>,<br /><br />
+                     Dear <span style="font-weight: bold;"> <t t-out="object.name or ''">Marc Demo</t></span>,<br /><br />
                      We regret to inform you that your hardship request has been declined. The reasons for the decline are detailed in the attached document. If you have any questions or concerns, please reach out to us.
                     
                     <br /><br />
@@ -464,7 +456,7 @@
         <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
             <tr><td valign="top" style="font-size: 13px;">
                 <div>
-                     Dear <span style="font-weight: bold;">Student</span> <t t-out="object.name or ''">Marc Demo</t>,<br /><br />
+                     Dear <span style="font-weight: bold;"> <t t-out="object.name or ''">Marc Demo</t></span>,<br /><br />
                      Great news! Your hardship request has been approved, and the new zip code has been added to our software for placement purposes. We appreciate your cooperation throughout this process.
                     <br /><br />
                     If you have any further questions or require additional assistance, please don't hesitate to contact us.
