@@ -3,7 +3,7 @@
 from odoo import api, fields, models
 
 
-class NewModule(models.Model):
+class PreferredSetting(models.Model):
     _name = 'preferred.setting'
     _description = 'Preferred Setting'
 
