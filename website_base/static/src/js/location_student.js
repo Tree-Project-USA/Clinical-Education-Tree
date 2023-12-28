@@ -157,7 +157,7 @@ odoo.define("website_base.location_student", function(require) {
             let content = $("#content-p")
                 if ($('input[type=checkbox]:checked').length > 5) {
                     $(this).prop('checked', false)
-                    $(content).text('Allowed only 5')
+                    $(content).text('Only allowed 5 preferred settings')
                         $(popup).css("transform", "translateX(0)");
                                 setTimeout(function() {
                                     $(popup).css("transform", "translateX(500px)");
@@ -190,7 +190,7 @@ odoo.define("website_base.location_student", function(require) {
                         event.preventDefault();
                         $this.closest('form').submit();
                     } else {
-                        $(content).text('dfsdfsdfsdfdsf')
+                        $(content).text('You should have one (IP) as minimum and one (OP)')
                         $(popup).css("transform", "translateX(0)");
                                 setTimeout(function() {
                                     $(popup).css("transform", "translateX(500px)");
