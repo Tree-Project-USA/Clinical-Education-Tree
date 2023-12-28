@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="hardship_information_template" name="Hardship Information">
+        <t t-call="website.layout">
+            <div class="container hardship_information">
+                <input
+                    type="hidden"
+                    id="state"
+                    t-att-value="hardship_id.state"
+                />
+                <div class="d-flex align-items-center flex-wrap text-center style_stage mt-4">
+                    <span id="draft" class="draft">Draft</span>
+                    <span id="update" class="update" >Update</span>
+                    <span id="under_review" class="under_review">Under Review</span>
+                    <span id="confirm" class="confirm">Validate</span>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-lg-6">
+                      <div class="form-group row">
+                        <label for="staticEmail" class="col-form-label">First Name</label>
+                        <div>
+                          <input
+                            type="text"
+                            id="first_name"
+                            class="form-control"
+                            name="first_name"
+                            t-att-value="hardship_id.student_id.first_name"
+                            readonly="readonly"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-6">
+                      <div class="form-group row">
+                        <label for="staticEmail" class="col-form-label">Last name</label>
+                        <div>
+                          <input
+                            type="text"
+                            id="last_name"
+                            class="form-control"
+                            name="last_name"
+                            t-att-value="hardship_id.student_id.last_name"
+                            readonly="readonly"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-lg-6">
+                        <div class="form-group row">
+                          <label for="staticEmail" class="col-form-label">Home Address</label>
+                          <div>
+                            <input
+                              type="text"
+                              id="home_address"
+                              name="home_address"
+                              class="form-control updated"
+                              readonly="readonly"
+                              t-att-value="hardship_id.student_id.home_address"
+                            />
+                          </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group row">
+                          <label for="staticEmail" class="col-form-label">Home Phone</label>
+                          <div>
+                            <input
+                              type="text"
+                              id="phone"
+                              max="10"
+                              name="phone"
+                              class="form-control updated"
+                              readonly="readonly"
+                              t-att-value="hardship_id.student_id.phone"
+                            />
+                          </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-lg-6">
+                        <div class="form-group row">
+                          <label for="staticEmail" class="col-form-label">Personal Phone</label>
+                          <div>
+                            <input
+                              type="text"
+                              id="personal_phone"
+                              max="10"
+                              name="personal_phone"
+                              class="form-control updated"
+                              readonly="readonly"
+                              t-att-value="hardship_id.student_id.personal_phone"
+                            />
+                          </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group row">
+                          <label for="staticEmail" class="col-form-label">Personal Email Address</label>
+                          <div>
+                            <input
+                              type="email"
+                              id="email"
+                              name="email"
+                              class="form-control updated"
+                              readonly="readonly"
+                              t-att-value="hardship_id.student_id.email"
+                            />
+                          </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4 mt-4 mb-4 text-left">
+                    <div class="col-12 mr-2">
+                        <a
+                            type="button"
+                            class="btn my-2"
+                            role="button" 
+                            href="/my/home"
+                            style="background-color:  #ab8631; !important; color: #fff"
+                        >
+                            Back
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+</odoo>
