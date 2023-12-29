@@ -119,12 +119,32 @@
                     <div class="col-12 mr-2">
                         <a
                             type="button"
-                            class="btn my-2"
+                            class="btn my-2 float-end"
                             role="button" 
                             href="/my/home"
                             style="background-color:  #ab8631; !important; color: #fff"
                         >
-                            Back
+                          Back My Profile
+                        </a>
+                        <a 
+                          t-if="hardship_id.state == 'cancel'"
+                          type="button"
+                          class="btn my-2"
+                          role="button" 
+                          style="background-color:  #ab8631; !important; color: #fff"
+                          t-attf-href="/web/content/hardship.request/#{hardship_id.id}/attachment_cancel?download=true"
+                        >
+                          Download Cancellation Reason File <i class="fa fa-download" />
+                        </a>
+                        <a 
+                          t-if="hardship_id.state == 'update'"
+                          type="button"
+                          class="btn my-2"
+                          role="button" 
+                          style="background-color:  #ab8631; !important; color: #fff"
+                          t-attf-href="/update/hardship/request"
+                        >
+                          Update
                         </a>
                     </div>
                 </div>

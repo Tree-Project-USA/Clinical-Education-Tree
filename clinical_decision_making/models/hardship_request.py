@@ -32,15 +32,11 @@ class HardshipRequest(models.Model):
         tracking=True,
         default='draft',
     )
-    _sql_constraints = [
-        ("student_id_unique", "UNIQUE(student_id)", "You Can Not Add Hardship For student more than one"),
-    ]
     expiration_date = fields.Date(string='Expiration Date')
     geographical_ids = fields.Many2many('geographical', 'geographical_ids', string='Geographical')
     student_geographical_ids = fields.Many2many('geographical', 'student_geographical_ids', string='Student Geographical')
     update_message = fields.Html(string='Message')
     attachment_cancel = fields.Binary(attachment=True)
-    
     
     def action_confirm(self):
         self.write({
@@ -66,7 +62,6 @@ class HardshipRequest(models.Model):
         self.student_id.can_apply_hardship = True
         
     def action_attachment_file_cancel(self):
-        self.attachment_cancel_id = False
         return {
             'name': _('Attachment File Cancel'),
             'view_mode': 'form',

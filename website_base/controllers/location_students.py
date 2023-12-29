@@ -17,7 +17,7 @@ class Location(http.Controller):
                 ).get_param('normal_number_zipcodes'))
         hardship_id = request.env["hardship.request"].sudo().search([
             ('student_id', '=', res_partner_id.id),
-        ])
+        ], limit=1, order="id desc")
         if request.httprequest.method == "GET":
     
             values["partner"] = res_partner_id

@@ -12,14 +12,6 @@ from odoo.exceptions import UserError
 _logger = logging.getLogger(__name__)
 
 class Dow(http.Controller):
-    
-    @http.route('/download/<int:document_id>', type='http', auth="public")
-    def download_document(self, document_id, **kwargs):
-        document = request.env['public.document'].browse(document_id)
-        if document.exists() and document.file:
-            return request.redirect('/web/content/%s?download=true' % document.file.id)
-        else:
-            return request.not_found()
 
     @http.route('/contract/attachment/<int:remote_id>', type='http', auth='public')
     def download_attachment(self, remote_id, **kwargs):

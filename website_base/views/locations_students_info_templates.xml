@@ -95,20 +95,20 @@
                                                     name="data_line_ids">
                                         </textarea>
                                     </div>
+                                    <div class="mt-4 mb-4">
+                                        <div class="col-12 mr-2">
+                                            <a
+                                                type="button"
+                                                class="btn my-2 float-end"
+                                                role="button" 
+                                                href="/my/home"
+                                                style="background-color:  #ab8631; !important; color: #fff"
+                                            >
+                                                Back My Profile
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="row mt-4 mt-4 mb-4 text-left">
-                            <div class="col-12 mr-2">
-                                <a
-                                    type="button"
-                                    class="btn my-2"
-                                    role="button" 
-                                    href="/my/home"
-                                    style="background-color:  #ab8631; !important; color: #fff"
-                                >
-                                    Back
-                                </a>
                             </div>
                         </div>
                     </div>
