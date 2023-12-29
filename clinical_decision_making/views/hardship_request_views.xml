@@ -53,7 +53,7 @@
                         <field name="expiration_date"/>
                     </group>
                 <notebook>
-                    <page string="Geographical" name="geographical_ids">
+                    <page string="Zip Codes" name="geographical_ids">
                         <field name="geographical_ids" attrs="{'readonly': [('state', 'in', ('cancel', 'confirm'))]}"/>
                     </page>
                     <page string="Attachment" name="attachment_ids">

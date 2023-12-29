@@ -497,7 +497,7 @@ class CPDMTree(models.Model):
         ('ice', 'ICE'),
         ('tce1', 'TCE1'),
         ('tce2', 'TCE2'),
-    ], string='Type', required=True)
+    ], string='Clinical Experience Type', required=True)
     term = fields.Selection([
         ('fall', 'Fall'),
         ('spring', 'Spring'),

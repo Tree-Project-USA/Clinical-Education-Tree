@@ -31,7 +31,7 @@ class PlacementOffer(models.Model):
     placement_type = fields.Selection([
         ('ice', 'ICE'),
         ('tce', 'TCE'),
-    ], string='Type', required=True)
+    ], string='Clinical Experience Type', required=True)
     placement_term = fields.Selection([
         ('fall', 'Fall'),
         ('spring', 'Spring'),

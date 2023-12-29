@@ -25,7 +25,7 @@ class Archive(models.Model):
         ('ice', 'ICE'),
         ('tce1', 'TCE1'),
         ('tce2', 'TCE2'),
-    ], string='Type', store=True)
+    ], string='Clinical Experience Type', store=True)
     setting = fields.Selection([
         ('op', 'OP'),
         ('ip', 'IP'),

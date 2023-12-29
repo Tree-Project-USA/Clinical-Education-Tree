@@ -33,8 +33,8 @@ class ResPartner(models.Model):
         ('fall', 'Fall'),
         ('spring', 'Spring'),
         ('summer', 'Summer'),
-    ], string='Start Term Type', )
-    start_year = fields.Selection(selection=SELECTION_YEAR_RANGE, string='Year', )
+    ], string='Start Term', )
+    start_year = fields.Selection(selection=SELECTION_YEAR_RANGE, string='Start Year', )
     start_term = fields.Char(string='Start Term', compute='_compute_term_fields', store=True)
     graduation_term = fields.Char(string='Graduation Term', compute='_compute_term_fields', store=True)
     is_with_hardship = fields.Boolean(string='is_with_hardship', compute='_compute_is_with_hardship', )

@@ -58,7 +58,7 @@
         </record>
 
         <record model="ir.actions.act_window" id="geographical_action">
-            <field name="name">Geographical Data</field>
+            <field name="name">Zip Codes Data</field>
             <field name="res_model">geographical</field>
             <field name="context">{'create': False}</field>
             <field name="view_mode">tree,form</field>
