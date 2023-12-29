@@ -89,7 +89,7 @@
                     </group>
 
                     <notebook colspan="4">
-                        <page string="Geographical" name="student_geographical" autofocus="autofocus">
+                        <page string="Zip Codes" name="student_geographical" autofocus="autofocus">
                             <field name="geographical_ids" mode="tree" readonly="1">
                                 <tree editable="bottom" create="false">
                                     <field name="zip_code"/>
@@ -98,7 +98,7 @@
                                 </tree>
                             </field>
                         </page>
-                        <page string="Archive" name="student_archive">
+                        <page string="Placement History" name="student_archive">
                             <field name="aval_archive_ids" mode="tree">
                                 <tree editable="bottom" delete="false">
                                     <field name="student_id" invisible="1"/>

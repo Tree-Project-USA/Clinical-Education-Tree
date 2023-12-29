@@ -39,7 +39,7 @@ class PlacementRequest(models.Model):
     placement_type = fields.Selection([
         ('ice', 'ICE'),
         ('tce', 'TCE')
-        ], string='Type', default='ice', required=True)
+        ], string='Clinical Experience Type', default='ice', required=True)
     year = fields.Selection(selection=SELECTION_YEAR_RANGE, string='Year', default='2000', required=True)
     placement_term = fields.Selection([
         ('fall', 'Fall'),
