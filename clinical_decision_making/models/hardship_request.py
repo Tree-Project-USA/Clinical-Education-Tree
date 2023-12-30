@@ -62,6 +62,7 @@ class HardshipRequest(models.Model):
         self.student_id.can_apply_hardship = True
         
     def action_attachment_file_cancel(self):
+        self.attachment_cancel = False
         return {
             'name': _('Attachment File Cancel'),
             'view_mode': 'form',
@@ -80,7 +81,7 @@ class HardshipRequest(models.Model):
             'can_apply_hardship': False
         })
         template = self.env.ref('clinical_decision_making.mail_template_send_hardship_request_declined')
-        template.send_mail(self.student_id.id, force_send=True)
+        template.send_mail(self.id, force_send=True)
         self.student_id.can_apply_hardship = True
         
     def action_open_update_view(self):

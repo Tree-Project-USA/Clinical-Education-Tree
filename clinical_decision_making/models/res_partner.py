@@ -20,7 +20,7 @@ class ResPartner(models.Model):
     hardship_ids = fields.One2many('hardship.request', 'student_id', string='Hardship')
     home_address = fields.Char(string='Home Address')
     personal_phone = fields.Char(string='Personal Phone')
-    usahs_email_address = fields.Char(string='USAHS Email Address', required=True)
+    university_email_address = fields.Char(string='University Email Address', required=True)
     campus = fields.Char(string='Campus', default='Austin, TX')
     archive_ids = fields.One2many(comodel_name='archive', inverse_name='student_id', string='Archive')
     can_apply_hardship = fields.Boolean(string='Apply Hardship', default=False)
@@ -64,9 +64,9 @@ class ResPartner(models.Model):
     def action_send_account_creation_invitation(self):
         group_portal = self.env.ref('base.group_portal')
         group_public = self.env.ref('base.group_public')
-        partner_ids = self.env['res.partner'].search([('email', '!=', False),('is_student', '=', True)])
+        partner_ids = self.env['res.partner'].search([('university_email_address', '!=', False),('is_student', '=', True)])
         for partner_id in partner_ids:
-            user_sudo = self.env['res.users'].search([('partner_id', '=', partner_id.id)])
+            user_sudo = self.env['res.users'].search([('partner_id', '=', partner_id.id), ('login', '!=', partner_id.university_email_address)])
             if not user_sudo:
                 # create a user if necessary and make sure it is in the portal group
                 company = partner_id.company_id or self.env.company
@@ -181,10 +181,10 @@ class ResPartner(models.Model):
             if len(all_states) < 3:
                     raise ValidationError('You Should add at least 3 different state.')
     
-    @api.constrains('usahs_email_address')
+    @api.constrains('university_email_address')
     def validate_mail(self):
-        if self.usahs_email_address:
-            if not re.match('^[_A-Za-z0-9-]+(\.[_A-Za-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', self.usahs_email_address):
+        if self.university_email_address:
+            if not re.match('^[_A-Za-z0-9-]+(\.[_A-Za-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', self.university_email_address):
                 raise ValidationError(_('The personal email address must be valid ( example@example.com )'))
     
     @api.constrains('geographical_ids')

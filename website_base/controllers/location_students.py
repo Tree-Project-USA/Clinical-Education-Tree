@@ -47,6 +47,8 @@ class Location(http.Controller):
                 request_dummy = request.env["res.partner"].sudo().new(values)  
                 request_dummy._check_geographical_ids()
                 res_partner_id.sudo().write(values)
+                template = request.env.ref('clinical_decision_making.mail_template_send_preferred_addresses_added')
+                template.send_mail(res_partner_id.id, force_send=True)
                 return request.redirect("/my/home")
             except ValidationError as msg:
                 if hardship_id.state == 'confirm':
