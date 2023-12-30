@@ -37,6 +37,7 @@ class HardshipRequest(models.Model):
     student_geographical_ids = fields.Many2many('geographical', 'student_geographical_ids', string='Student Geographical')
     update_message = fields.Html(string='Message')
     attachment_cancel = fields.Binary(attachment=True)
+    attachment_confirm = fields.Binary(attachment=True)
     
     def action_confirm(self):
         self.write({
@@ -48,7 +49,7 @@ class HardshipRequest(models.Model):
             'geographical_ids': self.geographical_ids.ids
         })
         template = self.env.ref('clinical_decision_making.mail_template_send_hardship_request_approved')
-        template.send_mail(self.student_id.id, force_send=True)
+        template.send_mail(self.id, force_send=True)
         self.student_id.can_apply_hardship = False
 
     def action_return_draft(self):
@@ -68,6 +69,17 @@ class HardshipRequest(models.Model):
             'view_mode': 'form',
             'res_model': 'hardship.request',
             'view_id': self.env.ref('clinical_decision_making.hardship_request_attachment_file_cancel_view_form').id,
+            'type': 'ir.actions.act_window',
+            'res_id': self.id,
+            'target': 'new'
+        }
+    def action_attachment_file_confirm(self):
+        self.attachment_confirm = False
+        return {
+            'name': _('Attachment File Confirm'),
+            'view_mode': 'form',
+            'res_model': 'hardship.request',
+            'view_id': self.env.ref('clinical_decision_making.hardship_request_attachment_file_confirm_view_form').id,
             'type': 'ir.actions.act_window',
             'res_id': self.id,
             'target': 'new'

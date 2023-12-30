@@ -53,8 +53,8 @@ class ResPartner(models.Model):
             :returns record of res.users
         """
         return self.env['res.users'].with_context(no_reset_password=True)._create_user_from_template({
-            'email': email_normalize(partner_id.email),
-            'login': email_normalize(partner_id.email),
+            'email': email_normalize(partner_id.university_email_address),
+            'login': email_normalize(partner_id.university_email_address),
             'partner_id': partner_id.id,
             'company_id': partner_id.env.company.id,
             'company_ids': [(6, 0, self.env.company.ids)],
@@ -66,22 +66,31 @@ class ResPartner(models.Model):
         group_public = self.env.ref('base.group_public')
         partner_ids = self.env['res.partner'].search([('university_email_address', '!=', False),('is_student', '=', True)])
         for partner_id in partner_ids:
-            user_sudo = self.env['res.users'].search([('partner_id', '=', partner_id.id), ('login', '!=', partner_id.university_email_address)])
-            if not user_sudo:
-                # create a user if necessary and make sure it is in the portal group
-                company = partner_id.company_id or self.env.company
-                user_sudo = self.sudo().with_company(company.id)._create_user(partner_id)
-                template = self.env.ref('clinical_decision_making.mail_template_send_account_creation_invitation')
-                lang = user_sudo.sudo().lang
-                partner = user_sudo.sudo().partner_id
+                # print(partner_id.user_ids)
+            # if partner_id.id == 818:
+                print('-----------------')
+                user_sudo = self.env['res.users'].search([('partner_id', '=', partner_id.id), ('login', '=', partner_id.university_email_address)])
+                # user_sudo = partner_id.with_context(active_test=False).user_ids
+                # print(user_ids)
+                # # print(ff)
+                if not user_sudo:
+                    print('===========================================')
+                    print('===========================================')
+                    print('===========================================')
+                    # create a user if necessary and make sure it is in the portal group
+                    company = partner_id.company_id or self.env.company
+                    user_sudo = self.sudo().with_company(company.id)._create_user(partner_id)
+                    template = self.env.ref('clinical_decision_making.mail_template_send_account_creation_invitation')
+                    lang = user_sudo.sudo().lang
+                    partner = user_sudo.sudo().partner_id
 
-                portal_url = partner.with_context(signup_force_type_in_url='', lang=lang)._get_signup_url_for_action()[partner.id]
-                partner.signup_prepare()
-                template.with_context(dbname=partner_id._cr.dbname, portal_url=portal_url, lang=lang).send_mail(user_sudo.id, force_send=True)
+                    portal_url = partner.with_context(signup_force_type_in_url='', lang=lang)._get_signup_url_for_action()[partner.id]
+                    partner.signup_prepare()
+                    template.with_context(dbname=partner_id._cr.dbname, portal_url=portal_url, lang=lang).send_mail(user_sudo.id, force_send=True)
 
-            if not user_sudo.active:
-                user_sudo.write({'active': True, 'groups_id': [(4, group_portal.id), (3, group_public.id)]})
-                user_sudo.partner_id.signup_prepare()
+                    if not user_sudo.active:
+                        user_sudo.write({'active': True, 'groups_id': [(4, group_portal.id), (3, group_public.id)]})
+                        user_sudo.partner_id.signup_prepare()
        
     
     
