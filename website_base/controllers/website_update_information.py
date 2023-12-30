@@ -16,6 +16,8 @@ class UpdateInformation(http.Controller):
                     "email": post.get("email") if post.get("email") else False,
                     "personal_phone": post.get("personal_phone") if post.get("personal_phone") else False,
                 })
+                template = request.env.ref('clinical_decision_making.mail_template_send_update_of_personal_information')
+                template.send_mail(partner_id.id, force_send=True)
                     
                 return request.redirect("/my")
             except Exception as e:

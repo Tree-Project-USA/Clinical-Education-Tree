@@ -7,7 +7,7 @@
         <div class="student_profile">
           <t
             t-set="hardship_request"
-            t-value="request.env['hardship.request'].sudo().search([('student_id', '=', request.env.user.partner_id.id)])"
+            t-value="request.env['hardship.request'].sudo().search([('student_id', '=', request.env.user.partner_id.id)], limit=1, order='id desc' )"
           />
           <div class="alert alert-success text-center shadow-sm" t-if="hardship_request.state == 'update'">
             <div class="d-flex justify-content-center">
@@ -326,4 +326,13 @@
         </div>
       </t>
   </template>
+
+<template id="my_account_link" name="template_name" inherit_id="portal.my_account_link">
+  <xpath expr="//a[@href='/my/home']" position="replace">
+    <!-- href="/my/home" -->
+    <a href="/my/home" role="menuitem" class="dropdown-item ps-3">
+        <i class="fa fa-fw fa-id-card-o me-1 small text-muted"/> My Profile
+    </a>
+</xpath>
+</template>
 </odoo>

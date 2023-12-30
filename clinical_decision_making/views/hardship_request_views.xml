@@ -39,7 +39,7 @@
                     <button name="action_confirm" string="Confirm" type="object" class="oe_highlight" attrs="{'invisible': ['|',('state', '=', 'confirm'), ('state', '=', 'cancel')]}" data-hotkey="c"/>
                     <button name="action_open_update_view" string="Update Information" type="object" class="btn btn-warning" data-hotkey="u"/>
                     <button name="action_return_draft" string="Return To Draft" type="object" class="btn btn-primary" attrs="{'invisible': [('state', 'in', ['draft', 'placementing'])]}" data-hotkey="c"/>
-                    <button name="action_cancel" string="Cancel" type="object" class="btn btn-danger" attrs="{'invisible': ['|',('state', '=', 'confirm'), ('state', '=', 'cancel')]}" data-hotkey="c"/>
+                    <button name="action_attachment_file_cancel" string="Cancel" type="object" class="btn btn-danger" attrs="{'invisible': ['|',('state', '=', 'confirm'), ('state', '=', 'cancel')]}" data-hotkey="c"/>
                     <field name="state" widget="statusbar" readonly="1"/>
                 </header>
                 <sheet>
@@ -89,6 +89,26 @@
                     <footer>
                         <button name="action_update" string="Send to Update" class="oe_highlight" type="object" />
                                 or
+                        <button special="cancel" string="Cancel" class="oe_link" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- view form for Attachment File Cancel -->
+        <record id="hardship_request_attachment_file_cancel_view_form" model="ir.ui.view">
+            <field name="name">hardship.request.view.form</field>
+            <field name="model">hardship.request</field>
+            <field name="arch" type="xml">
+                <form>
+                    <div>
+                        <p>
+                            <field name="attachment_cancel" required="1"/>
+                        </p>
+                    </div>
+                    <footer>
+                        <button name="action_cancel" string="Send to Cancel" class="oe_highlight" type="object" />
+                                
                         <button special="cancel" string="Cancel" class="oe_link" />
                     </footer>
                 </form>

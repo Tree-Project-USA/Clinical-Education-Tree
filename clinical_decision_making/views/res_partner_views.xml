@@ -81,7 +81,7 @@
                             <field name="phone" string="Home Phone"/>
                             <field name="personal_phone"/>
                             <field name="email" string="Personal Email Address"/>
-                            <field name="usahs_email_address" required="1"/>
+                            <field name="university_email_address" required="1"/>
                             <field name="ice_term"/>
                             <field name="tce1_term"/>
                             <field name="tce2_term"/>

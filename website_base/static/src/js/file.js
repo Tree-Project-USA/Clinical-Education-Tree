@@ -27,16 +27,22 @@ odoo.define("website_base.file", function(require) {
                 <td class="row-index" colspan="5">
                     <div class="row">
                         <div class="col-12">
-                            <div>
-								<input
-									type="file"
-									accept="image/jpg, image/jpeg, image/png, application/pdf"
-									class="form-control"
+                        <div class="file-upload" id="file-upload_` + counter_files + `">
+                            <div class="file-select">
+                                <div class="file-select-button" id="fileName_` + counter_files + `">
+                                    Choose File
+                                </div>
+                                <div class="file-select-name" id="noFile_` + counter_files + `">
+                                    Drag and drop your file here
+                                </div> 
+                                <input type="file" 
+                                    accept="image/jpg, image/jpeg, image/png, application/pdf"
                                     required="required"
-									name="datas_` + counter_files + `" 
-									id="datas_` + counter_files + `"
-								/>
+                                    name="datas_` + counter_files + `" 
+                                    id="chooseFile_` + counter_files + `"
+                                    />
                             </div>
+                        </div>
                         </div>
                     </div>
                 </td>
@@ -64,6 +70,22 @@ odoo.define("website_base.file", function(require) {
                     $('input[name="len_file"]').attr('value', counter_files)
                 }
             });
+
+            var ChooseFile = '#chooseFile_' + counter_files
+            var FileUpload = '#file-upload_' + counter_files
+            var NoFile = '#noFile_' + counter_files
+            $(ChooseFile).bind('change', function () {
+                var filename = $(ChooseFile).val();
+                if (/^\s*$/.test(filename)) {
+                  $(FileUpload).removeClass('active');
+                  $(NoFile).text("Drag and drop your file here"); 
+                }
+                else {
+                  $(FileUpload).addClass('active');
+                  $(NoFile).text(filename.replace("C:\\fakepath\\", "")); 
+                }
+              });
+              
 
             Array.prototype.remove = function() {
                 var what, a = arguments,

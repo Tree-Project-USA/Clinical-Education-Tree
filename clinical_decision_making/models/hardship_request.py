@@ -32,14 +32,11 @@ class HardshipRequest(models.Model):
         tracking=True,
         default='draft',
     )
-    _sql_constraints = [
-        ("student_id_unique", "UNIQUE(student_id)", "You Can Not Add Hardship For student more than one"),
-    ]
     expiration_date = fields.Date(string='Expiration Date')
     geographical_ids = fields.Many2many('geographical', 'geographical_ids', string='Geographical')
     student_geographical_ids = fields.Many2many('geographical', 'student_geographical_ids', string='Student Geographical')
     update_message = fields.Html(string='Message')
-    
+    attachment_cancel = fields.Binary(attachment=True)
     
     def action_confirm(self):
         self.write({
@@ -64,6 +61,17 @@ class HardshipRequest(models.Model):
         })
         self.student_id.can_apply_hardship = True
         
+    def action_attachment_file_cancel(self):
+        self.attachment_cancel = False
+        return {
+            'name': _('Attachment File Cancel'),
+            'view_mode': 'form',
+            'res_model': 'hardship.request',
+            'view_id': self.env.ref('clinical_decision_making.hardship_request_attachment_file_cancel_view_form').id,
+            'type': 'ir.actions.act_window',
+            'res_id': self.id,
+            'target': 'new'
+        }
     def action_cancel(self):
         self.write({
             'state': 'cancel',
@@ -73,7 +81,7 @@ class HardshipRequest(models.Model):
             'can_apply_hardship': False
         })
         template = self.env.ref('clinical_decision_making.mail_template_send_hardship_request_declined')
-        template.send_mail(self.student_id.id, force_send=True)
+        template.send_mail(self.id, force_send=True)
         self.student_id.can_apply_hardship = True
         
     def action_open_update_view(self):
