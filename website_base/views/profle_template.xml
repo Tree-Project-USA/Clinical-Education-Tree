@@ -104,7 +104,7 @@
                         <input
                           type="text"
                           id="phone"
-                          max="10"
+                          maxlength="10"
                           oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
                           name="phone"
                           class="form-control updated"
@@ -122,7 +122,7 @@
                         <input
                           type="text"
                           id="personal_phone"
-                          max="10"
+                          maxlength="10"
                           oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
                           name="personal_phone"
                           class="form-control updated"
@@ -155,11 +155,11 @@
                       <div>
                         <input
                           type="text"
-                          id="email"
-                          name="email"
+                          id="university_email_address"
+                          name="university_email_address"
                           class="form-control"
                           readonly="readonly"
-                          t-att-value="partner.email"
+                          t-att-value="partner.university_email_address"
                         />
                       </div>
                     </div>
