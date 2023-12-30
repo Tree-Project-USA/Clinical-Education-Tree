@@ -20,15 +20,11 @@ class PreferredSetting(http.Controller):
             setting_ip_ids = request.env["preferred.setting"].sudo().search([("type_setting", "=", 'ip')])
             setting_op_ids = request.env["preferred.setting"].sudo().search([("type_setting", "=", 'op')])
             preferred_setting_ids = request.env["preferred.setting"].sudo().search([])
-            data_fields = [i.read(['name'])[0] for i in preferred_setting_ids]
-            categorys = split_data_into_groups(data_fields, 6)
-            categor = split_data_into_groups(preferred_setting_ids, 6)
-            print(categorys)
-            print(categor)
             values.update({
                 'setting_ip_ids' :  setting_ip_ids,
                 'setting_op_ids' :   setting_op_ids ,         
-                'preferred_setting_ids' : preferred_setting_ids
+                'preferred_setting_ids' : preferred_setting_ids,
+                'preferred_list_id' : res_partner_id.preferred_setting_ids.ids or []
            })
             return request.render("website_base.preferred_setting_template", values)
         elif request.httprequest.method == "POST":

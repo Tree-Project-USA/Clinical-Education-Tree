@@ -22,13 +22,14 @@
                                 t-att-value="request.csrf_token()" />
                             <input type="hidden" name="list_setting" id="list_setting"/>
                             <div class="row mt-4">
+                                <t t-set="preferred" t-value="preferred_list_id"/>
                                 <t t-foreach='preferred_setting_ids' t-as='setting'>
                                     <div class="col-6">
                                         <div class="form-group">
                                             <div class="input-group mb-2">
                                                 <div class="form-check mb-3">
                                                     <input  class="multiple_choice setting" type="checkbox" t-attf-name="setting_#{setting.id}" t-attf-id="#{setting.id}"
-                                                           t-att-value='setting.name'/>
+                                                           t-att-value='setting.name'  t-att-checked="setting.id in preferred"/>
                                                     <label t-attf-for="setting_#{setting.id}">
                                                         <span t-field="setting.name"/>
                                                     </label>

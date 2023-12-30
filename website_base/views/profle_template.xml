@@ -263,7 +263,7 @@
                       <i class="fa fa-pencil"/> Submit Preferred Addresses 
                     </a>
                     <a
-                      t-if="not partner.geographical_ids or hardship_request.state in ['cancel','expired']"
+                      t-if="not partner.preferred_setting_ids"
                       type="button"
                       class="btn my-2"
                       role="button" 
@@ -271,6 +271,16 @@
                       style="background-color:  #ab8631; !important; color: #fff"
                     >
                       <i class="fa fa-pencil"/> Submit Preferred Setting 
+                    </a>
+                    <a
+                      t-if="partner.preferred_setting_ids"
+                      type="button"
+                      class="btn my-2"
+                      role="button" 
+                      href="/add/preferred/setting"
+                      style="background-color:  #ab8631; !important; color: #fff"
+                    >
+                      <i class="fa fa-pencil"/> Updat Preferred Setting 
                     </a>
                     <a
                       t-if="hardship_request and hardship_request.state not in ['cancel','expired']"
