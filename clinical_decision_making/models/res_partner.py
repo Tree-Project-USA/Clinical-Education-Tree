@@ -22,7 +22,6 @@ class ResPartner(models.Model):
     home_address = fields.Char(string='Home Address')
     personal_phone = fields.Char(string='Personal Phone')
     personal_email_address = fields.Char(string='Personal Email Address')
-    university_email_address = fields.Char(string='University Email Address', required=True)
     campus = fields.Char(string='Campus', default='Austin, TX')
     archive_ids = fields.One2many(comodel_name='archive', inverse_name='student_id', string='Archive')
     can_apply_hardship = fields.Boolean(string='Apply Hardship', default=False)

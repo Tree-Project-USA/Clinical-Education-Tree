@@ -124,7 +124,7 @@
                             href="/my/home"
                             style="background-color:  #ab8631; !important; color: #fff"
                         >
-                          Back My Profile
+                          Back To My Profile
                         </a>
                         <a 
                           t-if="hardship_id.state == 'cancel'"

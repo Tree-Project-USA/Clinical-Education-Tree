@@ -21,7 +21,9 @@ odoo.define("website_base.location_student", function(require) {
         init: function() {
             this._super.apply(this, arguments);
             this._popoverRPC = null;
+            console.log($("#variable"), '====')
             const variable = $("#variable").val()
+            console.log(variable, '====')
             for (let i = 0; i < parseInt(variable); i++) {
                 this._AddLocationsStudent()
             }
@@ -41,9 +43,10 @@ odoo.define("website_base.location_student", function(require) {
          */
         _AddLocationsStudent: function() {
             var locations_zip_vals = $('#locations_zip').val();
-
+            console.log(locations_zip_vals, '===========locations_zip_vals')
             if (locations_zip_vals) {
                 var locations_vals = JSON.parse(locations_zip_vals);
+                console.log(locations_vals, '===========locations_zip_vals')
 
             }
             var IndexLocations = counter_locations + 1
@@ -106,7 +109,7 @@ odoo.define("website_base.location_student", function(require) {
                     event.preventDefault();
                 }
             });
-            $(ZipID).input(function() {
+            $(ZipID).bind('input', function() {
                 var ZipCode = $(ZipID).val()
                 ajax.jsonRpc("/show/locations", 'call', { 'zip_code': ZipCode }).then(function(data) {
                     if (data.id) {
@@ -137,7 +140,7 @@ odoo.define("website_base.location_student", function(require) {
                         $(CityID).val("")
                     }
                 })
-            })
+            });
             if (locations_vals) {
 
                 $(ZipID).val(locations_vals[counter_locations]).change()
@@ -150,56 +153,56 @@ odoo.define("website_base.location_student", function(require) {
 
     $(document).ready(function() {
         $('input[type=checkbox]').change(function(e) {
-            let popup = $(".popup-card-error")[0]
-            let content = $("#content-p")
+                let popup = $(".popup-card-error")[0]
+                let content = $("#content-p")
                 if ($('input[type=checkbox]:checked').length > 5) {
                     $(this).prop('checked', false)
                     $(content).text('Only allowed 5 preferred settings')
-                        $(popup).css("transform", "translateX(0)");
-                                setTimeout(function() {
-                                    $(popup).css("transform", "translateX(500px)");
-                                }, 4000); 
+                    $(popup).css("transform", "translateX(0)");
+                    setTimeout(function() {
+                        $(popup).css("transform", "translateX(500px)");
+                    }, 4000);
                 }
             }),
 
-        /**
-         * @private
-         * @param {Event} ev
-         */
-        $('.preferred_setting').on('click', '.new-setting-submit', function(event) {
-            var $this = $(this);
-            var checkboxes = document.querySelectorAll('input[type="checkbox"]');
-            var list = []
-            let popup = $(".popup-card-error")[0]
-            let content = $("#content-p")
-            checkboxes.forEach(boxes => {
-                if (boxes.checked == true) {
-                    list.push(boxes.id)
-                }
-            })
-            if (list.length < 5) {
-
-            } else {
-                $('#list_setting').val(list)
-                ajax.jsonRpc("/check/preferred/setting", 'call', {
-                    'list_setting': list,
-                }).then(function(result) {
-                    if (result == true) {
-                        event.preventDefault();
-                        $this.closest('form').submit();
-                    } else {
-                        $(content).text('You should have one (IP) as minimum and one (OP)')
-                        $(popup).css("transform", "translateX(0)");
-                                setTimeout(function() {
-                                    $(popup).css("transform", "translateX(500px)");
-                                }, 4000); 
+            /**
+             * @private
+             * @param {Event} ev
+             */
+            $('.preferred_setting').on('click', '.new-setting-submit', function(event) {
+                var $this = $(this);
+                var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                var list = []
+                let popup = $(".popup-card-error")[0]
+                let content = $("#content-p")
+                checkboxes.forEach(boxes => {
+                    if (boxes.checked == true) {
+                        list.push(boxes.id)
                     }
                 })
-            }
+                if (list.length < 5) {
+
+                } else {
+                    $('#list_setting').val(list)
+                    ajax.jsonRpc("/check/preferred/setting", 'call', {
+                        'list_setting': list,
+                    }).then(function(result) {
+                        if (result == true) {
+                            event.preventDefault();
+                            $this.closest('form').submit();
+                        } else {
+                            $(content).text('You should have one (IP) as minimum and one (OP)')
+                            $(popup).css("transform", "translateX(0)");
+                            setTimeout(function() {
+                                $(popup).css("transform", "translateX(500px)");
+                            }, 4000);
+                        }
+                    })
+                }
 
 
 
-        })
+            })
     })
 
 
