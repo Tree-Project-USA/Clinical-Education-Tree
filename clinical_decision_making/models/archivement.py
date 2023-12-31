@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from odoo import models, fields, api
+from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
 
 
@@ -53,7 +53,8 @@ class Archive(models.Model):
         ('draft', 'Draft'),
         ('done', 'Done'),
     ], string='Term',)
-    criteria = fields.Html(string='Criteria')
+    offer_criteria = fields.Html(string='Offer Criteria')
+    student_criteria = fields.Html(string='Student Criteria')
     match_state = fields.Selection([
         ('approve', 'Approved'),
         ('decline', 'Declined'),
@@ -70,7 +71,9 @@ class Archive(models.Model):
     @api.constrains('placement_type', 'facility_id')
     def _check_placement_type(self):
         for rec in self:
-            print('_check_placement_type', rec)
+            if self.env['archive'].search([('student_id', '=', rec.student_id.id), ('placement_status', 'in', ['confirmed', 'completed']), ('id', '!=', rec.id), ('setting', '=', 'ip')]) and rec.setting == 'ip':
+                raise ValidationError(_("Student %s is already take  IP Setting"))
+            
             # if self.env['archive'].search([('student_id', '=', rec.student_id.id), ('facility_id', '=', rec.facility_id.id), ('placement_status', 'in', ['approved', 'completed', 'pending']), ('id', '!=', rec.id)]) and not rec.student_id.is_with_hardship:
             #     raise ValidationError("Student %s is already placed to %s facility" % (rec.student_id.name, rec.facility_id.name))    
             
@@ -92,10 +95,22 @@ class Archive(models.Model):
             #     if not archive_id:
             #         raise ValidationError("Student %s is Shuld Take TCE1 term before TCE2" % (rec.student_id.name))
             
+    @api.onchange('placement_status')
+    def _onchange_placement_status(self):
+        self.ensure_one()
+        if self.placement_status == 'not_placed':
+            if self.archive_offer_id:
+                self.archive_offer_id.is_linked = False
+                self.archive_offer_id.student_id = False
+            
+            
+            
     def action_approve(self):
         self.write({
          'match_state': 'approve',
+         'placement_status': 'approved'
         })
+        
         
     def action_decline(self):
         self.write({

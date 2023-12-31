@@ -99,7 +99,7 @@
 
                     <notebook colspan="4">
                         <page string="Zip Codes" name="student_geographical" autofocus="autofocus">
-                            <field name="geographical_ids" mode="tree" readonly="1">
+                            <field name="geographical_ids" mode="tree">
                                 <tree editable="bottom" create="false">
                                     <field name="zip_code"/>
                                     <field name="state"/>

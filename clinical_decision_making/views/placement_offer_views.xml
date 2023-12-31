@@ -101,6 +101,7 @@
                     <field name="placement_type"/>
                     <field name="placement_term"/>
                     <field name="year"/>
+                    <field name="term"/>
                     </tree>
                 </field>
             </record>
