@@ -10,17 +10,17 @@
                 <tree>
                     <field name="priority" optional="show" widget="priority" nolabel="1"/>
                     <field name="name" />
-                    <field name="create_date"/>
-                    <field name="create_uid"/>
                     <field name="facility_id"/>
                     <field name="year"/>
                     <field name="placement_type"/>
                     <field name="placement_term"/>
                     <field name="state" widget="badge" 
-                        decoration-primary="state == 'done'" 
-                        decoration-success="state == 'placementing'" 
-                        decoration-warning="state == 'cancel'" 
-                        decoration-muted="state == 'draft'"/>
+                    decoration-primary="state == 'done'" 
+                    decoration-success="state == 'placementing'" 
+                    decoration-warning="state == 'cancel'" 
+                    decoration-muted="state == 'draft'"/>
+                    <field name="create_date"/>
+                    <field name="create_uid"/>
                     </tree>
                 </field>
             </record>

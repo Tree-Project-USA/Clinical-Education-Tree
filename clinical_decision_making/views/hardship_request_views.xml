@@ -11,6 +11,7 @@
             <tree>
                 <field name="student_id"/>
                 <field name="create_date"/>
+                <field name="expiration_date"/>
                 <field name="state" widget="badge" decoration-muted="state == 'draft'"  decoration-danger="state == 'cancel'"  decoration-warning="state == 'update'" decoration-success="state == 'confirm'"/>
             </tree>
         </field>
@@ -23,6 +24,7 @@
             <search>
                 <field name="student_id"/>
                 <field name="create_date"/>
+                <field name="expiration_date"/>
                 <field name="state"/>
             </search>
         </field>
@@ -62,7 +64,7 @@
                     <page string="Notes" name="notes">
                         <field name="note" attrs="{'readonly': [('state', 'in', ('cancel', 'confirm'))]}"/>
                     </page>
-                    <page string="Student Geographical" name="student_geographical_ids">
+                    <page string="Student Geographical" name="student_geographical_ids" invisible="1">
                         <field name="student_geographical_ids" attrs="{'readonly': [('state', 'in', ('cancel', 'confirm'))]}"/>
                     </page>
                 </notebook>

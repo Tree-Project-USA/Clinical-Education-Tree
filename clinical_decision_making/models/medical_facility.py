@@ -13,7 +13,7 @@ class MedicalFacility(models.Model):
     offer_id = fields.One2many('placement.offer', 'facility_id',string='Placement Offers')
     address = fields.Char(string='Address')
     email = fields.Char(string='Email Address')
-    geographical_id = fields.Many2one(comodel_name='geographical', string='Geographical', required=True)
+    geographical_id = fields.Many2one(comodel_name='geographical', string='Zip Code', required=True)
     city = fields.Char(related='geographical_id.city')
     state = fields.Char(related='geographical_id.state')
     zip = fields.Char(related='geographical_id.zip_code')
@@ -26,7 +26,7 @@ class MedicalFacility(models.Model):
     contract_warning = fields.Boolean(string='Contract Warning', store=True, compute='_compute_contract_warning')
     first_contract_date = fields.Date(compute='_compute_first_contract_date', store=True)
     contracts_count = fields.Integer(compute='_compute_contracts_count', string='Contract Count', tracking=True)
-    scce_ids = fields.Many2many(comodel_name='scce', string='SCCES', tracking=True)
+    scce_ids = fields.Many2many(comodel_name='scce', string='SCCE', tracking=True)
     offer_ids = fields.One2many(comodel_name='placement.offer', inverse_name='facility_id', string='Offers')
     archive_offer_count = fields.Float(compute='_compute_archive_offer_count', string='Archive Offer Count')
     

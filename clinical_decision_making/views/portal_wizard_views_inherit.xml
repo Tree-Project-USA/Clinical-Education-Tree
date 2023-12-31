@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="wizard_view_inherit">
+            <field name="name">portal.wizard.inherit</field>
+            <field name="model">portal.wizard</field>
+            <field name="inherit_id" ref="portal.wizard_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='user_ids']/tree/field[@name='email']" position="attributes">
+                    <attribute name="string">University Email Address</attribute>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

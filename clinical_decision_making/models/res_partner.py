@@ -13,7 +13,8 @@ class ResPartner(models.Model):
     _inherit = 'res.partner'
     
     is_student = fields.Boolean(string='Is Student', default=False)
-    name = fields.Char(string='Student Name', compute='_compute_name', store=True, default='new')
+    student_id = fields.Char(string='Student ID')
+    name = fields.Char(string='Student Name', compute='_compute_name', store=True, default='Student Name')
     first_name = fields.Char(string='Student First Name', required=True)
     last_name = fields.Char(string='Student Last Name', required=True )
     cohort_label = fields.Char(string='Cohort Label', compute='_compute_term_fields', store=True)# TODO: Remoove this line
@@ -21,6 +22,7 @@ class ResPartner(models.Model):
     home_address = fields.Char(string='Home Address')
     personal_phone = fields.Char(string='Personal Phone')
     personal_email_address = fields.Char(string=' Email Address')
+    university_email_address = fields.Char(string='University Email Address', required=True)
     campus = fields.Char(string='Campus', default='Austin, TX')
     archive_ids = fields.One2many(comodel_name='archive', inverse_name='student_id', string='Archive')
     can_apply_hardship = fields.Boolean(string='Apply Hardship', default=False)
@@ -90,6 +92,12 @@ class ResPartner(models.Model):
                         user_sudo.partner_id.signup_prepare()
        
     
+    
+    @api.constrains('student_id')
+    def _check_student_id(self):
+        pattern = r'^\d+$'
+        if not re.match(pattern, self.student_id):
+            raise ValidationError(_('The Student ID Must Contain Numbers Only'))
     
     @api.depends('archive_ids')
     def get_aval_archive_ids(self):

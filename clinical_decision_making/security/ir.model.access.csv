@@ -14,7 +14,7 @@ access_medical_facility,medical.facility,model_medical_facility,,1,1,1,1
 access_placement_offer,placement.offer,model_placement_offer,,1,1,1,1
 access_placement_offer_line,placement.offer.line,model_placement_offer_line,,1,1,1,1
 
-access_program,program,model_program,,1,1,1,0
+access_program,program,model_program,,1,1,1,1
 access_placement_request,placement.request,model_placement_request,,1,1,1,1
 
 access_archive_offer,archive.offer,model_archive_offer,,1,1,1,1
