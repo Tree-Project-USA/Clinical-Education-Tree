@@ -9,6 +9,7 @@
         <field name="priority">0</field>
         <field name="arch" type="xml">
             <tree string="Students Placement Archive" delete="false">
+                <field name="studentid"/>
                 <field name="student_id"/>
                 <field name="facility_id"/>
                 <field name="placement_type"/>
@@ -31,6 +32,7 @@
                 <sheet>
                     <group>
                         <group>
+                            <field name="studentid"/>
                             <field name="student_id"/>
                             <field name="facility_id"/>
                         </group>
@@ -58,6 +60,7 @@
         <field name="model">archive</field>
         <field name="arch" type="xml">
             <search>
+                <field name="studentid"/>
                 <field name="student_id"/>
                 <field name="facility_id"/>
                 <field name="placement_type"/>

@@ -9,7 +9,7 @@
         <field name="priority">0</field>
         <field name="arch" type="xml">
             <tree>
-                <field name="student_id"/>
+                <field name="studentid"/>
                 <field name="name"/>
                 <field name="cohort_label"/>
                 <field name="email"/>
@@ -29,7 +29,7 @@
         <field name="priority">0</field>
         <field name="arch" type="xml">
             <search>
-                <field name="student_id"/>
+                <field name="studentid"/>
                 <field name="name"/>
                 <field name="cohort_label"/>
                 <field name="email"/>
@@ -57,7 +57,7 @@
                     <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
                     <div>
                         <h3>
-                            <field name="student_id" placeholder="Student ID" required="1"/>
+                            <field name="studentid" placeholder="Student ID" required="1"/>
                         </h3>
                         <h1>
                             <field name="name" placeholder="Student Name" required="1"/>

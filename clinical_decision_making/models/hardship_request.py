@@ -9,6 +9,7 @@ class HardshipRequest(models.Model):
     _description = 'Hardship Request'
     _rec_name = 'student_id'
     
+    studentid = fields.Char(related='student_id.studentid')
     student_id = fields.Many2one(comodel_name='res.partner', string='Student Name', domain=[('is_student', '=', True),('deny_show_student', '=', False)], tracking=True, required=True)
     attachment_ids = fields.Many2many(
         comodel_name='ir.attachment',
