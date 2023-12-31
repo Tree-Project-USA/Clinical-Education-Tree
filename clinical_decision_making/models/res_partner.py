@@ -20,7 +20,7 @@ class ResPartner(models.Model):
     hardship_ids = fields.One2many('hardship.request', 'student_id', string='Hardship')
     home_address = fields.Char(string='Home Address')
     personal_phone = fields.Char(string='Personal Phone')
-    university_email_address = fields.Char(string='University Email Address', required=True)
+    personal_email_address = fields.Char(string=' Email Address')
     campus = fields.Char(string='Campus', default='Austin, TX')
     archive_ids = fields.One2many(comodel_name='archive', inverse_name='student_id', string='Archive')
     can_apply_hardship = fields.Boolean(string='Apply Hardship', default=False)
@@ -53,8 +53,8 @@ class ResPartner(models.Model):
             :returns record of res.users
         """
         return self.env['res.users'].with_context(no_reset_password=True)._create_user_from_template({
-            'email': email_normalize(partner_id.university_email_address),
-            'login': email_normalize(partner_id.university_email_address),
+            'email': email_normalize(partner_id.email),
+            'login': email_normalize(partner_id.email),
             'partner_id': partner_id.id,
             'company_id': partner_id.env.company.id,
             'company_ids': [(6, 0, self.env.company.ids)],
@@ -64,19 +64,16 @@ class ResPartner(models.Model):
     def action_send_account_creation_invitation(self):
         group_portal = self.env.ref('base.group_portal')
         group_public = self.env.ref('base.group_public')
-        partner_ids = self.env['res.partner'].search([('university_email_address', '!=', False),('is_student', '=', True)])
+        partner_ids = self.env['res.partner'].search([('email', '!=', False),('is_student', '=', True)])
         for partner_id in partner_ids:
                 # print(partner_id.user_ids)
             # if partner_id.id == 818:
-                print('-----------------')
-                user_sudo = self.env['res.users'].search([('partner_id', '=', partner_id.id), ('login', '=', partner_id.university_email_address)])
+                user_sudo = self.env['res.users'].search([('partner_id', '=', partner_id.id), ('login', '=', partner_id.email)])
                 # user_sudo = partner_id.with_context(active_test=False).user_ids
                 # print(user_ids)
                 # # print(ff)
                 if not user_sudo:
-                    print('===========================================')
-                    print('===========================================')
-                    print('===========================================')
+                  
                     # create a user if necessary and make sure it is in the portal group
                     company = partner_id.company_id or self.env.company
                     user_sudo = self.sudo().with_company(company.id)._create_user(partner_id)

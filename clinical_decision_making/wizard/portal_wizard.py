@@ -22,7 +22,7 @@ class CustomPortalWizard(models.TransientModel):
             portal_wizard.user_ids = [
                 Command.create({
                     'partner_id': partner.id,
-                    'email': partner.university_email_address,
+                    'email': partner.email,
                 })
                 for partner in portal_wizard.partner_ids
             ]
@@ -40,3 +40,22 @@ class CustomPortalWizardUser(models.TransientModel):
             'company_id': self.env.company.id,
             'company_ids': [(6, 0, self.env.company.ids)],
         })
+        
+    def _send_email(self):
+        """ send notification email to a new portal user """
+        self.ensure_one()
+
+        # determine subject and body in the portal user's language
+        template = self.env.ref('clinical_decision_making.mail_template_send_account_creation_invitation')
+        if not template:
+            raise UserError(_('The template "Portal: new user" not found for sending email to the portal user.'))
+
+        lang = self.user_id.sudo().lang
+        partner = self.user_id.sudo().partner_id
+
+        portal_url = partner.with_context(signup_force_type_in_url='', lang=lang)._get_signup_url_for_action()[partner.id]
+        partner.signup_prepare()
+
+        template.with_context(dbname=self._cr.dbname, portal_url=portal_url, lang=lang).send_mail(self.user_id.id, force_send=True)
+
+        return True
