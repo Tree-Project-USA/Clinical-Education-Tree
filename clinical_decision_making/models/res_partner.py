@@ -13,7 +13,7 @@ class ResPartner(models.Model):
     _inherit = 'res.partner'
     
     is_student = fields.Boolean(string='Is Student', default=False)
-    student_id = fields.Char(string='Student ID')
+    studentid = fields.Char(string='Student ID')
     name = fields.Char(string='Student Name', compute='_compute_name', store=True, default='Student Name')
     first_name = fields.Char(string='Student First Name', required=True)
     last_name = fields.Char(string='Student Last Name', required=True )
@@ -85,15 +85,22 @@ class ResPartner(models.Model):
                     if not user_sudo.active:
                         user_sudo.write({'active': True, 'groups_id': [(4, group_portal.id), (3, group_public.id)]})
                         user_sudo.partner_id.signup_prepare()
-       
-    
-    
-    @api.constrains('student_id')
+
+    @api.constrains('studentid')
     def _check_student_id(self):
-        pattern = r'^\d+$'
-        if not re.match(pattern, self.student_id):
-            raise ValidationError(_('The Student ID Must Contain Numbers Only'))
-    
+        for rec in self:
+            pattern = r'^\d+$'
+            if not re.match(pattern, rec.studentid):
+                raise ValidationError(_('The Student ID Must Contain Numbers Only'))
+            students_ids = rec.env['res.partner'].search_count(
+                    [
+                    ("studentid", "=", [rec.studentid]),
+                    ("is_student", "=", True)
+                    ])
+            print(students_ids)
+            if students_ids > 1:
+                raise ValidationError(_('The Student ID Already Exists'))
+
     @api.depends('archive_ids')
     def get_aval_archive_ids(self):
         for rec in self:
