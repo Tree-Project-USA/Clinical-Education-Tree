@@ -17,7 +17,7 @@ class Archive(models.Model):
     facility_id = fields.Many2one('medical.facility', string='Matching Facility')
     offer_id = fields.Many2one(comodel_name='placement.offer', string="Offer")
     request_id = fields.Many2one(comodel_name='placement.request', string="Placement Request")
-    geographical_id = fields.Many2one(comodel_name='geographical', string='Geographical')
+    geographical_id = fields.Many2one(comodel_name='geographical', string='Facility Zip Code')
     city = fields.Char(related='geographical_id.city')
     state = fields.Char(related='geographical_id.state')
     zip_code = fields.Char(related='geographical_id.zip_code')
@@ -34,8 +34,8 @@ class Archive(models.Model):
         ('fall', 'Fall'),
         ('spring', 'Spring'),
         ('summer', 'Summer'),
-    ], string='Term', store=True)
-    year = fields.Selection(selection=SELECTION_YEAR_RANGE, string='Year', store=True)
+    ], string='Start Term', store=True)
+    year = fields.Selection(selection=SELECTION_YEAR_RANGE, string='Start Year', store=True)
     placement_status = fields.Selection([
         ('not_placed', 'Not Placed'),
         ('matched', 'Matched'),

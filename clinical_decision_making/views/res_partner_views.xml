@@ -9,12 +9,12 @@
         <field name="priority">0</field>
         <field name="arch" type="xml">
             <tree>
+                <field name="student_id"/>
                 <field name="name"/>
                 <field name="cohort_label"/>
-                <field name="email"/>
-                <field name="phone"/>
+                <field name="university_email_address"/>
+                <field name="personal_phone"/>
                 <field name="home_address"/>
-                <field name="contact_address"/>
                 <field name="ice_term"/>
                 <field name="tce1_term"/>
                 <field name="tce2_term"/>
@@ -29,10 +29,11 @@
         <field name="priority">0</field>
         <field name="arch" type="xml">
             <search>
+                <field name="student_id"/>
                 <field name="name"/>
                 <field name="cohort_label"/>
                 <field name="email"/>
-                <field name="phone"/>
+                <field name="personal_phone"/>
                 <field name="home_address"/>
                 <field name="contact_address"/>
                 <field name="ice_term"/>
@@ -54,10 +55,18 @@
                 <sheet>
                     <div class="oe_button_box" name="button_box"/>
                     <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+                    <div>
+                        <h3>
+                            <field name="student_id" placeholder="Student ID" required="1"/>
+                        </h3>
+                        <h1>
+                            <field name="name" placeholder="Student Name" required="1"/>
+                        </h1>
+                    </div>
                     <group>
                         <group>
                             <span class="o_form_label o_td_label" name="address_name">
-                                <b >Student Name</b>
+                                <b>Student Name</b>
                             </span>
                             <div class="o_address_format">
                                 <field name="first_name" placeholder="Student First Name" required="1" class="o_address_city"/>
@@ -73,7 +82,7 @@
                             <field name="start_year"/>
                             <field name="start_term_type"/>
                             <field name="cohort_label"/>
-                            <field name="start_term"/>
+                            <field name="start_term" invisible="1"/>
                             <field name="graduation_term"/>
                         </group>
                         <group>
