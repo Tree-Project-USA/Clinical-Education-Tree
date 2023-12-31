@@ -218,7 +218,8 @@ class ResPartner(models.Model):
             print('********************')
             self.check_zip_code_distance(self.geographical_ids)
             self.check_validation_zip_code_state(self.geographical_ids)
-            
+    
+    @api.model
     def create(self, vals):
         return super(ResPartner, self.with_context(pass_validation=True)).create(vals)
     
