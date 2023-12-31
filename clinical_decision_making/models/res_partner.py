@@ -21,7 +21,7 @@ class ResPartner(models.Model):
     hardship_ids = fields.One2many('hardship.request', 'student_id', string='Hardship')
     home_address = fields.Char(string='Home Address')
     personal_phone = fields.Char(string='Personal Phone')
-    personal_email_address = fields.Char(string=' Email Address')
+    personal_email_address = fields.Char(string='Personal Email Address')
     university_email_address = fields.Char(string='University Email Address', required=True)
     campus = fields.Char(string='Campus', default='Austin, TX')
     archive_ids = fields.One2many(comodel_name='archive', inverse_name='student_id', string='Archive')
@@ -195,10 +195,10 @@ class ResPartner(models.Model):
             if len(all_states) < 3:
                     raise ValidationError('You Should add at least 3 different state.')
     
-    @api.constrains('university_email_address')
+    @api.constrains('email')
     def validate_mail(self):
-        if self.university_email_address:
-            if not re.match('^[_A-Za-z0-9-]+(\.[_A-Za-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', self.university_email_address):
+        if self.email:
+            if not re.match('^[_A-Za-z0-9-]+(\.[_A-Za-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', self.email):
                 raise ValidationError(_('The personal email address must be valid ( example@example.com )'))
     
     @api.constrains('geographical_ids')

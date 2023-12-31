@@ -13,7 +13,7 @@ class UpdateInformation(http.Controller):
                     "home_address":  post.get("home_address") if post.get("home_address") else False,                    
                     "mobile": post.get("mobile") if post.get("mobile") else False,
                     "phone": post.get("phone") if post.get("phone") else False,
-                    "email": post.get("email") if post.get("email") else False,
+                    "personal_email_address": post.get("personal_email_address") if post.get("personal_email_address") else False,
                     "personal_phone": post.get("personal_phone") if post.get("personal_phone") else False,
                 })
                 template = request.env.ref('clinical_decision_making.mail_template_send_update_of_personal_information')

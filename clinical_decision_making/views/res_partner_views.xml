@@ -12,7 +12,7 @@
                 <field name="student_id"/>
                 <field name="name"/>
                 <field name="cohort_label"/>
-                <field name="university_email_address"/>
+                <field name="email"/>
                 <field name="personal_phone"/>
                 <field name="home_address"/>
                 <field name="ice_term"/>

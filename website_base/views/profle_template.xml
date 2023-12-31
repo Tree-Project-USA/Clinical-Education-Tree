@@ -138,11 +138,11 @@
                       <label for="staticEmail" class="col-form-label">Personal Email Address <i class="fa fa-pencil"/></label>
                       <div>
                         <input
-                          type="email"
-                          id="email"
-                          name="email"
+                          type="personal_email_address"
+                          id="personal_email_address"
+                          name="personal_email_address"
                           class="form-control updated"
-                          t-att-value="partner.email"
+                          t-att-value="partner.personal_email_address"
                         />
                       </div>
                     </div>
@@ -155,11 +155,11 @@
                       <div>
                         <input
                           type="text"
-                          id="university_email_address"
-                          name="university_email_address"
+                          id="email"
+                          name="email"
                           class="form-control"
                           readonly="readonly"
-                          t-att-value="partner.university_email_address"
+                          t-att-value="partner.email"
                         />
                       </div>
                     </div>
