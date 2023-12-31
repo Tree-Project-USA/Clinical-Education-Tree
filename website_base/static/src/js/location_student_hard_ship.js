@@ -127,7 +127,6 @@ odoo.define("website_base.location_student_hard_ship", function(require) {
                 return this;
             };
             counter_zip++
-            console.log(counter_zip)
             $('input[name="len_zip_code"]').attr('value', counter_zip)
             if (counter_zip >= 3){
                 $("#add_zip").addClass("d-none")
@@ -138,11 +137,8 @@ odoo.define("website_base.location_student_hard_ship", function(require) {
         * @private
         */
         _onZipChanges: function () {
-            console.log("ahmed ahmed")
             var zip_code = $(zip_cod).val();
-            console.log(zip_code)
             ajax.jsonRpc("/show/locations", 'call', { zip_code }).then(function(data) {
-                console.log(data.id)
                 $(state).val(data.state)
                 $(city).val(data.city)
             });

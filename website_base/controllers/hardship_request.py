@@ -53,8 +53,6 @@ class CustomerPortals(http.Controller):
                 partner_id.sudo().write({
                     "can_apply_hardship": True,
                 })
-                template = request.env.ref('website_base.mail_template_send_hardship_request')
-                template.sudo().send_mail(HardshipRequest.id, force_send=True)
                 return request.redirect("/success/hardship/request")
             except Exception as e:
                 return request.render("website_base.error_request", {'exception': e})

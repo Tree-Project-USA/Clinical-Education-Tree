@@ -270,7 +270,7 @@
                       href="/add/preferred/setting"
                       style="background-color:  #ab8631; !important; color: #fff"
                     >
-                      <i class="fa fa-pencil"/> Submit Preferred Setting 
+                      <i class="fa fa-pencil"/> Submit Preferred Settings
                     </a>
                     <a
                       t-if="partner.preferred_setting_ids"
@@ -280,7 +280,7 @@
                       href="/add/preferred/setting"
                       style="background-color:  #ab8631; !important; color: #fff"
                     >
-                      <i class="fa fa-pencil"/> Updat Preferred Setting 
+                      <i class="fa fa-pencil"/> Update Preferred Settings
                     </a>
                     <a
                       t-if="hardship_request and hardship_request.state not in ['cancel','expired']"

@@ -7,6 +7,7 @@ class UpdateInformation(http.Controller):
     @http.route("/update/information", type="http", website=True, auth="user", Methods=["POST"])
     def update_inforamtion(self, **post):
         partner_id = request.env.user.partner_id
+        user_id = request.env.user.id
         if post and request.httprequest.method == "POST":
             try:
                 partner_id.sudo().write({
@@ -17,7 +18,7 @@ class UpdateInformation(http.Controller):
                     "personal_phone": post.get("personal_phone") if post.get("personal_phone") else False,
                 })
                 template = request.env.ref('clinical_decision_making.mail_template_send_update_of_personal_information')
-                template.send_mail(partner_id.id, force_send=True)
+                template.sudo().send_mail(user_id, force_send=True)
                     
                 return request.redirect("/my")
             except Exception as e:

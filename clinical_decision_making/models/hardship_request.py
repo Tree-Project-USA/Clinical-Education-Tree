@@ -131,6 +131,6 @@ class HardshipRequest(models.Model):
     def create(self, values):
         result = super(HardshipRequest, self).create(values)
         template = self.env.ref('clinical_decision_making.mail_template_send_hardship_request_received')
-        template.send_mail(result.student_id.id, force_send=True)
+        template.send_mail(result.id, force_send=True)
         return result
     

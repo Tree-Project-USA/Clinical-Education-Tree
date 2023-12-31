@@ -68,12 +68,7 @@ class ResPartner(models.Model):
         group_public = self.env.ref('base.group_public')
         partner_ids = self.env['res.partner'].search([('email', '!=', False),('is_student', '=', True)])
         for partner_id in partner_ids:
-                # print(partner_id.user_ids)
-            # if partner_id.id == 818:
                 user_sudo = self.env['res.users'].search([('partner_id', '=', partner_id.id), ('login', '=', partner_id.email)])
-                # user_sudo = partner_id.with_context(active_test=False).user_ids
-                # print(user_ids)
-                # # print(ff)
                 if not user_sudo:
                   
                     # create a user if necessary and make sure it is in the portal group

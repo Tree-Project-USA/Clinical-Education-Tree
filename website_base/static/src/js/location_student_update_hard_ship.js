@@ -109,7 +109,6 @@ odoo.define("website_base.location_student_update_hard_ship", function(require) 
                         if (counter_zip < 3){
                             $("#add_zip").removeClass("d-none")
                         }
-                        console.log(counter_zip)
                         $('input[name="len_zip_code"]').attr('value', counter_zip)
                     }
                 }
@@ -128,7 +127,6 @@ odoo.define("website_base.location_student_update_hard_ship", function(require) 
                 return this;
             };
             counter_zip++
-            console.log(counter_zip)
             $('input[name="len_zip_code"]').attr('value', counter_zip)
             if (counter_zip >= 3){
                 $("#add_zip").addClass("d-none")

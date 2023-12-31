@@ -382,10 +382,10 @@
     <!-- ==== Hardship Request Received ===== -->
     <record id="mail_template_send_hardship_request_received" model="mail.template">
         <field name="name">Send Hardship Request Received</field>
-        <field name="model_id" ref="base.model_res_partner" />
+        <field name="model_id" ref="clinical_decision_making.model_hardship_request" />
         <field name="subject">Hardship Request Received</field>
-        <field name="email_from">{{ (object.company_id.email_formatted or user.email_formatted) }}</field>
-        <field name="email_to">{{ object.email_formatted }}</field>
+        <field name="email_from">{{ (user.company_id.email_formatted or user.email_formatted) }}</field>
+        <field name="email_to">{{ object.student_id.email_formatted }}</field>
         <field name="body_html" type="html">
             <table border="0" cellpadding="0" cellspacing="0"
                 style="padding-top: 16px; background-color: #FFFFFF; font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-collapse:separate;">
@@ -403,7 +403,7 @@
                                             <tr>
                                                 <td valign="top" style="font-size: 13px;">
                                                     <div> Dear <span style="font-weight: bold;">
-                                                            <t t-out="object.name or ''">Marc Demo</t>
+                                                            <t t-out="object.student_id.name or ''">Marc Demo</t>
                                                         </span>
                                                         ,<br /><br /> We have received your hardship
                                                         request, and we appreciate your
@@ -452,9 +452,9 @@
                                                             href="https://calendly.com/malameri/30min">Click
                                                         Here</a></p>
                                                     <img
-                                                        t-attf-src="/logo.png?company={{ object.company_id.id }}"
+                                                        t-attf-src="/logo.png?company={{ user.company_id.id }}"
                                                         style="padding: 0px; margin: 0px; height: auto; width: 80px;"
-                                                        t-att-alt="object.company_id.name" />
+                                                        t-att-alt="user.company_id.name" />
                                                 </td>
                                             </tr>
                                         </table>
@@ -466,7 +466,7 @@
                 </tr>
             </table>
         </field>
-        <field name="lang">{{ object.lang }}</field>
+        <field name="lang">{{ object.student_id.lang }}</field>
         <field name="auto_delete" eval="True" />
     </record>
 

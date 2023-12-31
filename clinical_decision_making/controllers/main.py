@@ -70,14 +70,3 @@ class CustomAuthSignupHome(AuthSignupHome):
         response.headers['X-Frame-Options'] = 'SAMEORIGIN'
         response.headers['Content-Security-Policy'] = "frame-ancestors 'self'"
         return response
-        # result = super(CustomAuthSignupHome, self).web_auth_signup()
-        # if 'error' not in  result.qcontext and request.httprequest.method == 'POST':
-        #     print(result.qcontext)
-        #     User = request.env['res.users']
-        #     user_sudo = User.sudo().search(
-        #         User._get_login_domain(result.qcontext.get('login')), order=User._get_login_order(), limit=1
-        #     )
-        #     template = request.env.ref('clinical_decision_making.mail_template_send_account_confirmation', raise_if_not_found=False)
-        #     if user_sudo and template:
-        #         template.sudo().send_mail(user_sudo.id, force_send=True)
-        # return result

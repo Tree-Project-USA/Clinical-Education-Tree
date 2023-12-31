@@ -42,7 +42,6 @@ odoo.define("website_base.location_student", function(require) {
         _AddLocationsStudent: function() {
             var locations_zip_vals = $('#locations_zip').val();
 
-            console.log(locations_zip_vals, 'locations_zip_vals')
             if (locations_zip_vals) {
                 var locations_vals = JSON.parse(locations_zip_vals);
 
@@ -107,11 +106,10 @@ odoo.define("website_base.location_student", function(require) {
                     event.preventDefault();
                 }
             });
-            $(ZipID).change(function() {
+            $(ZipID).input(function() {
                 var ZipCode = $(ZipID).val()
                 ajax.jsonRpc("/show/locations", 'call', { 'zip_code': ZipCode }).then(function(data) {
                     if (data.id) {
-                        console.log(data)
                         $(StateID).val(data['state'])
                         $(CityID).val(data['city'])
                         $(LocationsID).val(data['id'])
@@ -130,7 +128,6 @@ odoo.define("website_base.location_student", function(require) {
                             ids.push(val)
                         })
                         $('#list_zip_code').val(ids);
-                        console.log(ids, '<<<<<<<<<<<ids');
                     } else {
                         $(".zip_code_error").removeClass("d-none")
                         setTimeout(function() {
@@ -175,13 +172,14 @@ odoo.define("website_base.location_student", function(require) {
             var list = []
             let popup = $(".popup-card-error")[0]
             let content = $("#content-p")
-            console.log(checkboxes, '<<<<<<<<<<<ids>>>>>>>>>>>');
             checkboxes.forEach(boxes => {
                 if (boxes.checked == true) {
                     list.push(boxes.id)
                 }
             })
-            if (list.length < 5) {} else {
+            if (list.length < 5) {
+
+            } else {
                 $('#list_setting').val(list)
                 ajax.jsonRpc("/check/preferred/setting", 'call', {
                     'list_setting': list,
