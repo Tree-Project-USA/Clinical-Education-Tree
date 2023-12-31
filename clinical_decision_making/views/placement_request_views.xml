@@ -4,7 +4,7 @@
         <field name="name">placement.request.tree</field>
         <field name="model">placement.request</field>
         <field name="arch" type="xml">
-            <tree string="Placement Requests" decoration-info="placement_type == 'ice'" decoration-primary="placement_type == 'tce'">
+            <tree string="Placement Requests" decoration-info="placement_type == 'ice'" decoration-success="placement_type == 'tce'">
                 <field name="name"/>
                 <field name="placement_type"/>
                 <field name="placement_term"/>
@@ -23,8 +23,8 @@
         <field name="arch" type="xml">
             <form string="Placement Request">
                 <header>
-                    <button name="apply_filter" string="Apply Filter" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'draft')]}" data-hotkey="v"/>
-                    <field name="state" widget="statusbar" clickable="False"/>
+                    <button name="apply_filters" string="Apply Filter" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'draft')]}" data-hotkey="v"/>
+                    <field name="state" widget="statusbar" clickable="False" invisible="1"/>
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
@@ -36,13 +36,17 @@
                             <field name="offer_count" widget="statinfo"/>
                             <field name="offer_ids" invisible="1"/>
                         </button>
+                        <button class="oe_stat_button" name="action_view_offer_lines" type="object" icon="fa-list">
+                            <field name="archive_offer_count" widget="statinfo"/>
+                            <field name="archive_offer_ids" invisible="1"/>
+                        </button>
                         <button class="oe_stat_button" name="action_view_facilities" type="object" icon="fa-building">
                             <field name="facility_count" widget="statinfo"/>
                             <field name="facility_ids" invisible="1" force_save="1" readonly="1"/>
                         </button>
                     </div>
                     <div class="oe_title">
-                        <span class="o_form_label">Name </span>
+                        <label for="name" class="o_form_label">Name</label>
                         <h1 class="d-flex">
                             <field name="name" required="1"/>
                         </h1>
@@ -54,6 +58,22 @@
                             <field name="year"/>
                         </group>
                         <group>
+                            <field name="apply_hardship"/>
+                            <field name="has_hardship" attrs="{'invisible': [('apply_hardship', '=', False)], 'required': [('apply_hardship', '=', True)]}"/>
+                            <field name="apply_setting"/>
+                            <field name="setting" attrs="{'invisible': [('apply_setting', '=', False)], 'required': [('apply_setting', '=', True)]}"/>
+                        </group>
+                        <group>
+                            <field name="apply_location"/>
+                            <field name="location_dist" attrs="{'invisible': [('apply_location', '=', False)], 'required': [('apply_location', '=', True)]}"/>
+                        </group>
+                        <group>
+                            <field name="apply_placement_priority"/>
+                            <field name="placement_priority" attrs="{'invisible': [('apply_placement_priority', '=', False)], 'required': [('apply_placement_priority', '=', True)]}"/>
+                        </group>
+                        <group>
+                            <field name="apply_placement_status"/>
+                            <field name="placement_status" attrs="{'invisible': [('apply_placement_status', '=', False)], 'required': [('apply_placement_status', '=', True)]}"/>
                         </group>
                     </group>
                     <notebook>
@@ -63,12 +83,13 @@
                                     <field name="student_id" invisible="1"/>
                                     <field name="first_name"/>
                                     <field name="last_name"/>
-                                    <field name="hardship_status"/>
                                     <field name="facility_id"/>
-                                    <field name="criteria"/>
-                                    <button name="action_approve" type="object" string="Approve" class="btn btn-outline-success" attrs="{'invisible': [('match_state', '!=', False)]}"/>
-                                    <button name="action_decline" type="object" string="Decline" class="btn btn-outline-danger" attrs="{'invisible': [('match_state', '!=', False)]}"/>
+                                    <field name="offer_criteria"/>
+                                    <field name="student_criteria"/>
+                                    <field name="placement_status" invisible="1"/>
                                     <field name="match_state" widget="badge" decoration-danger="match_state == 'decline'" decoration-success="match_state  == 'approve'"/>
+                                    <button name="action_approve" type="object" string="Approve" class="btn btn-outline-success" attrs="{'invisible': ['|', ('match_state', '!=', False), ('placement_status', '!=', 'matched')]}"/>
+                                    <button name="action_decline" type="object" string="Decline" class="btn btn-outline-danger"  attrs="{'invisible': ['|', ('match_state', '!=', False), ('placement_status', '!=', 'matched')]}"/>
                                     <button name="action_view_student" type="object" string="View Student" class="btn btn-outline-secondary" icon="fa-address-card"/>
                                 </tree>
                             </field>

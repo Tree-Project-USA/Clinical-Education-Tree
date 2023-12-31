@@ -39,7 +39,7 @@ class ResPartner(models.Model):
     start_year = fields.Selection(selection=SELECTION_YEAR_RANGE, string='Start Year', )
     start_term = fields.Char(string='Start Term', compute='_compute_term_fields', store=True)
     graduation_term = fields.Char(string='Graduation Term', compute='_compute_term_fields', store=True)
-    is_with_hardship = fields.Boolean(string='is_with_hardship', compute='_compute_is_with_hardship', )
+    is_with_hardship = fields.Boolean(string='is_with_hardship', compute='_compute_is_with_hardship',  store=True)
     ice_term = fields.Char(string='ICE Term', compute='_compute_term_fields', store=True)
     tce1_term = fields.Char(string='TCE1 Term', compute='_compute_term_fields', store=True)
     tce2_term = fields.Char(string='TCE2 Term', compute='_compute_term_fields', store=True)
@@ -111,10 +111,9 @@ class ResPartner(models.Model):
             rec.is_complete_tce1 = True if self.env['archive'].search([('student_id', '=', rec.id), ('placement_type', '=', 'tce1'), ('placement_status', 'in', ['completed',])]) else False
             rec.is_complete_tce2 = True if self.env['archive'].search([('student_id', '=', rec.id), ('placement_type', '=', 'tce2'), ('placement_status', 'in', ['completed',])]) else False
         
-    @api.depends('hardship_ids')
+    @api.depends('hardship_ids', 'hardship_ids.state')
     def _compute_is_with_hardship(self):
         for rec in self:
-            print(self.env['hardship.request'].search([('student_id', '=', rec.id), ('state', '=', 'confirm')]))
             rec.is_with_hardship = True if self.env['hardship.request'].search([('student_id', '=', rec.id), ('state', '=', 'confirm')]) else False
             
     @api.depends('start_year', 'start_term_type', 'program_id')
@@ -271,9 +270,9 @@ class ResPartner(models.Model):
 
         return term_year
 
-    def get_accepted_distance_facility(self, facility_ids):
-        
-        facility_distance_mel = float(self.env['ir.config_parameter'].sudo().get_param('clinical_distance_mel'))
+    def get_accepted_distance_facility(self, facility_ids, facility_distance_mel=50):
+        print(facility_distance_mel)
+        facility_distance_mel = float(facility_distance_mel) or float(self.env['ir.config_parameter'].sudo().get_param('clinical_distance_mel')) or 50
         accepted_facility_ids = set()
 
         geographical_ids = self.mapped('geographical_ids')
