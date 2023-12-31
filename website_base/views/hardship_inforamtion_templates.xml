@@ -35,7 +35,7 @@
                     </div>
                     <div class="col-lg-6">
                       <div class="form-group row">
-                        <label for="staticEmail" class="col-form-label">Last name</label>
+                        <label for="staticEmail" class="col-form-label">Last Name</label>
                         <div>
                           <input
                             type="text"
@@ -134,7 +134,17 @@
                           style="background-color:  #ab8631; !important; color: #fff"
                           t-attf-href="/web/content/hardship.request/#{hardship_id.id}/attachment_cancel?download=true"
                         >
-                          Download Cancellation Reason File <i class="fa fa-download" />
+                          Download Cancellation Reason Attachment <i class="fa fa-download" />
+                        </a>
+                        <a 
+                          t-if="hardship_id.state == 'confirm' and attachment_confirm != False"
+                          type="button"
+                          class="btn my-2"
+                          role="button" 
+                          style="background-color:  #ab8631; !important; color: #fff"
+                          t-attf-href="/web/content/hardship.request/#{hardship_id.id}/attachment_confirm?download=true"
+                        >
+                          Download Confirmation Attachment <i class="fa fa-download" />
                         </a>
                         <a 
                           t-if="hardship_id.state == 'update'"
@@ -144,7 +154,7 @@
                           style="background-color:  #ab8631; !important; color: #fff"
                           t-attf-href="/update/hardship/request"
                         >
-                          Update
+                          Update Hardship Inforamtion
                         </a>
                     </div>
                 </div>
