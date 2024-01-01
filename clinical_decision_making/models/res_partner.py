@@ -198,7 +198,7 @@ class ResPartner(models.Model):
     @api.constrains('email')
     def validate_mail(self):
         if self.email:
-            if not re.match('^[_A-Za-z0-9-]+(\.[_A-Za-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', self.email):
+            if not re.match('^[_A-Za-z0-9-]+(\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-]+(\.[_A-Za-z0-9-]+)*(\.[a-z]{2,4})$', self.email):
                 raise ValidationError(_('The personal email address must be valid ( example@example.com )'))
     
     @api.constrains('geographical_ids')
@@ -304,3 +304,13 @@ class ResPartner(models.Model):
             distance, dis_and_geo = geographical_id.self.get_distance_with_zip_code(facility_id.geographical_id)
             if distance <= facility_distance_mel:
                 return geographical_id
+            
+    
+    def write(self, values):
+        if 'home_address' in values or 'phone' in values or 'personal_phone' in values or 'personal_email_address' in values:
+            template = self.env.ref('clinical_decision_making.mail_template_send_update_of_personal_information')
+            template.sudo().send_mail(self.id, force_send=True)
+        result = super(ResPartner, self).write(values)
+    
+        return result
+    

@@ -112,7 +112,7 @@
                         </p>
                     </div>
                     <footer>
-                        <button name="action_cancel" string="Send to Cancel" class="oe_highlight" type="object" />
+                        <button name="action_cancel" string="Send" class="oe_highlight" type="object" />
                                 
                         <button special="cancel" string="Cancel" class="oe_link" />
                     </footer>

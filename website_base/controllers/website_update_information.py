@@ -23,3 +23,18 @@ class UpdateInformation(http.Controller):
                 return request.redirect("/my")
             except Exception as e:
                 return request.render("website_base.error_request", {'exception': e})
+            
+    @http.route("/save/changes/information", type="json", auth="user", methods=['POST'], website=True, csrf=False)
+    def save_changes_information(self, **post):
+         try:
+                partner_id = request.env.user.partner_id
+                partner_id.sudo().write({
+                    "home_address":  post.get("home_address") if post.get("home_address") else False,                    
+                    "mobile": post.get("mobile") if post.get("mobile") else False,
+                    "phone": post.get("phone") if post.get("phone") else False,
+                    "personal_email_address": post.get("personal_email_address") if post.get("personal_email_address") else False,
+                    "personal_phone": post.get("personal_phone") if post.get("personal_phone") else False,
+                })
+                return True
+         except Exception as e:
+                return False
