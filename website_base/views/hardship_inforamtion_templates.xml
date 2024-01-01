@@ -115,6 +115,169 @@
                         </div>
                     </div>
                 </div>
+                <div>
+                  <div class="row s_col_no_resize s_col_no_bgcolor">
+                    <table class="table table-borderless mt-3 total_project_costs">
+                        <thead>
+                            <tr>
+                                <td style="width: 40px;">
+                                   #
+                                </td>
+                                <td>
+                                    <strong>
+                                        Zip code
+                                    </strong>
+                                </td>
+                                <td>
+                                    <strong>
+                                        State
+                                    </strong>
+                                </td>
+                                <td>
+                                    <strong>
+                                        City
+                                    </strong>
+                                </td>
+                            </tr>
+                        </thead>
+                        <div class="collapse">
+                            <tbody t-foreach="hardship_id.geographical_ids" t-as="location">
+                                <tr class="project_cost_line">
+                                    <td>
+                                        <div class="form-group">
+                                            <span t-esc="location_index + 1"/>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <div class="input-group mb-2">
+                                                <input 
+                                                    type="text" 
+                                                    readonly="1"
+                                                    class="form-control" 
+                                                    t-att-value="location.zip_code"
+                                                />
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <div class="input-group mb-2">
+                                                <input 
+                                                    type="text" 
+                                                    readonly="1"
+                                                    class="form-control" 
+                                                    t-att-value="location.state" 
+                                                    />
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <div class="input-group mb-2">
+                                                <input 
+                                                    type="text" 
+                                                    readonly="1"
+                                                    class="form-control" 
+                                                    t-att-value="location.city"
+                                                />
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </div>
+                    </table>
+                  </div>
+                </div>
+                <div>
+                  <div class="row s_col_no_resize s_col_no_bgcolor">
+                    <table class="table table-borderless mt-3 total_project_costs">
+                        <thead>
+                            <tr>
+                                <td style="width: 40px;">
+                                   #
+                                </td>
+                                <td>
+                                    <strong>
+                                        State
+                                    </strong>
+                                </td>
+                                <td>
+                                    <strong>
+                                        File Confirmation
+                                    </strong>
+                                </td>
+                                <td>
+                                    <strong>
+                                        File Cancelation
+                                    </strong>
+                                </td>
+                            </tr>
+                        </thead>
+                        <div class="collapse">
+                            <tbody>
+                                <tr class="project_cost_line"  t-foreach="hardship_ids" t-as="file">
+                                  <t >
+                                    <td>
+                                        <div class="form-group">
+                                            <span t-esc="file_index + 1"/>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <t t-esc="file.state"/>
+                                    </td>
+                                    <td>
+                                      <a 
+                                        t-if="file.attachment_confirm"
+                                        type="button"
+                                        class="btn my-2"
+                                        role="button" 
+                                        style="background-color:  #ab8631; !important; color: #fff"
+                                        t-attf-href="/web/content/hardship.request/#{file.id}/attachment_confirm?download=true"
+                                      >
+                                      <i class="fa fa-download" />
+                                      </a>
+                                      <a 
+                                        t-if="file.attachment_confirm"
+                                        type="button"
+                                        class="btn my-2"
+                                        role="button" 
+                                        style="background-color:  #ab8631; !important; color: #fff"
+                                        t-attf-href="/web/content/hardship.request/#{file.id}/attachment_confirm"
+                                      >
+                                      <i class="fa fa-eye"/>
+                                      </a>
+                                    </td>
+                                    <td>
+                                      <a 
+                                        t-if="file.attachment_cancel"
+                                        type="button"
+                                        class="btn my-2"
+                                        role="button" 
+                                        style="background-color:  #ab8631; !important; color: #fff"
+                                        t-attf-href="/web/content/hardship.request/#{file.id}/attachment_cancel?download=true"
+                                      >
+                                      <i class="fa fa-download" />
+                                      </a>
+                                      <a 
+                                        t-if="file.attachment_cancel"
+                                        type="button"
+                                        class="btn my-2"
+                                        role="button" 
+                                        style="background-color:  #ab8631; !important; color: #fff"
+                                        t-attf-href="/web/content/hardship.request/#{file.id}/attachment_cancel"
+                                      >
+                                      <i class="fa fa-eye"/>
+                                      </a>
+                                    </td>
+                                  </t>
+                                </tr>
+                            </tbody>
+                        </div>
+                    </table>
+                  </div>
+                </div>
                 <div class="row mt-4 mt-4 mb-4 text-left">
                     <div class="col-12 mr-2">
                         <a
@@ -125,26 +288,6 @@
                             style="background-color:  #ab8631; !important; color: #fff"
                         >
                           Back To My Profile
-                        </a>
-                        <a 
-                          t-if="hardship_id.state == 'cancel'"
-                          type="button"
-                          class="btn my-2"
-                          role="button" 
-                          style="background-color:  #ab8631; !important; color: #fff"
-                          t-attf-href="/web/content/hardship.request/#{hardship_id.id}/attachment_cancel?download=true"
-                        >
-                          Download Cancellation Reason Attachment <i class="fa fa-download" />
-                        </a>
-                        <a 
-                          t-if="hardship_id.state == 'confirm' and attachment_confirm != False"
-                          type="button"
-                          class="btn my-2"
-                          role="button" 
-                          style="background-color:  #ab8631; !important; color: #fff"
-                          t-attf-href="/web/content/hardship.request/#{hardship_id.id}/attachment_confirm?download=true"
-                        >
-                          Download Confirmation Attachment <i class="fa fa-download" />
                         </a>
                         <a 
                           t-if="hardship_id.state == 'update'"
