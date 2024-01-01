@@ -10,7 +10,7 @@ odoo.define("website_base.website_update_information", function(require) {
         selector: ".student_profile",
         events: {
             'input .updated': '_ShowButton',
-            'click .refuse': '_CloseButton',
+            'change .updated': '_changeInput',
         },
         // 
 
@@ -35,10 +35,6 @@ odoo.define("website_base.website_update_information", function(require) {
          * @private
          */
         _ShowButton: function() {
-            $(".save_changes").removeClass("d-none");
-            $(".save_changes").addClass("d-inline-block");
-            $(".refuse").removeClass("d-none");
-            $(".refuse").addClass("d-inline-block");
             $("#home_address").prop({ "required": true, })
             $("#mobile").prop({ "required": true, })
             $("#phone").prop({ "required": true, })
@@ -47,12 +43,29 @@ odoo.define("website_base.website_update_information", function(require) {
         /**
          * @private
          */
-        _CloseButton: function() {
-            $(".save_changes").addClass("d-none");
-            $(".save_changes").removeClass("d-inline-block");
-            $(".refuse").addClass("d-none");
-            $(".refuse").removeClass("d-inline-block");
+        _changeInput: function() {
+            var home_address = $("#home_address").val()
+            var phone = $("#phone").val()
+            var personal_phone = $("#personal_phone").val()
+            var personal_email_address = $("#personal_email_address").val()
+            let popupConfirm = $(".popup-card-confirm")[0]
+            if (home_address && phone && personal_phone && personal_email_address) {
+                ajax.jsonRpc("/save/changes/information", 'call', {
+                    'home_address': home_address,
+                    'phone': phone,
+                    'personal_phone': personal_phone,
+                    'personal_email_address': personal_email_address,
+                }).then(function(data) {
+
+
+                })
+                $(popupConfirm).css("transform", "translateX(0)");
+                setTimeout(function() {
+                    $(popupConfirm).css("transform", "translateX(500px)");
+                }, 4000);
+            }
         },
+
     })
 
 })

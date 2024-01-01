@@ -18,6 +18,14 @@
             </div>
           </div>
           <div class="container">
+            <div class="popup-card-confirm">
+              <div class="content">
+                <h3>Successfully</h3>
+                <p id="content-p">
+                  Your request submitted successfully
+                </p>
+              </div>
+          </div>
               <div class="row mt-4">
                 <div class="col-12">
                   <div class="text-center mb-4 mt-2">
@@ -138,7 +146,7 @@
                       <label for="staticEmail" class="col-form-label">Personal Email Address <i class="fa fa-pencil"/></label>
                       <div>
                         <input
-                          type="personal_email_address"
+                          type="email"
                           id="personal_email_address"
                           name="personal_email_address"
                           class="form-control updated"
@@ -301,23 +309,6 @@
                       style="background-color:  #ab8631; !important; color: #fff"
                     >
                       <i class="fa fa-pencil"/>Submit Hardship/Accommodation request
-                    </a>
-                    <button
-                      type="submit"
-                      class="btn save_changes d-none"
-                      role="button" 
-                      style="background-color:  #1fa33b; !important; color: #fff"
-                    >
-                      Save Changes
-                    </button>
-                    <a
-                      type="button"
-                      class="btn refuse d-none"
-                      role="button" 
-                      href="/my"
-                      style="background-color: red; !important; color: #fff"
-                    >
-                    Cancel
                     </a>
                     <a
                       t-if="partner.geographical_ids or hardship_request.state == 'confirm'"

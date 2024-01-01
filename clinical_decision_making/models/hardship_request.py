@@ -66,7 +66,7 @@ class HardshipRequest(models.Model):
     def action_attachment_file_cancel(self):
         self.attachment_cancel = False
         return {
-            'name': _('Attachment File Cancel'),
+            'name': _('Attachment'),
             'view_mode': 'form',
             'res_model': 'hardship.request',
             'view_id': self.env.ref('clinical_decision_making.hardship_request_attachment_file_cancel_view_form').id,
@@ -77,7 +77,7 @@ class HardshipRequest(models.Model):
     def action_attachment_file_confirm(self):
         self.attachment_confirm = False
         return {
-            'name': _('Attachment File Confirm'),
+            'name': _('Attachment'),
             'view_mode': 'form',
             'res_model': 'hardship.request',
             'view_id': self.env.ref('clinical_decision_making.hardship_request_attachment_file_confirm_view_form').id,

@@ -198,7 +198,7 @@
     <!-- ==== Update of Personal Information ===== -->
     <record id="mail_template_send_update_of_personal_information" model="mail.template">
         <field name="name">Send Update of Personal Information</field>
-        <field name="model_id" ref="base.model_res_users" />
+        <field name="model_id" ref="base.model_res_partner" />
         <field name="subject">Update of Personal Information</field>
         <field name="email_from">{{ (object.company_id.email_formatted or user.email_formatted) }}</field>
         <field name="email_to">{{ object.email_formatted }}</field>
@@ -316,6 +316,97 @@
                                                         ,<br /><br /> We are pleased to inform you
                                                         that your preferred addresses have been
                                                         added to our system. These addresses align
+                                                        with the placement rules of engagement. This
+                                                        ensures a smoother placement process that
+                                                        meets your preferences. <br /><br /> Should
+                                                        you encounter any difficulties or have
+                                                        questions, don't hesitate to contact me. <br /><br />
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align:center;">
+                                                    <hr width="100%"
+                                                        style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;" />
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <!-- FOOTER -->
+                                <tr>
+                                    <td align="center" style="min-width: 590px;">
+                                        <table border="0" cellpadding="0" cellspacing="0"
+                                            width="590"
+                                            style="min-width: 590px; background-color: white; font-size: 11px; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                            <tr>
+                                                <td valign="middle" align="left">
+                                                    <!-- <t t-out="object.company_id.name or
+                                                    ''">YourCompany</t> -->
+                                                    <h2 style="color:#226fff">Dr. Alameri</h2>
+                                                    <p>Mansoor Alameri, PT, MPT, PhD</p>
+                                                    <h3>Assistant Professor l Associate Director of
+                                                        Clinical Education</h3>
+                                                    <p>Flex DPT Program l University of St.
+                                                        Augustine for Health Sciences TXAU</p>
+                                                    <p style="color:#226fff">5401 La Crosse Ave,
+                                                        Austin TX 78739</p>
+                                                    <p>Office: (737) 202-3291 l Ext: 3421</p>
+                                                    <p><a href="mailto:KManella@usa.edu">
+                                                        Malameri@usa.edu</a> | <a
+                                                            href="https://www.usa.edu/faculty/mansoor-alameri-pt-phd-mpt-cci/">
+                                                        www.usa.edu</a></p>
+                                                    <p>Schedule an Appointment: <a
+                                                            href="https://calendly.com/malameri/30min">Click
+                                                        Here</a></p>
+                                                    <img
+                                                        t-attf-src="/logo.png?company={{ object.company_id.id }}"
+                                                        style="padding: 0px; margin: 0px; height: auto; width: 80px;"
+                                                        t-att-alt="object.company_id.name" />
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </field>
+        <field name="lang">{{ object.lang }}</field>
+        <field name="auto_delete" eval="True" />
+    </record>
+
+    <!-- ==== Preferred setting Added ===== -->
+    <record id="mail_template_send_preferred_settings_added" model="mail.template">
+        <field name="name">Send Preferred settings Added</field>
+        <field name="model_id" ref="base.model_res_users" />
+        <field name="subject">Preferred settings Added</field>
+        <field name="email_from">{{ (object.company_id.email_formatted or user.email_formatted) }}</field>
+        <field name="email_to">{{ object.email_formatted }}</field>
+        <field name="body_html" type="html">
+            <table border="0" cellpadding="0" cellspacing="0"
+                style="padding-top: 16px; background-color: #FFFFFF; font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-collapse:separate;">
+                <tr>
+                    <td align="center">
+                        <table border="0" cellpadding="0" cellspacing="0" width="590"
+                            style="padding: 16px; background-color: #FFFFFF; color: #454748; border-collapse:separate;">
+                            <tbody>
+                                <!-- CONTENT -->
+                                <tr>
+                                    <td align="center" style="min-width: 590px;">
+                                        <table border="0" cellpadding="0" cellspacing="0"
+                                            width="590"
+                                            style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                            <tr>
+                                                <td valign="top" style="font-size: 13px;">
+                                                    <div> Dear <span style="font-weight: bold;">
+                                                            <t t-out="object.name or ''">Marc Demo</t>
+                                                        </span>
+                                                        ,<br /><br /> We are pleased to inform you
+                                                        that your preferred settings have been
+                                                        added to our system. These settings align
                                                         with the placement rules of engagement. This
                                                         ensures a smoother placement process that
                                                         meets your preferences. <br /><br /> Should
