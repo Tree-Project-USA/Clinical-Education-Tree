@@ -226,7 +226,10 @@ class ResPartner(models.Model):
     
     @api.model
     def create(self, vals):
-        return super(ResPartner, self.with_context(pass_validation=True)).create(vals)
+        rec = super(ResPartner, self.with_context(pass_validation=True)).create(vals)
+        if len(rec.preferred_setting_ids) < 5:
+            raise ValidationError(_('Must be selected 5 preferred settings'))
+        return rec
     
     
     def calculate_end_term(self, start_term, start_year, num_terms):
@@ -310,7 +313,27 @@ class ResPartner(models.Model):
         if 'home_address' in values or 'phone' in values or 'personal_phone' in values or 'personal_email_address' in values:
             template = self.env.ref('clinical_decision_making.mail_template_send_update_of_personal_information')
             template.sudo().send_mail(self.id, force_send=True)
+        if 'preferred_setting_ids' in values:
+            if len(self.preferred_setting_ids) < 5:
+                raise ValidationError(_('Must be selected 5 preferred settings'))
         result = super(ResPartner, self).write(values)
     
         return result
+    
+    @api.onchange('preferred_setting_ids')
+    def _compute_preferred_setting_ids(self):
+        
+        for rec in self:
+            if rec.preferred_setting_ids:
+                list_type_setting_op = []
+                list_type_setting_ip = []
+                if len(rec.preferred_setting_ids) > 5:
+                    raise ValidationError(_('Only allowed 5 preferred settings'))
+                for setting_id in rec.preferred_setting_ids:
+                    if setting_id.type_setting == 'op':
+                        list_type_setting_op.append(setting_id._origin.id)
+                    else:
+                        list_type_setting_ip.append(setting_id._origin.id)
+                if len(list_type_setting_op) == 5 or len(list_type_setting_ip) == 5:
+                    raise ValidationError(_('You should have one (IP) as minimum and one (OP)'))
     

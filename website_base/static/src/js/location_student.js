@@ -181,7 +181,11 @@ odoo.define("website_base.location_student", function(require) {
                     }
                 })
                 if (list.length < 5) {
-
+                    $(content).text('Must be selected 5 preferred settings')
+                    $(popup).css("transform", "translateX(0)");
+                    setTimeout(function() {
+                        $(popup).css("transform", "translateX(500px)");
+                    }, 4000);
                 } else {
                     $('#list_setting').val(list)
                     ajax.jsonRpc("/check/preferred/setting", 'call', {
