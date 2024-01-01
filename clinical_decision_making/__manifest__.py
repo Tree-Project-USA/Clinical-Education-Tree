@@ -7,7 +7,7 @@
     'version': '16.0',
     'description': "",
     'license': 'LGPL-3',
-    'depends': ['base', 'base_address_extended', 'mail', 'portal'],
+    'depends': ['base', 'base_address_extended', 'mail', 'portal', 'odx_m2m_attachment_preview'],
     'data': [
         'security/ir.model.access.csv',
         'data/cron_servises.xml',
