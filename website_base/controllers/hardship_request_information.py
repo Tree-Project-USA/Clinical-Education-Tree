@@ -13,6 +13,9 @@ class HardshipInformation(http.Controller):
         hardship_id = request.env["hardship.request"].sudo().search([
             ('student_id', '=', partner_id.id),
             ], limit=1, order="id desc")
+        hardship_ids = request.env["hardship.request"].sudo().search([
+            ('student_id', '=', partner_id.id)])
         values["hardship_id"] = hardship_id
+        values["hardship_ids"] = hardship_ids
         return request.render("website_base.hardship_information_template", values)
     
