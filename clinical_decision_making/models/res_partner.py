@@ -13,7 +13,7 @@ class ResPartner(models.Model):
     _inherit = 'res.partner'
     
     is_student = fields.Boolean(string='Is Student', default=False)
-    studentid = fields.Char(string='Student ID')
+    studentid = fields.Char(string='Student ID', copy=False)
     name = fields.Char(string='Student Name', compute='_compute_name', store=True, default='Student Name')
     first_name = fields.Char(string='Student First Name', required=True)
     last_name = fields.Char(string='Student Last Name', required=True )

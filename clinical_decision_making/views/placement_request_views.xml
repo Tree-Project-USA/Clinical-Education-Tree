@@ -84,8 +84,8 @@
                                     <field name="first_name"/>
                                     <field name="last_name"/>
                                     <field name="facility_id"/>
-                                    <field name="offer_criteria"/>
-                                    <field name="student_criteria"/>
+                                    <field name="offer_criteria" colspan="3"/>
+                                    <field name="student_criteria" colspan="6"/>
                                     <field name="placement_status" invisible="1"/>
                                     <field name="match_state" widget="badge" decoration-danger="match_state == 'decline'" decoration-success="match_state  == 'approve'"/>
                                     <button name="action_approve" type="object" string="Approve" class="btn btn-outline-success" attrs="{'invisible': ['|', ('match_state', '!=', False), ('placement_status', '!=', 'matched')]}"/>
