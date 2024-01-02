@@ -19,6 +19,13 @@
               <h2>
                 Your request submitted successfully !
             </h2>
+            <a 
+              class="btn btn-success" 
+              role="button" 
+              href="/my/home"
+            >
+              My Profile
+            </a>
           </div>
         </div>
       </div>

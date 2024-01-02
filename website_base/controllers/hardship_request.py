@@ -13,7 +13,7 @@ class CustomerPortals(http.Controller):
         hardship_id = request.env["hardship.request"].sudo().search([
             ('student_id', '=', partner_id.id),
             ], limit=1, order="id desc")
-        if hardship_id and hardship_id.state != "expired":
+        if hardship_id and hardship_id.state not in ["declined", "expired"]:
             return request.redirect("/my/home")
         return request.render("website_base.hardship_request_template")
     
@@ -22,7 +22,7 @@ class CustomerPortals(http.Controller):
         partner_id = request.env.user.partner_id
         hardship_id = request.env["hardship.request"].sudo().search([
             ('student_id', '=', partner_id.id),
-            ], limit=1, order="id desc")
+            ])
         if kw and request.httprequest.method == "POST":
             try:
                 zip_code_list = []
@@ -30,7 +30,7 @@ class CustomerPortals(http.Controller):
                 for zip in range(0, int(kw.get("len_zip_code"))):
                     zip_code = request.env["geographical"].sudo().search([("zip_code", "=", kw.get("zip_code_" + str(zip)))])
                     zip_code_list.append(zip_code.id)
-                HardshipRequest = request.env["hardship.request"].sudo().create(
+                hardship_id = request.env["hardship.request"].sudo().create(
                     {
                         "student_id": partner_id.id,
                         "note":  kw.get("note") if kw.get("note") else False,
@@ -43,11 +43,11 @@ class CustomerPortals(http.Controller):
                         'name': kw.get("datas_" + str(files)).filename,
                         'datas': base64.b64encode(kw.get("datas_" + str(files), False).read()),
                         'res_model': 'hardship.request',
-                        'res_id': HardshipRequest.id,
+                        'res_id': hardship_id.id,
                     })
                     file_list.append(line_file)
                     
-                HardshipRequest.sudo().write({
+                hardship_id.sudo().write({
                     "attachment_ids": file_list,
                 })
                 partner_id.sudo().write({
@@ -95,11 +95,11 @@ class CustomerPortals(http.Controller):
         else:
             return request.redirect("/my/home")
     
-    @http.route("/success/hardship/request", type="http", website=True, auth="public")
+    @http.route("/success/hardship/request", type="http", website=True, auth="user")
     def success_hardship_request(self):
         return request.render("website_base.success_request_template")
     
-    @http.route("/info/hardship/request", type="http", website=True, auth="public")
+    @http.route("/info/hardship/request", type="http", website=True, auth="user")
     def info_hardship_request(self):
         values = {}
         partner_id = request.env.user.partner_id

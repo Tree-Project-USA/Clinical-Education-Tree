@@ -200,17 +200,7 @@
                                 </td>
                                 <td>
                                     <strong>
-                                        State
-                                    </strong>
-                                </td>
-                                <td>
-                                    <strong>
-                                        File Confirmation
-                                    </strong>
-                                </td>
-                                <td>
-                                    <strong>
-                                        File Cancelation
+                                      Attachments
                                     </strong>
                                 </td>
                             </tr>
@@ -225,51 +215,50 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <t t-esc="file.state"/>
-                                    </td>
-                                    <td>
-                                      <a 
-                                        t-if="file.attachment_confirm"
-                                        type="button"
-                                        class="btn my-2"
-                                        role="button" 
-                                        style="background-color:  #ab8631; !important; color: #fff"
-                                        t-attf-href="/web/content/hardship.request/#{file.id}/attachment_confirm?download=true"
-                                      >
-                                      <i class="fa fa-download" />
-                                      </a>
-                                      <a 
-                                        t-if="file.attachment_confirm"
-                                        type="button"
-                                        class="btn my-2"
-                                        role="button" 
-                                        style="background-color:  #ab8631; !important; color: #fff"
-                                        t-attf-href="/web/content/hardship.request/#{file.id}/attachment_confirm"
-                                      >
-                                      <i class="fa fa-eye"/>
-                                      </a>
-                                    </td>
-                                    <td>
-                                      <a 
-                                        t-if="file.attachment_cancel"
-                                        type="button"
-                                        class="btn my-2"
-                                        role="button" 
-                                        style="background-color:  #ab8631; !important; color: #fff"
-                                        t-attf-href="/web/content/hardship.request/#{file.id}/attachment_cancel?download=true"
-                                      >
-                                      <i class="fa fa-download" />
-                                      </a>
-                                      <a 
-                                        t-if="file.attachment_cancel"
-                                        type="button"
-                                        class="btn my-2"
-                                        role="button" 
-                                        style="background-color:  #ab8631; !important; color: #fff"
-                                        t-attf-href="/web/content/hardship.request/#{file.id}/attachment_cancel"
-                                      >
-                                      <i class="fa fa-eye"/>
-                                      </a>
+                                      <div t-if="file.attachment_confirm">
+                                        <p>Approval File</p>
+                                        <a 
+                                          type="button"
+                                          class="btn my-2"
+                                          role="button" 
+                                          style="background-color:  #ab8631; !important; color: #fff"
+                                          t-attf-href="/web/content/hardship.request/#{file.id}/attachment_confirm?download=true"
+                                        >
+                                        <i class="fa fa-download" />
+                                        </a>
+                                        <a 
+                                          type="button"
+                                          class="btn my-2"
+                                          role="button" 
+                                          style="background-color:  #ab8631; !important; color: #fff"
+                                          t-attf-href="/web/content/hardship.request/#{file.id}/attachment_confirm"
+                                        >
+                                        <i class="fa fa-eye"/>
+                                        </a>
+                                      </div>
+                                      <div t-if="file.attachment_cancel">
+                                        <p>Declination File</p>
+                                        <a 
+                                          t-if="file.attachment_cancel"
+                                          type="button"
+                                          class="btn my-2"
+                                          role="button" 
+                                          style="background-color:  #ab8631; !important; color: #fff"
+                                          t-attf-href="/web/content/hardship.request/#{file.id}/attachment_cancel?download=true"
+                                        >
+                                        <i class="fa fa-download" />
+                                        </a>
+                                        <a 
+                                          t-if="file.attachment_cancel"
+                                          type="button"
+                                          class="btn my-2"
+                                          role="button" 
+                                          style="background-color:  #ab8631; !important; color: #fff"
+                                          t-attf-href="/web/content/hardship.request/#{file.id}/attachment_cancel"
+                                        >
+                                        <i class="fa fa-eye"/>
+                                        </a>
+                                      </div>
                                     </td>
                                   </t>
                                 </tr>
