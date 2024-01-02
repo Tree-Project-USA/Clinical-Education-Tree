@@ -48,7 +48,7 @@ class Location(http.Controller):
                 request_dummy._check_geographical_ids()
                 res_partner_id.sudo().write(values)
                 template = request.env.ref('clinical_decision_making.mail_template_send_preferred_addresses_added')
-                template.send_mail(request.env.user.id, force_send=True)
+                template.sudo().send_mail(request.env.user.id, force_send=True)
                 return request.redirect("/my/home")
             except ValidationError as msg:
                 if hardship_id.state == 'approved':

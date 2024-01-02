@@ -261,7 +261,7 @@
                 <div class="row mt-4 mt-4 mb-4 text-center">
                   <div class="col-12 mr-2">
                     <a
-                      t-if="not partner.geographical_ids or hardship_request.state in ['expired','declined']"
+                      t-if="not partner.geographical_ids and hardship.state in ['expired','declined']"
                       type="button"
                       class="btn my-2"
                       role="button" 
@@ -291,7 +291,7 @@
                       <i class="fa fa-pencil"/> Update Preferred Settings
                     </a>
                     <a
-                      t-if="not hardship_request or hardship_request.state in ['expired','declined']"
+                      t-if="not hardship or hardship.state in ['expired','declined']"
                       type="button"
                       class="btn my-2"
                       role="button" 
@@ -301,7 +301,7 @@
                       <i class="fa fa-pencil"/>Submit Hardship/Accommodation request
                     </a>
                     <a
-                      t-if="partner.geographical_ids or hardship_request.state == 'confirm'"
+                      t-if="partner.geographical_ids"
                       type="button"
                       class="btn"
                       role="button" 
