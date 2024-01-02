@@ -53,7 +53,11 @@
                 <field name="active" invisible="1"/>
                 <field name="is_student" invisible="1"/>
                 <sheet>
-                    <div class="oe_button_box" name="button_box"/>
+                    <div name="button_box" position="inside">
+                        <button name="action_open_hardship" type="object" class="oe_stat_button" string="Hardship Request">
+                            <field name="hardship_count" widget="statinfo" string="Hardship Count"/>
+                        </button>
+                    </div>
                     <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
                     <div>
                         <h3>

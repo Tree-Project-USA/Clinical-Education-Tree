@@ -48,6 +48,12 @@ class ResPartner(models.Model):
     is_complete_tce2 = fields.Boolean(compute='_compute_term', string='Is Complate Tec2', store=True)   
     aval_archive_ids = fields.Many2many(comodel_name='archive', string='Archive', compute='get_aval_archive_ids', readonly=False)
     preferred_setting_ids = fields.Many2many(comodel_name='preferred.setting', string='Preferred Setting')
+    hardship_count = fields.Integer(compute='_compute_hardship_count', string='HardShip Count')
+    
+    @api.depends('hardship_ids')
+    def _compute_hardship_count(self):
+        for rec in self:
+            rec.hardship_count = len(rec.hardship_ids)
     
     def _create_user(self,partner_id):
         """ create a new user for wizard_user.partner_id
@@ -155,6 +161,16 @@ class ResPartner(models.Model):
                     rec.ice_term = ''
                     rec.tce1_term = ''
                     rec.tce2_term = ''
+                    
+    def action_open_hardship(self):
+        return {
+            'name': _("Student Hardship"),
+            'type': 'ir.actions.act_window',
+            'view_mode': 'tree,form',
+            'res_model': 'hardship.request',
+            'domain': [('id', 'in', self.hardship_ids.ids)],
+            'context': {'default_student_id': self.id, 'delete': False}
+        }
     
     # @api.onchange('geographical_ids')
     # def _onchange_geographical_ids(self):
