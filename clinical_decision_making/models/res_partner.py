@@ -227,10 +227,12 @@ class ResPartner(models.Model):
     @api.model
     def create(self, vals):
         rec = super(ResPartner, self.with_context(pass_validation=True)).create(vals)
-        if len(rec.preferred_setting_ids) < 5:
-            raise ValidationError(_('Must be selected 5 preferred settings'))
         return rec
-    
+
+    @api.constrains('preferred_setting_ids')
+    def validate_preferred_setting_ids(self):
+        if len(self.preferred_setting_ids) < 5:
+            raise ValidationError(_('Must be selected 5 preferred settings'))
     
     def calculate_end_term(self, start_term, start_year, num_terms):
         terms = ["spring", "summer", "fall"]

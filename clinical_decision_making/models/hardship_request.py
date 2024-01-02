@@ -87,7 +87,7 @@ class HardshipRequest(models.Model):
         }
     def action_cancel(self):
         self.write({
-            'state': 'expired',
+            'state': 'declined',
         })
         self.student_id.write({
             'deny_show_student': False,
