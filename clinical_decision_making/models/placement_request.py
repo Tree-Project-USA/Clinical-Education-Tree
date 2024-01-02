@@ -60,9 +60,9 @@ class PlacementRequest(models.Model):
     # Setting Criteria
     apply_setting = fields.Boolean(string='Apply Setting', default=True)
     setting = fields.Selection([
-        ('op', 'OP'),
-        ('ip', 'IP'),
-    ], string='Setting', default='op')
+        ('met', 'Met'),
+        ('not_met', 'Not Met'),
+    ], string='IP Setting', default='not_met')
     
     # Location Criteria
     apply_location = fields.Boolean(string='Apply Distance', default=True, help="The chosen option will override the accepted distance to medical facilities.")
@@ -82,13 +82,10 @@ class PlacementRequest(models.Model):
         Priority takeing
         1.ICE
             a. H.S ICE
-            b. Student ICE
         2.TCE
             a. H.S TCE2
             b. Important Student no hase IP complete TCE2
             c. H.S TCE1
-            d. Student TCE2
-            e. Student TCE1
         """  
                                         )
     
@@ -126,14 +123,37 @@ class PlacementRequest(models.Model):
         term = self.convert_term_year(self.placement_term, self.year)
         student_ids, archive_offer_ids, location_dist = self.get_filter_data()
         
-        print(student_ids)
         print('============================== All Student==================================')
         print("student_ids",student_ids)
-        placement_status = ['confirmed', 'completed']
+        
+        
+        # Apply filter for location_dist
+        if self.apply_location and self.location_dist:
+            location_dist = self.location_dist
+            facility_ids = archive_offer_ids.mapped('facility_id')
+            stud_ids = []
+            for student_id in student_ids:
+                accepted_facility_ids = student_id.get_accepted_distance_facility(facility_ids, location_dist)
+                if not accepted_facility_ids:
+                    stud_ids.append(student_id.id)
+            student_ids -= self.env['res.partner'].sudo().search([('id', 'in', stud_ids)])
         
         if self.apply_placement_status and self.placement_status:
-            placement_status = [self.placement_status]
-            
+            domain = []
+            if self.placement_type == 'ice':
+                domain = [('placement_type', '=', 'ice')]
+            else:
+                domain = ['|', ('placement_type', '=', 'tce1'), ('placement_type', '=', 'tce2')]
+            if self.placement_status == 'not_placed':
+                has_no_archide = self.env['archive'].search(domain + [('student_id', 'in', student_ids.ids)]).mapped('student_id')
+                has_no_archide = student_ids - has_no_archide
+                notplaced_archide = self.env['archive'].search(domain + [('student_id', 'in', student_ids.ids), ('placement_status', 'in', ['not_placed']), ('placement_status', 'not in', ['matched', 'pending', 'confirmed', 'completed', 'approved'])]).mapped('student_id')
+                student_ids = has_no_archide + notplaced_archide
+            else:
+                not_placement_stu = self.env['archive'].search(domain + [('student_id', 'in', student_ids.ids), ('placement_status', '=', self.placement_status)]).mapped('student_id')
+                student_ids = not_placement_stu
+             
+        placement_status = ['matched', 'pending', 'confirmed', 'completed', 'approved'] # TODO: Here to Control the Student Avalivle 
         if self.placement_type == 'ice' and self.apply_placement_priority:
                 if self.placement_priority == 'yes':
                     student_ids = student_ids.filtered(lambda student_id: student_id.is_with_hardship)
@@ -143,14 +163,14 @@ class PlacementRequest(models.Model):
         if self.placement_type == 'tce' and self.apply_placement_priority:
             if self.placement_priority == 'yes':
                 hardship_student_ids = student_ids.filtered(lambda student_id: student_id.is_with_hardship)
-                remove_stu = self.env['archive'].search([ ('placement_type', '=', 'tce2'), ('student_id', 'in', hardship_student_ids.ids), ('placement_status', 'in', placement_status)]).mapped('student_id')
+                remove_stu = self.env['archive'].search([('placement_type', '=', 'tce2'), ('student_id', 'in', hardship_student_ids.ids), ('placement_status', 'in', placement_status)]).mapped('student_id')
                 hardship_complete_tce2 = hardship_student_ids.filtered(lambda x: x.tce2_term == term) - remove_stu
                 
 
-                remove_stu = self.env['archive'].search([ ('placement_type', '=', 'tce2'), ('student_id', 'in', student_ids.ids), ('placement_status', 'in', placement_status)]).mapped('student_id')
+                remove_stu = self.env['archive'].search([('placement_type', '=', 'tce2'), ('student_id', 'in', student_ids.ids), ('placement_status', 'in', placement_status)]).mapped('student_id')
                 important_student_complete_tce2 = student_ids.filtered(lambda x: x.tce2_term == term and not x.is_take_ip) - remove_stu
                 # //*
-                remove_stu = self.env['archive'].search([ ('placement_type', '=', 'tce1'), ('student_id', 'in', hardship_student_ids.ids), ('placement_status', 'in', placement_status)]).mapped('student_id')
+                remove_stu = self.env['archive'].search([('placement_type', '=', 'tce1'), ('student_id', 'in', hardship_student_ids.ids), ('placement_status', 'in', placement_status)]).mapped('student_id')
                 hardship_complete_tce1 = hardship_student_ids.filtered(lambda x: x.tce1_term == term) - remove_stu
                 
 
@@ -161,11 +181,11 @@ class PlacementRequest(models.Model):
                 student_ids = hardship_complete_tce2 + important_student_complete_tce2 + hardship_complete_tce1
             else:
                 print('----------------------------------------------------------------',student_ids)
-                remove_stu = self.env['archive'].search([ ('placement_type', '=', 'tce2'), ('student_id', 'in', student_ids.ids), ('placement_status', 'not in', placement_status)]).mapped('student_id')
+                remove_stu = self.env['archive'].search([ ('placement_type', '=', 'tce2'), ('student_id', 'in', student_ids.ids), ('placement_status', 'in', placement_status)]).mapped('student_id')
                 student_complete_tce2 = student_ids.filtered(lambda x: x.tce2_term == term and x.is_take_ip) - remove_stu
                 
                 
-                remove_stu = self.env['archive'].search([ ('placement_type', '=', 'tce1'), ('student_id', 'in', student_ids.ids), ('placement_status', 'not in', placement_status)]).mapped('student_id')
+                remove_stu = self.env['archive'].search([ ('placement_type', '=', 'tce1'), ('student_id', 'in', student_ids.ids), ('placement_status', 'in', placement_status)]).mapped('student_id')
                 print(remove_stu)
                 student_complete_tce1 = student_ids.filtered(lambda x: x.tce1_term == term) - remove_stu
                 print('============================== TCE placement_priority NO==================================')
@@ -178,7 +198,6 @@ class PlacementRequest(models.Model):
         self.offer_ids = archive_offer_ids.mapped('offer_id')
         self.archive_offer_ids = archive_offer_ids
         self.facility_ids = archive_offer_ids.mapped('facility_id')  
-        print(archive_offer_ids)
         
     def get_filter_data(self):
         student_domain = []
@@ -208,23 +227,18 @@ class PlacementRequest(models.Model):
         
         student_ids = self.env["res.partner"].sudo().search(student_domain).filtered(lambda x: len(x.geographical_ids) > 0)
         archive_ids = self.env['archive'].search([('student_id', 'in', student_ids.ids)])
-        
-        
-        # Apply filter for placement_status
-        if self.apply_placement_status and self.placement_status:
-            archive_ids = archive_ids.filtered(lambda x:x.placement_status == self.placement_status)
-            student_ids = archive_ids.mapped('student_id')
-            placement_status = [self.placement_status]
-            
-        
+                  
+        # ------------------------------------------------------------------
         # Apply filter for setting
         if self.apply_setting and self.setting:
-            archive_student_ids = self.env['archive'].search([('id', 'in', archive_ids.ids), ('student_id', 'in', student_ids.ids), ('setting', '=', 'ip'), ('placement_status', 'in', ['approved', 'confirmed', 'completed'])]).mapped('student_id')# TODO: Add Pending status for take it for match
-            student_ids -= archive_student_ids
-            if self.setting == 'op':
+            met_student_ids = self.env['archive'].search([('id', 'in', archive_ids.ids), ('student_id', 'in', student_ids.ids), ('setting', '=', 'ip'), ('placement_status', 'in', ['approved', 'confirmed', 'completed'])]).mapped('student_id')# TODO: Add Pending status for take it for match
+            
+            if self.setting == 'met':
+                student_ids = met_student_ids
                 archive_offer_ids = archive_offer_ids.filtered(lambda archive_offer_id: archive_offer_id.setting == 'op')
 
             else:
+                student_ids -= met_student_ids
                 archive_offer_ids = archive_offer_ids.filtered(lambda archive_offer_id: archive_offer_id.setting == 'ip')
                             
         
@@ -315,17 +329,17 @@ class PlacementRequest(models.Model):
     def apply_ice(self, hardship_student_ids, student_ids, archive_offer_ids, location_dist):
         self._apply_ice(hardship_student_ids, archive_offer_ids, location_dist, 'The student was prioritized over ICE student: YES')
         self._apply_ice(student_ids, archive_offer_ids, location_dist, 'The student was prioritized over ICE student: No')
+
     
     def apply_tce(self, hardship_student_ids, student_ids, archive_offer_ids, location_dist):
             term = self.convert_term_year(self.placement_term, self.year)
-            print(term, archive_offer_ids)
             remove_stu = self.env['archive'].search([ ('placement_type', '=', 'tce2'), ('student_id', 'in', hardship_student_ids.ids), ('placement_status', 'in', ['confirmed', 'completed'])]).mapped('student_id')
             hardship_complete_tce2 = hardship_student_ids.filtered(lambda x: x.tce2_term == term) - remove_stu
             
 
             remove_stu = self.env['archive'].search([ ('placement_type', '=', 'tce2'), ('student_id', 'in', student_ids.ids), ('placement_status', 'in', ['confirmed', 'completed'])]).mapped('student_id')
             important_student_complete_tce2 = student_ids.filtered(lambda x: x.tce2_term == term and not x.is_take_ip) - remove_stu
-            # //*
+
             remove_stu = self.env['archive'].search([ ('placement_type', '=', 'tce1'), ('student_id', 'in', hardship_student_ids.ids), ('placement_status', 'in', ['confirmed', 'completed'])]).mapped('student_id')
             hardship_complete_tce1 = hardship_student_ids.filtered(lambda x: x.tce1_term == term) - remove_stu
             
@@ -414,7 +428,7 @@ class PlacementRequest(models.Model):
             if check_facility_ids and not student_id.is_with_hardship:
                 archive_offer_facility_ids -= check_facility_ids
             
-            archive_offer_facility_ids = student_id.get_accepted_distance_facility(archive_offer_facility_ids)
+            archive_offer_facility_ids = student_id.get_accepted_distance_facility(archive_offer_facility_ids, location_dist)
 
             if not archive_offer_facility_ids:
                 continue
@@ -422,7 +436,8 @@ class PlacementRequest(models.Model):
             ip_offers = archive_offer_ids.filtered(lambda x :x.setting == 'ip')
             op_offers = archive_offer_ids.filtered(lambda x :x.setting == 'op')
             
-
+            print(ip_offers)
+            print(op_offers)
             archive_offer_id = False
             archive_offer_facility_id = False
             geographical_id = False
@@ -438,7 +453,8 @@ class PlacementRequest(models.Model):
                     offer_id = hardship_facility_id.offer_ids.mapped('archive_offer_ids').filtered(lambda archive_offer_id: archive_offer_id.is_linked == False  and archive_offer_id.setting == 'ip')[0]
                     archive_offer_id = offer_id
                     archive_offer_facility_id = offer_id.facility_id
-                
+            print(archive_offer_id)
+            print(archive_offer_facility_id)
             if archive_offer_id and archive_offer_facility_id:
                 student_criteria, offer_criteria = self.get_student_matching_report(student_id, 'TCE1', archive_offer_id.setting, geographical_id, archive_offer_facility_id, priority, location_dist)
                 archive_id = self.env["archive"].create({
@@ -500,7 +516,9 @@ class PlacementRequest(models.Model):
                     archive_offer_facility_id = offer_id.facility_id
                 else:
                     continue
-                
+            
+            print(archive_offer_id)
+            print(archive_offer_facility_id)
             if archive_offer_id and archive_offer_facility_id:
                 student_criteria, offer_criteria = self.get_student_matching_report(student_id, 'TCE1', archive_offer_id.setting, geographical_id, archive_offer_facility_id, priority, location_dist)
                 archive_id = self.env["archive"].create({
@@ -536,36 +554,36 @@ class PlacementRequest(models.Model):
         
         
         ice_status = self.env['archive'].search([('student_id', '=', student_id.id), ('placement_type', '=', 'ice')], order='id ASC', limit=1)
-        ice_status = dict(ice_status._fields['placement_status'].selection).get(ice_status.placement_status) if ice_status else ''
+        ice_status = dict(ice_status._fields['placement_status'].selection).get(ice_status.placement_status) if ice_status else 'Not Placed'
         
         tce1_status = self.env['archive'].search([('student_id', '=', student_id.id), ('placement_type', '=', 'tce1')], order='id ASC', limit=1)
-        tce1_status = dict(tce1_status._fields['placement_status'].selection).get(tce1_status.placement_status) if tce1_status else ''
+        tce1_status = dict(tce1_status._fields['placement_status'].selection).get(tce1_status.placement_status) if tce1_status else 'Not Placed'
         
         tce2_status = self.env['archive'].search([('student_id', '=', student_id.id), ('placement_type', '=', 'tce2')], order='id ASC', limit=1)
-        tce2_status = dict(tce2_status._fields['placement_status'].selection).get(tce2_status.placement_status) if tce2_status else ''
-        
+        tce2_status = dict(tce2_status._fields['placement_status'].selection).get(tce2_status.placement_status) if tce2_status else 'Not Placed'
+        setting = 'IP' if setting == 'ip' else 'OP' if setting == 'op' else ''
         
         student_criteria = f"""
             <ul>
                 <li><strong>Term: </strong>{term}</li>
-                <li><strong>Clinical experience Type: </strong>{placement_type}</li>
+                <li><strong>Clinical Experience Type: </strong>{placement_type}</li>
                 <li><strong>Hardship Status: </strong>{'Yes' if student_id.is_with_hardship else 'No'}</li>
                 <li><strong>Placement Priority: </strong> {str(priority)}</li>
                 <li><strong>Setting: </strong>
                     <ul>
                         <li>ICE: {ice_setting}</li>
-                        <li>TCE I: {tce1_setting}</li>
-                        <li>TCE II: {tce2_setting}</li>
+                        <li>TCE 1: {tce1_setting}</li>
+                        <li>TCE 2: {tce2_setting}</li>
                     </ul>
                 </li>
                 <li><strong>Placement Status History:</strong>
                     <ul>
                         <li>ICE: {ice_status}</li>
-                        <li>ICE: {tce1_status}</li>
-                        <li>TCE II: {tce2_status}</li>
+                        <li>TCE 1: {tce1_status}</li>
+                        <li>TCE 2: {tce2_status}</li>
                     </ul>
                 </li>
-                <li><strong>Location ({facility_distance_mel} miles or less): </strong>{str(geographical_id.city)} {geographical_id.state} {geographical_id.zip_code} ({distance} Miles)</li>
+                <li><strong>Location ({facility_distance_mel} miles or less): </strong>{str(geographical_id.city)} {geographical_id.state} {geographical_id.zip_code} ({round(distance, 2)} Miles)</li>
             </ul>
         """
         
@@ -574,7 +592,7 @@ class PlacementRequest(models.Model):
                 <li><strong>Term: </strong> {term}</li>
                 <li><strong>Clinical experience Type: </strong> {clinical_experience}</li>
                 <li><strong>Setting: </strong>{setting}</li>
-                <li><strong>Location: </strong> {facility_id.address or ''}, {facility_id.geographical_id.state} {facility_id.geographical_id.zip_code}</li>
+                <li><strong>Location: </strong> {str(facility_id.address) + ', ' if facility_id.address else ''} {facility_id.geographical_id.state} {facility_id.geographical_id.zip_code}</li>
             </ul>
         """
         
