@@ -13,7 +13,7 @@ class CustomerPortals(http.Controller):
         hardship_id = request.env["hardship.request"].sudo().search([
             ('student_id', '=', partner_id.id),
             ], limit=1, order="id desc")
-        if hardship_id and hardship_id.state != "cancel":
+        if hardship_id and hardship_id.state != "expired":
             return request.redirect("/my/home")
         return request.render("website_base.hardship_request_template")
     
@@ -34,7 +34,7 @@ class CustomerPortals(http.Controller):
                     {
                         "student_id": partner_id.id,
                         "note":  kw.get("note") if kw.get("note") else False,
-                        "state": "draft",
+                        "state": "initial_submission",
                         "geographical_ids": [(6, 0, zip_code_list)],
                     }
                 )
@@ -62,7 +62,7 @@ class CustomerPortals(http.Controller):
         partner_id = request.env.user.partner_id
         hardship_id = request.env["hardship.request"].sudo().search([
             ('student_id', '=', partner_id.id),
-            ('state', '=', 'update')
+            ('state', '=', 'update_required')
             ], limit=1, order="id desc")
         if post and request.httprequest.method == "POST":
             try:

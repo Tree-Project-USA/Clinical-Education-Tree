@@ -17,7 +17,7 @@ class ResPartner(models.Model):
     name = fields.Char(string='Student Name', compute='_compute_name', store=True, default='Student Name')
     first_name = fields.Char(string='Student First Name', required=True)
     last_name = fields.Char(string='Student Last Name', required=True )
-    cohort_label = fields.Char(string='Cohort Label', compute='_compute_term_fields', store=True)# TODO: Remoove this line
+    cohort_label = fields.Char(string='Cohort', compute='_compute_term_fields', store=True)# TODO: Remoove this line
     hardship_ids = fields.One2many('hardship.request', 'student_id', string='Hardship')
     home_address = fields.Char(string='Home Address')
     personal_phone = fields.Char(string='Personal Phone')
@@ -37,7 +37,7 @@ class ResPartner(models.Model):
     ], string='Start Term', )
     start_year = fields.Selection(selection=SELECTION_YEAR_RANGE, string='Start Year', )
     start_term = fields.Char(string='Start Term', compute='_compute_term_fields', store=True)
-    graduation_term = fields.Char(string='Graduation Term', compute='_compute_term_fields', store=True)
+    graduation_term = fields.Char(string='Graduation Term/Year', compute='_compute_term_fields', store=True)
     is_with_hardship = fields.Boolean(string='is_with_hardship', compute='_compute_is_with_hardship',  store=True)
     ice_term = fields.Char(string='ICE Term', compute='_compute_term_fields', store=True)
     tce1_term = fields.Char(string='TCE1 Term', compute='_compute_term_fields', store=True)
@@ -93,7 +93,7 @@ class ResPartner(models.Model):
                 raise ValidationError(_('The Student ID Must Contain Numbers Only'))
             students_ids = rec.env['res.partner'].search_count(
                     [
-                    ("studentid", "=", [rec.studentid]),
+                    ("studentid", "in", [rec.studentid]),
                     ("is_student", "=", True)
                     ])
             print(students_ids)
@@ -120,7 +120,7 @@ class ResPartner(models.Model):
     @api.depends('hardship_ids', 'hardship_ids.state')
     def _compute_is_with_hardship(self):
         for rec in self:
-            rec.is_with_hardship = True if self.env['hardship.request'].search([('student_id', '=', rec.id), ('state', '=', 'confirm')]) else False
+            rec.is_with_hardship = True if self.env['hardship.request'].search([('student_id', '=', rec.id), ('state', '=', 'approved')]) else False
             
     @api.depends('start_year', 'start_term_type', 'program_id')
     def _compute_term_fields(self):
@@ -198,7 +198,7 @@ class ResPartner(models.Model):
     @api.constrains('email')
     def validate_mail(self):
         if self.email:
-            if not re.match('^[_A-Za-z0-9-]+(\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-]+(\.[_A-Za-z0-9-]+)*(\.[a-z]{2,4})$', self.email):
+            if not re.match('^[_A-Za-z0-9-]+(\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-]+(\.[_A-Za-z0-9-]+)*(\.[A-Za-z]{2,4})$', self.email):
                 raise ValidationError(_('The personal email address must be valid ( example@example.com )'))
     
     @api.constrains('geographical_ids')

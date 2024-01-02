@@ -12,13 +12,13 @@ class Archive(models.Model):
     _rec_name = 'facility_id'
     
     studentid = fields.Char(related='student_id.studentid')
-    student_id = fields.Many2one(comodel_name='res.partner', string='Student Name')
+    student_id = fields.Many2one(comodel_name='res.partner', string='Student Name', required=True)
     first_name = fields.Char(related='student_id.first_name')
     last_name = fields.Char(related='student_id.last_name')
-    facility_id = fields.Many2one('medical.facility', string='Matching Facility')
+    facility_id = fields.Many2one('medical.facility', string='Facility', required=True)
     offer_id = fields.Many2one(comodel_name='placement.offer', string="Offer")
     request_id = fields.Many2one(comodel_name='placement.request', string="Placement Request")
-    geographical_id = fields.Many2one(comodel_name='geographical', string='Facility Zip Code')
+    geographical_id = fields.Many2one(comodel_name='geographical', string='Facility Zip Code', required=True)
     city = fields.Char(related='geographical_id.city')
     state = fields.Char(related='geographical_id.state')
     zip_code = fields.Char(related='geographical_id.zip_code')
@@ -26,17 +26,17 @@ class Archive(models.Model):
         ('ice', 'ICE'),
         ('tce1', 'TCE1'),
         ('tce2', 'TCE2'),
-    ], string='Clinical Experience Type', store=True)
+    ], string='Clinical Experience Type', required=True, store=True)
     setting = fields.Selection([
         ('op', 'OP'),
         ('ip', 'IP'),
-    ], string='Setting',)
+    ], string='Setting Type', required=True)
     placement_term = fields.Selection([
         ('fall', 'Fall'),
         ('spring', 'Spring'),
         ('summer', 'Summer'),
-    ], string='Start Term', store=True)
-    year = fields.Selection(selection=SELECTION_YEAR_RANGE, string='Start Year', store=True)
+    ], string='Term', required=True, store=True)
+    year = fields.Selection(selection=SELECTION_YEAR_RANGE, string='Year', store=True)
     placement_status = fields.Selection([
         ('not_placed', 'Not Placed'),
         ('matched', 'Matched'),
@@ -44,7 +44,7 @@ class Archive(models.Model):
         ('pending', 'Pending'),
         ('confirmed', 'Confirmed'),
         ('completed', 'Completed'),
-    ], default='matched', string='placement status', store=True)
+    ], default='matched', string='Placement Status', store=True)
     
     hardship_status = fields.Selection([
         ('approved', 'Approved'),
@@ -103,8 +103,39 @@ class Archive(models.Model):
             if self.archive_offer_id:
                 self.archive_offer_id.is_linked = False
                 self.archive_offer_id.student_id = False
-            
-            
+
+    def convert_abbr_to_term_year(self, term_year):
+        term_abbr = term_year[:2]
+        year_abbr = term_year[2:]
+
+        term = ""
+        if term_abbr.upper() == "FA":
+            term = "Fall"
+        elif term_abbr.upper() == "SP":
+            term = "Spring"
+        elif term_abbr.upper() == "SU":
+            term = "Summer"
+
+        year = "20" + year_abbr
+
+        return term, int(year)
+
+    @api.onchange('student_id', 'placement_type')
+    def _onchange_student_id_placement_type(self):
+        for rec in self:
+            if rec.student_id and rec.placement_type:
+                if rec.placement_type == "ice" and rec.student_id.ice_term:
+                    term,year = rec.convert_abbr_to_term_year(rec.student_id.ice_term)
+                    rec.year = str(year)
+                    rec.placement_term = term.lower()
+                elif rec.placement_type == "tce1" and rec.student_id.tce1_term:
+                    term,year = rec.convert_abbr_to_term_year(rec.student_id.tce1_term)
+                    rec.year = str(year)
+                    rec.placement_term = term.lower()
+                elif rec.placement_type == "tce2" and rec.student_id.tce2_term:
+                    term,year = rec.convert_abbr_to_term_year(rec.student_id.tce2_term)
+                    rec.year = str(year)
+                    rec.placement_term = term.lower()
             
     def action_approve(self):
         self.write({

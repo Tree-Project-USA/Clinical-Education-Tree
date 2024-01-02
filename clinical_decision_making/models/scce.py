@@ -10,7 +10,8 @@ class SCCE(models.Model):
     name = fields.Char(compute='_compute_field_name', string='Name')
     first_name = fields.Char(string='First Name', required=True)
     last_name = fields.Char(string='Last Name', required=True)
-    email = fields.Char(string='Email Address')   
+    email = fields.Char(string='Email Address')
+    phone = fields.Char(string='Phone Number')
     facility_count = fields.Integer(compute='_compute_facility_count', string='Facility Count', store=False)
     
     def _compute_facility_count(self):

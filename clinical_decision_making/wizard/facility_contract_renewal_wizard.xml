@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="facility_contract_view_form_wizard" model="ir.ui.view">
+        <field name="name">facility.contract.view.form.wizard</field>
+        <field name="model">facility.contract</field>
+        <field name="mode">primary</field>
+        <field name="priority">0</field>
+        <field name="arch" type="xml">
+            <form string="Current Contract">
+                <header>
+                    <field name="state" widget="statusbar" options="{'clickable': '1'}" invisible="1"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box"/>
+                    <div class="oe_title mb24">
+                        <h1>
+                            <field id="name" class="text-break" name="name" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <label for="date_start" string="Dates"/>
+                            <div class="o_row">
+                                <span class="text-muted">From</span>
+                                <field name="date_start" class="oe_inline" widget="daterange" options="{'related_end_date': 'date_end'}" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <span class="text-muted">To</span>
+                                <field name="date_end" class="oe_inline" widget="daterange" options="{'related_end_date': 'date_start'}" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            </div>
+                        </group>
+                        <group>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Contract Details" name="other">
+                            <group><field name="contract_attachment" required="1"/></group>
+                            <group name="notes_group" string="Notes">
+                                <field name="notes" nolabel="1" colspan="2" placeholder="Type in notes about this contract..."/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

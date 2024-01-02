@@ -9,7 +9,7 @@
             t-set="hardship_request"
             t-value="request.env['hardship.request'].sudo().search([('student_id', '=', request.env.user.partner_id.id)], limit=1, order='id desc' )"
           />
-          <div class="alert alert-success text-center shadow-sm" t-if="hardship_request.state == 'update'">
+          <div class="alert alert-success text-center shadow-sm" t-if="hardship_request.state == 'update_required'">
             <div class="d-flex justify-content-center">
               <p>
                 Your hardship information need to be updated
@@ -261,7 +261,7 @@
                 <div class="row mt-4 mt-4 mb-4 text-center">
                   <div class="col-12 mr-2">
                     <a
-                      t-if="not partner.geographical_ids or hardship_request.state in ['cancel','expired']"
+                      t-if="not partner.geographical_ids or hardship_request.state in ['expired','declined']"
                       type="button"
                       class="btn my-2"
                       role="button" 
@@ -291,7 +291,7 @@
                       <i class="fa fa-pencil"/> Update Preferred Settings
                     </a>
                     <a
-                      t-if="not hardship_request or hardship_request.state in ['cancel','expired']"
+                      t-if="not hardship_request or hardship_request.state in ['expired','declined']"
                       type="button"
                       class="btn my-2"
                       role="button" 

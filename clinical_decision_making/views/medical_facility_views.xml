@@ -46,27 +46,9 @@
                             class="oe_stat_button"
                             icon="fa-book"
                             type="object">
-                            <div attrs="{'invisible' : [('first_contract_date', '=', False)]}" class="o_stat_info">
-                                <span class="o_stat_text text-success" attrs="{'invisible' : [('contract_warning', '=', True)]}" title="In Contract Since"> In Contract Since</span>
-                                <span class="o_stat_value text-success" attrs="{'invisible' : [('contract_warning', '=', True)]}">
-                                    <field name="first_contract_date" readonly="1"/>
-                                </span>
-                                <span class="o_stat_text text-danger" attrs="{'invisible' : [('contract_warning', '=', False)]}" title="In Contract Since">
-                                    In Contract Since
-                                </span>
-                                <span class="o_stat_value text-danger" attrs="{'invisible' : [('contract_warning', '=', False)]}">
-                                    <field name="first_contract_date" readonly="1"/>
-                                </span>
-                            </div>
-                            <div attrs="{'invisible' : [('first_contract_date', '!=', False)]}" class="o_stat_info">
-                                <span class="o_stat_value text-danger">
-                                   <field name="contracts_count"/>
-                                </span>
-                                <span attrs="{'invisible' : [('contracts_count', '!=', 1)]}" class="o_stat_text text-danger" >
+                            <div class="o_stat_info">
+                                <span class="o_stat_text text-danger" >
                                     Contract
-                                </span>
-                                <span attrs="{'invisible' : [('contracts_count', '=', 1)]}" class="o_stat_text text-danger">
-                                    Contracts
                                 </span>
                             </div>
                         </button>
@@ -87,25 +69,25 @@
                             icon="fa-ticket"
                             >
                         </button>
-                        <button name="action_open_placement_archive_offer" type="object" class="oe_stat_button" icon="fa-bullhorn" string="Avalible Offers">
-                            <field name="archive_offer_count" widget="statinfo" string="Offers"/>
+                        <button name="action_open_placement_archive_offer" type="object" class="oe_stat_button" string="Avalible Offers">
+                            <field name="archive_offer_count" widget="statinfo" string="Offers History"/>
                         </button>
                     </div>
                     <group>
-                        <label for="name"/>
+                        <label for="name" string="Facility Name"/>
                         <field name="name"/>
                         <group>
-                            <field name="email"/>
-                            <field name="address"/>
-                            <field name="geographical_id"/>
+                            <field name="email" string="Facility Email Address"/>
+                            <field name="address" string="Facility Address"/>
                         </group>
                         <group>
                             <field name="city"/>
                             <field name="state"/>
+                            <field name="geographical_id"/>
                         </group>
                     </group>
                     <notebook>
-                        <page string="SCCE">
+                        <page string="SCCE Information">
                             <field name="scce_ids"/>
                         </page>
                     </notebook>

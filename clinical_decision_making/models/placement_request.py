@@ -14,7 +14,7 @@ class PlacementRequest(models.Model):
     _description = 'Placement Request'
     _rec_name = 'name'
     
-    name = fields.Char(string='Name')
+    name = fields.Char(string='Round #')
     student_ids = fields.Many2many(comodel_name='res.partner', string='Students')
     offer_ids = fields.Many2many(comodel_name='placement.offer', string='offers')
     archive_offer_ids = fields.Many2many(comodel_name='archive.offer', string='archive offers')
@@ -43,12 +43,12 @@ class PlacementRequest(models.Model):
         ('ice', 'ICE'),
         ('tce', 'TCE')
         ], string='Clinical Experience Type', default='ice', required=True)
-    year = fields.Selection(selection=SELECTION_YEAR_RANGE, string='Start Year', default='2000', required=True)
+    year = fields.Selection(selection=SELECTION_YEAR_RANGE, string='Year', default='2000', required=True)
     placement_term = fields.Selection([
         ('fall', 'Fall'),
         ('spring', 'Spring'),
         ('summer', 'Summer'),
-        ], string='Start Term', default='fall', required=True)   
+        ], string='Term', default='fall', required=True)   
 
     
     apply_hardship = fields.Boolean(string='Apply Hardship Status', default=True)
@@ -96,7 +96,7 @@ class PlacementRequest(models.Model):
         ('matched', 'Matched'),
         ('approved', 'Approved'),
         ('pending', 'Pending'),
-    ], default='not_placed', string='placement status')
+    ], default='not_placed', string='Placement Status')
     
     @api.model
     def convert_term_year(self, term, year):
@@ -205,7 +205,7 @@ class PlacementRequest(models.Model):
         
         term = self.convert_term_year(self.placement_term, self.year)
         
-        offer_ids = self.env['placement.offer'].sudo().search([('state', '=', 'placementing'), ('placement_type', '=', self.placement_type), ('placement_term', '=', self.placement_term), ('year', '=', self.year)])
+        offer_ids = self.env['placement.offer'].sudo().search([('state', '=', 'offer_still_available'), ('placement_type', '=', self.placement_type), ('placement_term', '=', self.placement_term), ('year', '=', self.year)])
         archive_offer_ids = offer_ids.mapped('archive_offer_ids').filtered(lambda archive_offer_id: archive_offer_id.is_linked == False)
         offer_ids = archive_offer_ids.mapped('offer_id')
 
@@ -271,7 +271,7 @@ class PlacementRequest(models.Model):
     def apply_filter(self):
         self._preparing_reapply_filter()
         
-        offer_ids = self.env['placement.offer'].sudo().search([('state', '=', 'placementing'), ('placement_type', '=', self.placement_type), ('placement_term', '=', self.placement_term), ('year', '=', self.year)])
+        offer_ids = self.env['placement.offer'].sudo().search([('state', '=', 'offer_still_available'), ('placement_type', '=', self.placement_type), ('placement_term', '=', self.placement_term), ('year', '=', self.year)])
         archive_offer_ids = offer_ids.mapped('archive_offer_ids').filtered(lambda archive_offer_id: archive_offer_id.is_linked == False)
         facility_ids = archive_offer_ids.mapped('facility_id')
         offer_ids = archive_offer_ids.mapped('offer_id')
@@ -436,8 +436,6 @@ class PlacementRequest(models.Model):
             ip_offers = archive_offer_ids.filtered(lambda x :x.setting == 'ip')
             op_offers = archive_offer_ids.filtered(lambda x :x.setting == 'op')
             
-            print(ip_offers)
-            print(op_offers)
             archive_offer_id = False
             archive_offer_facility_id = False
             geographical_id = False

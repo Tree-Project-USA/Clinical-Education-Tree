@@ -22,7 +22,7 @@ class Location(http.Controller):
     
             values["partner"] = res_partner_id
             values["hardship"] = hardship_id
-            if hardship_id.state == 'confirm':
+            if hardship_id.state == 'approved':
                 can_apply_hardship = max_hardship_zipcodes or 3
             else:
                 can_apply_hardship = normal_number_zipcodes or 5
@@ -51,7 +51,7 @@ class Location(http.Controller):
                 template.send_mail(request.env.user.id, force_send=True)
                 return request.redirect("/my/home")
             except ValidationError as msg:
-                if hardship_id.state == 'confirm':
+                if hardship_id.state == 'approved':
                     can_apply_hardship = max_hardship_zipcodes or 3
                 else:
                     can_apply_hardship = normal_number_zipcodes or 5

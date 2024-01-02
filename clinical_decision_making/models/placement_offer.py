@@ -23,11 +23,11 @@ class PlacementOffer(models.Model):
     line_ids = fields.One2many(comodel_name='placement.offer.line', inverse_name='offer_id', string='Placement Lines')
     student_ids = fields.Many2many(comodel_name='res.partner', string='Students',domain=[('is_student', '=', True)], compute='_compute_offer_student_ids')
     state = fields.Selection([
-            ('draft', 'Draft'),
-            ('placementing', 'Placementing'),
-            ('done', 'Confirmed'),
-            ('cancel', 'Canceled'),
-        ], string='Status', default='draft')
+            ('offer_details_entered', 'Offer Details Entered'),
+            ('offer_still_available', 'Offer Still Available'),
+            ('offer_matched', 'Offer Matched'),
+            ('offer_cancel', 'Offer Canceled'),
+        ], string='Status', default='offer_details_entered')
     placement_type = fields.Selection([
         ('ice', 'ICE'),
         ('tce', 'TCE'),
@@ -36,10 +36,10 @@ class PlacementOffer(models.Model):
         ('fall', 'Fall'),
         ('spring', 'Spring'),
         ('summer', 'Summer'),
-    ], string='Start Term', required=True)
-    year = fields.Selection(selection=SELECTION_YEAR_RANGE, string='Start Year', required=True)
+    ], string='Term', required=True)
+    year = fields.Selection(selection=SELECTION_YEAR_RANGE, string='Year', required=True)
     archive_offer_ids = fields.One2many(comodel_name='archive.offer', inverse_name='offer_id', string='Archive Offer')
-    archive_offer_count = fields.Float(compute='_compute_archive_offer_count', string='Archive Offer Count')
+    archive_offer_count = fields.Integer(compute='_compute_archive_offer_count', string='Archive Offer Count')
     
     @api.depends('archive_offer_ids')
     def _compute_archive_offer_count(self):
@@ -79,11 +79,11 @@ class PlacementOffer(models.Model):
                 })
 
         self.write({
-            'state': 'placementing'
+            'state': 'offer_still_available'
         })
     def action_complete(self):
         self.write({
-            'state': 'done'
+            'state': 'offer_matched'
         })
                 
     def _check_linked_data(self):
@@ -95,12 +95,12 @@ class PlacementOffer(models.Model):
     def action_cancel(self):
         self._check_linked_data()
         self.action_reset_offers()
-        self.write({'state': 'cancel'})
+        self.write({'state': 'offer_cancel'})
 
     def action_draft(self):
         self._check_linked_data()
         self.action_reset_offers()
-        self.write({'state': 'draft'})
+        self.write({'state': 'offer_details_entered'})
         
     def action_reset_offers(self):
         self.archive_offer_ids.unlink()
@@ -119,13 +119,13 @@ class PlacementOffer(models.Model):
     
     @api.onchange('archive_offer_ids')
     def _onchange_archive_offer_ids(self):
-        for rec in self.filtered(lambda record: record.state == 'placementing'):
+        for rec in self.filtered(lambda record: record.state == 'offer_still_available'):
             lenth = len(rec.archive_offer_ids)
             linked_data = self.archive_offer_ids.filtered(lambda line: line.is_linked)
             linked_student = self.archive_offer_ids.mapped('student_id')
             if linked_data == lenth and linked_student == lenth:
                 rec.write({
-                    'state': 'done'
+                    'state': 'offer_matched'
                 })
 
     # #------------------------------------------------------------------------------
@@ -142,7 +142,7 @@ class PlacementOffer(models.Model):
     #                     for node in nodes:
     #                         modifiers = json.loads(node.get('modifiers') or '{}')
 
-    #                         modifiers['readonly'] = [['state', '!=', 'draft']]
+    #                         modifiers['readonly'] = [['state', '!=', 'offer_details_entered']]
     #                         node.set('modifiers', json.dumps(modifiers))
     #         res['arch'] = etree.tostring(doc, encoding='unicode')
     #     return res

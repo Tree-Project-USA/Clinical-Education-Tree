@@ -19,19 +19,19 @@ class HardshipRequest(models.Model):
     note = fields.Text('Internal Notes', tracking=True)
     state = fields.Selection(
         selection=[
-            ('draft', 'Draft'),
-            ('update', 'Required Update'),
+            ('initial_submission', 'Initial Submission'),
+            ('update_required', 'Update Required'),
             ('under_review', 'Under Review'),
-            ('confirm', 'Validate'),
+            ('approved', 'Approved'),
+            ('declined', 'Declined'),
             ('expired', 'Expired'),
-            ('cancel', 'Cancelled'),
         ],
         string='Status',
         required=True,
         readonly=True,
         copy=False,
         tracking=True,
-        default='draft',
+        default='initial_submission',
     )
     expiration_date = fields.Date(string='Expiration Date')
     geographical_ids = fields.Many2many('geographical', 'geographical_ids', string='Geographical')
@@ -42,7 +42,7 @@ class HardshipRequest(models.Model):
     
     def action_confirm(self):
         self.write({
-            'state': 'confirm',
+            'state': 'approved',
         })
         self.student_geographical_ids = self.student_id.geographical_ids.ids
         self.student_id.with_context(pass_validation=True).write({
@@ -53,9 +53,9 @@ class HardshipRequest(models.Model):
         template.send_mail(self.id, force_send=True)
         self.student_id.can_apply_hardship = False
 
-    def action_return_draft(self):
+    def action_return_initial_submission(self):
         self.write({
-            'state': 'draft',
+            'state': 'initial_submission',
         })
         self.student_id.with_context(pass_validation=True).write({
             'deny_show_student': False,
@@ -87,7 +87,7 @@ class HardshipRequest(models.Model):
         }
     def action_cancel(self):
         self.write({
-            'state': 'cancel',
+            'state': 'expired',
         })
         self.student_id.write({
             'deny_show_student': False,
@@ -114,7 +114,7 @@ class HardshipRequest(models.Model):
     def action_update(self):
         self.ensure_one()
         self.write({
-            'state': 'update',
+            'state': 'update_required',
         })
         template = self.env.ref('clinical_decision_making.mail_template_send_hardship_information_missing')
         template.send_mail(self.id, force_send=True)
@@ -123,7 +123,7 @@ class HardshipRequest(models.Model):
     
     # Cron job
     def check_end_date_of_hardship(self):
-        hardship_ids = self.sudo().search([("state","=","confirm"), ('expiration_date', '!=', False), ("expiration_date" , "<", date.today())])
+        hardship_ids = self.sudo().search([("state","=","approved"), ('expiration_date', '!=', False), ("expiration_date" , "<", date.today())])
         for hardship_id in hardship_ids:
             hardship_id.action_update()
             

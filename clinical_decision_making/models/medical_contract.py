@@ -54,7 +54,7 @@ class FacilityContractHistory(models.Model):
     @api.depends('facility_id.name')
     def _compute_display_name(self):
         for history in self:
-            history.display_name = _("%s's Contracts History", history.facility_id.name)
+            history.display_name = _("%s Contract History", history.facility_id.name)
     
     @api.depends('contract_ids')
     def _compute_contract_count(self):
@@ -82,14 +82,15 @@ class FacilityContracts(models.Model):
     name = fields.Char('Contract Reference', required=True)
     contract_attachment = fields.Binary(string='Contract Attachment', attachment=True)
     facility_id = fields.Many2one(comodel_name='medical.facility', string='Medical Facility')
-    date_start = fields.Datetime('Start Date', required=True)
-    date_end = fields.Datetime('End Date', required=True)
+    date_start = fields.Date('Start Date', required=True)
+    date_end = fields.Date('End Date', required=True)
     notes = fields.Html('Notes')
     state = fields.Selection([
-        ('draft', 'New'),
-        ('open', 'Running'),
+        ('draft', 'Contract Initiated'),
+        ('open', 'Active Contract'),
+        ('require_renewal', 'Require Renewal'),
         ('close', 'Expired'),
-        ('cancel', 'Cancelled')
+        ('cancel', 'Inactive Contract')
     ], string='Status', group_expand='_expand_states', copy=False,
        tracking=True, help='Status of the contract', default='draft')
     
@@ -107,6 +108,33 @@ class FacilityContracts(models.Model):
         })
         return action
 
+    def facility_contract_view_form_renewal_action(self):
+        self.ensure_one()
+        action = self.env['ir.actions.actions']._for_xml_id('clinical_decision_making.action_facility_contract')
+        action.update({
+            'context': {'default_facility_id': self.facility_id.id,
+                        'default_name': self.name,
+                        },
+            'view_mode': 'form',
+            'view_id': self.env.ref('clinical_decision_making.facility_contract_view_form_wizard').id,
+            'views': [(self.env.ref('clinical_decision_making.facility_contract_view_form_wizard').id, 'form')],
+            'target': 'new'
+        })
+        return action
+
+    def action_require_renewal(self):
+        for rec in self:
+            end = rec.date_end
+            today = date.today()
+            if (end - today).days < 180:
+                rec.write({
+                    'state': 'require_renewal',
+                })
+
+    def action_cancel(self):
+        self.write({
+            'state': 'cancel',
+        })
 
     def _assign_open_contract(self):
         for contract in self:

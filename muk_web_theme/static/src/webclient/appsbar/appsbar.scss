@@ -145,13 +145,13 @@
     }
 }
 
-.btn-primary {
-    background-color: var(--color1);
-}
+// .btn-primary {
+//     background-color: var(--color1);
+// }
 
-.btn-primary:hover {
-    background-color: var(--color4);
-}
+// .btn-primary:hover {
+//     background-color: var(--color4);
+// }
 
 .btn-link {
     color: var(--color1);
@@ -263,4 +263,16 @@ a:hover {
 
 .o_navbar_apps_menu.show .dropdown-menu .o_app>a .mk_app_name {
     color: var(--color1) !important;
+}
+
+.bootstrap-datetimepicker-widget .datepicker table td{
+    background-color: #b9dadb;
+}
+
+.o_field_statusbar > .o_statusbar_status > .o_arrow_button.o_arrow_button_current.disabled {
+    background-color: var(--color1);
+    color: #FFFFFF;
+}
+.o_field_statusbar > .o_statusbar_status > .o_arrow_button.o_arrow_button_current.disabled::after{
+    border-left-color: var(--color1);
 }
