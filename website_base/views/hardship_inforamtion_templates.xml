@@ -10,12 +10,12 @@
                     t-att-value="hardship_id.state"
                 />
                 <div class="d-flex align-items-center flex-wrap text-center style_stage mt-4">
-                    <span id="draft" class="draft">Draft</span>
-                    <span id="update" class="update" >Required Update</span>
+                    <span id="initial_submission" class="initial_submission">Initial Submission</span>
+                    <span id="update_required" class="update_required" >Update Required</span>
                     <span id="under_review" class="under_review">Under Review</span>
-                    <span id="confirm" class="confirm">Validate</span>
+                    <span id="approved" class="approved">Approved</span>
+                    <span id="declined" class="declined">Declined</span>
                     <span id="expired" class="expired">Expired</span>
-                    <span id="cancel" class="cancel">Cancelled</span>
                 </div>
                 <div class="row mt-4">
                     <div class="col-lg-6">
@@ -290,7 +290,7 @@
                           Back To My Profile
                         </a>
                         <a 
-                          t-if="hardship_id.state == 'update'"
+                          t-if="hardship_id.state == 'update_required'"
                           type="button"
                           class="btn my-2"
                           role="button" 

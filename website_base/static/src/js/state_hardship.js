@@ -16,13 +16,13 @@ odoo.define("website_base.state_hardship", function(require) {
         },
         _check_request_stage: function() {
             var stage = $("#state").val();
-            if (stage == "draft") {
-                $("#draft").css({
+            if (stage == "initial_submission") {
+                $("#initial_submission").css({
                     "background-color": "#000000",
                     color: "#b4904f",
                 });
-            } else if (stage == "update") {
-                $("#update").css({
+            } else if (stage == "update_required") {
+                $("#update_required").css({
                     "background-color": "#000000",
                     color: "#b4904f",
                 });
@@ -31,18 +31,18 @@ odoo.define("website_base.state_hardship", function(require) {
                     "background-color": "#000000",
                     color: "#b4904f",
                 });
-            } else if (stage == "confirm") {
-                $("#confirm").css({
+            } else if (stage == "approved") {
+                $("#approved").css({
                     "background-color": "#08a05c",
                     color: "#fff",
                 });
-            }else if (stage == "expired") {
-                $("#expired").css({
+            }else if (stage == "declined") {
+                $("#declined").css({
                     "background-color": "#000000",
                     color: "#b4904f",
                 });
-            }else if (stage == "cancel") {
-                $("#cancel").css({
+            }else if (stage == "expired") {
+                $("#expired").css({
                     "background-color": "red",
                     color: "#fff",
                 });

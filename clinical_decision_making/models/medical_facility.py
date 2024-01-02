@@ -28,7 +28,7 @@ class MedicalFacility(models.Model):
     contracts_count = fields.Integer(compute='_compute_contracts_count', string='Contract Count', tracking=True)
     scce_ids = fields.Many2many(comodel_name='scce', string='SCCE', tracking=True)
     offer_ids = fields.One2many(comodel_name='placement.offer', inverse_name='facility_id', string='Offers')
-    archive_offer_count = fields.Float(compute='_compute_archive_offer_count', string='Archive Offer Count')
+    archive_offer_count = fields.Integer(compute='_compute_archive_offer_count', string='Archive Offer Count')
     
     @api.depends('offer_ids')
     def _compute_archive_offer_count(self):
@@ -114,7 +114,7 @@ class MedicalFacility(models.Model):
             'view_id': self.env.ref('clinical_decision_making.archive_offer_view_tree').id,
             'views': [(self.env.ref('clinical_decision_making.archive_offer_view_tree').id, 'tree')],
             'res_id': self.id,
-            'domin': [('id', 'in', archive_offer_ids.ids)],
+            'domain': [('id', 'in', archive_offer_ids.ids)],
         })
         return action
         

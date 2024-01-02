@@ -16,7 +16,7 @@ class CustomerPortals(CustomerPortal):
         res_partner_id = request.env.user.partner_id
         hardship_id = request.env["hardship.request"].sudo().search([
             ('student_id', '=', res_partner_id.id),
-            ('state', '=', 'update')
+            ('state', '=', 'update_required')
         ])
         values["partner"] = res_partner_id
         values["hardship"] = hardship_id

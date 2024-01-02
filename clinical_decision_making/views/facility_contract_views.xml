@@ -54,13 +54,13 @@
                     </h1>
                     <group>
                         <group>
-                            <field name="facility_id"/>
+                            <field name="facility_id" string="Facility"/>
                             <field name="contract_id" invisible="1"/>
                             <field name="country_code" invisible="1"/>
                         </group>
                     </group>
                     <notebook>
-                        <page string="Contract History" name="contract_history">
+                        <page string="History" name="contract_history">
                             <field name="contract_ids" widget="one2many" readonly="0">
                                 <tree string="Current Contracts"
                                       decoration-primary="state == 'open'"
@@ -71,7 +71,7 @@
                                       no_open="1"
                                       create="0" delete="0">
                                     <button name="action_open_contract_form" type="object" icon="fa-external-link" title="Open Contract"/>
-                                    <field name="name" string="Contract Name"/>
+                                    <field name="name" string="Contract Name" invisible="1"/>
                                     <field name="date_start"/>
                                     <field name="date_end"/>
                                     <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-warning="state == 'close'" decoration-success="state == 'open'"/>
@@ -110,6 +110,8 @@
         <field name="arch" type="xml">
             <form string="Current Contract">
                 <header>
+                    <button name="facility_contract_view_form_renewal_action" string="RENEW CONTRACT" type="object" class="btn-primary" attrs="{'invisible': [('state', '!=', 'require_renewal')]}"/>
+                    <button name="action_cancel" string="CANCEL CONTRACT" type="object" class="btn btn-danger" attrs="{'invisible': [('state', '=', 'cancel')]}" data-hotkey="c"/>
                     <field name="state" widget="statusbar" options="{'clickable': '1'}"/>
                 </header>
                 <sheet>

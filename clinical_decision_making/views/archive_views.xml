@@ -13,11 +13,13 @@
                 <field name="student_id"/>
                 <field name="facility_id"/>
                 <field name="placement_type"/>
+                <field name="setting"/>
                 <field name="placement_term"/>
                 <field name="year"/>
-                <field name="geographical_id"/>
                 <field name="city"/>
                 <field name="state"/>
+                <field name="geographical_id"/>
+                <field name="placement_status"/>
             </tree>
         </field>
     </record>
@@ -38,16 +40,17 @@
                         </group>
                         <group>
                             <field name="placement_type"/>
-                            <field name="placement_term"/>
+                            <field name="placement_term" readonly="1"/>
                         </group>
                         <group>
-                            <field name="year"/>
-                            <field name="geographical_id"/>
+                            <field name="year" readonly="1"/>
+                            <field name="setting"/>
                         </group>
                         <group>
                             <field name="zip_code" invisible="1"/>
                             <field name="city"/>
                             <field name="state"/>
+                            <field name="geographical_id"/>
                         </group>
                     </group>
                 </sheet>

@@ -16,7 +16,7 @@ class Dow(http.Controller):
     @http.route('/contract/attachment/<int:remote_id>', type='http', auth='public')
     def download_attachment(self, remote_id, **kwargs):
 
-        contract_id = request.env['site'].sudo().search([('id', '=', int(remote_id))], limit=1)
+        contract_id = request.env['medical.facility'].sudo().search([('id', '=', int(remote_id))], limit=1)
         attachment = contract_id.contract_attachment
         content_base64 = base64.b64decode(attachment)
         mimetype = guess_mimetype(base64.b64decode(attachment))

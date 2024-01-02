@@ -13,7 +13,7 @@
                 <field name="student_id"/>
                 <field name="create_date"/>
                 <field name="expiration_date"/>
-                <field name="state" widget="badge" decoration-muted="state == 'draft'"  decoration-danger="state == 'cancel'"  decoration-warning="state == 'update'" decoration-success="state == 'confirm'"/>
+                <field name="state" widget="badge" decoration-muted="state == 'initial_submission'"  decoration-danger="state == 'expired'"  decoration-warning="state == 'update_required'" decoration-success="state == 'approved'"/>
             </tree>
         </field>
     </record>
@@ -40,35 +40,41 @@
         <field name="arch" type="xml">
             <form string="Request">
                 <header>
-                    <button name="action_attachment_file_confirm" string="Confirm" type="object" class="oe_highlight" attrs="{'invisible': ['|',('state', '=', 'confirm'), ('state', '=', 'cancel')]}" data-hotkey="c"/>
-                    <button name="action_open_update_view" string="Update Information" type="object" class="btn btn-warning" data-hotkey="u"/>
-                    <button name="action_return_draft" string="Return To Draft" type="object" class="btn btn-primary" attrs="{'invisible': [('state', 'in', ['draft', 'placementing'])]}" data-hotkey="c"/>
-                    <button name="action_attachment_file_cancel" string="Cancel" type="object" class="btn btn-danger" attrs="{'invisible': ['|',('state', '=', 'confirm'), ('state', '=', 'cancel')]}" data-hotkey="c"/>
+                    <button name="action_return_initial_submission" string="RETURN TO INITIAL SUBMISSION" type="object" class="btn btn-primary" attrs="{'invisible': [('state', 'in', ['initial_submission', 'placementing'])]}" data-hotkey="c"/>
+                    <button name="action_open_update_view" string="UPDATE INFORMATION" type="object" class="btn btn-warning" data-hotkey="u"/>
+                    <button name="action_attachment_file_confirm" string="APPROVE" type="object" class="oe_highlight" attrs="{'invisible': ['|',('state', '=', 'approved'), ('state', '=', 'expired')]}" data-hotkey="c"/>
+                    <button name="action_attachment_file_cancel" string="DECLINE" type="object" class="btn btn-danger" attrs="{'invisible': ['|',('state', '=', 'approved'), ('state', '=', 'expired')]}" data-hotkey="c"/>
                     <field name="state" widget="statusbar" readonly="1"/>
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box"/>
-                    <widget name="web_ribbon" title="Cancelled" bg_color="bg-danger" attrs="{'invisible': [('state', '!=', 'cancel')]}"/>
-                    <widget name="web_ribbon" title="Required Update" bg_color="bg-warning" attrs="{'invisible': [('state', '!=', 'update')]}"/>
-                    <widget name="web_ribbon" title="Validated" bg_color="bg-success" attrs="{'invisible': [('state', '!=', 'confirm')]}"/>
+                    <widget name="web_ribbon" title="Expired" bg_color="bg-danger" attrs="{'invisible': [('state', '!=', 'expired')]}"/>
+                    <widget name="web_ribbon" title="Update Required" bg_color="bg-warning" attrs="{'invisible': [('state', '!=', 'update_required')]}"/>
+                    <widget name="web_ribbon" title="Approved" bg_color="bg-success" attrs="{'invisible': [('state', '!=', 'approved')]}"/>
                     <group>
                         <field name="studentid"/>
-                        <field name="student_id" attrs="{'readonly': [('state', 'in', ('cancel', 'confirm'))]}"/>
+                        <field name="student_id" attrs="{'readonly': [('state', 'in', ('expired', 'approved'))]}"/>
                         <field name="create_date"/>
                         <field name="expiration_date"/>
                     </group>
                 <notebook>
-                    <page string="Zip Codes" name="geographical_ids">
-                        <field name="geographical_ids" attrs="{'readonly': [('state', 'in', ('cancel', 'confirm'))]}"/>
+                    <page string="Preferred Addresses" name="geographical_ids">
+                        <field name="geographical_ids" attrs="{'readonly': [('state', 'in', ('expired', 'approved'))]}">
+                            <tree editable="bottom">
+                                <field name="city"/>
+                                <field name="state"/>
+                                <field name="zip_code"/>
+                            </tree>
+                        </field>
                     </page>
                     <page string="Attachment" name="attachment_ids">
                         <field name="attachment_ids" widget="many2many_attachment_preview" string="Attach a file" nolabel="1" attrs="{'readonly': [('state', 'in', ('cancel', 'confirm'))]}"/>
                     </page>
                     <page string="Notes" name="notes">
-                        <field name="note" attrs="{'readonly': [('state', 'in', ('cancel', 'confirm'))]}"/>
+                        <field name="note" attrs="{'readonly': [('state', 'in', ('expired', 'approved'))]}"/>
                     </page>
                     <page string="Student Geographical" name="student_geographical_ids" invisible="1">
-                        <field name="student_geographical_ids" attrs="{'readonly': [('state', 'in', ('cancel', 'confirm'))]}"/>
+                        <field name="student_geographical_ids" attrs="{'readonly': [('state', 'in', ('expired', 'approved'))]}"/>
                     </page>
                 </notebook>
                 </sheet>

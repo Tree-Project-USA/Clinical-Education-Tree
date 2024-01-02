@@ -33,6 +33,9 @@
         'views/portal_wizard_views_inherit.xml',
         'views/menu.xml',
 
+
+        'wizard/facility_contract_renewal_wizard.xml',
+
     ],
     'assets': {
         'web.assets_backend': [

@@ -22,7 +22,7 @@ class Geographical(models.Model):
 
     @api.model
     def find_or_create_zip_code(self, zipcode):
-        zip_code_id = self.search([('zipcode', '=', zipcode)])
+        zip_code_id = self.search([('zip_code', '=', zipcode)])
         if not zip_code_id:
             locstion_info = self.get_locstion_informations(zipcode)
             zip_code_id = self.create({
@@ -40,12 +40,14 @@ class Geographical(models.Model):
         ).get_param('zip_code_token')
         try:
             if token:
-                url = "https://www.zipcodeapi.com/rest/%s/info.json/%s/degrees" % (token, zip)
+                url = "https://www.zipcodeapi.com/rest/%s/info.json/%s/degrees" % (token, zipcode)
                 res = requests.request("GET", url)
                 if res.status_code == 200:
                     return res.json()
                 else:
                     raise ValidationError(res.json().get('error_msg', ''))
+            else:
+                raise ValidationError('Token Is invalidate')
         except Exception as e:
             raise ValidationError(str(e))
     
