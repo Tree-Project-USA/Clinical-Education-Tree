@@ -109,7 +109,7 @@ odoo.define("website_base.location_student", function(require) {
                     event.preventDefault();
                 }
             });
-            $(ZipID).bind('input', function() {
+            $(ZipID).change(function() {
                 var ZipCode = $(ZipID).val()
                 ajax.jsonRpc("/show/locations", 'call', { 'zip_code': ZipCode }).then(function(data) {
                     if (data.id) {
