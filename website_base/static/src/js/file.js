@@ -36,11 +36,12 @@ odoo.define("website_base.file", function(require) {
                                     Drag and drop your file here
                                 </div> 
                                 <input type="file" 
-                                    accept="image/jpg, image/jpeg, image/png, application/pdf"
-                                    required="required"
-                                    name="datas_` + counter_files + `" 
-                                    id="chooseFile_` + counter_files + `"
-                                    />
+                                    multiple
+                                    accept=".jpg, .jpeg, .png, .pdf, .docx, .xls, .pptx"
+                                    required
+                                    name="datas_${counter_files}"
+                                    id="chooseFile_${counter_files}"
+                                />
                             </div>
                         </div>
                         </div>

@@ -105,11 +105,11 @@
                           <div>
                             <input
                               type="email"
-                              id="email"
-                              name="email"
+                              id="personal_email_address"
+                              name="personal_email_address"
                               class="form-control updated"
                               readonly="readonly"
-                              t-att-value="hardship_id.student_id.email"
+                              t-att-value="hardship_id.student_id.personal_email_address"
                             />
                           </div>
                         </div>
