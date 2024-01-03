@@ -331,9 +331,6 @@ class ResPartner(models.Model):
         if 'home_address' in values or 'phone' in values or 'personal_phone' in values or 'personal_email_address' in values:
             template = self.env.ref('clinical_decision_making.mail_template_send_update_of_personal_information')
             template.sudo().send_mail(self.id, force_send=True)
-        if 'preferred_setting_ids' in values:
-            if len(self.preferred_setting_ids) < 5:
-                raise ValidationError(_('Must be selected 5 preferred settings'))
         result = super(ResPartner, self).write(values)
     
         return result
