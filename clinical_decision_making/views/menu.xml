@@ -189,7 +189,7 @@
 
     <menuitem
         id="configuration_menu"
-        name="Configuration"
+        name="Setting"
         parent="menu_root_cpdm"
         sequence="6"/>
         
@@ -260,7 +260,7 @@
 
     <menuitem
         id="preferred_setting_menu"
-        name="Setting Types"
+        name="Settings Types"
         action="action_preferred_setting"
         parent="configuration_menu"
         sequence="99"/>

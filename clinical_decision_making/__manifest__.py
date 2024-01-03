@@ -14,6 +14,7 @@
         'data/tree_data.xml',
         'data/mail_data.xml',
         'data/preferred_setting_data.xml',
+        'data/sequence_data.xml',
         
         
         'views/archive_views.xml',

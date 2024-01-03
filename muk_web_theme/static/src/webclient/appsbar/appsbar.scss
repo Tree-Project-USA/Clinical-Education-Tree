@@ -276,3 +276,7 @@ a:hover {
 .o_field_statusbar > .o_statusbar_status > .o_arrow_button.o_arrow_button_current.disabled::after{
     border-left-color: var(--color1);
 }
+
+.bootstrap-datetimepicker-widget .datepicker table th {
+    background-color: #61a8aa;
+}

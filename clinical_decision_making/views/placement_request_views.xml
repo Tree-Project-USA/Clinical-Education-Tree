@@ -32,12 +32,8 @@
                             <field name="student_count" string="Students" widget="statinfo"/>
                             <field name="student_ids" invisible="1"/>
                         </button>
-                        <button class="oe_stat_button" name="action_view_lines" type="object" icon="fa-list">
-                            <field name="offer_count" string="Offers" widget="statinfo"/>
-                            <field name="offer_ids" invisible="1"/>
-                        </button>
                         <button class="oe_stat_button" name="action_view_offer_lines" type="object" icon="fa-list">
-                            <field name="archive_offer_count" widget="statinfo"/>
+                            <field name="archive_offer_count" widget="statinfo" string="Available Offers"/>
                             <field name="archive_offer_ids" invisible="1"/>
                         </button>
                         <button class="oe_stat_button" name="action_view_facilities" type="object" icon="fa-building">
@@ -58,13 +54,13 @@
                             <field name="year"/>
                         </group>
                         <group>
-                            <field name="apply_hardship"/>
+                            <field name="apply_hardship" string="Hardship"/>
                             <field name="has_hardship" attrs="{'invisible': [('apply_hardship', '=', False)], 'required': [('apply_hardship', '=', True)]}"/>
                             <field name="apply_setting"/>
                             <field name="setting" attrs="{'invisible': [('apply_setting', '=', False)], 'required': [('apply_setting', '=', True)]}"/>
                         </group>
                         <group>
-                            <field name="apply_location"/>
+                            <field name="apply_location" string="Distance"/>
                             <field name="location_dist" attrs="{'invisible': [('apply_location', '=', False)], 'required': [('apply_location', '=', True)]}"/>
                         </group>
                         <group>
@@ -72,8 +68,7 @@
                             <field name="placement_priority" attrs="{'invisible': [('apply_placement_priority', '=', False)], 'required': [('apply_placement_priority', '=', True)]}"/>
                         </group>
                         <group>
-                            <field name="apply_placement_status"/>
-                            <field name="placement_status" attrs="{'invisible': [('apply_placement_status', '=', False)], 'required': [('apply_placement_status', '=', True)]}"/>
+                            <field name="placement_status" string="Placement Status" required="1"/>
                         </group>
                     </group>
                     <notebook>

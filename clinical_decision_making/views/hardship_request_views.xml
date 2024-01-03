@@ -42,8 +42,8 @@
                 <header>
                     <button name="action_return_initial_submission" string="RETURN TO INITIAL SUBMISSION" type="object" class="btn btn-primary" attrs="{'invisible': [('state', 'in', ['initial_submission', 'placementing'])]}" data-hotkey="c"/>
                     <button name="action_open_update_view" string="UPDATE INFORMATION" type="object" class="btn btn-warning" data-hotkey="u"/>
-                    <button name="action_attachment_file_confirm" string="APPROVE" type="object" class="oe_highlight" attrs="{'invisible': ['|',('state', '=', 'approved'), ('state', '=', 'expired')]}" data-hotkey="c"/>
-                    <button name="action_attachment_file_cancel" string="DECLINE" type="object" class="btn btn-danger" attrs="{'invisible': ['|',('state', '=', 'approved'), ('state', '=', 'expired')]}" data-hotkey="c"/>
+                    <button name="action_attachment_file_confirm" string="APPROVE" type="object" class="btn btn-success" attrs="{'invisible': [('state', 'in', ['approved', 'expired', 'declined'])]}" data-hotkey="c"/>
+                    <button name="action_attachment_file_cancel" string="DECLINE" type="object" class="btn btn-danger" attrs="{'invisible': [('state', 'in', ['approved', 'expired', 'declined'])]}" data-hotkey="c"/>
                     <field name="state" widget="statusbar" readonly="1"/>
                 </header>
                 <sheet>
@@ -138,7 +138,7 @@
                         </p>
                     </div>
                     <footer>
-                        <button name="action_confirm" string="Confirm" class="oe_highlight" type="object" />
+                        <button name="action_confirm" string="APPROVE" class="oe_highlight" type="object" />
                                 
                         <button special="cancel" string="Cancel" class="oe_link" />
                     </footer>

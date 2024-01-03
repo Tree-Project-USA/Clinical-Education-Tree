@@ -158,7 +158,7 @@ class TreeMatching(models.Model):
         return {
             'domain':
                 {
-                    'scce_id': [('id', 'in', self.facility_id.scce_ids.ids)],
+                    'scce_id': [('id', 'in', self.facility_id.scce_primary_id.id)],
                 },
         }
 
@@ -167,7 +167,7 @@ class TreeMatching(models.Model):
     def _compute_aval_scce_ids(self):
         for rec in self:
             if rec.facility_id:
-                rec.aval_scce_ids = rec.facility_id.scce_ids
+                rec.aval_scce_ids = rec.facility_id.scce_primary_id
             else:
                 rec.aval_scce_ids = False 
                 
