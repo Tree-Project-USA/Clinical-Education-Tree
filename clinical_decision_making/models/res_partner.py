@@ -147,8 +147,12 @@ class ResPartner(models.Model):
                     
                     tce2_term_t, tce2_term_y = self.get_specific_term_year(rec.start_term_type, rec.start_year, rec.program_id.num_terms, rec.program_id.tce2_term)
                     rec.tce2_term = self.convert_term_year(tce2_term_t, tce2_term_y)
-
-                    rec.cohort_label = f"{tce2_term_y}-04-{rec.campus}-{rec.program_type}"
+                    if tce2_term_t == 'spring':
+                        rec.cohort_label = f"{tce2_term_y}-04-{rec.campus}-{rec.program_type}"
+                    elif tce2_term_t == 'summer':
+                        rec.cohort_label = f"{tce2_term_y}-08-{rec.campus}-{rec.program_type}"
+                    elif tce2_term_t == 'fall':
+                        rec.cohort_label = f"{tce2_term_y}-12-{rec.campus}-{rec.program_type}"
                 else:
                     rec.start_term = ''
                     rec.graduation_term = ''
