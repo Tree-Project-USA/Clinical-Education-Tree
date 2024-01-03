@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <data noupdate="0">
     <!-- Email template for new users -->
     <record id="mail_template_send_account_creation_invitation" model="mail.template">
         <field name="name">Send Account Creation Invitation</field>
@@ -856,6 +857,6 @@
         <field name="lang">{{ object.student_id.lang }}</field>
         <field name="auto_delete" eval="True" />
     </record>
-
+    </data>
 
 </odoo>
