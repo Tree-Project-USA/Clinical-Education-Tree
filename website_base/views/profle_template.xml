@@ -261,7 +261,7 @@
                 <div class="row mt-4 mt-4 mb-4 text-center">
                   <div class="col-12 mr-2">
                     <a
-                      t-if="not partner.geographical_ids and hardship.state in ['expired','declined']"
+                      t-if="not partner.geographical_ids and hardship.state not in ['expired','declined']"
                       type="button"
                       class="btn my-2"
                       role="button" 
