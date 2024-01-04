@@ -57,7 +57,7 @@
                                     <!-- <field name="student_id"/> -->
                                     <field name="facility_id" string="Facility" attrs="{'readonly': [('state', '!=', 'offer_details_entered')]}"/>
                                     <field name="placement_type" attrs="{'readonly': [('state', '!=', 'offer_details_entered')]}"/>
-                                    <field name="placement_term" attrs="{'readonly': [('state', '!=', 'offer_details_entered')]}"/>
+                                    <field name="placement_term" attrs="{'readonly': [('state', '!=', 'offer_details_entered')], 'required': [('state', '=', 'offer_details_entered')]}"/>
                                     <field name="year" force_save="1" attrs="{'readonly': [('state', '!=', 'offer_details_entered')]}"/>
                                 </group>
                                 <group>
