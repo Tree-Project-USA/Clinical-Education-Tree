@@ -255,17 +255,11 @@ class ResPartner(models.Model):
         else:
             return self._get_studentid_sequence()
 
-    @api.model
-    def create(self, vals):
-        if not vals['studentid']:
-            vals['studentid'] = self._get_studentid_sequence()
-        else:
-            self._check_unique_studentid(vals['studentid'])
-    
+
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
-            vals['facilityid'] = self._get_facilityid_sequence()
+            vals['studentid'] = self._get_studentid_sequence()
         return super(ResPartner, self.with_context(pass_validation=True)).create(vals_list)
 
     @api.constrains('preferred_setting_ids')
