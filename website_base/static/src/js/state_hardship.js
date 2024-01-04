@@ -38,7 +38,7 @@ odoo.define("website_base.state_hardship", function(require) {
                 });
             }else if (stage == "declined") {
                 $("#declined").css({
-                    "background-color": "#red",
+                    "background-color": "red",
                     color: "#fff",
                 });
             }else if (stage == "expired") {

@@ -208,7 +208,7 @@
                         <div class="collapse">
                             <tbody>
                                 <tr class="project_cost_line"  t-foreach="hardship_ids" t-as="file">
-                                  <t >
+                                  <t t-if="file.attachment_confirm or file.attachment_cancel">
                                     <td>
                                         <div class="form-group">
                                             <span t-esc="file_index + 1"/>
@@ -235,6 +235,7 @@
                                         >
                                         <i class="fa fa-eye"/>
                                         </a>
+                                        <t t-esc="file.date_attachment_confirm"/>
                                       </div>
                                       <div t-if="file.attachment_cancel">
                                         <p>Declination File</p>
@@ -258,6 +259,7 @@
                                         >
                                         <i class="fa fa-eye"/>
                                         </a>
+                                        <t t-esc="file.date_attachment_cancel"/>
                                       </div>
                                     </td>
                                   </t>

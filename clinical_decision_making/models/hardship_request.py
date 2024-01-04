@@ -39,6 +39,20 @@ class HardshipRequest(models.Model):
     update_message = fields.Html(string='Message')
     attachment_cancel = fields.Binary(attachment=True)
     attachment_confirm = fields.Binary(attachment=True)
+    date_attachment_cancel = fields.Datetime()
+    date_attachment_confirm = fields.Datetime()
+
+    
+    @api.onchange('attachment_cancel')
+    def _onchange_attachment_cancel(self):
+        record = self.env[self._name].search([("id", "in", self.ids)])
+        record.date_attachment_cancel = fields.Datetime.now()
+        
+    @api.onchange('attachment_confirm')
+    def _onchange_attachment_confirm(self):
+        record = self.env[self._name].search([("id", "in", self.ids)])
+        record.date_attachment_confirm = fields.Datetime.now()
+
     
     def action_confirm(self):
         self.write({
