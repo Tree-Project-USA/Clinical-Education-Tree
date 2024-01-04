@@ -225,7 +225,12 @@ class PlacementRequest(models.Model):
         
         
         student_ids = self.env["res.partner"].sudo().search(student_domain).filtered(lambda x: len(x.geographical_ids) > 0)
-        archive_ids = self.env['archive'].search([('student_id', 'in', student_ids.ids)])
+        if self.placement_type == 'tce':
+            rem_stu_tce1_ids = self.env['archive'].search([('student_id', 'in', student_ids.ids), ('placement_status', 'in', ['approved', 'confirmed', 'completed']), ('tce1_term', '=', term)]).mapped('student_id')
+            rem_stu_tce2_ids = self.env['archive'].search([('student_id', 'in', student_ids.ids), ('placement_status', 'in', ['approved', 'confirmed', 'completed']), ('tce2_term', '=', term)]).mapped('student_id')
+            student_ids -= rem_stu_tce1_ids
+            student_ids -= rem_stu_tce2_ids
+        archive_ids = self.env['archive'].search([('student_id', 'in', student_ids.ids), ('placement_status', 'in', ['approved', 'confirmed', 'completed'])])
                   
         # ------------------------------------------------------------------
         # Apply filter for setting
@@ -517,7 +522,7 @@ class PlacementRequest(models.Model):
             print(archive_offer_id)
             print(archive_offer_facility_id)
             if archive_offer_id and archive_offer_facility_id:
-                student_criteria, offer_criteria = self.get_student_matching_report(student_id, 'TCE1', archive_offer_id.setting, geographical_id, archive_offer_facility_id, priority, location_dist)
+                student_criteria, offer_criteria = self.get_student_matching_report(student_id, 'TCE2', archive_offer_id.setting, geographical_id, archive_offer_facility_id, priority, location_dist)
                 archive_id = self.env["archive"].create({
                         'student_id': student_id.id,
                         'facility_id': archive_offer_facility_id.id,

@@ -36,7 +36,7 @@ class PlacementOffer(models.Model):
         ('fall', 'Fall'),
         ('spring', 'Spring'),
         ('summer', 'Summer'),
-    ], string='Term', required=True)
+    ], string='Term')
     year = fields.Selection(selection=SELECTION_YEAR_RANGE, string='Year', required=True)
     archive_offer_ids = fields.One2many(comodel_name='archive.offer', inverse_name='offer_id', string='Archive Offer')
     archive_offer_count = fields.Integer(compute='_compute_archive_offer_count', string='Archive Offer Count')

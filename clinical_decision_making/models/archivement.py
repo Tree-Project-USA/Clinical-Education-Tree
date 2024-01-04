@@ -18,7 +18,7 @@ class Archive(models.Model):
     facility_id = fields.Many2one('medical.facility', string='Facility', required=True)
     offer_id = fields.Many2one(comodel_name='placement.offer', string="Offer")
     request_id = fields.Many2one(comodel_name='placement.request', string="Placement Request")
-    geographical_id = fields.Many2one(comodel_name='geographical', string='Facility Zip Code', required=True)
+    geographical_id = fields.Many2one(comodel_name='geographical', string='Facility Zip Code')
     city = fields.Char(related='geographical_id.city')
     state = fields.Char(related='geographical_id.state')
     zip_code = fields.Char(related='geographical_id.zip_code')
@@ -35,7 +35,7 @@ class Archive(models.Model):
         ('fall', 'Fall'),
         ('spring', 'Spring'),
         ('summer', 'Summer'),
-    ], string='Term', required=True, store=True)
+    ], string='Term', store=True)
     year = fields.Selection(selection=SELECTION_YEAR_RANGE, string='Year', store=True)
     placement_status = fields.Selection([
         ('not_placed', 'Not Placed'),
@@ -62,6 +62,9 @@ class Archive(models.Model):
     ], string='Match State',)
     archive_offer_id = fields.Many2one('archive.offer', string='Archive Offer')
     is_show_student = fields.Boolean("Show to Student")
+    ice_term = fields.Char(string='ICE Term', related='student_id.ice_term', store=True,)
+    tce1_term = fields.Char(string='TCE1 Term', related='student_id.tce1_term', store=True,)
+    tce2_term = fields.Char(string='TCE2 Term', related='student_id.tce2_term', store=True,)
     
     @api.constrains('placement_status')
     def _check_placement_status(self):

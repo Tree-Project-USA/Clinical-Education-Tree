@@ -15,7 +15,7 @@ class MedicalFacility(models.Model):
     offer_id = fields.One2many('placement.offer', 'facility_id',string='Placement Offers')
     address = fields.Char(string='Address')
     email = fields.Char(related='scce_primary_id.email')
-    geographical_id = fields.Many2one(comodel_name='geographical', string='Zip Code', required=True)
+    geographical_id = fields.Many2one(comodel_name='geographical', string='Zip Code')
     city = fields.Char(related='geographical_id.city')
     state = fields.Char(related='geographical_id.state')
     zip = fields.Char(related='geographical_id.zip_code')
