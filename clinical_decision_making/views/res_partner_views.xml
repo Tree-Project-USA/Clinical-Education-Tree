@@ -29,8 +29,8 @@
         <field name="priority">0</field>
         <field name="arch" type="xml">
             <search>
-                <field name="studentid"/>
                 <field name="name"/>
+                <field name="studentid"/>
                 <field name="cohort_label"/>
                 <field name="email"/>
                 <field name="personal_phone"/>
@@ -54,14 +54,14 @@
                 <field name="is_student" invisible="1"/>
                 <sheet>
                     <div name="button_box" position="inside">
-                        <button name="action_open_hardship" type="object" class="oe_stat_button" string="Hardship Request">
-                            <field name="hardship_count" widget="statinfo" string="Hardship Count"/>
+                        <button name="action_open_hardship" type="object" class="oe_stat_button">
+                            <span class="o_stat_text">Hardship<br/>Request</span>
                         </button>
                     </div>
                     <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
                     <div>
                         <h3>
-                            <field name="studentid" placeholder="Student ID" required="1"/>
+                            <field name="studentid" placeholder="Student ID" attrs="{'readonly': [('id', '!=', False)]}"/>
                         </h3>
                         <h1>
                             <field name="name" placeholder="Student Name" required="1"/>

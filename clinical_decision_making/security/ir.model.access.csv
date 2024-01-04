@@ -2,6 +2,7 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 
 
 access_scce,scce,model_scce,,1,1,1,1
+access_scce_facility,scce_facility,model_scce_facility,,1,1,1,1
 access_archive,archive,model_archive,,1,1,1,1
 
 access_geographical,geographical,model_geographical,,1,1,1,1

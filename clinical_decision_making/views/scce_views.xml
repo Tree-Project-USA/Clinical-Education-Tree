@@ -6,6 +6,7 @@
         <field name="model">scce</field>
         <field name="arch" type="xml">
             <tree>
+                <field name="scceid"/>
                 <field name="first_name"/>
                 <field name="last_name"/>
                 <field name="email"/>
@@ -32,6 +33,7 @@
                     </button>
                 </div>
                     <group>
+                        <field name="scceid" required="1"/>
                         <field name="first_name"/>
                         <field name="last_name"/>
                         <field name="email"/>

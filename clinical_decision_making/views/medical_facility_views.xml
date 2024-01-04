@@ -8,12 +8,15 @@
         <field name="model">medical.facility</field>
         <field name="arch" type="xml">
             <tree>
-                <field name="name"/>
-                <field name="email"/>
-                <field name="address"/>
-                <field name="geographical_id"/>
+                <field name="facilityid"/>
+                <field name="name" string="Facility Name"/>
+                <field name="scce_first_name" string="SCCE First Name"/>
+                <field name="scce_last_name" string="SCCE Last Name"/>
+                <field name="email" string="SCCE Email Address"/>
+                <field name="address" string="Facility Address"/>
                 <field name="city"/>
                 <field name="state"/>
+                <field name="geographical_id"/>
             </tree>
         </field>
     </record>
@@ -24,6 +27,7 @@
         <field name="arch" type="xml">
             <search>
                 <field name="name"/>
+                <field name="facilityid"/>
                 <field name="email"/>
                 <field name="address"/>
                 <field name="geographical_id"/>
@@ -74,11 +78,16 @@
                         </button>
                     </div>
                     <group>
+                        <label for="facilityid" string="Facility ID"/>
+                        <field name="facilityid" required="1"/>
                         <label for="name" string="Facility Name"/>
                         <field name="name"/>
                         <group>
                             <field name="email" string="Facility Email Address"/>
                             <field name="address" string="Facility Address"/>
+                            <field name="scce_primary_id" string="Scce Primary" invisible="1"/>
+                            <field name="scce_first_name" string="Scce Last Name" invisible="1"/>
+                            <field name="scce_last_name" string="Scce Last Name" invisible="1"/>
                         </group>
                         <group>
                             <field name="city"/>
@@ -88,7 +97,14 @@
                     </group>
                     <notebook>
                         <page string="SCCE Information">
-                            <field name="scce_ids"/>
+                            <field name="scce_facility_ids">
+                                <tree editable="bottom">
+                                    <field name="facility_id" invisible="1"/>
+                                    <field name="scce_id"/>
+                                    <field name="is_primary_scce"/>
+                                    <field name="is_secondary_scce"/>
+                                </tree>
+                            </field>
                         </page>
                     </notebook>
                 </sheet>

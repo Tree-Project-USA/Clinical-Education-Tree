@@ -91,21 +91,6 @@ class ResPartner(models.Model):
                         user_sudo.write({'active': True, 'groups_id': [(4, group_portal.id), (3, group_public.id)]})
                         user_sudo.partner_id.signup_prepare()
 
-    @api.constrains('studentid')
-    def _check_student_id(self):
-        for rec in self:
-            pattern = r'^\d+$'
-            if not re.match(pattern, rec.studentid):
-                raise ValidationError(_('The Student ID Must Contain Numbers Only'))
-            students_ids = rec.env['res.partner'].search_count(
-                    [
-                    ("studentid", "in", [rec.studentid]),
-                    ("is_student", "=", True)
-                    ])
-            print(students_ids)
-            if students_ids > 1:
-                raise ValidationError(_('The Student ID Already Exists'))
-
     @api.depends('archive_ids')
     def get_aval_archive_ids(self):
         for rec in self:
@@ -243,11 +228,40 @@ class ResPartner(models.Model):
             print('********************')
             self.check_zip_code_distance(self.geographical_ids)
             self.check_validation_zip_code_state(self.geographical_ids)
-    
+
+    def _check_unique_studentid(self, studentid):
+        if studentid:
+            pattern = r'^\d+$'
+            if not re.match(pattern, studentid):
+                raise ValidationError(_('The Student ID Must Contain Numbers Only'))
+            students_ids = self.env['res.partner'].search_count(
+                    [
+                    ("studentid", "in", [studentid]),
+                    ("is_student", "=", True)
+                    ])
+            if students_ids > 1:
+                raise ValidationError(_(f'The Student ID : {studentid} Already Exists'))
+
+    @api.model
+    def _get_studentid_sequence(self):
+        code = self.env['ir.sequence'].next_by_code('res_partner_sequence')
+        students_ids = self.env['res.partner'].search_count(
+            [
+            ("studentid", "=", code),
+            ("is_student", "=", True)
+            ])
+        if not students_ids:
+            return code
+        else:
+            return self._get_studentid_sequence()
+
     @api.model
     def create(self, vals):
-        rec = super(ResPartner, self.with_context(pass_validation=True)).create(vals)
-        return rec
+        if not vals['studentid']:
+            vals['studentid'] = self._get_studentid_sequence()
+        else:
+            self._check_unique_studentid(vals['studentid'])
+        return super(ResPartner, self.with_context(pass_validation=True)).create(vals)
 
     @api.constrains('preferred_setting_ids')
     def validate_preferred_setting_ids(self):

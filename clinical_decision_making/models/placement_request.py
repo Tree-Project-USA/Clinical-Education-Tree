@@ -58,7 +58,7 @@ class PlacementRequest(models.Model):
     ], string='Has Hardship', default='no')
     
     # Setting Criteria
-    apply_setting = fields.Boolean(string='Apply Setting', default=True)
+    apply_setting = fields.Boolean(string='IP Setting Met ?', default=True)
     setting = fields.Selection([
         ('met', 'Met'),
         ('not_met', 'Not Met'),
@@ -90,7 +90,6 @@ class PlacementRequest(models.Model):
                                         )
     
     # Placement Status Criteria
-    apply_placement_status = fields.Boolean(string='Apply Placement Status', default=True)
     placement_status = fields.Selection([
         ('not_placed', 'Not Placed'),
         ('matched', 'Matched'),
@@ -117,7 +116,7 @@ class PlacementRequest(models.Model):
     
     @api.onchange('placement_type', 'placement_term', 'year', 'apply_hardship', 'has_hardship',
               'apply_setting', 'setting', 'apply_location', 'location_dist',
-              'apply_placement_priority', 'placement_priority', 'apply_placement_status', 'placement_status')
+              'apply_placement_priority', 'placement_priority', 'placement_status')
     def _onchange_apply_criteria(self):
         self.ensure_one()
         term = self.convert_term_year(self.placement_term, self.year)
@@ -138,7 +137,7 @@ class PlacementRequest(models.Model):
                     stud_ids.append(student_id.id)
             student_ids -= self.env['res.partner'].sudo().search([('id', 'in', stud_ids)])
         
-        if self.apply_placement_status and self.placement_status:
+        if self.placement_status:
             domain = []
             if self.placement_type == 'ice':
                 domain = [('placement_type', '=', 'ice')]
