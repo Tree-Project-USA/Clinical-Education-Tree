@@ -4,3 +4,4 @@ from . import location_students
 from . import website_update_information
 from . import preferred_setting
 from . import hardship_request_information
+from . import placement_history

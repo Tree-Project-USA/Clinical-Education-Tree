@@ -26,7 +26,7 @@
         "views/error_request_template.xml",
         "views/preferred_setting_template.xml",
         "views/hardship_inforamtion_templates.xml",
-
+        "views/placement_history_templates.xml",
     ],
     # only loaded in demonstration mode
     "demo": [],

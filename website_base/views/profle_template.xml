@@ -310,6 +310,22 @@
                     >
                     <i class="fa fa-eye mx-2"/>Show your Location 
                     </a>
+                    <t t-set="show_placement" t-value="0"/>
+                    <t t-foreach="partner.archive_ids" t-as="archive">
+                      <t t-if="archive.is_show_student">
+                        <t t-set="show_placement" t-value="show_placement + 1"/>
+                      </t>
+                    </t>
+                    <a
+                      t-if="partner.archive_ids and show_placement >= 1"
+                      type="button"
+                      class="btn"
+                      role="button" 
+                      href="/placement/history"
+                      style="background-color:  #ab8631; !important; color: #fff"
+                    >
+                    <i class="fa fa-eye mx-2"/>Show your Placement History
+                    </a>
                     <a
                       t-if="hardship_request"
                       type="button"
