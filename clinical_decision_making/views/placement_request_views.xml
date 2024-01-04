@@ -55,9 +55,7 @@
                         </group>
                         <group>
                             <field name="apply_hardship" string="Hardship"/>
-                            <field name="has_hardship" attrs="{'invisible': [('apply_hardship', '=', False)], 'required': [('apply_hardship', '=', True)]}"/>
                             <field name="apply_setting"/>
-                            <field name="setting" attrs="{'invisible': [('apply_setting', '=', False)], 'required': [('apply_setting', '=', True)]}"/>
                         </group>
                         <group>
                             <field name="apply_location" string="Distance"/>
@@ -65,26 +63,28 @@
                         </group>
                         <group>
                             <field name="apply_placement_priority"/>
-                            <field name="placement_priority" attrs="{'invisible': [('apply_placement_priority', '=', False)], 'required': [('apply_placement_priority', '=', True)]}"/>
                         </group>
                         <group>
-                            <field name="placement_status" string="Placement Status" required="1"/>
+                            <field name="placement_status" string="Placement Status"/>
                         </group>
                     </group>
                     <notebook>
                         <page string="Match">
                             <field name="archive_ids">
                                 <tree edit="false" create="false" delete="false">
-                                    <field name="student_id" invisible="1"/>
-                                    <field name="first_name"/>
-                                    <field name="last_name"/>
-                                    <field name="facility_id"/>
-                                    <field name="offer_criteria" colspan="3"/>
-                                    <field name="student_criteria" colspan="6"/>
-                                    <field name="placement_status" invisible="1"/>
+                                    <field name="student_id" invisible="1" attrs="{'readonly': [('is_declined', '=', True)]}"/>
+                                    <field name="first_name" attrs="{'readonly': [('is_declined', '=', True)]}"/>
+                                    <field name="last_name" attrs="{'readonly': [('is_declined', '=', True)]}"/>
+                                    <field name="facility_id" attrs="{'readonly': [('is_declined', '=', True)]}"/>
+                                    <field name="offer_criteria" colspan="3" attrs="{'readonly': [('is_declined', '=', True)]}"/>
+                                    <field name="student_criteria" colspan="6" attrs="{'readonly': [('is_declined', '=', True)]}"/>
+                                    <field name="placement_status" invisible="1" attrs="{'readonly': [('is_declined', '=', True)]}"/>
+                                    <field name="is_declined" invisible="1"/>
                                     <field name="match_state" string="ADCE/DCE Decision" widget="badge" decoration-danger="match_state == 'decline'" decoration-success="match_state  == 'approve'"/>
                                     <button name="action_approve" type="object" string="Approve" class="btn btn-outline-success" attrs="{'invisible': ['|', ('match_state', '!=', False), ('placement_status', '!=', 'matched')]}"/>
-                                    <button name="action_decline" type="object" string="Decline" class="btn btn-outline-danger"  attrs="{'invisible': ['|', ('match_state', '!=', False), ('placement_status', '!=', 'matched')]}"/>
+                                    <button name="action_decline" type="object" string="Decline" class="btn-outline-danger"  attrs="{'invisible': ['|', ('match_state', '!=', False), ('placement_status', '!=', 'matched')]}"/>
+                                    <button name="declined_student_offer" type="object" string="Decline and prevent to from offer" class="btn btn-outline-danger"  attrs="{'invisible': ['|', ('match_state', '!=', False), ('placement_status', '!=', 'matched')]}"/>
+                                    <button name="apply_student_offer" type="object" string="Re-Apply offer " class="btn btn-outline-secondary"  attrs="{'invisible': [('is_declined', '!=', True)]}"/>
                                     <button name="action_view_student" type="object" string="View Student" class="btn btn-outline-secondary" icon="fa-address-card"/>
                                 </tree>
                             </field>

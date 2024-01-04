@@ -115,17 +115,19 @@
                             <field name="archive_ids" mode="tree">
                                 <tree editable="bottom" delete="false">
                                     <field name="student_id" invisible="1"/>
-                                    <field name="facility_id" required="1"/>
-                                    <field name="placement_type" required="1"/>
+                                    <field name="is_declined" invisible="1"/>
+                                    <field name="facility_id" required="1" attrs="{'readonly': [('is_declined', '=', True)]}"/>
+                                    <field name="placement_type" required="1" attrs="{'readonly': [('is_declined', '=', True)]}"/>
                                     <field name="placement_term" readonly="1"/>
-                                    <field name="year" readonly="1"/>
-                                    <field name="setting" required="1"/>
+                                    <field name="year" readonly="1" />
+                                    <field name="setting" required="1" attrs="{'readonly': [('is_declined', '=', True)]}"/>
                                     <field name="city" string="Student Preferred City"/>
                                     <field name="state" string="Student Preferred State"/>
-                                    <field name="geographical_id" string="Student Preferred Zip Code" required="1"/>
-                                    <field name="placement_status" required="1"/>
+                                    <field name="geographical_id" string="Student Preferred Zip Code" required="1" attrs="{'readonly': [('is_declined', '=', True)]}"/>
+                                    <field name="placement_status" required="1" attrs="{'readonly': [('is_declined', '=', True)]}"/>
                                     <button name="unlink_offer" type="object" string="Cancel Placement" class="btn btn-outline-danger" attrs="{'invisible': [('placement_status', 'not in', ['approved', 'pending'])]}"/>
                                     <field name="is_show_student" widget="boolean_toggle" />
+                                    <button name="apply_student_offer" type="object" string="Re-Apply offer " class="btn btn-outline-secondary"  attrs="{'invisible': [('is_declined', '!=', True)]}"/>
                                     <field name="zip_code" invisible="1"/>
                                 </tree>
                             </field>

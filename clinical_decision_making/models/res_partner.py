@@ -6,7 +6,7 @@ import re
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
 
-SELECTION_YEAR_RANGE = [(str(i),str(i)) for i in range(1999, 2500)]
+SELECTION_YEAR_RANGE = [(str(i),str(i)) for i in range(2020, 2500)]
 
 
 class ResPartner(models.Model):
@@ -261,7 +261,12 @@ class ResPartner(models.Model):
             vals['studentid'] = self._get_studentid_sequence()
         else:
             self._check_unique_studentid(vals['studentid'])
-        return super(ResPartner, self.with_context(pass_validation=True)).create(vals)
+    
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            vals['facilityid'] = self._get_facilityid_sequence()
+        return super(ResPartner, self.with_context(pass_validation=True)).create(vals_list)
 
     @api.constrains('preferred_setting_ids')
     def validate_preferred_setting_ids(self):

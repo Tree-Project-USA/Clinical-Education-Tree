@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from odoo import models, fields, api, _
+from odoo import models, fields, api, _, Command
 from odoo.exceptions import ValidationError
 
 
-SELECTION_YEAR_RANGE = [(str(i),str(i)) for i in range(1999, 2500)]
+SELECTION_YEAR_RANGE = [(str(i),str(i)) for i in range(2020, 2500)]
 
 class Archive(models.Model):
     _name = 'archive'
@@ -35,9 +35,10 @@ class Archive(models.Model):
         ('fall', 'Fall'),
         ('spring', 'Spring'),
         ('summer', 'Summer'),
-    ], string='Term', store=True)
-    year = fields.Selection(selection=SELECTION_YEAR_RANGE, string='Year', store=True)
+    ], string='Term', compute='_compute_term_year', store=True)
+    year = fields.Selection(selection=SELECTION_YEAR_RANGE, string='Year', compute='_compute_term_year', store=True)
     placement_status = fields.Selection([
+        ('decline', 'Decline'),
         ('not_placed', 'Not Placed'),
         ('matched', 'Matched'),
         ('approved', 'Approved'),
@@ -65,7 +66,32 @@ class Archive(models.Model):
     ice_term = fields.Char(string='ICE Term', related='student_id.ice_term', store=True,)
     tce1_term = fields.Char(string='TCE1 Term', related='student_id.tce1_term', store=True,)
     tce2_term = fields.Char(string='TCE2 Term', related='student_id.tce2_term', store=True,)
+    is_declined = fields.Boolean("Is Declined")
     
+    def declined_student_offer(self):
+        print(self.offer_id)
+        if self.offer_id or self.archive_offer_id.offer_id:
+            offer_id = self.offer_id or self.archive_offer_id.offer_id
+            offer_id.write({
+                'blocked_ids': [Command.link(self.student_id.id)]
+                })
+            self.is_declined = True
+            if self.archive_offer_id:
+                self.archive_offer_id.is_linked = False
+                self.archive_offer_id.student_id = False
+            self.action_decline()
+            self.placement_status = 'decline'
+        else:
+            self.action_decline()
+    
+    def apply_student_offer(self):
+        if self.offer_id or self.archive_offer_id.offer_id:
+            offer_id = self.offer_id or self.archive_offer_id.offer_id
+            offer_id.write({
+                'blocked_ids': [Command.unlink(self.student_id.id)]
+                })
+        self.is_declined = False
+        self.placement_status = 'not_placed'
     @api.constrains('placement_status')
     def _check_placement_status(self):
         for rec in self:
@@ -124,8 +150,8 @@ class Archive(models.Model):
 
         return term, int(year)
 
-    @api.onchange('student_id', 'placement_type')
-    def _onchange_student_id_placement_type(self):
+    @api.depends('student_id', 'placement_type')
+    def _compute_term_year(self):
         for rec in self:
             if rec.student_id and rec.placement_type:
                 if rec.placement_type == "ice" and rec.student_id.ice_term:

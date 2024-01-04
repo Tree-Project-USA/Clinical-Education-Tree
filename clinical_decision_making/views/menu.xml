@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <menuitem name="CPDM Tree" id="menu_root_cpdm" />
+    <menuitem name="Clin Ed TREE" id="menu_root_cpdm" />
 
     <record id="student_action" model="ir.actions.act_window">
         <field name="name">Student Information</field>
@@ -115,7 +115,7 @@
         sequence="1"/> -->
 
     <record id="action_placement_request" model="ir.actions.act_window">
-        <field name="name">Match</field>
+        <field name="name">TREE Match</field>
         <field name="res_model">placement.request</field>
         <field name="view_mode">tree,form</field>
         <field name="help" type="html">
@@ -158,7 +158,7 @@
 
     <menuitem 
         id="menu_placement_request" 
-        name="Match"
+        name="TREE Match"
         parent="menu_root_cpdm"
         sequence="0"
         action="action_placement_request"/>

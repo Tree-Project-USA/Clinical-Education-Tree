@@ -5,7 +5,7 @@ from odoo.exceptions import ValidationError
 from odoo import models, fields, api, _
 
 
-SELECTION_YEAR_RANGE = [(str(i),str(i)) for i in range(1999, 2500)]
+SELECTION_YEAR_RANGE = [(str(i),str(i)) for i in range(2020, 2500)]
 class PlacementOffer(models.Model):
     _name = 'placement.offer'
     _inherit = ['mail.thread']
@@ -40,6 +40,7 @@ class PlacementOffer(models.Model):
     year = fields.Selection(selection=SELECTION_YEAR_RANGE, string='Year', required=True)
     archive_offer_ids = fields.One2many(comodel_name='archive.offer', inverse_name='offer_id', string='Archive Offer')
     archive_offer_count = fields.Integer(compute='_compute_archive_offer_count', string='Archive Offer Count')
+    blocked_ids = fields.Many2many(comodel_name='res.partner', string='Blocked Students')
     
     @api.depends('archive_offer_ids')
     def _compute_archive_offer_count(self):

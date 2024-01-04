@@ -171,13 +171,12 @@ class MedicalFacility(models.Model):
         else:
             return self._get_facilityid_sequence()
 
-    @api.model
-    def create(self, vals):
-        if not vals['facilityid']:
+        
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
             vals['facilityid'] = self._get_facilityid_sequence()
-        else:
-            self._check_unique_facilityid(vals['facilityid'])
-        return super(MedicalFacility, self.with_context(pass_validation=True)).create(vals)
+        return super(MedicalFacility, self.with_context(pass_validation=True)).create(vals_list)
 
 
 class ScceFacility(models.Model):
