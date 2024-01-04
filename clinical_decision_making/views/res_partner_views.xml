@@ -125,6 +125,7 @@
                                     <field name="geographical_id" string="Student Preferred Zip Code" required="1"/>
                                     <field name="placement_status" required="1"/>
                                     <button name="unlink_offer" type="object" string="Cancel Placement" class="btn btn-outline-danger" attrs="{'invisible': [('placement_status', 'not in', ['approved', 'pending'])]}"/>
+                                    <field name="is_show_student" widget="boolean_toggle" />
                                     <field name="zip_code" invisible="1"/>
                                 </tree>
                             </field>

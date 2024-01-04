@@ -61,6 +61,7 @@ class Archive(models.Model):
         ('decline', 'Declined'),
     ], string='Match State',)
     archive_offer_id = fields.Many2one('archive.offer', string='Archive Offer')
+    is_show_student = fields.Boolean("Show to Student")
     
     @api.constrains('placement_status')
     def _check_placement_status(self):

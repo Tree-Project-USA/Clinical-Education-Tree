@@ -20,6 +20,7 @@
                 <field name="state"/>
                 <field name="geographical_id"/>
                 <field name="placement_status"/>
+                <field name="is_show_student" widget="boolean_toggle" />
             </tree>
         </field>
     </record>
@@ -51,6 +52,7 @@
                             <field name="city"/>
                             <field name="state"/>
                             <field name="geographical_id"/>
+                            <field name="is_show_student" widget="boolean_toggle" />
                         </group>
                     </group>
                 </sheet>
