@@ -82,8 +82,8 @@
                                     <field name="is_declined" invisible="1"/>
                                     <field name="match_state" string="ADCE/DCE Decision" widget="badge" decoration-danger="match_state == 'decline'" decoration-success="match_state  == 'approve'"/>
                                     <button name="action_approve" type="object" string="Approve" class="btn btn-outline-success" attrs="{'invisible': ['|', ('match_state', '!=', False), ('placement_status', '!=', 'matched')]}"/>
-                                    <button name="action_decline" type="object" string="Decline" class="btn-outline-danger"  attrs="{'invisible': ['|', ('match_state', '!=', False), ('placement_status', '!=', 'matched')]}"/>
-                                    <button name="declined_student_offer" type="object" string="Decline and prevent to from offer" class="btn btn-outline-danger"  attrs="{'invisible': ['|', ('match_state', '!=', False), ('placement_status', '!=', 'matched')]}"/>
+                                    <button name="action_decline" type="object" string="Decline and Release Offer" class="btn-outline-danger"  attrs="{'invisible': ['|', ('match_state', '!=', False), ('placement_status', '!=', 'matched')]}"/>
+                                    <button name="declined_student_offer" type="object" string="Permanently Decline" class="btn btn-outline-danger"  attrs="{'invisible': ['|', ('match_state', '!=', False), ('placement_status', '!=', 'matched')]}"/>
                                     <button name="apply_student_offer" type="object" string="Re-Apply offer " class="btn btn-outline-secondary"  attrs="{'invisible': [('is_declined', '!=', True)]}"/>
                                     <button name="action_view_student" type="object" string="View Student" class="btn btn-outline-secondary" icon="fa-address-card"/>
                                 </tree>

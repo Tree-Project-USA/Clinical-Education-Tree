@@ -53,8 +53,9 @@
                 <field name="active" invisible="1"/>
                 <field name="is_student" invisible="1"/>
                 <sheet>
+                    <field name="hardship_count" invisible="1"/>
                     <div name="button_box" position="inside">
-                        <button name="action_open_hardship" type="object" class="oe_stat_button">
+                        <button name="action_open_hardship" type="object" class="oe_stat_button" attrs="{'invisible': [('hardship_count', '=', 0)]}">
                             <span class="o_stat_text">Hardship<br/>Request</span>
                         </button>
                     </div>
@@ -125,7 +126,7 @@
                                     <field name="state" string="Student Preferred State"/>
                                     <field name="geographical_id" string="Student Preferred Zip Code" required="1" attrs="{'readonly': [('is_declined', '=', True)]}"/>
                                     <field name="placement_status" required="1" attrs="{'readonly': [('is_declined', '=', True)]}"/>
-                                    <button name="unlink_offer" type="object" string="Cancel Placement" class="btn btn-outline-danger" attrs="{'invisible': [('placement_status', 'not in', ['approved', 'pending'])]}"/>
+                                    <!-- <button name="unlink_offer" type="object" string="Cancel Placement" class="btn btn-outline-danger" attrs="{'invisible': [('placement_status', 'not in', ['approved', 'pending'])]}"/> -->
                                     <field name="is_show_student" widget="boolean_toggle" />
                                     <button name="apply_student_offer" type="object" string="Re-Apply offer " class="btn btn-outline-secondary"  attrs="{'invisible': [('is_declined', '!=', True)]}"/>
                                     <field name="zip_code" invisible="1"/>

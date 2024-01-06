@@ -38,9 +38,9 @@ class Archive(models.Model):
     ], string='Term', compute='_compute_term_year', store=True)
     year = fields.Selection(selection=SELECTION_YEAR_RANGE, string='Year', compute='_compute_term_year', store=True)
     placement_status = fields.Selection([
-        ('decline', 'Decline'),
         ('not_placed', 'Not Placed'),
         ('matched', 'Matched'),
+        ('decline', 'Declined'),
         ('approved', 'Approved'),
         ('pending', 'Pending'),
         ('confirmed', 'Confirmed'),
