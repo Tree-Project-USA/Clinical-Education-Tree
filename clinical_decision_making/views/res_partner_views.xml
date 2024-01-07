@@ -119,8 +119,8 @@
                                     <field name="is_declined" invisible="1"/>
                                     <field name="facility_id" required="1" attrs="{'readonly': [('is_declined', '=', True)]}"/>
                                     <field name="placement_type" required="1" attrs="{'readonly': [('is_declined', '=', True)]}"/>
-                                    <field name="placement_term" readonly="1"/>
-                                    <field name="year" readonly="1" />
+                                    <field name="placement_term" readonly="1" force_save="1"/>
+                                    <field name="year" readonly="1" force_save="1"/>
                                     <field name="setting" required="1" attrs="{'readonly': [('is_declined', '=', True)]}"/>
                                     <field name="city" string="Student Preferred City"/>
                                     <field name="state" string="Student Preferred State"/>

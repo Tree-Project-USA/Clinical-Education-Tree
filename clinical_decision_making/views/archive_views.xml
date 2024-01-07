@@ -51,7 +51,7 @@
                             <field name="zip_code" invisible="1"/>
                             <field name="city"/>
                             <field name="state"/>
-                            <field name="geographical_id"/>
+                            <field name="geographical_id" required="1"/>
                             <field name="is_show_student" widget="boolean_toggle" />
                         </group>
                     </group>

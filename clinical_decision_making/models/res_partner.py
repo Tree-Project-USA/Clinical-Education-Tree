@@ -205,7 +205,7 @@ class ResPartner(models.Model):
         if self.email:
             if not re.match('^[_A-Za-z0-9-]+(\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-]+(\.[_A-Za-z0-9-]+)*(\.[A-Za-z]{2,4})$', self.email):
                 raise ValidationError(_('The personal email address must be valid ( example@example.com )'))
-    
+            
     @api.constrains('geographical_ids')
     def _check_geographical_ids(self):
         self.ensure_one()
