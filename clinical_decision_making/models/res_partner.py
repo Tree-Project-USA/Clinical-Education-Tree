@@ -339,7 +339,7 @@ class ResPartner(models.Model):
         return  (min(data, key=lambda x: x[1])[0], min(data, key=lambda x: x[1])[2]) if min(data, key=lambda x: x[1]) else (False, False)
     
     def get_nearby_facility_zipcode(self, facility_id):
-        facility_distance_mel = float(self.env['ir.config_parameter'].sudo().get_param('clinical_distance_mel'))
+        facility_distance_mel = float(self.env['ir.config_parameter'].sudo().get_param('clinical_distance_mel')) or 50
         geographical_ids = self.mapped('geographical_ids')        
         for geographical_id in geographical_ids:
             distance, dis_and_geo = geographical_id.self.get_distance_with_zip_code(facility_id.geographical_id)

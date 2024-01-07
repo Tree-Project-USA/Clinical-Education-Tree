@@ -19,8 +19,11 @@ class ResConfigSettings(models.TransientModel):
         string='Max ZipCodes in State', default=0,
         config_parameter='max_zipcodes_in_state')
     clinical_distance_mel = fields.Float(
-        string='Max Distance Mels', default=75.0,
+        string='Max Distance Mels', default=50.0,
         config_parameter='clinical_distance_mel')
     zip_code_token = fields.Char(
         string='Zip Code API Token',
         config_parameter='zip_code_token')
+    contract_notify_months = fields.Integer(
+        string='Contract Notification Days',
+        config_parameter='contract_notify_months')

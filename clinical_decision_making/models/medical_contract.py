@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from datetime import date
+from datetime import date, datetime, timedelta
+
 from collections import defaultdict
 from odoo import api, models, fields, _
 
@@ -122,14 +123,22 @@ class FacilityContracts(models.Model):
         })
         return action
 
+    # Cron job
     def action_require_renewal(self):
-        for rec in self:
-            end = rec.date_end
-            today = date.today()
-            if (end - today).days < 180:
-                rec.write({
-                    'state': 'require_renewal',
-                })
+        contract_notify_months = int(self.env['ir.config_parameter'].sudo().get_param('contract_notify_months')) or 6
+        current_date = datetime.now()
+        future_date = current_date + timedelta(days=contract_notify_months*30)
+        contract_ids = self.env['facility.contract'].sudo().search([("state","=","open"),("date_end" , "<", future_date)])
+        contract_ids.sudo().write({
+            "state" : "require_renewal"
+            })
+        
+    def action_expired_contract(self):
+        current_date = datetime.now()
+        contract_ids = self.env['facility.contract'].sudo().search([("state", "in", ["open", 'require_renewal']), ("date_end" , ">=", current_date)])
+        contract_ids.sudo().write({
+            "state" : "close"
+            })
 
     def action_cancel(self):
         self.write({

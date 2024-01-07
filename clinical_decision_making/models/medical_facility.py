@@ -135,7 +135,7 @@ class MedicalFacility(models.Model):
         return action
         
     def get_accepted_distance_students(self, student_ids):
-        facility_distance_mel = float(self.env['ir.config_parameter'].sudo().get_param('clinical_distance_mel'))
+        facility_distance_mel = float(self.env['ir.config_parameter'].sudo().get_param('clinical_distance_mel')) or 50
         students = []
         
         for student_id in student_ids:

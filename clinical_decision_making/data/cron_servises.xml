@@ -24,4 +24,16 @@
             <field name="doall" eval="False"/>
             <field name="nextcall" eval="(DateTime.now() + timedelta(days=1)).strftime('%Y-%m-%d 23:59:59')"/>
         </record>
+
+        <record id="cron_contract_expired" model="ir.cron">
+            <field name="name">Expired Contract Cron</field>
+            <field name="model_id" ref="clinical_decision_making.model_facility_contract"/>
+            <field name="state">code</field>
+            <field name="code">model.action_expired_contract()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+            <field name="nextcall" eval="(DateTime.now() + timedelta(days=1)).strftime('%Y-%m-%d 23:59:59')"/>
+        </record>
 </odoo>
