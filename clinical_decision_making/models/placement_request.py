@@ -110,7 +110,7 @@ class PlacementRequest(models.Model):
         self.ensure_one()
         term = self.convert_term_year(self.placement_term, self.year)
         student_ids, archive_offer_ids, location_dist = self.get_filter_data()
-        
+            
         print('============================== All Student==================================')
         print("student_ids",student_ids)
         
