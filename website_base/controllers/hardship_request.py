@@ -1,21 +1,43 @@
-import base64
-import json
 from odoo import http
 from odoo.http import request
+# from odoo.tools import image_resize_images
+
+import base64
+import werkzeug
 
 
 class CustomerPortals(http.Controller):
 
+    @http.route('/download_attachment', type='http', auth="public")
+    def download_attachment(self, **kwargs):
+        attachment_id = int(kwargs.get('id', 0))
+        attachment = request.env['res.config.settings'].sudo().browse(attachment_id)
 
+        if attachment.hardship_form_attachment:
+            print("ahmed")
+            filecontent = base64.b64decode(attachment.hardship_form_attachment)
+            headers = [
+                ('Content-Type', 'application/octet-stream'),
+                ('Content-Disposition', werkzeug.urls.url_quote(attachment.name))
+            ]
+            return request.make_response(filecontent, headers)
+        else:
+            print("salim")
+            return request.not_found()
+        
     @http.route("/hardship/request", type="http", website=True, auth="user")
     def hardship_request(self):
+        values = {}
         partner_id = request.env.user.partner_id
+        
         hardship_id = request.env["hardship.request"].sudo().search([
             ('student_id', '=', partner_id.id),
             ], limit=1, order="id desc")
+        company_id = request.env['res.company'].sudo().search([])
+        values["company_id"] =  company_id
         if hardship_id and hardship_id.state not in ["declined", "expired"]:
             return request.redirect("/my/home")
-        return request.render("website_base.hardship_request_template")
+        return request.render("website_base.hardship_request_template", values)
     
     @http.route("/create/hardship/request", type="http", website=True, auth="user", Methods=["POST"])
     def create_hardship_request(self, **kw):
@@ -33,6 +55,7 @@ class CustomerPortals(http.Controller):
                 hardship_id = request.env["hardship.request"].sudo().create(
                     {
                         "student_id": partner_id.id,
+                        "company_id": request.env.user.company_id.id,
                         "note":  kw.get("note") if kw.get("note") else False,
                         "state": "initial_submission",
                         "geographical_ids": [(6, 0, zip_code_list)],
@@ -86,7 +109,8 @@ class CustomerPortals(http.Controller):
                     "attachment_ids": file_list,
                     "geographical_ids": [(6, 0, zip_code_list)],
                 })
-                    
+                template = request.env.ref('clinical_decision_making.mail_template_send_update_hardship_information_missing')
+                template.sudo().send_mail(hardship_id.id, force_send=True)
                 return request.redirect("/success/hardship/request")
             except Exception as e:
                 return request.render("website_base.error_request", {'exception': e})

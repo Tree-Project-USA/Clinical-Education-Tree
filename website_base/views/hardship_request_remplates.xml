@@ -20,6 +20,28 @@
                             method="post"
                             enctype="multipart/form-data"
                         >
+                        <div class="modal fade" id="download_attachment" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h1 class="modal-title fs-5">Download Hardship Form Attachment</h1>
+                                </div>
+                                <div class="modal-body text-center">
+                                    <input type="hidden" id="company_id" t-att-value="company_id.id" />
+                                    <a t-if="company_id.hardship_form_attachment"
+                                    id="download_hardship"
+                                    type="button"
+                                    class="btn btn-primary"
+                                    role="button" 
+                                    style="background-color:  #ab8631 !important; color: #fff; border-color:#ab8631"
+                                    >
+                                    Hardship Form Attachment 
+                                    <i class="fa fa-download" />
+                                </a>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                             <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                             <input type="hidden" name="len_file" value="1" />
                             <input type="hidden" name="len_zip_code" value="1" />

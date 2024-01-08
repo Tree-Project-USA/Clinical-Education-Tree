@@ -41,6 +41,8 @@ class HardshipRequest(models.Model):
     attachment_confirm = fields.Binary(attachment=True)
     date_attachment_cancel = fields.Datetime()
     date_attachment_confirm = fields.Datetime()
+    company_id = fields.Many2one(
+        'res.company', string='Company', default=lambda self: self.env.user.company_id)
 
     
     @api.onchange('attachment_cancel')
@@ -146,6 +148,8 @@ class HardshipRequest(models.Model):
     def create(self, values):
         result = super(HardshipRequest, self).create(values)
         template = self.env.ref('clinical_decision_making.mail_template_send_hardship_request_received')
+        # user_admin = self.env.ref('base.user_admin')
         template.send_mail(result.id, force_send=True)
+        # template.with_context(dbname=self._cr.dbname, user_admin=user_admin).send_mail(result.id, force_send=True)
         return result
     

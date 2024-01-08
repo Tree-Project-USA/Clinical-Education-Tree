@@ -12,6 +12,7 @@ odoo.define("website_base.location_student_hard_ship", function(require) {
         events: {
             'input input[type="text"]': '_onZipChanges',
             'click #add_zip': '_onClickAddzip',
+            'click #download_hardship': '_onClicDownloadHardship',
         },
 
         /**
@@ -20,7 +21,16 @@ odoo.define("website_base.location_student_hard_ship", function(require) {
         init: function() {
             this._super.apply(this, arguments);
             this._popoverRPC = null;
+            $('#download_attachment').modal('show');
             this._onClickAddzip();
+        },
+          /**
+        * @private
+        */
+        _onClicDownloadHardship: function(ev) {
+            var company_id = $('#company_id').val()
+            window.location.href = "/web/content/res.company/"+ company_id + "/hardship_form_attachment?download=true" ;
+            $('#download_attachment').modal('hide');
         },
           /**
         * @private

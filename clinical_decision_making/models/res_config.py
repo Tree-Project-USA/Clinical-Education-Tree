@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from odoo import fields, models, _
+from odoo import fields, models, api, _
+import ast
 
 
 class ResConfigSettings(models.TransientModel):
@@ -27,3 +28,20 @@ class ResConfigSettings(models.TransientModel):
     contract_notify_months = fields.Integer(
         string='Contract Notification Days',
         config_parameter='contract_notify_months')
+    hardship_attachment = fields.Binary(
+        related='company_id.hardship_form_attachment',
+        readonly=False
+    )
+    
+    @api.model
+    def set_values(self):
+        res = super(ResConfigSettings, self).set_values()
+        self.env['ir.config_parameter'].sudo().set_param('clinical_decision_making.hardship_attachment', self.hardship_attachment)
+        return res
+    
+    def get_values(self):
+        res = super(ResConfigSettings, self).get_values()
+        res.update(
+            hardship_attachment = self.env['ir.config_parameter'].sudo().get_param('clinical_decision_making.hardship_attachment')
+        )
+        return res
