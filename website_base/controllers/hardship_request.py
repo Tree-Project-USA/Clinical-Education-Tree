@@ -1,21 +1,54 @@
-import base64
-import json
 from odoo import http
 from odoo.http import request
+# from odoo.tools import image_resize_images
+
+import base64
+import werkzeug
 
 
 class CustomerPortals(http.Controller):
 
+    @http.route('/download_attachment', type='http', auth="public")
+    def download_attachment(self, **kwargs):
+        attachment_id = int(kwargs.get('id', 0))
+        attachment = request.env['res.config.settings'].sudo().browse(attachment_id)
 
+        print(attachment)
+        print(attachment.hardship_form_attachment)
+        if attachment.hardship_form_attachment:
+            print("ahmed")
+            filecontent = base64.b64decode(attachment.hardship_form_attachment)
+            headers = [
+                ('Content-Type', 'application/octet-stream'),
+                ('Content-Disposition', werkzeug.urls.url_quote(attachment.name))
+            ]
+            return request.make_response(filecontent, headers)
+        else:
+            print("salim")
+            return request.not_found()
+        
     @http.route("/hardship/request", type="http", website=True, auth="user")
     def hardship_request(self):
+        values = {}
         partner_id = request.env.user.partner_id
+        
+        hardship_id = request.env["res.prtner"].sudo().search([
+            ('student_id', '=', partner_id.id),
+            ], limit=1, order="id desc")
+        
         hardship_id = request.env["hardship.request"].sudo().search([
             ('student_id', '=', partner_id.id),
             ], limit=1, order="id desc")
+        company_id = request.env['res.company'].sudo().search([])
+        print(company_id.background_image)
+        # hardship_form_attachment = request.env['ir.config_parameter'].sudo(
+        #         ).get_param('hardship_form_attachment')
+        # print(hardship_form_attachment)
+        # values["hardship_form_attachment"] = hardship_form_attachment
+        values["company_id"] =  company_id
         if hardship_id and hardship_id.state not in ["declined", "expired"]:
             return request.redirect("/my/home")
-        return request.render("website_base.hardship_request_template")
+        return request.render("website_base.hardship_request_template", values)
     
     @http.route("/create/hardship/request", type="http", website=True, auth="user", Methods=["POST"])
     def create_hardship_request(self, **kw):

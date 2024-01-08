@@ -71,6 +71,22 @@
                                     </table>
                                 </div>
                             </div>
+                            <div class="row">
+                                <!-- <a href="/web/binary/download_document?model=res.config.settings&amp;field=hardship_form_attachment&amp;id=#{record_id}">Download Attachment</a> -->
+                                <!-- <a href="/web/binary/download_document?model=res.config.settings&amp;field=hardship_form_attachment">Download Attachment</a> -->
+                                <!-- <a t-attf-href="/web/binary/saveas?model=res.config.settings&amp;field=attachment&amp;id={{ record.id }}&amp;filename={{ record.hardship_form_attachment }}">Download Attachment</a> -->
+                                <a 
+                                    type="button"
+                                    class="btn my-2"
+                                    role="button" 
+                                    style="background-color:  #ab8631; !important; color: #fff"
+                                    t-attf-href="/web/content/res.company/#{company_id.id}/hardship_form_attachment"
+                                    >
+                                    <!-- t-attf-href="/portal/download/hardship_form_attachment" -->
+                                 ahmed 
+                                 <!-- <t t-esc="hardship_form_attachment"/> -->
+                                </a>
+                            </div>
                             <div class="file row mt-4">
                                 <div>
                                     <table class="table add_file table-bordered">
