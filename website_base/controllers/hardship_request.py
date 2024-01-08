@@ -66,6 +66,7 @@ class CustomerPortals(http.Controller):
                 hardship_id = request.env["hardship.request"].sudo().create(
                     {
                         "student_id": partner_id.id,
+                        "company_id": request.env.user.company_id.id,
                         "note":  kw.get("note") if kw.get("note") else False,
                         "state": "initial_submission",
                         "geographical_ids": [(6, 0, zip_code_list)],
@@ -119,7 +120,8 @@ class CustomerPortals(http.Controller):
                     "attachment_ids": file_list,
                     "geographical_ids": [(6, 0, zip_code_list)],
                 })
-                    
+                template = request.env.ref('clinical_decision_making.mail_template_send_update_hardship_information_missing')
+                template.sudo().send_mail(hardship_id.id, force_send=True)
                 return request.redirect("/success/hardship/request")
             except Exception as e:
                 return request.render("website_base.error_request", {'exception': e})
