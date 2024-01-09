@@ -20,7 +20,7 @@
                             method="post"
                             enctype="multipart/form-data"
                         >
-                        <div class="modal fade" id="download_attachment" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div t-if="company_id.hardship_form_attachment" class="modal fade" id="download_attachment" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                             <div class="modal-dialog">
                               <div class="modal-content">
                                 <div class="modal-header">
@@ -28,7 +28,7 @@
                                 </div>
                                 <div class="modal-body text-center">
                                     <input type="hidden" id="company_id" t-att-value="company_id.id" />
-                                    <a t-if="company_id.hardship_form_attachment"
+                                    <a 
                                     id="download_hardship"
                                     type="button"
                                     class="btn btn-primary"
