@@ -235,6 +235,8 @@ class PlacementRequest(models.Model):
         else:
             self.apply_tce(hardship_student_ids, student_ids, archive_offer_ids, location_dist)
         
+        self._onchange_apply_criteria()
+        
             
     def apply_filter(self):
         self._preparing_reapply_filter()
@@ -476,12 +478,14 @@ class PlacementRequest(models.Model):
                 archive_offer_facility_ids -= check_facility_ids
             
             archive_offer_facility_ids = student_id.get_accepted_distance_facility(archive_offer_facility_ids, location_dist)
-
             if not archive_offer_facility_ids:
                 continue
 
             ip_offers = archive_offer_ids.filtered(lambda x :x.setting == 'ip')
             op_offers = archive_offer_ids.filtered(lambda x :x.setting == 'op')
+            
+            print('--------------------------------OP Offers', op_offers)
+            print('--------------------------------IP Offers', ip_offers)
             
             check_ip = self.env['archive'].sudo().search([('student_id', '=', student_id.id), ('placement_status', '!=', 'not_placed'), ('setting', '=', 'ip')])
             if not check_ip and not ip_offers:
@@ -497,14 +501,16 @@ class PlacementRequest(models.Model):
                 archive_offer_facility_id = offer_id.facility_id
             
             if ip_offers:
+                print(student_id.is_take_ip)
+                print(not student_id.is_take_ip)
+                check_ip = self.env['archive'].sudo().search([('student_id', '=', student_id.id), ('placement_status', '!=', 'not_placed'), ('setting', '=', 'ip')])
                 if not student_id.is_take_ip and ip_offers:
                     hardship_facility_id, geographical_id = student_id.get_nearest_facility(ip_offers.mapped('facility_id'))
                     offer_id = hardship_facility_id.offer_ids.mapped('archive_offer_ids').filtered(lambda archive_offer_id: archive_offer_id.is_linked == False  and archive_offer_id.setting == 'ip')[0]
                     archive_offer_id = offer_id
                     archive_offer_facility_id = offer_id.facility_id
-                else:
-                    continue
-            
+                
+            print('--------------------------------', student_id)
             print(archive_offer_id)
             print(archive_offer_facility_id)
             if archive_offer_id and archive_offer_facility_id:

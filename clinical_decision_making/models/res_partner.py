@@ -23,7 +23,7 @@ class ResPartner(models.Model):
     personal_phone = fields.Char(string='Personal Phone')
     personal_email_address = fields.Char(string='Personal Email Address')
     campus = fields.Char(string='Campus', default='Austin, TX')
-    archive_ids = fields.One2many(comodel_name='archive', inverse_name='student_id', string='Archive')
+    archive_ids = fields.One2many(comodel_name='archive', inverse_name='student_id', string='Placement History')
     can_apply_hardship = fields.Boolean(string='Apply Hardship', default=False)
     is_reach_maximum_zip_code = fields.Boolean(string='Reach Maximum Zip Code', default=False)
     deny_show_student = fields.Boolean()
@@ -346,15 +346,45 @@ class ResPartner(models.Model):
             if distance <= facility_distance_mel:
                 return geographical_id
             
-    
-    def write(self, values):
-        if 'home_address' in values or 'phone' in values or 'personal_phone' in values or 'personal_email_address' in values:
+    def write(self, vals):
+        if any(field in vals for field in ['home_address', 'phone', 'personal_phone', 'personal_email_address']):
             template = self.env.ref('clinical_decision_making.mail_template_send_update_of_personal_information')
             template.sudo().send_mail(self.id, force_send=True)
-        result = super(ResPartner, self).write(values)
-    
-        return result
-    
+
+        body_list = []
+        archive_ids = vals.get('archive_ids')
+        if archive_ids:
+            for line_id in archive_ids:
+                if line_id[0] == 1 and line_id[2]:
+                    data = line_id[2]
+                    record_id = self.env['archive'].browse(line_id[1])
+                    
+                    facility_id = data.get('facility_id')
+                    if facility_id:
+                        facility = self.env['medical.facility'].browse(facility_id)
+                        facility_name_old = record_id.facility_id.name
+                        facility_name_new = facility.name
+                        facility_name_old_formatted = f"<span style='color:red'>{facility_name_old}</span>"
+                        facility_name_new_formatted = f"<span style='color:green'>{facility_name_new}</span>"
+                        body = _("Student Change Facility from (%s) to (%s)") % (facility_name_old_formatted, facility_name_new_formatted)
+                        body_list.append(body)
+                    
+                    placement_status = data.get('placement_status')
+                    if placement_status:
+                        placement_status_old = dict(record_id._fields['placement_status'].selection).get(placement_status)
+                        placement_status_current = dict(record_id._fields['placement_status'].selection).get(record_id.placement_status)
+                        placement_status_old_formatted = f"<span style='color:red'>{placement_status_old}</span>"
+                        placement_status_current_formatted = f"<span style='color:green'>{placement_status_current}</span>"
+                        body = _("Student Change Placement Status from (%s) to (%s)") % (placement_status_old_formatted, placement_status_current_formatted)
+                        body_list.append(body)
+
+        res = super(ResPartner, self).write(vals)
+
+        if body_list:
+            self.message_post(body='<br>'.join(body_list), message_type='comment')
+
+        return res
+
     @api.onchange('preferred_setting_ids')
     def _compute_preferred_setting_ids(self):
         
@@ -372,3 +402,20 @@ class ResPartner(models.Model):
                 if len(list_type_setting_op) == 5 or len(list_type_setting_ip) == 5:
                     raise ValidationError(_('You should have one (IP) as minimum and one (OP)'))
     
+    # @api.depends('archive_ids')
+    # def _onchange_archive_ids(self):
+    #     body_list = []
+    #     for rec in self.archive_ids:
+    #         if rec._origin.placement_status != rec.placement_status:
+    #             body = _("Student Change Placement Status from (%s) to (%s)") % (dict(rec._fields['placement_status'].selection).get(rec._origin.placement_status), dict(rec._fields['placement_status'].selection).get(rec.placement_status))
+    #             body_list.append(body)
+    #         if rec._origin.facility_id != rec.facility_id:
+    #             body = _("Student Change Facility from (%s) to (%s)") % (rec._origin.facility_id.name, rec.facility_id.name)
+    #             body_list.append(body)
+                
+    #     s = self.env['res.partner'].search([('id', 'in', self.ids)])
+    #     for body in body_list: 
+    #         s.message_post(body=body,
+    #                 message_type='comment',
+    #                 )
+        
