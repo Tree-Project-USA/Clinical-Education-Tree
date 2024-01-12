@@ -26,3 +26,4 @@ access_hardship_request,hardship.request,model_hardship_request,,1,1,1,1
 access_preferred_setting,preferred.setting,model_preferred_setting,,1,1,1,0
 
 access_mail_template_portal,mail.template.portal,mail.model_mail_template,,1,1,1,0
+access_skip_manager,skip_manager,model_skip,,1,1,1,1

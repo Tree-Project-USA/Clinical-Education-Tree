@@ -8,6 +8,7 @@ SELECTION_YEAR_RANGE = [(str(i),str(i)) for i in range(2020, 2500)]
 
 class Archive(models.Model):
     _name = 'archive'
+    _inherit = ['mail.thread']
     _description = 'Archive Placement'
     _rec_name = 'facility_id'
     
@@ -232,5 +233,16 @@ class Archive(models.Model):
             'res_id': self.student_id.id,
             'view_id': self.env.ref('clinical_decision_making.student_view_form').id,
             'views': [(self.env.ref('clinical_decision_making.student_view_form').id, 'form')],
+        })
+        return action
+    
+    def action_open_archive_log(self):
+        self.ensure_one()
+        action = self.env['ir.actions.actions']._for_xml_id('clinical_decision_making.archive_action')
+        action.update({
+            'view_mode': 'form',
+            'view_id': self.env.ref('clinical_decision_making.archive_wizard_view_form').id,
+            'views': [(self.env.ref('clinical_decision_making.archive_wizard_view_form').id, 'form')],
+            'res_id': self.id,
         })
         return action

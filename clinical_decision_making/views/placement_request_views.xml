@@ -86,6 +86,8 @@
                                     <button name="declined_student_offer" type="object" string="Permanently Decline" class="btn btn-outline-danger"  attrs="{'invisible': ['|', ('match_state', '!=', False), ('placement_status', '!=', 'matched')]}"/>
                                     <button name="apply_student_offer" type="object" string="Re-Apply offer " class="btn btn-outline-secondary"  attrs="{'invisible': [('is_declined', '!=', True)]}"/>
                                     <button name="action_view_student" type="object" string="View Student" class="btn btn-outline-secondary" icon="fa-address-card"/>
+                                    <button name="action_open_archive_log" type="object" icon="fa-external-link" title="Open Contract"/>
+
                                 </tree>
                             </field>
                         </page>

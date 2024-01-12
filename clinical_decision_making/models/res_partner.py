@@ -49,6 +49,8 @@ class ResPartner(models.Model):
     aval_archive_ids = fields.Many2many(comodel_name='archive', string='Archive', compute='get_aval_archive_ids', readonly=False)
     preferred_setting_ids = fields.Many2many(comodel_name='preferred.setting', string='Preferred Setting')
     hardship_count = fields.Integer(compute='_compute_hardship_count', string='HardShip Count')
+    skip_ids = fields.One2many('skip', 'student_id', string='Student Skipped Terms')
+    
     
     @api.depends('hardship_ids')
     def _compute_hardship_count(self):
@@ -113,24 +115,25 @@ class ResPartner(models.Model):
         for rec in self:
             rec.is_with_hardship = True if self.env['hardship.request'].search([('student_id', '=', rec.id), ('state', '=', 'approved')]) else False
             
-    @api.depends('start_year', 'start_term_type', 'program_id')
+    @api.depends('start_year', 'start_term_type', 'program_id', 'skip_ids', 'skip_ids.state', 'skip_ids.year', 'skip_ids.term')
     def _compute_term_fields(self):
         for rec in self:
             try:
                 if rec.start_year and rec.start_term_type  and rec.program_id:
                     rec.start_term = self.convert_term_year(rec.start_term_type, rec.start_year)
-                    graduation_t, graduation_y = rec.calculate_end_term(rec.start_term_type, rec.start_year, rec.program_id.num_terms)
+                    skipped_terms = [self.convert_term_year(x.term, x.year) for x in rec.skip_ids.filtered(lambda x:x.state == 'confirmed')]
+                    graduation_t, graduation_y = rec.calculate_end_term(rec.start_term_type, rec.start_year, rec.program_id.num_terms, skipped_terms)
                     rec.graduation_term = self.convert_term_year(graduation_t, graduation_y)
                     
-                    
-                    print(self.get_specific_term_year(rec.start_term_type, rec.start_year, rec.program_id.num_terms, rec.program_id.ice_term))
-                    ice_term_t, ice_term_y = self.get_specific_term_year(rec.start_term_type, rec.start_year, rec.program_id.num_terms, rec.program_id.ice_term)
+                    print('--------------------------------Skipping Terms: ', skipped_terms)
+                    print(self.get_specific_term_year(rec.start_term_type, rec.start_year, rec.program_id.num_terms, rec.program_id.ice_term, skipped_terms))
+                    ice_term_t, ice_term_y = self.get_specific_term_year(rec.start_term_type, rec.start_year, rec.program_id.num_terms, rec.program_id.ice_term, skipped_terms)
                     rec.ice_term = self.convert_term_year(ice_term_t, ice_term_y)
                     
-                    tce1_term_t, tce1_term_y = self.get_specific_term_year(rec.start_term_type, rec.start_year, rec.program_id.num_terms, rec.program_id.tce1_term)
+                    tce1_term_t, tce1_term_y = self.get_specific_term_year(rec.start_term_type, rec.start_year, rec.program_id.num_terms, rec.program_id.tce1_term, skipped_terms)
                     rec.tce1_term = self.convert_term_year(tce1_term_t, tce1_term_y)
                     
-                    tce2_term_t, tce2_term_y = self.get_specific_term_year(rec.start_term_type, rec.start_year, rec.program_id.num_terms, rec.program_id.tce2_term)
+                    tce2_term_t, tce2_term_y = self.get_specific_term_year(rec.start_term_type, rec.start_year, rec.program_id.num_terms, rec.program_id.tce2_term, skipped_terms)
                     rec.tce2_term = self.convert_term_year(tce2_term_t, tce2_term_y)
                     if tce2_term_t == 'spring':
                         rec.cohort_label = f"{tce2_term_y}-04-{rec.campus}-{rec.program_type}"
@@ -211,10 +214,7 @@ class ResPartner(models.Model):
         self.ensure_one()
         if self.env.context.get('pass_validation', False) or self.is_with_hardship:
             return
-        print('************************is_with_hardship', self.is_with_hardship)
-        print(self.env.context.get('pass_validation', False))
-        print(self.is_with_hardship)
-        print(not self.env.context.get('pass_validation', False))
+
         if not self.env.context.get('pass_validation', False) or not self.is_with_hardship:
             normal_number_zipcodes = self.env['ir.config_parameter'].sudo().get_param('normal_number_zipcodes') or 5
             normal_number_zipcodes = int(normal_number_zipcodes)
@@ -225,7 +225,6 @@ class ResPartner(models.Model):
             for rec in self.geographical_ids:
                 if rec.id in self.geographical_ids.filtered(lambda x : x.id != rec.id).mapped('id'):
                     raise ValidationError(_('Zip code must be unique. '))
-            print('********************')
             self.check_zip_code_distance(self.geographical_ids)
             self.check_validation_zip_code_state(self.geographical_ids)
 
@@ -270,35 +269,44 @@ class ResPartner(models.Model):
             if len(rec.preferred_setting_ids) < 5:
                 raise ValidationError(_('Must be selected 5 preferred settings'))
     
-    def calculate_end_term(self, start_term, start_year, num_terms):
+    def calculate_end_term(self, start_term, start_year, num_terms, skipped_terms=[]):
         terms = ["spring", "summer", "fall"]
         start_index = terms.index(start_term)
         current_index = start_index
         current_year = int(start_year)
 
         # Calculate the end term
-        for _ in range(num_terms - 1):
+        i = 0
+        while i < num_terms - 1:
             current_index += 1
             if current_index == len(terms):
                 current_index = 0
                 current_year += 1
+            term = self.convert_term_year(terms[current_index], current_year)
+            if term not in skipped_terms:
+                i += 1
 
         return terms[current_index], current_year
     
-    def get_specific_term_year(self, start_term, start_year, num_terms, target_term_index):
+    def get_specific_term_year(self, start_term, start_year, num_terms, target_term_index, skipped_terms=[]):
         terms = ["spring", "summer", "fall"]
 
         start_index = terms.index(start_term)
         current_index = start_index
         current_year = int(start_year)
         counter = 1
-        # Calculate the end term
-        for _ in range(num_terms):
+        
+        i = 0
+        while i < num_terms - 1:
             current_index += 1
             if current_index == len(terms):
                 current_index = 0
                 current_year += 1
-            counter += 1
+            term = self.convert_term_year(terms[current_index], current_year)
+            if term not in skipped_terms:
+                i += 1
+                counter += 1
+                
             if counter == target_term_index:
                 return terms[current_index], current_year
     
@@ -387,7 +395,6 @@ class ResPartner(models.Model):
 
     @api.onchange('preferred_setting_ids')
     def _compute_preferred_setting_ids(self):
-        
         for rec in self:
             if rec.preferred_setting_ids:
                 list_type_setting_op = []
@@ -402,20 +409,25 @@ class ResPartner(models.Model):
                 if len(list_type_setting_op) == 5 or len(list_type_setting_ip) == 5:
                     raise ValidationError(_('You should have one (IP) as minimum and one (OP)'))
     
-    # @api.depends('archive_ids')
-    # def _onchange_archive_ids(self):
-    #     body_list = []
-    #     for rec in self.archive_ids:
-    #         if rec._origin.placement_status != rec.placement_status:
-    #             body = _("Student Change Placement Status from (%s) to (%s)") % (dict(rec._fields['placement_status'].selection).get(rec._origin.placement_status), dict(rec._fields['placement_status'].selection).get(rec.placement_status))
-    #             body_list.append(body)
-    #         if rec._origin.facility_id != rec.facility_id:
-    #             body = _("Student Change Facility from (%s) to (%s)") % (rec._origin.facility_id.name, rec.facility_id.name)
-    #             body_list.append(body)
-                
-    #     s = self.env['res.partner'].search([('id', 'in', self.ids)])
-    #     for body in body_list: 
-    #         s.message_post(body=body,
-    #                 message_type='comment',
-    #                 )
+    
+    def skip_student_term_action(self):
+        self.ensure_one()
+        action = self.env['ir.actions.actions']._for_xml_id('clinical_decision_making.action_skip')
+        action.update({
+            'name': 'Skipping Terms of %s' % self.name,
+            'context': {'default_student_id': self.id},
+            'view_mode': 'form',
+            'view_id': self.env.ref('clinical_decision_making.skip_form_view_wizard').id,
+            'views': [(self.env.ref('clinical_decision_making.skip_form_view_wizard').id, 'form')],
+            'target': 'new'
+        })
+        return action
+    
+    # Smart Button Action Methods
+    #------------------------------------------------------------------------------   
+    def action_view_skipped_term(self):
+        action = self.env.ref('clinical_decision_making.action_skip').read()[0]
+        action['domain'] = [('id', 'in', self.skip_ids.ids)]
+        action['context'] = {'create': False, 'delete': False, 'edit': False}
+        return action
         
