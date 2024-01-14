@@ -8,17 +8,17 @@ _logger = logging.getLogger(__name__)
 
 SELECTION_YEAR_RANGE = [(str(i),str(i)) for i in range(2020, 2500)]
 
-class Skip(models.Model):
-    _name = 'skip'
-    _description = "Student Skip Term"
+class AlternativeSchedule(models.Model):
+    _name = 'alternative.schedule'
+    _description = "Student Alternative Schedule"
 
     student_id = fields.Many2one(comodel_name='res.partner', string='Student', ondelete='cascade')
     term = fields.Selection([
         ('fall', 'Fall'),
         ('spring', 'Spring'),
         ('summer', 'Summer'),
-    ], string='Term')
-    year = fields.Selection(selection=SELECTION_YEAR_RANGE, string='Year')
+    ], string='Term Skipped', required=True)
+    year = fields.Selection(selection=SELECTION_YEAR_RANGE, string='Year Skipped', required=True)
     state = fields.Selection(
         string=_('State'),
         selection=[
@@ -39,14 +39,19 @@ class Skip(models.Model):
         })
     
     @api.constrains('student_id', 'term', 'year')
-    def _check_student_skipped_terms(self):
+    def _check_student_alternative_schedule(self):
         for rec in self:
-            existing_skip = self.env['skip'].search([
+            existing_alternative_schedule = self.env['alternative.schedule'].search([
                 ('id', '!=', rec.id),
                 ('student_id', '=', rec.student_id.id),
                 ('term', '=', rec.term),
                 ('year', '=', rec.year)
             ])
-            if existing_skip:
+            if existing_alternative_schedule:
                 term = rec.student_id.convert_term_year(rec.term, rec.year)
-                raise ValidationError(_("Student %s has already skipped the %s term") % (rec.student_id.name, term))
+                raise ValidationError(_("Student %s has already alternative schedule for %s term. ") % (rec.student_id.name, term))
+    
+    def alternative_schedule_student_term_action(self):
+        self.ensure_one()
+        if self.student_id:
+            return self.student_id.action_view_alternative_schedule()

@@ -13,13 +13,13 @@ class Archive(models.Model):
     _rec_name = 'facility_id'
     
     studentid = fields.Char(related='student_id.studentid')
-    student_id = fields.Many2one(comodel_name='res.partner', string='Student Name', required=True)
+    student_id = fields.Many2one(comodel_name='res.partner', string='Student Name', required=True, tracking=True)
     first_name = fields.Char(related='student_id.first_name')
     last_name = fields.Char(related='student_id.last_name')
-    facility_id = fields.Many2one('medical.facility', string='Facility', required=True)
+    facility_id = fields.Many2one('medical.facility', string='Facility', required=True, tracking=True)
     offer_id = fields.Many2one(comodel_name='placement.offer', string="Offer")
     request_id = fields.Many2one(comodel_name='placement.request', string="Placement Request")
-    geographical_id = fields.Many2one(comodel_name='geographical', string='Facility Zip Code')
+    geographical_id = fields.Many2one(comodel_name='geographical', string='Facility Zip Code', tracking=True)
     city = fields.Char(related='geographical_id.city')
     state = fields.Char(related='geographical_id.state')
     zip_code = fields.Char(related='geographical_id.zip_code')
@@ -27,17 +27,17 @@ class Archive(models.Model):
         ('ice', 'ICE'),
         ('tce1', 'TCE1'),
         ('tce2', 'TCE2'),
-    ], string='Clinical Experience Type', required=True, store=True)
+    ], string='Clinical Experience Type', required=True, store=True, tracking=True)
     setting = fields.Selection([
         ('op', 'OP'),
         ('ip', 'IP'),
-    ], string='Setting Type', required=True)
+    ], string='Setting Type', required=True, tracking=True)
     placement_term = fields.Selection([
         ('fall', 'Fall'),
         ('spring', 'Spring'),
         ('summer', 'Summer'),
-    ], string='Term', compute='_compute_term_year', store=True)
-    year = fields.Selection(selection=SELECTION_YEAR_RANGE, string='Year', compute='_compute_term_year', store=True)
+    ], string='Term', compute='_compute_term_year', store=True, tracking=True)
+    year = fields.Selection(selection=SELECTION_YEAR_RANGE, string='Year', compute='_compute_term_year', store=True, tracking=True)
     placement_status = fields.Selection([
         ('decline', 'Decline'),
         ('not_placed', 'Not Placed'),
@@ -47,7 +47,7 @@ class Archive(models.Model):
         ('pending', 'Pending'),
         ('confirmed', 'Confirmed'),
         ('completed', 'Completed'),
-    ], default='matched', string='Placement Status', store=True)
+    ], default='matched', string='Placement Status', store=True, tracking=True)
     
     hardship_status = fields.Selection([
         ('approved', 'Approved'),
@@ -56,19 +56,19 @@ class Archive(models.Model):
     archive_state = fields.Selection([
         ('draft', 'Draft'),
         ('done', 'Done'),
-    ], string='Term',)
+    ], string='Term')
     offer_criteria = fields.Html(string='Offer Criteria')
     student_criteria = fields.Html(string='Student Criteria')
     match_state = fields.Selection([
         ('approve', 'Approved'),
         ('decline', 'Declined'),
-    ], string='Match State',)
+    ], string='Match State', tracking=True)
     archive_offer_id = fields.Many2one('archive.offer', string='Archive Offer')
     is_show_student = fields.Boolean("Show to Student")
     ice_term = fields.Char(string='ICE Term', related='student_id.ice_term', store=True,)
     tce1_term = fields.Char(string='TCE1 Term', related='student_id.tce1_term', store=True,)
     tce2_term = fields.Char(string='TCE2 Term', related='student_id.tce2_term', store=True,)
-    is_declined = fields.Boolean("Is Declined")
+    is_declined = fields.Boolean("Is Declined", tracking=True)
     
     def declined_student_offer(self):
         print(self.offer_id)
@@ -244,5 +244,6 @@ class Archive(models.Model):
             'view_id': self.env.ref('clinical_decision_making.archive_wizard_view_form').id,
             'views': [(self.env.ref('clinical_decision_making.archive_wizard_view_form').id, 'form')],
             'res_id': self.id,
+            # 'target': 'inline'
         })
         return action

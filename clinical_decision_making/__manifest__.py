@@ -31,7 +31,7 @@
         'views/tree_matching_views.xml',
         'views/res_config_views.xml',
         'views/preferred_setting.xml',
-        'views/skip_views.xml',
+        'views/alternative_schedule_views.xml',
         'views/portal_wizard_views_inherit.xml',
         'views/menu.xml',
 

@@ -16,4 +16,4 @@ from . import tree_matching
 from . import archivement_offer
 from . import preferred_setting
 from . import res_company
-from . import skip
+from . import alternative_schedule

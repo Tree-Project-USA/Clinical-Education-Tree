@@ -51,18 +51,19 @@
         <field name="arch" type="xml">
             <form string="Partners">
                 <header>
-                    <button name="skip_student_term_action" string="Skip Student Term" type="object"/>
+                    <button name="alternative_schedule_term_action" string="Alternative Schedule" type="object"/>
                 </header>
                 <field name="active" invisible="1"/>
                 <field name="is_student" invisible="1"/>
+                <field name="hardship_count" invisible="1"/>
+                <field name="alternative_schedule_count" invisible="1"/>
                 <sheet>
-                    <field name="hardship_count" invisible="1"/>
                     <div name="button_box" position="inside">
                         <button name="action_open_hardship" type="object" class="oe_stat_button" attrs="{'invisible': [('hardship_count', '=', 0)]}">
                             <span class="o_stat_text">Hardship<br/>Request</span>
                         </button>
-                        <button name="action_view_skipped_term" type="object" class="oe_stat_button" icon="fa-forward">
-                            <span class="o_stat_text">Skipped<br/>Terms</span>
+                        <button name="action_view_alternative_schedule" type="object" class="oe_stat_button" attrs="{'invisible': [('alternative_schedule_count', '=', 0)]}">
+                            <span class="o_stat_text">Alternative Schedule History</span>
                         </button>
                     </div>
                     <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
@@ -135,7 +136,7 @@
                                     <!-- <button name="unlink_offer" type="object" string="Cancel Placement" class="btn btn-outline-danger" attrs="{'invisible': [('placement_status', 'not in', ['approved', 'pending'])]}"/> -->
                                     <field name="is_show_student" widget="boolean_toggle" />
                                     <button name="apply_student_offer" type="object" string="Re-Apply offer " class="btn btn-outline-secondary"  attrs="{'invisible': [('is_declined', '!=', True)]}"/>
-                                    <button name="action_open_archive_log" type="object" icon="fa-external-link" title="Open Contract"/>
+                                    <button name="action_open_archive_log" type="object" string="Placement Log" icon="fa-external-link" title="Open Log"/>
 
                                     <field name="zip_code" invisible="1"/>
                                 </tree>
