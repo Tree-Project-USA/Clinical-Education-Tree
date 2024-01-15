@@ -28,7 +28,7 @@ class MedicalFacility(models.Model):
     contract_warning = fields.Boolean(string='Contract Warning', store=True, compute='_compute_contract_warning')
     first_contract_date = fields.Date(compute='_compute_first_contract_date', store=True)
     contracts_count = fields.Integer(compute='_compute_contracts_count', string='Contract Count', tracking=True)
-    scce_facility_ids = fields.One2many(comodel_name='scce.facility', inverse_name='facility_id', string='Scce Facility', tracking=True)
+    scce_facility_ids = fields.One2many(comodel_name='scce.facility', inverse_name='facility_id', string='SCCE Facility', tracking=True)
     scce_primary_id = fields.Many2one(comodel_name='scce', string='Primary SCCE', tracking=True)
     scce_first_name = fields.Char(related='scce_primary_id.first_name')
     scce_last_name = fields.Char(related='scce_primary_id.last_name')
@@ -179,12 +179,12 @@ class MedicalFacility(models.Model):
         return super(MedicalFacility, self.with_context(pass_validation=True)).create(vals_list)
 
 
-class ScceFacility(models.Model):
+class SCCEFacility(models.Model):
 
     _name = 'scce.facility'
-    _description = 'Scce Facility'
+    _description = 'SCCE Facility'
     
     facility_id = fields.Many2one('medical.facility', string='Facility')
-    scce_id = fields.Many2one('scce', string='Scce')
+    scce_id = fields.Many2one('scce', string='SCCE')
     is_primary_scce = fields.Boolean(string='Is Primary SCCE', store=True,)
     is_secondary_scce = fields.Boolean(string='Is Secondary SCCE')

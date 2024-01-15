@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- View Alternative Schedule View Tree -->
+    <record id="view_alternative_schedule_tree" model="ir.ui.view">
+        <field name="name">view.alternative.schedule.tree</field>
+        <field name="model">alternative.schedule</field>
+        <field name="arch" type="xml">
+            <tree string="Alternative Schedule">
+                <field name="student_id" invisible="1"/>
+                <field name="term"/>
+                <field name="year"/>
+                <field name="state" widget="badge" decoration-muted="state == 'draft'" decoration-success="state == 'confirmed'"/>
+                <button name="action_confirm" type="object" string="Confirm" class="oe_stat_button" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                <button name="action_draft" type="object" string="Return to Draft" class="oe_stat_button" attrs="{'invisible': [('state', '!=', 'confirmed')]}"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- View Alternative Schedule search -->
+    <record id="view_alternative_schedule_search" model="ir.ui.view">
+        <field name="name">view.alternative.schedule.search</field>
+        <field name="model">alternative.schedule</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="term"/>
+                <field name="year"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="alternative_schedule_form_view_wizard" model="ir.ui.view">
+        <field name="name">alternative.schedule.form.wizard</field>
+        <field name="model">alternative.schedule</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="student_id" invisible="1"/>
+                        <field name="term"/>
+                        <field name="year"/>
+                    </group>
+                    <footer>
+                        <button string="Save" class="btn-primary" special="save" type="object"/>
+                        <button string="Confirm" class="btn-success" name="action_confirm" type="object"/>
+                            or
+                        <button string="Alternative Schedule History" class="btn-success" name="alternative_schedule_student_term_action" type="object"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <!-- Action Alternative Schedule -->
+    <record id="action_alternative_schedule" model="ir.actions.act_window">
+        <field name="name">Alternative Schedule</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">alternative.schedule</field>
+        <field name="view_mode">tree</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                There is no examples click here to add new Alternative Schedule.
+            </p>
+        </field>
+    </record>
+
+
+</odoo>

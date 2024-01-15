@@ -113,6 +113,7 @@ class PlacementRequest(models.Model):
             
         print('============================== All Student==================================')
         print("student_ids",student_ids)
+        print("self.placement_type",self.placement_type)
         
         
         # Apply filter for location_dist
@@ -197,16 +198,16 @@ class PlacementRequest(models.Model):
         
         student_ids = self.env["res.partner"].sudo().search(student_domain).filtered(lambda x: len(x.geographical_ids) > 0)
         if self.placement_type == 'tce':
-            rem_stu_tce1_ids = self.env['archive'].search([('student_id', 'in', student_ids.ids), ('placement_status', 'in', ['approved', 'confirmed', 'completed']), ('year', '=', self.year), ('placement_term', '=', self.placement_term)]).mapped('student_id')
-            rem_stu_tce2_ids = self.env['archive'].search([('student_id', 'in', student_ids.ids), ('placement_status', 'in', ['approved', 'confirmed', 'completed']), ('year', '=', self.year), ('placement_term', '=', self.placement_term)]).mapped('student_id')
+            rem_stu_tce1_ids = self.env['archive'].search([('student_id', 'in', student_ids.ids), ('placement_status', 'in', ['confirmed', 'completed']), ('year', '=', self.year), ('placement_term', '=', self.placement_term)]).mapped('student_id') # TODO: Add 'approved',  here 
+            rem_stu_tce2_ids = self.env['archive'].search([('student_id', 'in', student_ids.ids), ('placement_status', 'in', ['confirmed', 'completed']), ('year', '=', self.year), ('placement_term', '=', self.placement_term)]).mapped('student_id')# TODO: Add 'approved',  here 
             student_ids -= rem_stu_tce1_ids
             student_ids -= rem_stu_tce2_ids
-        archive_ids = self.env['archive'].search([('student_id', 'in', student_ids.ids), ('placement_status', 'in', ['approved', 'confirmed', 'completed'])])
+        archive_ids = self.env['archive'].search([('student_id', 'in', student_ids.ids), ('placement_status', 'in', ['confirmed', 'completed'])])# TODO: Add 'approved',  here 
                   
         # ------------------------------------------------------------------
         # Apply filter for setting
         if self.apply_setting:
-            met_student_ids = self.env['archive'].search([('id', 'in', archive_ids.ids), ('student_id', 'in', student_ids.ids), ('setting', '=', 'ip'), ('placement_status', 'in', ['approved', 'confirmed', 'completed'])]).mapped('student_id')# TODO: Add Pending status for take it for match
+            met_student_ids = self.env['archive'].search([('id', 'in', archive_ids.ids), ('student_id', 'in', student_ids.ids), ('setting', '=', 'ip'), ('placement_status', 'in', ['confirmed', 'completed'])]).mapped('student_id')# TODO: Add Pending status for take it for match # TODO: Add 'approved',  here 
             student_ids = met_student_ids
             archive_offer_ids = archive_offer_ids.filtered(lambda archive_offer_id: archive_offer_id.setting == 'op')
 
@@ -219,7 +220,6 @@ class PlacementRequest(models.Model):
     def apply_filters(self):
         location_dist = float(self.env['ir.config_parameter'].sudo().get_param('clinical_distance_mel')) or 50
         
-        self._preparing_reapply_filter()
         # Apply filter for location_dist
         if self.apply_location and self.location_dist:
             location_dist = self.location_dist
@@ -230,16 +230,31 @@ class PlacementRequest(models.Model):
         hardship_student_ids = student_ids.filtered(lambda student_id: student_id.is_with_hardship)
         student_ids -= hardship_student_ids
         
-        if self.placement_type == 'ice':
-            self.apply_ice(hardship_student_ids, student_ids, archive_offer_ids, location_dist)
+        
+        if self.placement_status:
+            self.get_placement_status_archive_filter()
         else:
-            self.apply_tce(hardship_student_ids, student_ids, archive_offer_ids, location_dist)
+            if self.placement_type == 'ice':
+                self.apply_ice(hardship_student_ids, student_ids, archive_offer_ids, location_dist)
+            else:
+                self.apply_tce(hardship_student_ids, student_ids, archive_offer_ids, location_dist)
         
         self._onchange_apply_criteria()
-        
+    
+    def get_placement_status_archive_filter(self):
+        domain = []
+        print('------------------------------Apply Plcement Status Archide for ', self.student_ids)
+        if self.placement_type == 'ice':
+            domain = [('placement_type', '=', 'ice')]
+        else:
+            domain = ['|', ('placement_type', '=', 'tce1'), ('placement_type', '=', 'tce2')]
+        co_student_ids = self.student_ids - self.env['archive'].search(domain + [('student_id', 'in', self.student_ids.ids), ('placement_status', 'in', ['confirmed', 'completed'])]).mapped('student_id')
+        archive_ids = self.env['archive'].search([('student_id', 'in', co_student_ids.ids), ('placement_status', '=', self.placement_status)])
+        self.write({
+            'archive_ids': [Command.link(archive_id.id) for archive_id in archive_ids]
+        })
             
     def apply_filter(self):
-        self._preparing_reapply_filter()
         
         offer_ids = self.env['placement.offer'].sudo().search([('state', '=', 'offer_still_available'), ('placement_type', '=', self.placement_type), ('placement_term', '=', self.placement_term), ('year', '=', self.year)])
         archive_offer_ids = offer_ids.mapped('archive_offer_ids').filtered(lambda archive_offer_id: archive_offer_id.is_linked == False)
@@ -288,12 +303,6 @@ class PlacementRequest(models.Model):
                 'state': 'done',
             })
     
-        
-    def _preparing_reapply_filter(self):
-        if self.archive_ids:
-            # self.archive_ids.filtered(lambda x: x.match_state == False).write({'placement_status': 'not_placed'}) # TODO:Using form change lines state to not_placed 
-            self.archive_ids.filtered(lambda x: x.match_state == False).unlink() # TODO:Using form remove lines without add to archived record 
-            
     # Filter Methods
     #------------------------------------------------------------------------------
     def apply_ice(self, hardship_student_ids, student_ids, archive_offer_ids, location_dist):
