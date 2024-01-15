@@ -97,7 +97,7 @@
                     </group>
                     <notebook>
                         <page string="SCCE Information">
-                            <field name="scce_facility_ids">
+                            <field name="scce_ids">
                                 <tree editable="bottom">
                                     <field name="facility_id" invisible="1"/>
                                     <field name="scce_id"/>

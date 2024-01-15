@@ -42,9 +42,25 @@
     <record id="scce_action" model="ir.actions.act_window">
         <field name="type">ir.actions.act_window</field>
         <field name="name">SCCE</field>
-        <field name="res_model">scce</field>
+        <field name="res_model">res.partner</field>
         <field name="view_mode">tree,form</field>
+        <field name="domain">[('is_scce', '=', True)]</field>
+        <field name="context">{'default_is_scce': True}</field>
     </record>
+
+  <record id="scce_tree_view" model="ir.actions.act_window.view">
+    <field eval="1" name="sequence" />
+    <field name="view_mode">tree</field>
+    <field name="view_id" ref="clinical_decision_making.scce_view_tree" />
+    <field name="act_window_id" ref="scce_action" />
+  </record>
+
+  <record id="scce_form_view" model="ir.actions.act_window.view">
+    <field eval="2" name="sequence" />
+    <field name="view_mode">form</field>
+    <field name="view_id" ref="clinical_decision_making.scce_view_form" />
+    <field name="act_window_id" ref="scce_action" />
+  </record>
 
     <record id="medical_facility_action" model="ir.actions.act_window">
         <field name="type">ir.actions.act_window</field>

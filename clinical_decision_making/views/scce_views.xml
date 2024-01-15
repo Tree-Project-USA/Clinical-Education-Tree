@@ -2,11 +2,10 @@
 <odoo>
     <!-- SCCE Views -->
     <record id="scce_view_tree" model="ir.ui.view">
-        <field name="name">scce.view.tree</field>
-        <field name="model">scce</field>
+        <field name="name">res.partner.scce.view.tree</field>
+        <field name="model">res.partner</field>
         <field name="arch" type="xml">
             <tree>
-                <field name="scceid"/>
                 <field name="first_name"/>
                 <field name="last_name"/>
                 <field name="email"/>
@@ -15,9 +14,10 @@
             </tree>
         </field>
     </record>
+
     <record id="scce_view_form" model="ir.ui.view">
-        <field name="name">scce.view.form</field>
-        <field name="model">scce</field>
+        <field name="name">res.partner.scce.view.form</field>
+        <field name="model">res.partner</field>
         <field name="arch" type="xml">
             <form>
                 <sheet>
@@ -33,7 +33,6 @@
                     </button>
                 </div>
                     <group>
-                        <field name="scceid" required="1"/>
                         <field name="first_name"/>
                         <field name="last_name"/>
                         <field name="email"/>

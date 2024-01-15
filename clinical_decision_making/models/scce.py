@@ -4,6 +4,30 @@ from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
 import re
 
+
+
+class ResPartner(models.Model):
+    _inherit = 'res.partner'
+    
+    is_scce = fields.Boolean(string='Is SCCE', default=False)
+    facility_count = fields.Integer(compute='_compute_facility_count', string='Facility Count', store=False)
+    
+    def _compute_facility_count(self):
+        for rec in self:
+            rec.facility_count = len(self.env['medical.facility'].search([('scce_ids', 'in', self.ids)]))
+    
+    
+    def action_open_facility(self):
+        facility_ids = self.env['medical.facility'].search([('scce_ids', 'in', self.ids)])
+        return {
+            'name': _("Medical Facility"),
+            'type': 'ir.actions.act_window',
+            'view_mode': 'tree,form',
+            'res_model': 'medical.facility',
+            'domain': [('id', 'in', facility_ids.ids)],
+            'context': {'create': False, 'edit': False, 'delete': False}
+        }
+    
 class SCCE(models.Model):
     _name = 'scce'
     _description = 'SCCE'
@@ -19,7 +43,7 @@ class SCCE(models.Model):
     
     def _compute_facility_count(self):
         for rec in self:
-            rec.facility_count = len(self.env['medical.facility'].search([('scce_facility_ids', 'in', self.ids)]))
+            rec.facility_count = len(self.env['medical.facility'].search([('scce_ids', 'in', self.ids)]))
 
     @api.depends('first_name', 'last_name')
     def _compute_field_name(self):
@@ -27,7 +51,7 @@ class SCCE(models.Model):
             rec.name = rec.first_name + ', ' + rec.last_name
     
     def action_open_facility(self):
-        facility_ids = self.env['medical.facility'].search([('scce_facility_ids', 'in', self.ids)])
+        facility_ids = self.env['medical.facility'].search([('scce_ids', 'in', self.ids)])
         return {
             'name': _("Medical Facility"),
             'type': 'ir.actions.act_window',

@@ -28,21 +28,21 @@ class MedicalFacility(models.Model):
     contract_warning = fields.Boolean(string='Contract Warning', store=True, compute='_compute_contract_warning')
     first_contract_date = fields.Date(compute='_compute_first_contract_date', store=True)
     contracts_count = fields.Integer(compute='_compute_contracts_count', string='Contract Count', tracking=True)
-    scce_facility_ids = fields.One2many(comodel_name='scce.facility', inverse_name='facility_id', string='SCCE Facility', tracking=True)
-    scce_primary_id = fields.Many2one(comodel_name='scce', string='Primary SCCE', tracking=True)
+    scce_ids = fields.One2many(comodel_name='scce.facility', inverse_name='facility_id', string='SCCE Facility', tracking=True)
+    scce_primary_id = fields.Many2one(comodel_name='res.partner', string='Primary SCCE', domain=[('is_scce', '=', True)], tracking=True)
     scce_first_name = fields.Char(related='scce_primary_id.first_name')
     scce_last_name = fields.Char(related='scce_primary_id.last_name')
     offer_ids = fields.One2many(comodel_name='placement.offer', inverse_name='facility_id', string='Offers')
     archive_offer_count = fields.Integer(compute='_compute_archive_offer_count', string='Archive Offer Count')
 
-    @api.onchange('scce_facility_ids')
-    def _onchange_scce_facility_ids(self):
-        checked_count = sum(record.is_primary_scce for record in self.scce_facility_ids)
+    @api.onchange('scce_ids')
+    def _onchange_scce_ids(self):
+        checked_count = sum(record.is_primary_scce for record in self.scce_ids)
         if checked_count > 1:
-            for record in self.scce_facility_ids:
+            for record in self.scce_ids:
                 if record.is_primary_scce:
                     record.is_primary_scce = False
-        for rec in self.scce_facility_ids:
+        for rec in self.scce_ids:
             if rec.is_primary_scce:
                 self.write({'scce_primary_id': rec.scce_id.id})
 
@@ -185,6 +185,6 @@ class SCCEFacility(models.Model):
     _description = 'SCCE Facility'
     
     facility_id = fields.Many2one('medical.facility', string='Facility')
-    scce_id = fields.Many2one('scce', string='SCCE')
+    scce_id = fields.Many2one('res.partner', string='SCCE', domain=[('is_scce', '=', True)])
     is_primary_scce = fields.Boolean(string='Is Primary SCCE', store=True,)
     is_secondary_scce = fields.Boolean(string='Is Secondary SCCE')
