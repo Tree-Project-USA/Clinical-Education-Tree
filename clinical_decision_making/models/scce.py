@@ -9,7 +9,7 @@ class SCCE(models.Model):
     _description = 'SCCE'
     _rec_name = 'name'
     
-    scceid = fields.Char(string='Scce ID', copy=False)
+    scceid = fields.Char(string='SCCE ID', copy=False)
     name = fields.Char(compute='_compute_field_name', string='Name')
     first_name = fields.Char(string='First Name', required=True)
     last_name = fields.Char(string='Last Name', required=True)

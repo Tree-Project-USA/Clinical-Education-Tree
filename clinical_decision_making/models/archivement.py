@@ -13,10 +13,10 @@ class Archive(models.Model):
     _rec_name = 'facility_id'
     
     studentid = fields.Char(related='student_id.studentid')
-    student_id = fields.Many2one(comodel_name='res.partner', string='Student Name', required=True, tracking=True)
+    student_id = fields.Many2one(comodel_name='res.partner', string='Student Name', tracking=True)
     first_name = fields.Char(related='student_id.first_name')
     last_name = fields.Char(related='student_id.last_name')
-    facility_id = fields.Many2one('medical.facility', string='Facility', required=True, tracking=True)
+    facility_id = fields.Many2one('medical.facility', string='Facility', tracking=True)
     offer_id = fields.Many2one(comodel_name='placement.offer', string="Offer")
     request_id = fields.Many2one(comodel_name='placement.request', string="Placement Request")
     geographical_id = fields.Many2one(comodel_name='geographical', string='Facility Zip Code', tracking=True)
@@ -27,11 +27,11 @@ class Archive(models.Model):
         ('ice', 'ICE'),
         ('tce1', 'TCE1'),
         ('tce2', 'TCE2'),
-    ], string='Clinical Experience Type', required=True, store=True, tracking=True)
+    ], string='Clinical Experience Type', store=True, tracking=True)
     setting = fields.Selection([
         ('op', 'OP'),
         ('ip', 'IP'),
-    ], string='Setting Type', required=True, tracking=True)
+    ], string='Setting Type', tracking=True)
     placement_term = fields.Selection([
         ('fall', 'Fall'),
         ('spring', 'Spring'),
@@ -95,12 +95,12 @@ class Archive(models.Model):
         self.is_declined = False
         self.placement_status = 'not_placed'
 
-    @api.constrains('student_id', 'placement_type', 'placement_status', 'setting')
-    def _check_placement_status(self):
-        for rec in self:
-            comp_archive = self.env['archive'].search_count([('student_id', '=', rec.student_id.id), ('id', '!=', rec.id), ('placement_type', '=', rec.placement_type), ('placement_status', 'in', ['confirmed', 'completed'])]) and rec.placement_status in ['confirmed', 'completed']
-            if comp_archive:
-                raise ValidationError("Student (%s) is already Matching In (%s) for (%s)" % (rec.student_id.name, rec.facility_id.name,rec.placement_type))
+    # @api.constrains('student_id', 'placement_type', 'placement_status', 'setting')
+    # def _check_placement_status(self):
+    #     for rec in self:
+    #         comp_archive = self.env['archive'].search_count([('student_id', '=', rec.student_id.id), ('id', '!=', rec.id), ('placement_type', '=', rec.placement_type), ('placement_status', 'in', ['confirmed', 'completed'])]) and rec.placement_status in ['confirmed', 'completed']
+    #         if comp_archive:
+    #             raise ValidationError("Student (%s) is already Matching In (%s) for (%s)" % (rec.student_id.name, rec.facility_id.name,rec.placement_type))
     
     @api.constrains('student_id', 'placement_type', 'placement_status', 'setting')
     def _check_placement_status_SSSSS(self):
@@ -201,6 +201,8 @@ class Archive(models.Model):
          'match_state': 'approve',
          'placement_status': 'approved'
         })
+        if self.request_id:
+            self.request_id._onchange_apply_criteria()
         
         
     def action_decline(self):
@@ -208,6 +210,8 @@ class Archive(models.Model):
          'match_state': 'decline',
         })
         self.unlink_offer()
+        if self.request_id:
+            self.request_id._onchange_apply_criteria()
     
     @api.depends('student_id', 'student_id.hardship_ids', 'student_id.hardship_ids.state')
     def _compute_hardship_status(self):

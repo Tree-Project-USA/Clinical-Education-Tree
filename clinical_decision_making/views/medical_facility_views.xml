@@ -85,9 +85,9 @@
                         <group>
                             <field name="email" string="Facility Email Address"/>
                             <field name="address" string="Facility Address"/>
-                            <field name="scce_primary_id" string="Scce Primary" invisible="1"/>
-                            <field name="scce_first_name" string="Scce Last Name" invisible="1"/>
-                            <field name="scce_last_name" string="Scce Last Name" invisible="1"/>
+                            <field name="scce_primary_id" string="SCCE Primary" invisible="1"/>
+                            <field name="scce_first_name" string="SCCE Last Name" invisible="1"/>
+                            <field name="scce_last_name" string="SCCE Last Name" invisible="1"/>
                         </group>
                         <group>
                             <field name="city"/>

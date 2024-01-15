@@ -11,7 +11,7 @@
         <field name="number_increment">1</field>
       </record>
 
-    <!-- Scce Sequence -->
+    <!-- SCCE Sequence -->
     <record id="scceid_sequence" model="ir.sequence">
         <field name="name">SCCE</field>
         <field name="code">scce_sequence</field>
