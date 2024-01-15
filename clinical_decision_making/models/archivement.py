@@ -243,6 +243,7 @@ class Archive(models.Model):
     def action_open_archive_log(self):
         self.ensure_one()
         action = self.env['ir.actions.actions']._for_xml_id('clinical_decision_making.archive_action')
+        action['context'] = {'create': False, 'delete': False, 'edit': False}
         action.update({
             'view_mode': 'form',
             'view_id': self.env.ref('clinical_decision_making.archive_wizard_view_form').id,
