@@ -95,12 +95,12 @@ class Archive(models.Model):
         self.is_declined = False
         self.placement_status = 'not_placed'
 
-    # @api.constrains('student_id', 'placement_type', 'placement_status', 'setting')
-    # def _check_placement_status(self):
-    #     for rec in self:
-    #         comp_archive = self.env['archive'].search_count([('student_id', '=', rec.student_id.id), ('id', '!=', rec.id), ('placement_type', '=', rec.placement_type), ('placement_status', 'in', ['confirmed', 'completed'])]) and rec.placement_status in ['confirmed', 'completed']
-    #         if comp_archive:
-    #             raise ValidationError("Student (%s) is already Matching In (%s) for (%s)" % (rec.student_id.name, rec.facility_id.name,rec.placement_type))
+    @api.constrains('student_id', 'placement_type', 'placement_status', 'setting')
+    def _check_placement_status(self):
+        for rec in self:
+            comp_archive = self.env['archive'].search_count([('student_id', '=', rec.student_id.id), ('id', '!=', rec.id), ('placement_type', '=', rec.placement_type), ('placement_status', 'in', ['confirmed', 'completed'])]) and rec.placement_status in ['confirmed', 'completed']
+            if comp_archive:
+                raise ValidationError("Student (%s) is already Matching In (%s) for (%s)" % (rec.student_id.name, rec.facility_id.name,rec.placement_type))
     
     @api.constrains('student_id', 'placement_type', 'placement_status', 'setting')
     def _check_placement_status_SSSSS(self):

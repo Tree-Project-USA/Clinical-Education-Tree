@@ -150,8 +150,18 @@ class PlacementOffer(models.Model):
 
 class PlacementOfferLine(models.Model):
     _name = 'placement.offer.line'
+    _description = "Offer line"
 
     name = fields.Char(string='Name')
+    facility_id = fields.Many2one(comodel_name='medical.facility', related='offer_id.facility_id', store=True)
+    department_id = fields.Many2one(comodel_name='facility.department' , string='Department', domain="[('id', 'in', department_ids)]")
+    department_ids = fields.Many2many(comodel_name='facility.department', compute="_get_facility_departments")
+    
+    @api.depends('facility_id')
+    def _get_facility_departments(self):
+        for rec in self:
+            rec.department_ids = rec.facility_id.department_ids
+    
     offer_id = fields.Many2one(comodel_name='placement.offer', string='Parent Offer')
     parent_state = fields.Selection(related='offer_id.state')
     placement_type = fields.Selection(related='offer_id.placement_type')

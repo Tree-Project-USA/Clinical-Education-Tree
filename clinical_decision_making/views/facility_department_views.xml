@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- View facility.department View Tree -->
+    <record id="view_facility_department_tree" model="ir.ui.view">
+        <field name="name">view.facility.department.tree</field>
+        <field name="model">facility.department</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="facility_id"/>
+                <field name="geographical_id"/>
+                <field name="city"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- View facility.department form -->
+    <record id="view_facility_department_form" model="ir.ui.view">
+        <field name="name">view.facility.department.form</field>
+        <field name="model">facility.department</field>
+        <field name="arch" type="xml">
+            <form>
+                <header></header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="Name..."/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="facility_id"/>
+                            <field name="geographical_id"/>
+                        </group>
+                        <group>
+                            <field name="city"/>
+                            <field name="state"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Preferred Setting">
+                            <field name="preferred_setting_ids"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- View facility.department search -->
+    <record id="view_facility_department_search" model="ir.ui.view">
+        <field name="name">view.facility.department.search</field>
+        <field name="model">facility.department</field>
+        <field name="arch" type="xml">
+            <search string="Facility Department">
+                <group expand="1" string="Group By">
+                    <filter string="Name" name="name" domain="[]" context="{'group_by':'name'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action facility.department -->
+    <record id="action_facility_department" model="ir.actions.act_window">
+        <field name="name">Facility Department</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">facility.department</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                 click here to add new Facility Department.
+            </p>
+        </field>
+    </record>
+
+</odoo>

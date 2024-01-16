@@ -33,6 +33,7 @@
         'views/preferred_setting.xml',
         'views/alternative_schedule_views.xml',
         'views/portal_wizard_views_inherit.xml',
+        'views/facility_department_views.xml',
         'views/menu.xml',
 
 

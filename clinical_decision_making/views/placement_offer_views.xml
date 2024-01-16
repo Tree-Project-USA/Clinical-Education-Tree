@@ -70,7 +70,9 @@
                                 <page string="Offers">
                                     <field name="line_ids" attrs="{'readonly': [('state', '!=', 'offer_details_entered')]}">
                                         <tree editable="bottom">
-                                            <field name="name" string="Location" required="1"/>
+                                            <field name="department_id" required="1"/>
+                                            <field name="department_ids" invisible="1"/>
+                                            <field name="facility_id" invisible="1"/>
                                             <field name="setting" string="Offer Setting Type"/>
                                             <field name="offers" string="Number of Offers"/>
                                         </tree>

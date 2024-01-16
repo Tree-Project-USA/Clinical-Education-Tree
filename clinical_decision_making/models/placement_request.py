@@ -231,13 +231,11 @@ class PlacementRequest(models.Model):
         student_ids -= hardship_student_ids
         
         
-        if self.placement_status:
-            self.get_placement_status_archive_filter()
+
+        if self.placement_type == 'ice':
+            self.apply_ice(hardship_student_ids, student_ids, archive_offer_ids, location_dist)
         else:
-            if self.placement_type == 'ice':
-                self.apply_ice(hardship_student_ids, student_ids, archive_offer_ids, location_dist)
-            else:
-                self.apply_tce(hardship_student_ids, student_ids, archive_offer_ids, location_dist)
+            self.apply_tce(hardship_student_ids, student_ids, archive_offer_ids, location_dist)
         
         self._onchange_apply_criteria()
     

@@ -34,22 +34,19 @@ class MedicalFacility(models.Model):
     scce_last_name = fields.Char(related='scce_primary_id.last_name')
     offer_ids = fields.One2many(comodel_name='placement.offer', inverse_name='facility_id', string='Offers')
     archive_offer_count = fields.Integer(compute='_compute_archive_offer_count', string='Archive Offer Count')
+    department_ids = fields.One2many(comodel_name='facility.department', inverse_name='facility_id', string='Facility Department')
+    preferred_setting_ids = fields.Many2many(comodel_name='preferred.setting', string='Setting', compute='_compute_preferred_setting_ids')    
 
-    @api.onchange('scce_ids')
-    def _onchange_scce_ids(self):
-        checked_count = sum(record.is_primary_scce for record in self.scce_ids)
-        if checked_count > 1:
-            for record in self.scce_ids:
-                if record.is_primary_scce:
-                    record.is_primary_scce = False
-        for rec in self.scce_ids:
-            if rec.is_primary_scce:
-                self.write({'scce_primary_id': rec.scce_id.id})
 
     @api.depends('offer_ids')
     def _compute_archive_offer_count(self):
         for rec in self:
             rec.archive_offer_count = len(rec.offer_ids.mapped('archive_offer_ids'))
+            
+    @api.depends('department_ids', 'department_ids.preferred_setting_ids')
+    def _compute_preferred_setting_ids(self):
+        for rec in self:
+            rec.preferred_setting_ids = rec.department_ids.mapped('preferred_setting_ids')
         
     @api.depends('contract_id', 'contract_id.state')
     def _compute_contract_warning(self):
@@ -183,8 +180,29 @@ class SCCEFacility(models.Model):
 
     _name = 'scce.facility'
     _description = 'SCCE Facility'
+    _rec_name = 'scce_id'
     
     facility_id = fields.Many2one('medical.facility', string='Facility')
     scce_id = fields.Many2one('res.partner', string='SCCE', domain=[('is_scce', '=', True)])
     is_primary_scce = fields.Boolean(string='Is Primary SCCE', store=True,)
     is_secondary_scce = fields.Boolean(string='Is Secondary SCCE')
+
+    def action_set_primary(self):
+        self.ensure_one()
+        scce_ids = self.facility_id.mapped('scce_ids').ids
+        if scce_ids:
+            self.search([('id', '!=', self.id), ('id', 'in', scce_ids)]).write({
+                'is_primary_scce': False
+            })
+        self.facility_id.scce_primary_id = self.scce_id
+        self.is_primary_scce = True
+        
+    def action_set_secondary(self):
+        self.ensure_one()
+        scce_ids = self.facility_id.mapped('scce_ids').ids
+        if scce_ids:
+            self.search([('id', '!=', self.id), ('id', 'in', scce_ids)]).write({
+                'is_secondary_scce': False
+            })
+        self.is_secondary_scce = True
+        
