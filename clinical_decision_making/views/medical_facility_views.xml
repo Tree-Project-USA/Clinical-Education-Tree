@@ -88,7 +88,7 @@
                             <field name="scce_primary_id" string="SCCE Primary" invisible="1"/>
                             <field name="scce_first_name" string="SCCE Last Name" invisible="1"/>
                             <field name="scce_last_name" string="SCCE Last Name" invisible="1"/>
-                            <field name="preferred_setting_ids" widget="many2many_tags"/>
+                            <field name="setting_ids" widget="many2many_tags"/>
                         </group>
                         <group>
                             <field name="city"/>
@@ -97,27 +97,29 @@
                         </group>
                     </group>
                     <notebook>
-                        <page string="Department">
+                        <page string="Department" attrs="{'invisible':[('is_single_facility', '=', True)]}">
                             <field name="department_ids">
-                                <tree editable="bottom">
-                                    <field name="name"/>
+                                <tree editable="bottom" decoration-primary="is_main_department==True">
+                                    <field name="is_main_department" invisible="1"/>
                                     <field name="facility_id" invisible="1"/>
-                                    <field name="geographical_id"/>
+                                    <field name="name" required="1" attrs="{'readonly': [('is_main_department', '=', True)]}"/>
                                     <field name="scce_ids" domain="[('id', 'in', parent.scce_ids)]" widget="many2many_tags"/>
+                                    <field name="setting_ids" widget="many2many_tags"/>
                                     <field name="city"/>
                                     <field name="state"/>
-                                    <field name="preferred_setting_ids" widget="many2many_tags"/>
+                                    <field name="geographical_id" required="1" attrs="{'readonly': [('is_main_department', '=', True)]}"/>
+                                    <button name="action_view_facility_department" type="object" icon="fa-external-link" title="Open Department Details"/>
                                 </tree>
                             </field>
                         </page>
                         <page string="SCCE Information">
-                            <field name="scce_ids">
+                            <field name="scce_ids" widget="one2many">
                                 <tree editable="bottom">
                                     <field name="facility_id" invisible="1"/>
                                     <field name="scce_id"/>
                                     <field name="is_primary_scce" widget="boolean_toggle" readonly="1"/>
+                                    <button string="Set to Primary"  name="action_set_primary" type="object" icon="fa-check" attrs="{'invisible': [('is_primary_scce', '=', True)]}"/>
                                     <field name="is_secondary_scce" widget="boolean_toggle" readonly="1"/>
-                                    <button string="Set to Primary" name="action_set_primary" type="object" icon="fa-check" attrs="{'invisible': [('is_primary_scce', '=', True)]}"/>
                                     <button string="Set to Secondary" name="action_set_secondary" type="object" icon="fa-check" attrs="{'invisible': [('is_secondary_scce', '=', True)]}"/>
                                 </tree>
                             </field>

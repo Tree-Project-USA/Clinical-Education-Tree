@@ -35,18 +35,20 @@ class MedicalFacility(models.Model):
     offer_ids = fields.One2many(comodel_name='placement.offer', inverse_name='facility_id', string='Offers')
     archive_offer_count = fields.Integer(compute='_compute_archive_offer_count', string='Archive Offer Count')
     department_ids = fields.One2many(comodel_name='facility.department', inverse_name='facility_id', string='Facility Department')
-    preferred_setting_ids = fields.Many2many(comodel_name='preferred.setting', string='Setting', compute='_compute_preferred_setting_ids')    
-
-
+    setting_ids = fields.Many2many(comodel_name='preferred.setting', string='Setting', compute='_compute_setting_ids')    
+    main_department_id = fields.Many2one(comodel_name='facility.department', string='Main Department')
+    is_single_facility = fields.Boolean(string='Single Facility', default=False)
+    
+    
     @api.depends('offer_ids')
     def _compute_archive_offer_count(self):
         for rec in self:
             rec.archive_offer_count = len(rec.offer_ids.mapped('archive_offer_ids'))
             
-    @api.depends('department_ids', 'department_ids.preferred_setting_ids')
-    def _compute_preferred_setting_ids(self):
+    @api.depends('department_ids', 'department_ids.setting_ids')
+    def _compute_setting_ids(self):
         for rec in self:
-            rec.preferred_setting_ids = rec.department_ids.mapped('preferred_setting_ids')
+            rec.setting_ids = rec.department_ids.mapped('setting_ids')
         
     @api.depends('contract_id', 'contract_id.state')
     def _compute_contract_warning(self):
@@ -169,12 +171,40 @@ class MedicalFacility(models.Model):
             return self._get_facilityid_sequence()
 
         
+    # CRUD operations
+    #------------------------------------------------------------------------------   
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
             vals['facilityid'] = self._get_facilityid_sequence()
-        return super(MedicalFacility, self.with_context(pass_validation=True)).create(vals_list)
+        res = super(MedicalFacility, self.with_context(pass_validation=True)).create(vals_list)
+        for rec in res:
+            main_department_vals = {
+                'name': rec.name,
+                'facility_id': rec.id,
+                'scce_ids': [(6, 0, rec.scce_ids.ids)],
+                'setting_ids': [(6, 0, rec.setting_ids.ids)],
+                'geographical_id': rec.geographical_id.id,
+                'is_main_department': True
+            }
+            main_department_id = self.env['facility.department'].create(main_department_vals)
+            rec.main_department_id = main_department_id
+        return res
+    
+    def write(self, vals):
+        res = super(MedicalFacility, self).write(vals)
+        if self.main_department_id and any(field in vals for field in ['name', 'scce_ids', 'setting_ids', 'geographical_id']):
+            main_department_vals = {
+                'name': self.name,
+                'scce_ids': [(6, 0, self.scce_ids.ids)],
+                'setting_ids': [(6, 0, self.setting_ids.ids)],
+                'geographical_id': self.geographical_id.id,
+            }
+            self.main_department_id.write(main_department_vals)
+        return res
 
+    def unlink(self):
+        return super(MedicalFacility, self.with_context(unlink_main_department=True)).unlink()
 
 class SCCEFacility(models.Model):
 
@@ -184,9 +214,14 @@ class SCCEFacility(models.Model):
     
     facility_id = fields.Many2one('medical.facility', string='Facility')
     scce_id = fields.Many2one('res.partner', string='SCCE', domain=[('is_scce', '=', True)])
+    first_name = fields.Char(related='scce_id.first_name')
+    last_name = fields.Char(related='scce_id.last_name')
+    email = fields.Char(related='scce_id.email')
+    phone = fields.Char(related='scce_id.phone')
     is_primary_scce = fields.Boolean(string='Is Primary SCCE', store=True,)
     is_secondary_scce = fields.Boolean(string='Is Secondary SCCE')
 
+    
     def action_set_primary(self):
         self.ensure_one()
         scce_ids = self.facility_id.mapped('scce_ids').ids

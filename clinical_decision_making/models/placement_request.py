@@ -231,7 +231,9 @@ class PlacementRequest(models.Model):
         student_ids -= hardship_student_ids
         
         
-
+        if self.placement_status:
+            self.get_placement_status_archive_filter()
+            
         if self.placement_type == 'ice':
             self.apply_ice(hardship_student_ids, student_ids, archive_offer_ids, location_dist)
         else:
@@ -248,8 +250,8 @@ class PlacementRequest(models.Model):
             domain = ['|', ('placement_type', '=', 'tce1'), ('placement_type', '=', 'tce2')]
         co_student_ids = self.student_ids - self.env['archive'].search(domain + [('student_id', 'in', self.student_ids.ids), ('placement_status', 'in', ['confirmed', 'completed'])]).mapped('student_id')
         archive_ids = self.env['archive'].search([('student_id', 'in', co_student_ids.ids), ('placement_status', '=', self.placement_status)])
-        self.write({
-            'archive_ids': [Command.link(archive_id.id) for archive_id in archive_ids]
+        archive_ids.write({
+            'placement_status': 'not_placed'
         })
             
     def apply_filter(self):

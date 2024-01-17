@@ -114,7 +114,7 @@ class PlacementOffer(models.Model):
             'view_id': self.env.ref('clinical_decision_making.archive_offer_view_tree').id,
             'views': [(self.env.ref('clinical_decision_making.archive_offer_view_tree').id, 'tree')],
             'res_id': self.id,
-            'domin': [('id', 'in', self.archive_offer_ids.ids)],
+            'domain': [('id', 'in', self.archive_offer_ids.ids)],
         })
         return action
     

@@ -15,8 +15,8 @@ class ResPartner(models.Model):
     is_student = fields.Boolean(string='Is Student', default=False)
     studentid = fields.Char(string='Student ID', copy=False)
     name = fields.Char(string='Student Name', compute='_compute_name', store=True, default='Student Name')
-    first_name = fields.Char(string='Student First Name', required=True)
-    last_name = fields.Char(string='Student Last Name', required=True )
+    first_name = fields.Char(string='First Name', required=True)
+    last_name = fields.Char(string='Last Name', required=True )
     cohort_label = fields.Char(string='Cohort', compute='_compute_term_fields', store=True)# TODO: Remoove this line
     hardship_ids = fields.One2many('hardship.request', 'student_id', string='Hardship')
     home_address = fields.Char(string='Home Address')
@@ -364,40 +364,7 @@ class ResPartner(models.Model):
         if any(field in vals for field in ['home_address', 'phone', 'personal_phone', 'personal_email_address']):
             template = self.env.ref('clinical_decision_making.mail_template_send_update_of_personal_information')
             template.sudo().send_mail(self.id, force_send=True)
-
-        body_list = []
-        archive_ids = vals.get('archive_ids')
-        if archive_ids:
-            for line_id in archive_ids:
-                if line_id[0] == 1 and line_id[2]:
-                    data = line_id[2]
-                    record_id = self.env['archive'].browse(line_id[1])
-                    
-                    facility_id = data.get('facility_id')
-                    if facility_id:
-                        facility = self.env['medical.facility'].browse(facility_id)
-                        facility_name_old = record_id.facility_id.name
-                        facility_name_new = facility.name
-                        facility_name_old_formatted = f"<span style='color:red'>{facility_name_old}</span>"
-                        facility_name_new_formatted = f"<span style='color:green'>{facility_name_new}</span>"
-                        body = _("Student Change Facility from (%s) to (%s)") % (facility_name_old_formatted, facility_name_new_formatted)
-                        body_list.append(body)
-                    
-                    placement_status = data.get('placement_status')
-                    if placement_status:
-                        placement_status_old = dict(record_id._fields['placement_status'].selection).get(placement_status)
-                        placement_status_current = dict(record_id._fields['placement_status'].selection).get(record_id.placement_status)
-                        placement_status_old_formatted = f"<span style='color:red'>{placement_status_old}</span>"
-                        placement_status_current_formatted = f"<span style='color:green'>{placement_status_current}</span>"
-                        body = _("Student Change Placement Status from (%s) to (%s)") % (placement_status_old_formatted, placement_status_current_formatted)
-                        body_list.append(body)
-
-        res = super(ResPartner, self).write(vals)
-
-        if body_list:
-            self.message_post(body='<br>'.join(body_list), message_type='comment')
-
-        return res
+        return super(ResPartner, self).write(vals)
 
     @api.onchange('preferred_setting_ids')
     def _compute_preferred_setting_ids(self):
@@ -418,8 +385,6 @@ class ResPartner(models.Model):
     
     def alternative_schedule_term_action(self):
         self.ensure_one()
-        print(self.env.context)
-        print(self.env.context)
         action = self.env['ir.actions.actions']._for_xml_id('clinical_decision_making.action_alternative_schedule')
         action.update({
             'name': 'Alternative Schedule of %s' % self.name,

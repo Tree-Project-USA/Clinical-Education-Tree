@@ -155,14 +155,21 @@ class Archive(models.Model):
             #     if not archive_id:
             #         raise ValidationError("Student %s is Shuld Take TCE1 term before TCE2" % (rec.student_id.name))
             
-    @api.onchange('placement_status')
-    def _onchange_placement_status(self):
-        self.ensure_one()
-        if self.placement_status == 'not_placed':
-            if self.archive_offer_id:
-                self.archive_offer_id.is_linked = False
-                self.archive_offer_id.student_id = False
-
+    
+    def write(self, vals):
+        print(vals)
+        res = super(Archive, self).write(vals)
+        if 'placement_status' in vals:
+            for rec in self:
+                if rec.placement_status == 'confirmed':
+                    self.search([('id', '!=', self.id), ('student_id', '=', self.student_id.id), ('placement_type', '=', self.placement_type), ('placement_term', '=', self.placement_term)]).write({
+                        'placement_status': 'not_placed'
+                    })
+                    
+                if rec.placement_status == 'not_placed':
+                    rec.unlink_offer()
+        return res
+    
     def convert_abbr_to_term_year(self, term_year):
         term_abbr = term_year[:2]
         year_abbr = term_year[2:]
@@ -210,6 +217,7 @@ class Archive(models.Model):
          'match_state': 'decline',
         })
         self.unlink_offer()
+        self.placement_status = 'not_placed'
         if self.request_id:
             self.request_id._onchange_apply_criteria()
     
@@ -227,7 +235,7 @@ class Archive(models.Model):
         if self.archive_offer_id:
             self.archive_offer_id.is_linked = False
             self.archive_offer_id.student_id = False
-        self.placement_status = 'not_placed'
+        
             
     def action_view_student(self):
         action = self.env.ref('clinical_decision_making.student_action').read()[0]
@@ -239,6 +247,16 @@ class Archive(models.Model):
             'views': [(self.env.ref('clinical_decision_making.student_view_form').id, 'form')],
         })
         return action
+    
+    def confirm_placement_status(self):
+        print(       self.search([('id', '!=', self.id), ('student_id', '=', self.student_id.id), ('placement_type', '=', self.placement_type), ('placement_term', '=', self.placement_term)]))
+        print(       self.search([('id', '!=', self.id), ('student_id', '=', self.student_id.id), ('placement_type', '=', self.placement_type), ('placement_term', '=', self.placement_term)]))
+        print(       self.search([('id', '!=', self.id), ('student_id', '=', self.student_id.id), ('placement_type', '=', self.placement_type), ('placement_term', '=', self.placement_term)]))
+        print(       self.search([('id', '!=', self.id), ('student_id', '=', self.student_id.id), ('placement_type', '=', self.placement_type), ('placement_term', '=', self.placement_term)]))
+        self.search([('id', '!=', self.id), ('student_id', '=', self.student_id.id), ('placement_type', '=', self.placement_type), ('placement_term', '=', self.placement_term)]).write({
+            'placement_status': 'not_placed'
+        })
+
     
     def action_open_archive_log(self):
         self.ensure_one()

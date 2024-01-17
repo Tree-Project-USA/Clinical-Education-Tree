@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- View scce.facility View Tree -->
+    <record id="view_scce_facility_tree" model="ir.ui.view">
+        <field name="name">view.scce.facility.tree</field>
+        <field name="model">scce.facility</field>
+        <field name="arch" type="xml">
+            <tree string="Scce Facility">
+                <field name="scce_id"/>
+                <field name="first_name"/>
+                <field name="last_name"/>
+                <field name="email"/>
+                <field name="phone"/>
+            </tree>
+        </field>
+    </record>
+
+</odoo>
