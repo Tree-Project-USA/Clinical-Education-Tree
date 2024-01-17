@@ -474,9 +474,9 @@ class PlacementRequest(models.Model):
                     allow_offers -= x
             
             archive_offer_ids = archive_offer_ids.filtered(lambda x: x.offer_id.id in  allow_offers.ids)
-            student_archive = self.env['archive'].sudo().search([('student_id', '=', student_id.id), ('placement_type', '=', 'tce2'), ('placement_status', '!=', 'not_placed')])
-            if student_archive:
-                continue
+            # student_archive = self.env['archive'].sudo().search([('student_id', '=', student_id.id), ('placement_type', '=', 'tce2'), ('placement_status', '!=', 'not_placed')])
+            # if student_archive:
+            #     continue
                         
             archive_offer_ids = archive_offer_ids.filtered(lambda archive_offer_id: archive_offer_id.is_linked == False)
             
@@ -496,9 +496,9 @@ class PlacementRequest(models.Model):
             print('--------------------------------OP Offers', op_offers)
             print('--------------------------------IP Offers', ip_offers)
             
-            check_ip = self.env['archive'].sudo().search([('student_id', '=', student_id.id), ('placement_status', '!=', 'not_placed'), ('setting', '=', 'ip')])
-            if not check_ip and not ip_offers:
-                continue
+            # check_ip = self.env['archive'].sudo().search([('student_id', '=', student_id.id), ('placement_status', '!=', 'not_placed'), ('setting', '=', 'ip')])
+            # if not check_ip and not ip_offers:
+            #     continue
             
             archive_offer_id = False
             archive_offer_facility_id = False
