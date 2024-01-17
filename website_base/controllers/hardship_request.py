@@ -1,6 +1,5 @@
 from odoo import http
 from odoo.http import request
-# from odoo.tools import image_resize_images
 
 import base64
 import werkzeug

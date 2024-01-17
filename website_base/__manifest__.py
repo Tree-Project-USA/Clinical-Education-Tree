@@ -27,6 +27,8 @@
         "views/preferred_setting_template.xml",
         "views/hardship_inforamtion_templates.xml",
         "views/placement_history_templates.xml",
+        "views/scce_profle_template.xml",
+        "views/availability_template.xml",
     ],
     # only loaded in demonstration mode
     "demo": [],
@@ -41,6 +43,7 @@
             "website_base/static/src/js/file.js",
             "website_base/static/src/js/state_hardship.js",
             "website_base/static/src/js/website_update_information.js",
+            "website_base/static/src/js/availability.js",
         ],
     },
     "installable": True,
