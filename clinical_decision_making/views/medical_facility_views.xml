@@ -97,7 +97,7 @@
                         </group>
                     </group>
                     <notebook>
-                        <page string="Department" attrs="{'invisible':[('is_single_facility', '=', True)]}">
+                        <page string="Department">
                             <field name="department_ids">
                                 <tree editable="bottom" decoration-primary="is_main_department==True">
                                     <field name="is_main_department" invisible="1"/>
