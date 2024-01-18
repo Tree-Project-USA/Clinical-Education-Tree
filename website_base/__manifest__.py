@@ -29,7 +29,8 @@
         "views/placement_history_templates.xml",
         "views/scce_profle_template.xml",
         "views/availability_template.xml",
-        "views/show _placement_offer_facility_template.xml",
+        "views/show_placement_offer_facility_template.xml",
+        "views/student_profile_template.xml",
     ],
     # only loaded in demonstration mode
     "demo": [],

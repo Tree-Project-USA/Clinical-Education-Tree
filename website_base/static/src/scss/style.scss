@@ -56,3 +56,20 @@
         }
     }
 }
+
+.form-select {
+    display: block;
+    width: 94%;
+    margin-left: 0.7rem;
+    border: 1px solid #ab8631;
+}
+
+.form-select:focus {
+    border-color: #ab8631;
+    box-shadow: 0 0 0 0.25rem #ab863196
+}
+
+.form-control:focus {
+    border-color: #ab8631;
+    box-shadow: 0 0 0 0.25rem #ab863196
+}

@@ -45,13 +45,19 @@
                             </div>
                         </div>
                         <div class="col-4">
-
                             <div class="row">
-                                <label class="required" for="placement_term">Term</label>
+                                <label class="col-form-label" for="placement_term">Term</label>
                                 <select
                                     class="form-select"
                                     name="placement_term"
+                                    required="required"
                                 >
+                                    <option
+                                        value=""
+                                        selected="selected"
+                                        disabled="1">
+                                        select...
+                                    </option>
                                     <option
                                         name='placement_term'
                                         value="fall"
@@ -84,6 +90,7 @@
                                 <select
                                     class="form-select"
                                     name="term"
+                                    required="required"
                                 >
                                 <option
                                     value=""
@@ -108,7 +115,14 @@
                                 <select
                                     class="form-select"
                                     name="placement_type"
+                                    required="required"
                                 >
+                                    <option
+                                        value=""
+                                        selected="selected"
+                                        disabled="1">
+                                        select...
+                                    </option>
                                     <option
                                         name='placement_type'
                                         value="ice"
@@ -135,7 +149,7 @@
                                         id="first_name"
                                         class="form-control"
                                         name="first_name"
-                                        t-att-value="facility_id.name"
+                                        t-att-value=""
                                         readonly="readonly"
                                     />
                                 </div>
@@ -163,7 +177,14 @@
                                 <select
                                     class="form-select"
                                     name="setting"
+                                    required="required"
                                 >
+                                    <option
+                                        value=""
+                                        selected="selected"
+                                        disabled="1">
+                                        select...
+                                    </option>
                                     <option
                                         name='setting'
                                         value="ip"
@@ -179,21 +200,6 @@
                                         OP
                                     </option>
                                 </select>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="form-group row">
-                                <label for="staticEmail" class="col-form-label">Assigned Student/s</label>
-                                <div>
-                                    <input
-                                        type="text"
-                                        id="first_name"
-                                        class="form-control"
-                                        name="first_name"
-                                        t-att-value="facility_id.name"
-                                        readonly="readonly"
-                                    />
-                                </div>
                             </div>
                         </div>
                     </div>
