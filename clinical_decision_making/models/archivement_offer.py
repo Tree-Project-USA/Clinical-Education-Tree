@@ -8,6 +8,7 @@ class ArchiveOffer(models.Model):
     _description = 'Archive Offer'
     _rec_name = 'facility_id'
     
+    active = fields.Boolean(string='Active', default=True)
     student_id = fields.Many2one(comodel_name='res.partner', string='Student')
     is_linked = fields.Boolean('is Joined', default=False, readonly=True)
     facility_id = fields.Many2one(comodel_name='medical.facility', string='Facility')

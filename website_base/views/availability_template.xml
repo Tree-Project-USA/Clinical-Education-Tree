@@ -4,12 +4,15 @@
         <t t-call="website.layout">
             <div class="container">
                 <form
-                    action="/submit/availability"
+                t-att-action="'/submit/availability/%s' % (facility_id.id)"
                     class="availability"
                     method="post"
                     enctype="multipart/form-data"
                 >
-                    <t t-esc="facility_id.name" />
+                <input type="hidden" name="csrf_token"
+                    t-att-value="request.csrf_token()" />
+                <input type="hidden" name="facility_id"
+                    t-att-value="facility_id.id" />
                     <div class="row mt-4">
                         <div class="col-4">
                             <div class="form-group row">
@@ -42,42 +45,35 @@
                             </div>
                         </div>
                         <div class="col-4">
-                            <!-- <select class="form-select" aria-label="Default select example">
-                                <option>Open this select menu</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                              </select> -->
-                            <div>
-                                <div>
-                                    <label class="required" for="placement_term">Term</label>
-                                    <select
-                                        class="form-select"
-                                        name="term"
+
+                            <div class="row">
+                                <label class="required" for="placement_term">Term</label>
+                                <select
+                                    class="form-select"
+                                    name="placement_term"
+                                >
+                                    <option
+                                        name='placement_term'
+                                        value="fall"
+                                        id="placement_term"
                                     >
-                                        <option
-                                            name='placement_term'
-                                            value="fall"
-                                            id="placement_term"
-                                        >
-                                            FALL
-                                        </option>
-                                        <option
-                                            name='placement_term'
-                                            value="spring"
-                                            id="placement_term"
-                                        >
-                                            SPRING
-                                        </option>
-                                        <option
-                                            name='placement_term'
-                                            value="summer"
-                                            id="placement_term"
-                                        >
-                                            SUMMER
-                                        </option>
-                                    </select>
-                                </div>
+                                        FALL
+                                    </option>
+                                    <option
+                                        name='placement_term'
+                                        value="spring"
+                                        id="placement_term"
+                                    >
+                                        SPRING
+                                    </option>
+                                    <option
+                                        name='placement_term'
+                                        value="summer"
+                                        id="placement_term"
+                                    >
+                                        SUMMER
+                                    </option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -86,48 +82,48 @@
                             <div class="row">
                                 <label for="staticEmail" class="col-form-label">Year</label>
                                 <select
-                                        class="form-select"
-                                        name="term"
-                                    >
+                                    class="form-select"
+                                    name="term"
+                                >
+                                <option
+                                    value=""
+                                    selected="selected"
+                                    disabled="1">
+                                    select...
+                                </option>
+                                <t t-foreach="SELECTION_YEAR_RANGE" t-as="nationality">
                                     <option
-                                        value=""
-                                        selected="selected"
-                                        disabled="1">
-                                        select...
+                                    t-att-value="nationality[1]"
+                                    >
+                                    <t t-esc="nationality[1]" />
                                     </option>
-                                    <t t-foreach="SELECTION_YEAR_RANGE" t-as="nationality">
-                                        <option
-                                        t-att-value="nationality.index"
-                                        >
-                                        <t t-esc="nationality.index" />
-                                        </option>
-                                    </t>
-                                    </select>
-                                <div>
-                                    <input
-                                        type="text"
-                                        id="first_name"
-                                        class="form-control"
-                                        name="first_name"
-                                        t-att-value="SELECTION_YEAR_RANGE"
-                                        readonly="readonly"
-                                    />
-                                </div>
+                                </t>
+                                </select>
+  
                             </div>
                         </div>
                         <div class="col-4">
-                            <div class="form-group row">
+                            <div class="row">
                                 <label for="staticEmail" class="col-form-label">CE Type</label>
-                                <div>
-                                    <input
-                                        type="text"
-                                        id="first_name"
-                                        class="form-control"
-                                        name="first_name"
-                                        t-att-value="facility_id.name"
-                                        readonly="readonly"
-                                    />
-                                </div>
+                                <select
+                                    class="form-select"
+                                    name="placement_type"
+                                >
+                                    <option
+                                        name='placement_type'
+                                        value="ice"
+                                        id="placement_type"
+                                    >
+                                        ICE
+                                    </option>
+                                    <option
+                                        name='placement_type'
+                                        value="tce"
+                                        id="placement_type"
+                                    >
+                                        TCE I
+                                    </option>
+                                </select>
                             </div>
                         </div>
                         <div class="col-4">
@@ -153,11 +149,10 @@
                                 <div>
                                     <input
                                         type="text"
-                                        id="first_name"
+                                        id="offers"
                                         class="form-control"
-                                        name="first_name"
-                                        t-att-value="facility_id.name"
-                                        readonly="readonly"
+                                        name="offers"
+                                        t-att-value=""
                                     />
                                 </div>
                             </div>
@@ -165,16 +160,25 @@
                         <div class="col-4">
                             <div class="form-group row">
                                 <label for="staticEmail" class="col-form-label">Setting</label>
-                                <div>
-                                    <input
-                                        type="text"
-                                        id="first_name"
-                                        class="form-control"
-                                        name="first_name"
-                                        t-att-value="facility_id.name"
-                                        readonly="readonly"
-                                    />
-                                </div>
+                                <select
+                                    class="form-select"
+                                    name="setting"
+                                >
+                                    <option
+                                        name='setting'
+                                        value="ip"
+                                        id="setting"
+                                    >
+                                        IP
+                                    </option>
+                                    <option
+                                        name='setting'
+                                        value="op"
+                                        id="setting"
+                                    >
+                                        OP
+                                    </option>
+                                </select>
                             </div>
                         </div>
                         <div class="col-4">
@@ -193,86 +197,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
-                    <input type="hidden" name="len_availability" value="1" />
-                    <div class="file row mt-4">
-                      <div>
-                          <table class="table add_file table-bordered">
-                              <thead>
-                                  <tr class="text-center">
-                                      <td>
-                                          <strong>
-                                              #
-                                          </strong>
-                                      </td>
-                                      <td>
-                                          <strong>
-                                            Facility Name
-                                          </strong>
-                                      </td>
-                                      <td>
-                                          <strong>
-                                            University
-                                          </strong>
-                                      </td>
-                                      <td>
-                                          <strong>
-                                            Term
-                                          </strong>
-                                      </td>
-                                      <td>
-                                          <strong>
-                                            Year
-                                          </strong>
-                                      </td>
-                                      <td>
-                                          <strong>
-                                            CE Type
-                                          </strong>
-                                      </td>
-                                      <td>
-                                          <strong>
-                                            CE Date
-                                          </strong>
-                                      </td>
-                                      <td>
-                                          <strong>
-                                            Availability
-                                          </strong>
-                                      </td>
-                                      <td>
-                                          <strong>
-                                            Setting
-                                          </strong>
-                                      </td>
-                                      <td>
-                                          <strong>
-                                            Assigned Student/s
-                                          </strong>
-                                      </td>
-                                      <td>
-                                      </td>
-                                  </tr>
-                              </thead>
-                              <tbody id="add_availability_row">
-                                  
-                              </tbody>
-                              <tfooter class="footer">
-                                  <tr>
-                                      <td colspan="11">
-                                          <a 
-                                          id="add_availability" 
-                                          class="btn m-2"
-                                          style="background-color:#ab8631;color:#fff;" 
-                                          >
-                                          <h6>Add New Availability</h6>
-                                          </a>
-                                      </td>
-                                  </tr>
-                              </tfooter>
-                          </table>
-                      </div>
-                    </div> -->
                     <div class="clearfix oe_login_buttons mt-4">
                         <button type="submit"
                             class="custom_create btn btn-block"
