@@ -80,3 +80,13 @@ class SubmitAvailability(http.Controller):
         })
         return request.redirect_query(
                             "/facility/placement/offer/%s" % archive_offer_ids.mapped('facility_id').id)
+        
+    @http.route('/profile/student/<int:id>', website=True, type='http', auth="user")
+    def declin_assigned_student(self, id=None, **kw):
+        values = {}
+        archive_offer_ids = request.env['archive.offer'].sudo().search([
+            ('id', '=', id),
+        ])
+        values["student_id"] = archive_offer_ids.mapped('student_id')
+        values["facility_id"] = archive_offer_ids.mapped('facility_id')
+        return request.render("website_base.student_profile_templates", values)

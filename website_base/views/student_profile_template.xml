@@ -1,0 +1,240 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <template id="student_profile_templates" name="User Information">
+        <t t-call="website.layout">
+            <div class="student_profile">
+                <div class="container">
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="text-center mb-4 mt-2">
+                                <h3>Student Information</h3>
+                            </div>
+                            <div class="text-center">
+                                <img
+                                    t-if="student_id.image_1920"
+                                    t-att-src="image_data_uri(student_id.image_1920)"
+                                    class="img img-fluid rounded-circle o_wblog_author_avatar mr-1"
+                                    loading="lazy"
+                                    style="width: 12rem; height:12rem;"
+                                />
+                                <img
+                                    t-else=""
+                                    src="/website_base/static/src/img/blank-profile-picture.jpg"
+                                    class="img img-fluid rounded-circle o_wblog_author_avatar mr-1"
+                                    loading="lazy"
+                                    style="width: 12rem; height:12rem;"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <form>
+                        <div class="row mt-4">
+                            <div class="col-lg-6">
+                                <div class="form-group row">
+                                    <label for="staticEmail" class="col-form-label">First Name</label>
+                                    <div>
+                                        <input
+                                            type="text"
+                                            id="first_name"
+                                            class="form-control"
+                                            name="first_name"
+                                            t-att-value="student_id.first_name"
+                                            readonly="readonly"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group row">
+                                    <label for="staticEmail" class="col-form-label">Last Name</label>
+                                    <div>
+                                        <input
+                                            type="text"
+                                            id="last_name"
+                                            class="form-control"
+                                            name="last_name"
+                                            t-att-value="student_id.last_name"
+                                            readonly="readonly"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-lg-6">
+                                <div class="form-group row">
+                                    <label for="staticEmail" class="col-form-label">Home Address</label>
+                                    <div>
+                                        <input
+                                            type="text"
+                                            id="home_address"
+                                            name="home_address"
+                                            class="form-control updated"
+                                            t-att-value="student_id.home_address"
+                                            readonly="readonly"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group row">
+                                    <label for="staticEmail" class="col-form-label">Home Phone</label>
+                                    <div>
+                                        <input
+                                            type="text"
+                                            id="phone"
+                                            maxlength="10"
+                                            name="phone"
+                                            readonly="readonly"
+                                            class="form-control updated"
+                                            t-att-value="student_id.phone"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-lg-6">
+                                <div class="form-group row">
+                                    <label for="staticEmail" class="col-form-label">Personal Phone</label>
+                                    <div>
+                                        <input
+                                            type="text"
+                                            id="personal_phone"
+                                            maxlength="10"
+                                            name="personal_phone"
+                                            readonly="readonly"
+                                            class="form-control updated"
+                                            t-att-value="student_id.personal_phone"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group row">
+                                    <label for="staticEmail" class="col-form-label">Personal Email
+                                        Address</label>
+                                    <div>
+                                        <input
+                                            type="email"
+                                            id="personal_email_address"
+                                            name="personal_email_address"
+                                            class="form-control updated"
+                                            readonly="readonly"
+                                            t-att-value="student_id.personal_email_address"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-lg-6">
+                                <div class="form-group row">
+                                    <label for="staticEmail" class="col-form-label">University Email
+                                        Address</label>
+                                    <div>
+                                        <input
+                                            type="text"
+                                            id="email"
+                                            name="email"
+                                            class="form-control"
+                                            readonly="readonly"
+                                            t-att-value="student_id.email"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group row">
+                                    <label for="staticEmail" class="col-form-label">Campus</label>
+                                    <div>
+                                        <input
+                                            type="text"
+                                            id="campus"
+                                            name="campus"
+                                            class="form-control"
+                                            readonly="readonly"
+                                            t-att-value="student_id.campus"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-lg-6">
+                                <div class="form-group row">
+                                    <label for="staticEmail" class="col-form-label">Program Duration</label>
+                                    <div>
+                                        <input
+                                            type="text"
+                                            id="program_id"
+                                            name="program_id"
+                                            class="form-control"
+                                            readonly="readonly"
+                                            t-att-value="student_id.program_id.name"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group row">
+                                    <label for="staticEmail" class="col-form-label">Program Type</label>
+                                    <div>
+                                        <input
+                                            type="text"
+                                            id="program_id"
+                                            name="program_id"
+                                            class="form-control"
+                                            readonly="readonly"
+                                            t-att-value="student_id.program_type"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-lg-6">
+                                <div class="form-group row">
+                                    <label for="staticEmail" class="col-form-label">Graduation Term/
+                                        Year</label>
+                                    <div>
+                                        <input
+                                            type="text"
+                                            id="graduation_term"
+                                            name="graduation_term"
+                                            class="form-control"
+                                            readonly="readonly"
+                                            t-att-value="student_id.graduation_term"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group row">
+                                    <label for="staticEmail" class="col-form-label">Cohort</label>
+                                    <div>
+                                        <input
+                                            type="text"
+                                            id="cohort_label"
+                                            name="cohort_label"
+                                            class="form-control"
+                                            readonly="readonly"
+                                            t-att-value="student_id.cohort_label"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="clearfix oe_login_buttons my-4">
+                        <a t-attf-href="/facility/placement/offer/#{facility_id.id}"
+                            class="float-end custom_create btn btn-block "
+                            style="background-color:#ab8631;color:#fff;">
+                            Back To Facility
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

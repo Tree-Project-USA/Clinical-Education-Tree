@@ -113,7 +113,7 @@
                       <td><t t-esc="val.zip"/></td>
                       <td>
                         <a
-                        t-if="not val.offer_ids"
+                         t-if="not val.offer_ids"
                           type="button"
                           class="btn my-2"
                           role="button" 
