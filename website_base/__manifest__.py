@@ -29,6 +29,7 @@
         "views/placement_history_templates.xml",
         "views/scce_profle_template.xml",
         "views/availability_template.xml",
+        "views/show _placement_offer_facility_template.xml",
     ],
     # only loaded in demonstration mode
     "demo": [],
@@ -43,7 +44,6 @@
             "website_base/static/src/js/file.js",
             "website_base/static/src/js/state_hardship.js",
             "website_base/static/src/js/website_update_information.js",
-            "website_base/static/src/js/availability.js",
         ],
     },
     "installable": True,

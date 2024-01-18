@@ -113,13 +113,24 @@
                       <td><t t-esc="val.zip"/></td>
                       <td>
                         <a
+                        t-if="not val.offer_ids"
                           type="button"
                           class="btn my-2"
                           role="button" 
-                          href="#"
+                          t-attf-href="/submit/availability/#{val.id}"
                           style="background-color:  #ab8631; !important; color: #fff"
                         >
                           <i class="fa fa-pencil"/> Submit Availability
+                        </a>
+                        <a
+                          t-if="val.offer_ids"
+                          type="button"
+                          class="btn my-2"
+                          role="button" 
+                          t-attf-href="/facility/placement/offer/#{val.id}"
+                          style="background-color:  #ab8631; !important; color: #fff"
+                        >
+                        <i class="fa fa-eye mx-2"/> Show Placement Offer
                         </a>
                       </td>
                     </tr>

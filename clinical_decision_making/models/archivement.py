@@ -11,7 +11,7 @@ class Archive(models.Model):
     _inherit = ['mail.thread']
     _description = 'Archive Placement'
     _rec_name = 'facility_id'
-    
+        
     studentid = fields.Char(related='student_id.studentid')
     student_id = fields.Many2one(comodel_name='res.partner', string='Student Name', tracking=True)
     first_name = fields.Char(related='student_id.first_name')
