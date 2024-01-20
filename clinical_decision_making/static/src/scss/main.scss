@@ -38,3 +38,23 @@
     color: #875A7B; 
     
   }
+.prima {
+    th:nth-child(2).o_list_button::after {
+        content: "is Primary SCCE";
+        margin-left: 5px;
+        background-color: #eaeaea;
+        color: #333;
+        padding: 2px 4px;
+        border-radius: 4px;
+    }
+
+    th:nth-child(3).o_list_button::after {
+        content: "is Secondary SCCE";
+        margin-left: 5px;
+        background-color: #eaeaea;
+        color: #333;
+        padding: 2px 4px;
+        border-radius: 4px;
+    }
+
+}

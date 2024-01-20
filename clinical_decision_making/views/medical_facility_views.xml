@@ -114,12 +114,12 @@
                         </page>
                         <page string="SCCE Information">
                             <field name="scce_ids" widget="one2many">
-                                <tree editable="bottom">
+                                <tree editable="bottom" class="prima">
                                     <field name="facility_id" invisible="1"/>
                                     <field name="scce_id"/>
-                                    <field name="is_primary_scce" widget="boolean_toggle" readonly="1"/>
-                                    <button string="Set to Primary"  name="action_set_primary" type="object" icon="fa-check" attrs="{'invisible': [('is_primary_scce', '=', True)]}"/>
-                                    <field name="is_secondary_scce" widget="boolean_toggle" readonly="1"/>
+                                    <field name="is_primary_scce" widget="boolean_toggle" readonly="1" invisible="1"/>
+                                    <button string="Set to Primary" name="action_set_primary" type="object" icon="fa-check" attrs="{'invisible': [('is_primary_scce', '=', True)]}"/>
+                                    <field name="is_secondary_scce" widget="boolean_toggle" readonly="1" invisible="1"/>
                                     <button string="Set to Secondary" name="action_set_secondary" type="object" icon="fa-check" attrs="{'invisible': [('is_secondary_scce', '=', True)]}"/>
                                 </tree>
                             </field>
