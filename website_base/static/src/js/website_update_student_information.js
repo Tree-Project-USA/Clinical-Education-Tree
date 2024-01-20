@@ -1,4 +1,4 @@
-odoo.define("website_base.website_update_information", function(require) {
+odoo.define("website_base.website_update_student_information", function(require) {
     "use strict";
     var publicWidget = require("web.public.widget");
     var ajax = require('web.ajax');
@@ -12,10 +12,6 @@ odoo.define("website_base.website_update_information", function(require) {
             'input .updated': '_ShowButton',
             'change .updated': '_changeInput',
         },
-        // 
-
-
-
         /**
          * @class
          */
