@@ -202,8 +202,12 @@ class PlacementRequest(models.Model):
             rem_stu_tce2_ids = self.env['archive'].search([('student_id', 'in', student_ids.ids), ('placement_status', 'in', ['confirmed', 'completed']), ('year', '=', self.year), ('placement_term', '=', self.placement_term)]).mapped('student_id')# TODO: Add 'approved',  here 
             student_ids -= rem_stu_tce1_ids
             student_ids -= rem_stu_tce2_ids
+        elif self.placement_type == 'ice':
+            rem_stu_ice_ids = self.env['archive'].search([('student_id', 'in', student_ids.ids), ('placement_status', 'in', ['confirmed', 'completed']), ('year', '=', self.year), ('placement_term', '=', self.placement_term)]).mapped('student_id') # TODO: Add 'approved',  here 
+            student_ids -= rem_stu_ice_ids
+            
         archive_ids = self.env['archive'].search([('student_id', 'in', student_ids.ids), ('placement_status', 'in', ['confirmed', 'completed'])])# TODO: Add 'approved',  here 
-                  
+        
         # ------------------------------------------------------------------
         # Apply filter for setting
         if self.apply_setting:
