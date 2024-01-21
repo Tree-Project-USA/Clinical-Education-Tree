@@ -69,6 +69,7 @@ class Archive(models.Model):
     tce1_term = fields.Char(string='TCE1 Term', related='student_id.tce1_term', store=True,)
     tce2_term = fields.Char(string='TCE2 Term', related='student_id.tce2_term', store=True,)
     is_declined = fields.Boolean("Is Declined", tracking=True)
+    department_id = fields.Many2one(comodel_name='facility.department' , string='Department')
     
     def declined_student_offer(self):
         print(self.offer_id)

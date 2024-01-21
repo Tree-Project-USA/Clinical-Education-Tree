@@ -179,6 +179,7 @@ class PlacementRequest(models.Model):
         term = self.convert_term_year(self.placement_term, self.year)
         
         offer_ids = self.env['placement.offer'].sudo().search([('state', '=', 'offer_still_available'), ('placement_type', '=', self.placement_type), ('placement_term', '=', self.placement_term), ('year', '=', self.year)])
+        print(offer_ids)
         facility_ids = offer_ids.mapped('facility_id').filtered(lambda x : x.contract_id.state in ['open', 'require_renewal'])
         offer_ids = offer_ids.filtered(lambda offer_id: offer_id.facility_id.id in facility_ids.ids)
         archive_offer_ids = offer_ids.mapped('archive_offer_ids').filtered(lambda archive_offer_id: archive_offer_id.is_linked == False)
@@ -621,7 +622,7 @@ class PlacementRequest(models.Model):
     
     def action_view_offer_lines(self):
         action = self.env.ref('clinical_decision_making.action_archive_offer').read()[0]
-        action['domain'] = [('id', 'in', self.archive_offer_ids.ids)]
+        action['domain'] = [('id', 'in', self.archive_offer_ids.ids), ('active', '=', True)]
         action['context'] = {'create': False, 'delete': False, 'edit': False}
         return action
     

@@ -38,7 +38,8 @@
         'views/menu.xml',
 
 
-        'wizard/facility_contract_renewal_wizard.xml',
+        'wizards/facility_contract_renewal_wizard.xml',
+        'wizards/active_facility_depend_wizard.xml',
 
     ],
     'assets': {

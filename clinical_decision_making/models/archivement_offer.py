@@ -2,22 +2,31 @@
 
 from odoo import models, fields, api
 
+SELECTION_YEAR_RANGE = [(str(i),str(i)) for i in range(2020, 2500)]
 
 class ArchiveOffer(models.Model):
     _name = 'archive.offer'
     _description = 'Archive Offer'
-    _rec_name = 'facility_id'
+    _rec_name = 'department_id'
     
     active = fields.Boolean(string='Active', default=True)
     student_id = fields.Many2one(comodel_name='res.partner', string='Student')
     is_linked = fields.Boolean('is Joined', default=False, readonly=True)
-    facility_id = fields.Many2one(comodel_name='medical.facility', string='Facility')
+    department_id = fields.Many2one(comodel_name='facility.department' , string='Department')
+    facility_id = fields.Many2one(comodel_name='medical.facility', related='department_id.facility_id', store=True,)
     offer_id = fields.Many2one(comodel_name='placement.offer', string='Offer')
     offer_line_id = fields.Many2one(comodel_name='placement.offer.line', string='Line')
     setting = fields.Selection(related='offer_line_id.setting', store=True)
-    placement_type = fields.Selection(related='offer_id.placement_type', store=True)
-    placement_term = fields.Selection(related='offer_id.placement_term', store=True)
-    year = fields.Selection(related='offer_id.year', store=True)
+    placement_type = fields.Selection([
+        ('ice', 'ICE'),
+        ('tce', 'TCE'),
+    ], string='Clinical Experience Type')
+    placement_term = fields.Selection([
+        ('fall', 'Fall'),
+        ('spring', 'Spring'),
+        ('summer', 'Summer'),
+    ], string='Term')
+    year = fields.Selection(selection=SELECTION_YEAR_RANGE, string='Year')
     term = fields.Char(string='Term', compute='_compute_term', store=True)
     
     @api.depends('placement_term', 'year', 'offer_id', 'offer_id.placement_term', 'offer_id.year')

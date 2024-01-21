@@ -403,4 +403,12 @@ class ResPartner(models.Model):
         action['domain'] = [('id', 'in', self.alternative_schedule_ids.ids)]
         action['context'] = {'create': False, 'delete': False, 'edit': False}
         return action
+    
+    def archive_unarchive_student(self):
+        self.ensure_one()
+        if self.active:
+            self.active = False
+        else:
+            self.active = True
+        
         

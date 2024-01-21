@@ -31,6 +31,8 @@
                 <field name="model">placement.offer</field>
                 <field name="arch" type="xml">
                     <form>
+                        <field name="is_single_facility" invisible="1"/>
+                        <field name="active" invisible="1"/>
                         <header>
                             <button name="action_prograss" string="Approve" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'offer_details_entered')]}" data-hotkey="v"/>
                             <button name="action_draft" string="Return to Offer Details" type="object" class="oe_highlight" attrs="{'invisible': [('state', 'in', ['offer_details_entered', 'offer_matched'])]}" data-hotkey="w"/>
@@ -39,6 +41,7 @@
                         </header>
 
                         <sheet>
+                            <widget name="web_ribbon" title="Not Active" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
                             <div class="oe_button_box" name="button_box">
                                 <button name="action_open_archive_offer_ids" type="object" class="oe_stat_button" string="Avalible Offers">
                                     <field name="archive_offer_count" widget="statinfo" string="Available Offers"/>
@@ -56,25 +59,31 @@
                                 <group>
                                     <!-- <field name="student_id"/> -->
                                     <field name="facility_id" string="Facility" attrs="{'readonly': [('state', '!=', 'offer_details_entered')]}"/>
-                                    <field name="placement_type" attrs="{'readonly': [('state', '!=', 'offer_details_entered')]}"/>
-                                    <field name="placement_term" attrs="{'readonly': [('state', '!=', 'offer_details_entered')], 'required': [('state', '=', 'offer_details_entered')]}"/>
-                                    <field name="year" force_save="1" attrs="{'readonly': [('state', '!=', 'offer_details_entered')]}"/>
+                                    <field name="main_department_id" attrs="{'invisible':[('is_single_facility', '=', False)]}"/>
+
                                 </group>
                                 <group>
-                                    <field name="city"/>
-                                    <field name="geographical_state"/>
-                                    <field name="zip_code"/>
+                                    <field name="city" attrs="{'invisible':[('is_single_facility', '=', False)]}"/>
+                                    <field name="geographical_state" attrs="{'invisible':[('is_single_facility', '=', False)]}"/>
+                                    <field name="zip_code" attrs="{'invisible':[('is_single_facility', '=', False)]}"/>
                                 </group>
                             </group>
                             <notebook>
                                 <page string="Offers">
                                     <field name="line_ids" attrs="{'readonly': [('state', '!=', 'offer_details_entered')]}">
                                         <tree editable="bottom">
-                                            <field name="department_id" required="1"/>
-                                            <field name="department_ids" invisible="1"/>
                                             <field name="facility_id" invisible="1"/>
+                                            <field name="department_ids" invisible="1"/>
+                                            <field name="department_id" attrs="{'column_invisible':[('parent.is_single_facility', '=', True)], 'required':[('parent.is_single_facility', '=', False)]}"/>
+                                            <field name="placement_type" required="1"/>
+                                            <field name="placement_term" required="1"/>
+                                            <field name="year" force_save="1" required="1"/> 
                                             <field name="setting" string="Offer Setting Type"/>
                                             <field name="offers" string="Number of Offers"/>
+                                            <field name="street" optional="hide" attrs="{'column_invisible':[('parent.is_single_facility', '=', True)]}"/>
+                                            <field name="city" optional="hide" attrs="{'column_invisible':[('parent.is_single_facility', '=', True)]}"/>
+                                            <field name="state" optional="hide" attrs="{'column_invisible':[('parent.is_single_facility', '=', True)]}"/>
+                                            <field name="geographical_id" optional="hide" attrs="{'column_invisible':[('parent.is_single_facility', '=', True)]}"/>
                                         </tree>
                                     </field>
                                 </page>
@@ -94,8 +103,10 @@
             <field name="model">archive.offer</field>
             <field name="arch" type="xml">
                 <tree create="false" edit="false" delete="false">
+                    <field name="active" invisible="1"/>
                     <field name="student_id"/>
                     <field name="is_linked" />
+                    <field name="department_id"/>
                     <field name="facility_id"/>
                     <field name="offer_id"/>
                     <field name="offer_line_id"/>

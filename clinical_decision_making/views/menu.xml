@@ -8,7 +8,7 @@
         <field name="res_model">res.partner</field>
         <field name="view_mode">tree,form</field>
         <field name="domain">[('is_student', '=', True)]</field>
-        <field name="context">{'default_is_student': True, 'default_can_apply_hardship': False}</field>
+        <field name="context">{'default_is_student': True, 'default_can_apply_hardship': False, 'active_test': False}</field>
     </record>
 
     <record id="student_action_view2" model="ir.actions.act_window.view">
@@ -17,6 +17,7 @@
         <field name="view_id" ref="clinical_decision_making.student_view_tree"/>
         <field name="act_window_id" ref="student_action"/>
     </record>
+
     <record id="student_action_view3" model="ir.actions.act_window.view">
         <field eval="2" name="sequence"/>
         <field name="view_mode">form</field>
@@ -24,28 +25,13 @@
         <field name="act_window_id" ref="student_action"/>
     </record>
 
-    <!-- <record id="cpdm_tree_action" model="ir.actions.act_window">
-        <field name="type">ir.actions.act_window</field>
-        <field name="name">Internship</field>
-        <field name="res_model">cpdm.tree</field>
-        <field name="view_mode">tree,form</field>
-    </record> -->
-
-    <!-- <record id="cohort_action" model="ir.actions.act_window">
-        <field name="type">ir.actions.act_window</field>
-        <field name="name">Placement</field>
-        <field name="res_model">cohort</field>
-        <field name="context">{'group_by': 'cpdm_tree_id', 'create': False}</field>
-        <field name="view_mode">tree,form</field>
-    </record> -->
-
     <record id="scce_action" model="ir.actions.act_window">
         <field name="type">ir.actions.act_window</field>
         <field name="name">SCCE</field>
         <field name="res_model">res.partner</field>
         <field name="view_mode">tree,form</field>
         <field name="domain">[('is_scce', '=', True)]</field>
-        <field name="context">{'default_is_scce': True}</field>
+        <field name="context">{'default_is_scce': True, 'active_test': False}</field>
     </record>
 
   <record id="scce_tree_view" model="ir.actions.act_window.view">
@@ -66,6 +52,7 @@
         <field name="type">ir.actions.act_window</field>
         <field name="name">Facilities</field>
         <field name="res_model">medical.facility</field>
+        <field name="context">{'active_test': False}</field>
         <field name="view_mode">tree,form</field>
     </record>
 

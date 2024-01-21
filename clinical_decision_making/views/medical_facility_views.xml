@@ -43,9 +43,31 @@
         <field name="arch" type="xml">
             <form>
                 <field name="contract_attachment" invisible="1"/>
+                <field name="is_single_facility" invisible="1"/>
+                <field name="active" invisible="1"/>
+                <header>
+                <button name="facility_multi_department"
+                    string="Apply Multi Department"
+                    type="object"
+                    attrs="{'invisible':[('is_single_facility', '=', False)]}"
+                />
+                </header>
                 <sheet>
+                    <widget name="web_ribbon" title="Not Active" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
                     <div name="button_box" position="inside">
                         <field name="contract_warning" invisible="1"/>
+            
+                        <button type="object" name="action_open_department_archive"
+                                class="text-center fa fa-fw fa-circle text-success"
+                                attrs="{'invisible': [('active', '=', False)]}">
+                            <span style="padding:10px;">Active</span>
+                        </button>
+                        <button type="object" name="action_open_department_archive"
+                                class="fa fa-fw fa-circle text-center"
+                                attrs="{'invisible': [('active', '=', True)]}">
+                            <span style="padding:10px;">Not Active</span>
+                        </button>
+
                         <button name="action_open_contract_history"
                             class="oe_stat_button"
                             icon="fa-book"
@@ -56,7 +78,7 @@
                                 </span>
                             </div>
                         </button>
-                        <button
+                        <!-- <button
                             name="print_report"
                             type="object"
                             string="Contact Attachment File"
@@ -64,6 +86,9 @@
                             icon="fa-download"
                             attrs="{'invisible' : [('contract_attachment', '=', False)]}"
                             >
+                        </button> -->
+                        <button name="action_open_facility_department" type="object" class="oe_stat_button" string="Department">
+                            <field name="department_count" widget="statinfo" string="Departments"/>
                         </button>
                         <button
                             name="action_open_placement_offer"
@@ -88,26 +113,28 @@
                             <field name="scce_primary_id" string="SCCE Primary" invisible="1"/>
                             <field name="scce_first_name" string="SCCE Last Name" invisible="1"/>
                             <field name="scce_last_name" string="SCCE Last Name" invisible="1"/>
-                            <field name="setting_ids" widget="many2many_tags"/>
+                            <field name="setting_ids" widget="many2many_tags" attrs="{'invisible':[('is_single_facility', '=', False)]}"/>
                         </group>
                         <group>
-                            <field name="city"/>
-                            <field name="state"/>
-                            <field name="geographical_id" required="1"/>
+                            <field name="city" attrs="{'invisible':[('is_single_facility', '=', False)]}"/>
+                            <field name="state" attrs="{'invisible':[('is_single_facility', '=', False)]}"/>
+                            <field name="geographical_id" attrs="{'invisible':[('is_single_facility', '=', False)]}"/>
+                            <field name="setting_ids" widget="many2many_tags" attrs="{'invisible':[('is_single_facility', '=', True)]}"/>
                         </group>
                     </group>
                     <notebook>
-                        <page string="Department">
+                        <page string="Department" attrs="{'invisible':[('is_single_facility', '=', True)]}">
                             <field name="department_ids">
                                 <tree editable="bottom" decoration-primary="is_main_department==True">
                                     <field name="is_main_department" invisible="1"/>
                                     <field name="facility_id" invisible="1"/>
-                                    <field name="name" required="1" attrs="{'readonly': [('is_main_department', '=', True)]}"/>
+                                    <field name="name" required="1"/>
                                     <field name="scce_ids" domain="[('id', 'in', parent.scce_ids)]" widget="many2many_tags"/>
                                     <field name="setting_ids" widget="many2many_tags"/>
                                     <field name="city"/>
                                     <field name="state"/>
-                                    <field name="geographical_id" required="1" attrs="{'readonly': [('is_main_department', '=', True)]}"/>
+                                    <field name="geographical_id" required="1"/>
+                                    <field name="active_state" widget="badge" decoration-danger="active_state == 'not_active'" decoration-success="active_state == 'active'"/>
                                     <button name="action_view_facility_department" type="object" icon="fa-external-link" title="Open Department Details"/>
                                 </tree>
                             </field>

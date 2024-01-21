@@ -59,6 +59,16 @@
                 <field name="alternative_schedule_count" invisible="1"/>
                 <sheet>
                     <div name="button_box" position="inside">
+                        <button type="object" name="archive_unarchive_student"
+                                class="text-center fa fa-fw fa-circle text-success"
+                                attrs="{'invisible': [('active', '=', False)]}">
+                            <span style="padding:10px;">Active</span>
+                        </button>
+                        <button type="object" name="archive_unarchive_student"
+                                class="fa fa-fw fa-circle text-center"
+                                attrs="{'invisible': [('active', '=', True)]}">
+                            <span style="padding:10px;">Not Active</span>
+                        </button>
                         <button name="action_open_hardship" type="object" class="oe_stat_button" attrs="{'invisible': [('hardship_count', '=', 0)]}">
                             <span class="o_stat_text">Hardship<br/>Request</span>
                         </button>
@@ -66,7 +76,7 @@
                             <span class="o_stat_text">Alternative Schedule History</span>
                         </button>
                     </div>
-                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+                    <widget name="web_ribbon" title="Not Active" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
                     <div>
                         <h3>
                             <field name="studentid" placeholder="Student ID" attrs="{'readonly': [('id', '!=', False)]}"/>

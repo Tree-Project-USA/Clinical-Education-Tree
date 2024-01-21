@@ -10,6 +10,7 @@ class MedicalFacility(models.Model):
     _description = 'Medical Facility (Site)'
     _rec_name = 'name'
 
+    active = fields.Boolean(string='Active', compute='_compute_active')              
     facilityid = fields.Char(string='Facility ID', copy=False)
     name = fields.Char(string='Medical Facility Name', required=True)
     offer_id = fields.One2many('placement.offer', 'facility_id',string='Placement Offers')
@@ -34,16 +35,34 @@ class MedicalFacility(models.Model):
     scce_last_name = fields.Char(related='scce_primary_id.last_name')
     offer_ids = fields.One2many(comodel_name='placement.offer', inverse_name='facility_id', string='Offers')
     archive_offer_count = fields.Integer(compute='_compute_archive_offer_count', string='Archive Offer Count')
+    department_count = fields.Integer(compute='_compute_department_count', string='Department Count')
     department_ids = fields.One2many(comodel_name='facility.department', inverse_name='facility_id', string='Facility Department')
     setting_ids = fields.Many2many(comodel_name='preferred.setting', string='Setting', compute='_compute_setting_ids')    
     main_department_id = fields.Many2one(comodel_name='facility.department', string='Main Department')
-    is_single_facility = fields.Boolean(string='Single Facility', default=False)
+    is_single_facility = fields.Boolean(string='Single Facility', default=True)
     
+    def facility_multi_department(self):
+        self.write({
+            'is_single_facility': False
+        })
     
-    @api.depends('offer_ids')
+    @api.depends('department_ids', 'department_ids.active')
+    def _compute_active(self):
+        for rec in self:
+            if all(not department_id.active for department_id in rec.department_ids):
+                rec.active = False
+            else:
+                rec.active = True
+    
+    @api.depends('offer_ids', 'offer_ids.active')
     def _compute_archive_offer_count(self):
         for rec in self:
-            rec.archive_offer_count = len(rec.offer_ids.mapped('archive_offer_ids'))
+            rec.archive_offer_count = len(rec.offer_ids.filtered(lambda x: x.active == True).mapped('archive_offer_ids'))
+    
+    @api.depends('department_ids', 'department_ids.active')
+    def _compute_department_count(self):
+        for rec in self:
+            rec.department_count = len(rec.department_ids.filtered(lambda x: x.active == True or x.active == False))
             
     @api.depends('department_ids', 'department_ids.setting_ids')
     def _compute_setting_ids(self):
@@ -110,6 +129,8 @@ class MedicalFacility(models.Model):
                     'target': 'new',
         }
 
+    # View ButtonBox Action Methods
+    #------------------------------------------------------------------------------   
     def action_open_placement_offer(self):
         offer_ids = self.env['placement.offer'].search([('facility_id', '=', self.id)])
         return {
@@ -120,7 +141,16 @@ class MedicalFacility(models.Model):
             'domain': [('id', 'in', offer_ids.ids)],
             'context': {'default_facility_id': self.id, 'delete': False}
         }
-    
+        
+    def action_open_facility_department(self):
+        self.ensure_one()
+        action = self.env['ir.actions.actions']._for_xml_id('clinical_decision_making.action_facility_department')
+        action.update({
+            'domain': [('id', 'in', self.department_ids.ids)],
+            'context': {'default_facility_id': self.id, 'active_test': False},
+        })
+        return action
+        
     def action_open_placement_archive_offer(self):
         archive_offer_ids = self.offer_ids.mapped('archive_offer_ids')
         action = self.env['ir.actions.actions']._for_xml_id('clinical_decision_making.action_archive_offer')
@@ -129,7 +159,7 @@ class MedicalFacility(models.Model):
             'view_id': self.env.ref('clinical_decision_making.archive_offer_view_tree').id,
             'views': [(self.env.ref('clinical_decision_making.archive_offer_view_tree').id, 'tree')],
             'res_id': self.id,
-            'domain': [('id', 'in', archive_offer_ids.ids)],
+            'domain': [('id', 'in', archive_offer_ids.ids), ('active', '=', True)],
         })
         return action
         
@@ -206,6 +236,37 @@ class MedicalFacility(models.Model):
     def unlink(self):
         return super(MedicalFacility, self.with_context(unlink_main_department=True)).unlink()
 
+    # ARCHIVES/ UNARCHIVES Methods
+    #------------------------------------------------------------------------------   
+    # def action_open_department_archive(self):
+    #     department_ids = self.env['facility.department'].search([('id', 'in', self.facility_id.department_ids.ids)])
+    #     return {
+    #         'name': _("Medical Facility"),
+    #         'type': 'ir.actions.act_window',
+    #         'view_mode': 'tree,form',
+    #         'res_model': 'medical.facility',
+    #         'domain': [('id', 'in', department_ids.ids)],
+    #         'context': {'create': False, 'edit': False, 'delete': False},
+    #         'target': 'new'
+    #     }
+
+    def action_open_department_archive(self):
+        self.ensure_one() 
+        if self.is_single_facility:
+            if self.active:
+                self.main_department_id.archive_department_and_offers()
+                self.main_department_id.active = False
+                self.active = False
+            else:
+                self.main_department_id.unarchive_department_and_offers()
+                self.main_department_id.active = True
+                self.active = True
+        else:
+            action = self.env['ir.actions.actions']._for_xml_id('clinical_decision_making.action_active_facility_depend_wizard')
+            action.update({
+                'context': {'default_facility_id': self.id},
+            })
+            return action
 class SCCEFacility(models.Model):
 
     _name = 'scce.facility'
