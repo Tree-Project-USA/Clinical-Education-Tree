@@ -11,196 +11,44 @@
                 >
                 <input type="hidden" name="csrf_token"
                     t-att-value="request.csrf_token()" />
-                <input type="hidden" name="facility_id"
+                <input type="hidden" name="facility_id" id="facility_id"
                     t-att-value="facility_id.id" />
+                    <input type="hidden" name="len_department" value="1" />
                     <div class="row mt-4">
-                        <div class="col-4">
-                            <div class="form-group row">
-                                <label for="staticEmail" class="col-form-label">Facility Name</label>
-                                <div>
-                                    <input
-                                        type="text"
-                                        id="facility_name"
-                                        class="form-control"
-                                        name="facility_name"
-                                        t-att-value="facility_id.name"
-                                        readonly="readonly"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="form-group row">
-                                <label for="staticEmail" class="col-form-label">University</label>
-                                <div>
-                                    <input
-                                        type="text"
-                                        id="university"
-                                        class="form-control"
-                                        name="university"
-                                        t-att-value="company_id.name"
-                                        readonly="readonly"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="row">
-                                <label class="col-form-label" for="placement_term">Term</label>
-                                <select
-                                    class="form-select"
-                                    name="placement_term"
-                                    required="required"
-                                >
-                                    <option
-                                        value=""
-                                        selected="selected"
-                                        disabled="1">
-                                        select...
-                                    </option>
-                                    <option
-                                        name='placement_term'
-                                        value="fall"
-                                        id="placement_term"
+                        <div>
+                            <table class="table add_file table-bordered">
+                              <thead>
+                                <tr>
+                                  <th class="text-center" colspan="7">Departments</th>
+                                </tr>
+                                <tr>
+                                    <th class="text-center">Department</th>
+                                    <th class="text-center">CE Type</th>
+                                    <th class="text-center">Term</th>
+                                    <th class="text-center">Year</th>
+                                    <th class="text-center">Offer Setting Type</th>
+                                    <th class="text-center">Number of Offers</th>
+                                    <th class="text-center"></th>
+                                </tr>
+                              </thead>
+                              <tbody id="add_department">
+                                
+                              </tbody>
+                            
+                              <tfooter>
+                                <tr>
+                                  <td colspan="7">
+                                    <a 
+                                      id="add_departments" 
+                                      class="btn m-2"
+                                      style="background-color:#ab8631;color:#fff;" 
                                     >
-                                        FALL
-                                    </option>
-                                    <option
-                                        name='placement_term'
-                                        value="spring"
-                                        id="placement_term"
-                                    >
-                                        SPRING
-                                    </option>
-                                    <option
-                                        name='placement_term'
-                                        value="summer"
-                                        id="placement_term"
-                                    >
-                                        SUMMER
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row mt-4">
-                        <div class="col-4">
-                            <div class="row">
-                                <label for="staticEmail" class="col-form-label">Year</label>
-                                <select
-                                    class="form-select"
-                                    name="term"
-                                    required="required"
-                                >
-                                <option
-                                    value=""
-                                    selected="selected"
-                                    disabled="1">
-                                    select...
-                                </option>
-                                <t t-foreach="SELECTION_YEAR_RANGE" t-as="nationality">
-                                    <option
-                                    t-att-value="nationality[1]"
-                                    >
-                                    <t t-esc="nationality[1]" />
-                                    </option>
-                                </t>
-                                </select>
-  
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="row">
-                                <label for="staticEmail" class="col-form-label">CE Type</label>
-                                <select
-                                    class="form-select"
-                                    name="placement_type"
-                                    required="required"
-                                >
-                                    <option
-                                        value=""
-                                        selected="selected"
-                                        disabled="1">
-                                        select...
-                                    </option>
-                                    <option
-                                        name='placement_type'
-                                        value="ice"
-                                        id="placement_type"
-                                    >
-                                        ICE
-                                    </option>
-                                    <option
-                                        name='placement_type'
-                                        value="tce"
-                                        id="placement_type"
-                                    >
-                                        TCE I
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="form-group row">
-                                <label for="staticEmail" class="col-form-label">CE Date</label>
-                                <div>
-                                    <input
-                                        type="text"
-                                        id="first_name"
-                                        class="form-control"
-                                        name="first_name"
-                                        t-att-value=""
-                                        readonly="readonly"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row mt-4">
-                        <div class="col-4">
-                            <div class="form-group row">
-                                <label for="staticEmail" class="col-form-label">Availability</label>
-                                <div>
-                                    <input
-                                        type="text"
-                                        id="offers"
-                                        class="form-control"
-                                        name="offers"
-                                        t-att-value=""
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="form-group row">
-                                <label for="staticEmail" class="col-form-label">Setting</label>
-                                <select
-                                    class="form-select"
-                                    name="setting"
-                                    required="required"
-                                >
-                                    <option
-                                        value=""
-                                        selected="selected"
-                                        disabled="1">
-                                        select...
-                                    </option>
-                                    <option
-                                        name='setting'
-                                        value="ip"
-                                        id="setting"
-                                    >
-                                        IP
-                                    </option>
-                                    <option
-                                        name='setting'
-                                        value="op"
-                                        id="setting"
-                                    >
-                                        OP
-                                    </option>
-                                </select>
-                            </div>
+                                      <h6>Add Department</h6>
+                                    </a>
+                                  </td>
+                                </tr>
+                              </tfooter>
+                            </table>
                         </div>
                     </div>
                     <div class="clearfix oe_login_buttons mt-4">

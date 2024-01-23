@@ -133,8 +133,11 @@
                             <field name="archive_ids" mode="tree">
                                 <tree editable="bottom" delete="false">
                                     <field name="student_id" invisible="1"/>
+                                    <field name="term"/>
+                                    <field name="department_id" required="1" attrs="{'readonly': [('is_declined', '=', True)]}"/>
+                                    <field name="archive_offer_id"/>
                                     <field name="is_declined" invisible="1"/>
-                                    <field name="facility_id" required="1" attrs="{'readonly': [('is_declined', '=', True)]}"/>
+                                    <field name="facility_id"/>
                                     <field name="placement_type" required="1" attrs="{'readonly': [('is_declined', '=', True)]}"/>
                                     <field name="placement_term" readonly="1" force_save="1"/>
                                     <field name="year" readonly="1" force_save="1"/>

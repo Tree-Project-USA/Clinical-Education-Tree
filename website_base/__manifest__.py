@@ -46,6 +46,7 @@
             "website_base/static/src/js/state_hardship.js",
             "website_base/static/src/js/website_update_student_information.js",
             "website_base/static/src/js/website_update_scce_information.js",
+            "website_base/static/src/js/departments.js",
         ],
     },
     "installable": True,

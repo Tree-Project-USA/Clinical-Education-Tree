@@ -227,7 +227,7 @@
                         </div>
                     </form>
                     <div class="clearfix oe_login_buttons my-4">
-                        <a t-attf-href="/facility/placement/offer/#{facility_id.id}"
+                        <a t-attf-href="/facility/placement/offer/#{facility_id}"
                             class="float-end custom_create btn btn-block "
                             style="background-color:#ab8631;color:#fff;">
                             Back To Facility

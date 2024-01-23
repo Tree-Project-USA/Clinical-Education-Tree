@@ -52,6 +52,11 @@ class ResPartner(models.Model):
     alternative_schedule_count = fields.Integer(compute='_compute_alternative_schedule_count', string='Alternative Schedule Count')
     alternative_schedule_ids = fields.One2many('alternative.schedule', 'student_id', string='Alternative Schedule')
     
+    @api.onchange('archive_ids', 'archive_ids.archive_offer_id')
+    def _onchange_archive_ids(self):
+        for rec in self:
+            for res in rec.archive_ids:
+                res.archive_offer_id.student_id = self.id
     
     @api.depends('hardship_ids')
     def _compute_hardship_count(self):
