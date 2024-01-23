@@ -31,6 +31,7 @@
         "views/availability_template.xml",
         "views/show_placement_offer_facility_template.xml",
         "views/student_profile_template.xml",
+        "views/show_facility_student_templates.xml",
     ],
     # only loaded in demonstration mode
     "demo": [],
