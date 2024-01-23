@@ -98,6 +98,9 @@
                             icon="fa-ticket"
                             >
                         </button>
+                        <button name="action_view_placement_history" type="object" class="oe_stat_button" string="Placement History">
+                            <field name="archive_count" widget="statinfo" string="Placement History"/>
+                        </button>
                         <button name="action_open_placement_archive_offer" type="object" class="oe_stat_button" string="Avalible Offers">
                             <field name="archive_offer_count" widget="statinfo" string="Offers History"/>
                         </button>
@@ -148,6 +151,23 @@
                                     <button string="Set to Primary" name="action_set_primary" type="object" icon="fa-check" attrs="{'invisible': [('is_primary_scce', '=', True)]}"/>
                                     <field name="is_secondary_scce" widget="boolean_toggle" readonly="1" invisible="1"/>
                                     <button string="Set to Secondary" name="action_set_secondary" type="object" icon="fa-check" attrs="{'invisible': [('is_secondary_scce', '=', True)]}"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Placement History">
+                            <field name="archive_ids" options="{'no_open': True, 'no_create': True, 'create': False}" widget="one2many">
+                                <tree>
+                                    <field name="department_id"/>
+                                    <field name="student_id"/>
+                                    <field name="placement_type"/>
+                                    <field name="setting"/>
+                                    <field name="placement_term"/>
+                                    <field name="year"/>
+                                    <field name="city"/>
+                                    <field name="state"/>
+                                    <field name="geographical_id"/>
+                                    <field name="placement_status"/>
+                                    <field name="is_show_student" widget="boolean_toggle" />
                                 </tree>
                             </field>
                         </page>

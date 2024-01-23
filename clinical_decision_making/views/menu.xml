@@ -183,6 +183,12 @@
         action="hardship_request_action"
         parent="student_details_menu"
         sequence="2"/>
+    <menuitem
+        id="attachment_request_menu"
+        name="Medical Documnet"
+        action="clinical_decision_making.action_attachment_request"
+        parent="student_details_menu"
+        sequence="3"/>
     
     <menuitem
         id="clinic_details_menu"
@@ -231,6 +237,13 @@
         action="program_action"
         parent="configuration_menu"
         sequence="99"/>
+    
+    <menuitem
+        id="attachment_type_menu"
+        name="Attachment Type"
+        action="clinical_decision_making.action_attachment_type"
+        parent="configuration_menu"
+        sequence="100"/>
     
     <!-- <menuitem
         id="location_setting_menu"

@@ -12,6 +12,7 @@ class Archive(models.Model):
     _description = 'Archive Placement'
     _rec_name = 'department_id'
         
+    active = fields.Boolean(string='Active', default=True)
     studentid = fields.Char(related='student_id.studentid')
     student_id = fields.Many2one(comodel_name='res.partner', string='Student Name', tracking=True)
     first_name = fields.Char(related='student_id.first_name')
@@ -259,10 +260,6 @@ class Archive(models.Model):
         return action
     
     def confirm_placement_status(self):
-        print(       self.search([('id', '!=', self.id), ('student_id', '=', self.student_id.id), ('placement_type', '=', self.placement_type), ('placement_term', '=', self.placement_term)]))
-        print(       self.search([('id', '!=', self.id), ('student_id', '=', self.student_id.id), ('placement_type', '=', self.placement_type), ('placement_term', '=', self.placement_term)]))
-        print(       self.search([('id', '!=', self.id), ('student_id', '=', self.student_id.id), ('placement_type', '=', self.placement_type), ('placement_term', '=', self.placement_term)]))
-        print(       self.search([('id', '!=', self.id), ('student_id', '=', self.student_id.id), ('placement_type', '=', self.placement_type), ('placement_term', '=', self.placement_term)]))
         self.search([('id', '!=', self.id), ('student_id', '=', self.student_id.id), ('placement_type', '=', self.placement_type), ('placement_term', '=', self.placement_term)]).write({
             'placement_status': 'not_placed'
         })
