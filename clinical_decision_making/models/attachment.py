@@ -20,6 +20,7 @@ class Attachment(models.Model):
     _rec_name = "attachment_type"
 
     student_id = fields.Many2one("res.partner", string="Student")
+    request_id = fields.Many2one("attachment.request", string="Request")
     attachment_type = fields.Many2one(
         "attachment.type", string="Attachment Type"
     )

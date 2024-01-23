@@ -51,6 +51,7 @@ class ResPartner(models.Model):
     hardship_count = fields.Integer(compute='_compute_hardship_count', string='HardShip Count')
     alternative_schedule_count = fields.Integer(compute='_compute_alternative_schedule_count', string='Alternative Schedule Count')
     alternative_schedule_ids = fields.One2many('alternative.schedule', 'student_id', string='Alternative Schedule')
+    medical_attachment_ids = fields.One2many(comodel_name='attachments', inverse_name='student_id', string='Medical Document')
     
     @api.onchange('archive_ids', 'archive_ids.archive_offer_id')
     def _onchange_archive_ids(self):
@@ -58,7 +59,6 @@ class ResPartner(models.Model):
             for res in rec.archive_ids:
                 res.archive_offer_id.student_id = self.id
     
-    medical_attachment_ids = fields.One2many(comodel_name='attachments', inverse_name='student_id', string='Medical Document')
     
     @api.depends('hardship_ids')
     def _compute_hardship_count(self):

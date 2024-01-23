@@ -13,11 +13,7 @@ class AttachmentRequest(models.Model):
     _rec_name = 'student_id'
 
     student_id = fields.Many2one(comodel_name='res.partner', string='Student Name', domain=[('is_student', '=', True)], tracking=True, required=True)
-    medical_attachment_ids = fields.Many2many(
-        comodel_name='attachments',
-        string="Attachments",
-        tracking=True
-    )
+    medical_attachment_ids = fields.One2many(comodel_name='attachments', inverse_name='request_id', string='Medical Document')
     note = fields.Text('Internal Notes', tracking=True)
     state = fields.Selection(
         selection=[
