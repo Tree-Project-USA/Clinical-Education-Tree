@@ -40,6 +40,9 @@ class MedicalFacility(models.Model):
     setting_ids = fields.Many2many(comodel_name='preferred.setting', string='Setting', compute='_compute_setting_ids')    
     main_department_id = fields.Many2one(comodel_name='facility.department', string='Main Department')
     is_single_facility = fields.Boolean(string='Single Facility', default=True)
+    archive_ids = fields.One2many(comodel_name='archive', inverse_name='facility_id', string='Placement History')
+    archive_count = fields.Integer(compute='_compute_archive_count', string='Placement History Count')
+    
     
     def facility_multi_department(self):
         self.write({
@@ -53,6 +56,11 @@ class MedicalFacility(models.Model):
                 rec.active = False
             else:
                 rec.active = True
+    
+    @api.depends('archive_ids')
+    def _compute_archive_count(self):
+        for rec in self:
+            rec.archive_count = len(rec.archive_ids)
     
     @api.depends('offer_ids', 'offer_ids.active')
     def _compute_archive_offer_count(self):
@@ -161,6 +169,16 @@ class MedicalFacility(models.Model):
             'res_id': self.id,
             'domain': [('id', 'in', archive_offer_ids.ids), ('active', '=', True)],
         })
+        return action
+    
+    def action_view_placement_history(self):
+        self.ensure_one()
+        action = self.env.ref('clinical_decision_making.archive_action').read()[0]
+        action['view_mode'] = 'tree'
+        action['views'] = [(self.env.ref('clinical_decision_making.archive_view_tree').id, 'tree')]
+        action['view_id'] = self.env.ref('clinical_decision_making.archive_view_tree').id
+        action['context'] = {'default_facility_id': self.id}
+        action['domain'] = [('id', 'in', self.archive_ids.ids), ('active', '=', True)]
         return action
         
     def get_accepted_distance_students(self, student_ids):

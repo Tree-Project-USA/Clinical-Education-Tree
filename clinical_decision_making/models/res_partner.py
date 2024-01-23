@@ -58,6 +58,8 @@ class ResPartner(models.Model):
             for res in rec.archive_ids:
                 res.archive_offer_id.student_id = self.id
     
+    medical_attachment_ids = fields.One2many(comodel_name='attachments', inverse_name='student_id', string='Medical Document')
+    
     @api.depends('hardship_ids')
     def _compute_hardship_count(self):
         for rec in self:

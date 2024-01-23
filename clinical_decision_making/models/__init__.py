@@ -18,3 +18,5 @@ from . import preferred_setting
 from . import res_company
 from . import alternative_schedule
 from . import facility_department
+from . import attachment
+from . import attachment_request

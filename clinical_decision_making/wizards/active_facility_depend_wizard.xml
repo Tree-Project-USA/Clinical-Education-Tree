@@ -18,32 +18,15 @@
                             <field name="city"/>
                             <field name="state"/>
                             <field name="geographical_id" readonly="1"/>
-
-                            <button name="archive_department" string="Archive Department" type="object" class="btn btn-link" onclick="return false;" attrs="{'invisible':[('active', '!=', True)]}"/>
-
-                            <!-- Archive Department and Offers -->
-                            <button name="archive_department_and_offers" string="Archive Department and Offers" type="object" class="btn btn-link" attrs="{'invisible':[('active', '!=', True)]}"/>
-
-                            <!-- Archive Department and Unlink Offers -->
-                            <button name="archive_department_and_unlink_offers" string="Archive Department and Unlink Offers" type="object" class="btn btn-link" attrs="{'invisible':[('active', '!=', True)]}"/>
-
-                            <!-- Unarchive Department -->
-                            <button name="unarchive_department" string="Unarchive Department" type="object" class="btn btn-link" attrs="{'invisible':[('active', '=', True)]}"/>
-
-                            <!-- Unarchive Department and Offers -->
-                            <button name="unarchive_department_and_offers" string="Unarchive Department and Offers" type="object" class="btn btn-link" attrs="{'invisible':[('active', '=', True)]}"/>
-
-                            <!-- Unarchive Department and Unlink Offers -->
-                            <button name="unarchive_department_and_unlink_offers" string="Unarchive Department and Unlink Offers" type="object" class="btn btn-link" attrs="{'invisible':[('active', '=', True)]}"/>
+                            <button name="archive_department" string="Inactive but allow use of existing offers" type="object" class="btn btn-link" onclick="return false;" attrs="{'invisible':[('active', '!=', True)]}"/>
+                            <button name="archive_department_and_unlink_offers" string="Inactive" type="object" class="btn btn-link" attrs="{'invisible':[('active', '!=', True)]}"/>
+                            <button name="unarchive_department" string="Active" type="object" class="btn btn-link" attrs="{'invisible':[('active', '=', True)]}"/>
                         </tree>
                     </field>
                 <footer>
-                        <button name="archive_department" string="Archive Department" type="object" class="btn btn-primary"/>
-                        <button name="archive_department_and_offers" string="Archive Department and Offers" type="object" class="btn btn-success"/>
-                        <button name="archive_department_and_unlink_offers" string="Archive Department and Unlink Offers" type="object" class="btn btn-danger"/>
-                        <button name="unarchive_department" string="Unarchive Department" type="object" class="btn btn-primary"/>
-                        <button name="unarchive_department_and_offers" string="Unarchive Department and Offers" type="object" class="btn btn-success"/>
-                        <button name="unarchive_department_and_unlink_offers" string="Unarchive Department and Unlink Offers" type="object" class="btn btn-danger"/>
+                    <button name="archive_department" string="Inactive but allow use of existing offers" type="object" class="btn btn-primary"/>
+                    <button name="archive_department_and_unlink_offers" string="Inactive" type="object" class="btn btn-danger"/>
+                    <button name="unarchive_department" string="Active" type="object" class="btn btn-primary"/>
                     <button special="cancel" string="Cancel"/>
                 </footer>
             </form>

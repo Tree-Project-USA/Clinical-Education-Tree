@@ -34,11 +34,14 @@ class FacilityDepartment(models.Model):
         ],
         compute='_compute_active_state',
     )
-
+    archive_ids = fields.One2many(comodel_name='archive', inverse_name='department_id', string='Placement History')
+    archive_count = fields.Integer(compute='_compute_count', string='Placement History Count')
+            
     def _compute_count(self):
         for rec in self:
             rec.student_count = len(self.env['archive'].with_context(active_test=False).search([('department_id', '=', rec.id), ('placement_status', 'in', ['completed', 'confirmed'])]).mapped('student_id'))
             rec.archive_offer_count = len(self.env['archive.offer'].search([('department_id', '=', rec.id)]))
+            rec.archive_count = len(rec.archive_ids)
             
     @api.depends('active')
     def _compute_active_state(self):
@@ -96,6 +99,17 @@ class FacilityDepartment(models.Model):
         action['context'] = {'default_facility_id': self.facility_id.id}
         return action
     
+    def action_view_placement_history(self):
+        self.ensure_one()
+        action = self.env.ref('clinical_decision_making.archive_action').read()[0]
+        action['view_mode'] = 'tree'
+        action['views'] = [(self.env.ref('clinical_decision_making.archive_view_tree').id, 'tree')]
+        action['view_id'] = self.env.ref('clinical_decision_making.archive_view_tree').id
+        action['context'] = {'default_department_id': self.id}
+        action['domain'] = [('id', 'in', self.archive_ids.ids), ('active', '=', True)]
+        return action
+
+       
     # Archive Methods
     #------------------------------------------------------------------------------   
     

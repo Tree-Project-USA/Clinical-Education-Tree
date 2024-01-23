@@ -29,3 +29,6 @@ access_mail_template_portal,mail.template.portal,mail.model_mail_template,,1,1,1
 access_alternative_schedule_manager,alternative_schedule_manager,model_alternative_schedule,,1,1,1,1
 access_facility_department_manager,facility_department_manager,model_facility_department,,1,1,1,1
 access_active_facility_depend_wizard_manager,active_facility_depend_wizard_manager,model_active_facility_depend_wizard,,1,1,1,1
+access_attachments_manager,attachments_manager,model_attachments,,1,1,1,1
+access_attachment_type_manager,attachment_type_manager,model_attachment_type,,1,1,1,1
+access_attachment_request_manager,attachment_request_manager,model_attachment_request,,1,1,1,1

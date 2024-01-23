@@ -137,7 +137,8 @@
                                     <field name="department_id" required="1" attrs="{'readonly': [('is_declined', '=', True)]}"/>
                                     <field name="archive_offer_id"/>
                                     <field name="is_declined" invisible="1"/>
-                                    <field name="facility_id"/>
+                                    <field name="facility_id" required="1" attrs="{'readonly': [('is_declined', '=', True)]}"/>
+                                    <field name="department_id" required="1" attrs="{'readonly': [('is_declined', '=', True)]}"/>
                                     <field name="placement_type" required="1" attrs="{'readonly': [('is_declined', '=', True)]}"/>
                                     <field name="placement_term" readonly="1" force_save="1"/>
                                     <field name="year" readonly="1" force_save="1"/>
@@ -163,6 +164,12 @@
                                 </tree>
                             </field>
                         </page>
+                        <page name='internal_notes' string="Post Placement Managament">
+                        </page>
+                        <page name='medical_attachment_ids' string="Medical Document">
+                            <field name="medical_attachment_ids"/>
+                        </page>
+                        
                         <page name='internal_notes' string="Notes">
                             <field name="comment" placeholder="Internal notes..."/>
                         </page>
