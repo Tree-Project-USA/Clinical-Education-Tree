@@ -138,10 +138,6 @@ odoo.define("website_base.departments", function(require) {
             ajax.jsonRpc("/departments", 'call', {
                 'id': facility_id,
             }).then(function(result) {
-                console.log(result)
-                console.log(result["department_ids"])
-                console.log(result["company_id"])
-                console.log(result["SELECTION_YEAR_RANGE"])
                 _.each(result["department_ids"], function(value){
                     $(department).append($('<option>', {
                         value: value.id,

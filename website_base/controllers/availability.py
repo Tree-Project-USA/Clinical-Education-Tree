@@ -59,15 +59,6 @@ class SubmitAvailability(http.Controller):
         archive_id = request.env['archive'].sudo().search([
             ('id', '=', id),
         ])
-        for student in archive_id.mapped("student_id"):
-            comp_tce1 = request.env['archive'].search_count([('student_id', '=', student.id), ('placement_type', '=', 'tce1'), ('placement_status', 'in', ['completed', 'confirmed'])])
-            if comp_tce1:
-                pass
-            else:
-                error = _("Student %s should take TCE 1 term before TCE 2" % (student.name))
-                if error:
-                    values["error"] = error
-                    return request.redirect_query("/facility/placement/offer/%s" % facility_id, values)
         archive_id.sudo().write({
             "placement_status": "confirmed"
         })
@@ -112,10 +103,7 @@ class SubmitAvailability(http.Controller):
     @http.route('/departments', website=True, type='json', auth="user", csrf=False)
     def departments(self, id=None, **kw):
         values = {}
-        partner_id = request.env.user.partner_id
         facility_id = request.env["medical.facility"].sudo().search([("id", "=", id)])
-        company_id = request.env["res.company"].sudo().search([], limit=1)
-        # SELECTION_YEAR_RANGE = [(str(i),str(i)) for i in range(2020, 2500)]
         SELECTION_YEAR_RANGE = [{
                     'id': str(i),
                 } for i in range(2020, 2500)]
@@ -123,13 +111,6 @@ class SubmitAvailability(http.Controller):
                     'id': department.id,
                     'name': department.name
                 } for department in facility_id.mapped("department_ids")]
-        companys = [{
-                    'id': company.id,
-                    'name': company.name
-                } for company in company_id]
-        values["partner_id"] = partner_id
-        values["facility_id"] = facility_id
-        values["company_id"] = companys
         values["department_ids"] = departments
         values["SELECTION_YEAR_RANGE"] = SELECTION_YEAR_RANGE
         return values

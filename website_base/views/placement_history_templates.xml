@@ -24,9 +24,11 @@
                       </tr>
                     </thead>
                     <tbody>
-                        <tr t-foreach="partner.archive_ids" t-as="val">
+                        <tr t-foreach="archive_ids" t-as="val">
                           <t t-if="val.is_show_student">
-                            <td><t t-esc="val.facility_id.name"/></td>
+                            <td>
+                              <a t-attf-href="/show/facility/#{val.facility_id.id}"><i class="fa fa-eye mx-2"/><t t-esc="val.facility_id.name"/></a>
+                            </td>
                             <td><t t-esc="dict(val._fields['placement_type'].selection).get(val.placement_type)"/></td>
                             <td><t t-esc="dict(val._fields['placement_term'].selection).get(val.placement_term)"/></td>
                             <td><t t-esc="val.year"/></td>
