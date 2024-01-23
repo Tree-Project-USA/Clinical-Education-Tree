@@ -10,13 +10,13 @@ class Archive(models.Model):
     _name = 'archive'
     _inherit = ['mail.thread']
     _description = 'Archive Placement'
-    _rec_name = 'facility_id'
+    _rec_name = 'department_id'
         
     studentid = fields.Char(related='student_id.studentid')
     student_id = fields.Many2one(comodel_name='res.partner', string='Student Name', tracking=True)
     first_name = fields.Char(related='student_id.first_name')
     last_name = fields.Char(related='student_id.last_name')
-    facility_id = fields.Many2one('medical.facility', string='Facility', tracking=True)
+    facility_id = fields.Many2one('medical.facility', string='Facility', related='department_id.facility_id', readonly=True)
     offer_id = fields.Many2one(comodel_name='placement.offer', string="Offer")
     request_id = fields.Many2one(comodel_name='placement.request', string="Placement Request")
     geographical_id = fields.Many2one(comodel_name='geographical', string='Facility Zip Code', tracking=True)
@@ -63,13 +63,22 @@ class Archive(models.Model):
         ('approve', 'Approved'),
         ('decline', 'Declined'),
     ], string='Match State', tracking=True)
-    archive_offer_id = fields.Many2one('archive.offer', string='Archive Offer')
+    archive_offer_id = fields.Many2one('archive.offer', string='Archive Offer', domain="[('student_id', '=', False), ('term', '=', term)]")
     is_show_student = fields.Boolean("Show to Student")
     ice_term = fields.Char(string='ICE Term', related='student_id.ice_term', store=True,)
     tce1_term = fields.Char(string='TCE1 Term', related='student_id.tce1_term', store=True,)
     tce2_term = fields.Char(string='TCE2 Term', related='student_id.tce2_term', store=True,)
     is_declined = fields.Boolean("Is Declined", tracking=True)
-    department_id = fields.Many2one(comodel_name='facility.department' , string='Department')
+    department_id = fields.Many2one(comodel_name='facility.department' , related='archive_offer_id.department_id', store=True,  readonly=False)
+    term = fields.Char(string='Term', compute='_compute_term', store=True)
+    
+    @api.depends('placement_term', 'year')
+    def _compute_term(self):
+        for rec in self:
+            if rec.year and rec.placement_term:
+                rec.term = self.env['placement.request'].convert_term_year(rec.placement_term, rec.year)
+            else:
+                rec.term = ''
     
     def declined_student_offer(self):
         print(self.offer_id)

@@ -20,13 +20,13 @@ class ArchiveOffer(models.Model):
     placement_type = fields.Selection([
         ('ice', 'ICE'),
         ('tce', 'TCE'),
-    ], string='Clinical Experience Type')
+    ], string='Clinical Experience Type', required=True)
     placement_term = fields.Selection([
         ('fall', 'Fall'),
         ('spring', 'Spring'),
         ('summer', 'Summer'),
-    ], string='Term')
-    year = fields.Selection(selection=SELECTION_YEAR_RANGE, string='Year')
+    ], string='Term', required=True)
+    year = fields.Selection(selection=SELECTION_YEAR_RANGE, string='Year', required=True)
     term = fields.Char(string='Term', compute='_compute_term', store=True)
     
     @api.depends('placement_term', 'year', 'offer_id', 'offer_id.placement_term', 'offer_id.year')

@@ -10,6 +10,8 @@
         <field name="arch" type="xml">
             <tree string="Students Placement Archive">
                 <field name="studentid"/>
+                <field name="term"/>
+                <field name="department_id"/>
                 <field name="student_id"/>
                 <field name="facility_id"/>
                 <field name="placement_type"/>
@@ -32,6 +34,7 @@
         <field name="priority">0</field>
         <field name="arch" type="xml">
             <form string="Students Placement Archive">
+                <field name="term" invisible="1"/>
                 <sheet>
                     <group>
                         <group>
