@@ -1,37 +1,36 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <template id="user_profile_templates" name="User Information">
-
-<!-- ================================================================ user_information ===================================================================== -->
-      <t t-call="website.layout">
-        <div class="student_profile">
-          <t
-            t-set="hardship_request"
-            t-value="request.env['hardship.request'].sudo().search([('student_id', '=', request.env.user.partner_id.id)], limit=1, order='id desc' )"
-          />
-          <div class="alert alert-success text-center shadow-sm" t-if="hardship_request.state == 'update_required'">
-            <div class="d-flex justify-content-center">
-              <p>
-                Your hardship information need to be updated
+  <template id="user_profile_templates" name="User Information">
+    <t t-call="website.layout">
+      <div class="student_profile">
+        <t
+          t-set="hardship_request"
+          t-value="request.env['hardship.request'].sudo().search([('student_id', '=', request.env.user.partner_id.id)], limit=1, order='id desc' )"
+        />
+        <div class="alert alert-success text-center shadow-sm"
+          t-if="hardship_request.state == 'update_required'">
+          <div class="d-flex justify-content-center">
+            <p>
+              Your hardship information need to be updated
+            </p>
+            <a class="mx-2" href="/update/hardship/request">here</a>
+          </div>
+        </div>
+        <div class="container">
+          <div class="popup-card-confirm">
+            <div class="content">
+              <h3>Successfully</h3>
+              <p id="content-p">
+                Your request submitted successfully
               </p>
-              <a class="mx-2" href="/update/hardship/request">here</a>
             </div>
           </div>
-          <div class="container">
-            <div class="popup-card-confirm">
-              <div class="content">
-                <h3>Successfully</h3>
-                <p id="content-p">
-                  Your request submitted successfully
-                </p>
+          <div class="row my-4">
+            <div class="col-12">
+              <div class="text-center mb-4 mt-2">
+                <h3>Student Information</h3>
               </div>
-            </div>
-              <div class="row mt-4">
-                <div class="col-12">
-                  <div class="text-center mb-4 mt-2">
-                    <h3>User Information</h3>
-                  </div>
-                  <div class="text-center">
+              <!-- <div class="text-center">
                     <img
                       t-if="partner.image_1920"
                       t-att-src="image_data_uri(partner.image_1920)"
@@ -46,16 +45,111 @@
                       loading="lazy"
                       style="width: 12rem; height:12rem;"
                   />
-                  </div>
-                </div>
-              </div>
+                  </div> -->
+            </div>
+          </div>
+          <div class="row my-4">
+            <div class="col-12 mr-2">
+              <a
+                t-if="not partner.geographical_ids or hardship.state in ['expired','declined']"
+                type="button"
+                class="btn my-2"
+                role="button"
+                href="/add/location"
+                style="background-color:  #ab8631; !important; color: #fff"
+              >
+                <i class="fa fa-pencil" /> Submit Preferred Addresses </a>
+              <a
+                t-if="not partner.preferred_setting_ids"
+                type="button"
+                class="btn my-2"
+                role="button"
+                href="/add/preferred/setting"
+                style="background-color:  #ab8631; !important; color: #fff"
+              >
+                <i class="fa fa-pencil" /> Submit Preferred Settings </a>
+              <a
+                t-if="partner.preferred_setting_ids"
+                type="button"
+                class="btn my-2"
+                role="button"
+                href="/add/preferred/setting"
+                style="background-color:  #ab8631; !important; color: #fff"
+              >
+                <i class="fa fa-pencil" /> Update Preferred Settings </a>
+              <a
+                t-if="not hardship or hardship.state in ['expired','declined']"
+                type="button"
+                class="btn my-2"
+                role="button"
+                href="/hardship/request"
+                style="background-color:  #ab8631; !important; color: #fff"
+              >
+                <i class="fa fa-pencil" />Submit Hardship/Accommodation request </a>
+              <t t-set="show_placement" t-value="0" />
+              <t t-foreach="partner.archive_ids" t-as="archive">
+                <t t-if="archive.is_show_student">
+                  <t t-set="show_placement" t-value="show_placement + 1" />
+                </t>
+              </t>
+              <a
+                t-if="hardship_request"
+                type="button"
+                class="btn my-2"
+                role="button"
+                href="/hardship/request/inforamtion"
+                style="background-color:  #ab8631; !important; color: #fff"
+              >
+                <i class="fa fa-eye mx-2" />My hardship details </a>
+            </div>
+          </div>
+          <ul class="nav nav-tabs my-4" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="student-info-tab" data-bs-toggle="tab"
+                data-bs-target="#student_info" type="button" role="tab" aria-controls="student_info"
+                aria-selected="false">Basic Student Information</button>
+            </li>
+            <li class="nav-item" role="presentation" t-if="locations">
+              <button class="nav-link" id="preferred-address-tab" data-bs-toggle="tab"
+                data-bs-target="#preferred_address" type="button" role="tab"
+                aria-controls="preferred_address" aria-selected="false">Preferred Address</button>
+            </li>
+            <li class="nav-item" role="presentation" t-if="archive_ids">
+              <button class="nav-link" id="placement-history-tab" data-bs-toggle="tab"
+                data-bs-target="#placement_history" type="button" role="tab"
+                aria-controls="placement_history" aria-selected="true">Placement History</button>
+            </li>
+            <li class="nav-item" role="presentation" t-if="preferred_setting_ids">
+              <button class="nav-link" id="preferred-setting-tab" data-bs-toggle="tab"
+                data-bs-target="#preferred_setting" type="button" role="tab"
+                aria-controls="preferred_setting" aria-selected="false">Preferred Setting</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="post-placement-managament-tab" data-bs-toggle="tab"
+                data-bs-target="#post_placement_managament" type="button" role="tab"
+                aria-controls="post_placement_managament" aria-selected="false">Post Placement
+                Managament</button>
+            </li>
+            <li class="nav-item" role="presentation" t-if="medical_attachment_ids">
+              <button class="nav-link" id="medical-document-tab" data-bs-toggle="tab"
+                data-bs-target="#medical_document" type="button" role="tab"
+                aria-controls="medical_document" aria-selected="false">Medical Document</button>
+            </li>
+            <li class="nav-item" role="presentation" t-if="partner.comment">
+              <button class="nav-link" id="notes-tab" data-bs-toggle="tab" data-bs-target="#notes"
+                type="button" role="tab" aria-controls="notes" aria-selected="false">Notes</button>
+            </li>
+          </ul>
+          <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade my-4 show active" id="student_info" role="tabpanel"
+              aria-labelledby="student-info-tab">
               <form
                 action="/update/information"
                 method="post"
                 enctype="multipart/form-data"
               >
-              <input type="hidden" name="csrf_token"
-                                t-att-value="request.csrf_token()" />
+                <input type="hidden" name="csrf_token"
+                  t-att-value="request.csrf_token()" />
                 <div class="row mt-4">
                   <div class="col-lg-6">
                     <div class="form-group row">
@@ -91,7 +185,8 @@
                 <div class="row mt-2">
                   <div class="col-lg-6">
                     <div class="form-group row">
-                      <label for="staticEmail" class="col-form-label">Home Address <i class="fa fa-pencil"/></label>
+                      <label for="staticEmail" class="col-form-label">Home Address <i
+                          class="fa fa-pencil" /></label>
                       <div>
                         <input
                           type="text"
@@ -107,7 +202,8 @@
                 <div class="row mt-2">
                   <div class="col-lg-6">
                     <div class="form-group row">
-                      <label for="staticEmail" class="col-form-label">Home Phone <i class="fa fa-pencil"/></label>
+                      <label for="staticEmail" class="col-form-label">Home Phone <i
+                          class="fa fa-pencil" /></label>
                       <div>
                         <input
                           type="text"
@@ -125,7 +221,8 @@
                 <div class="row mt-2">
                   <div class="col-lg-6">
                     <div class="form-group row">
-                      <label for="staticEmail" class="col-form-label">Personal Phone <i class="fa fa-pencil"/></label>
+                      <label for="staticEmail" class="col-form-label">Personal Phone <i
+                          class="fa fa-pencil" /></label>
                       <div>
                         <input
                           type="text"
@@ -143,7 +240,8 @@
                 <div class="row mt-2">
                   <div class="col-lg-6">
                     <div class="form-group row">
-                      <label for="staticEmail" class="col-form-label">Personal Email Address <i class="fa fa-pencil"/></label>
+                      <label for="staticEmail" class="col-form-label">Personal Email Address <i
+                          class="fa fa-pencil" /></label>
                       <div>
                         <input
                           type="email"
@@ -258,98 +356,176 @@
                     </div>
                   </div>
                 </div>
-                <div class="row mt-4 mt-4 mb-4 text-center">
-                  <div class="col-12 mr-2">
-                    <a
-                      t-if="not partner.geographical_ids or hardship.state in ['expired','declined']"
-                      type="button"
-                      class="btn my-2"
-                      role="button" 
-                      href="/add/location"
-                      style="background-color:  #ab8631; !important; color: #fff"
-                    >
-                      <i class="fa fa-pencil"/> Submit Preferred Addresses 
-                    </a>
-                    <a
-                      t-if="not partner.preferred_setting_ids"
-                      type="button"
-                      class="btn my-2"
-                      role="button" 
-                      href="/add/preferred/setting"
-                      style="background-color:  #ab8631; !important; color: #fff"
-                    >
-                      <i class="fa fa-pencil"/> Submit Preferred Settings
-                    </a>
-                    <a
-                      t-if="partner.preferred_setting_ids"
-                      type="button"
-                      class="btn my-2"
-                      role="button" 
-                      href="/add/preferred/setting"
-                      style="background-color:  #ab8631; !important; color: #fff"
-                    >
-                      <i class="fa fa-pencil"/> Update Preferred Settings
-                    </a>
-                    <a
-                      t-if="not hardship or hardship.state in ['expired','declined']"
-                      type="button"
-                      class="btn my-2"
-                      role="button" 
-                      href="/hardship/request"
-                      style="background-color:  #ab8631; !important; color: #fff"
-                    >
-                      <i class="fa fa-pencil"/>Submit Hardship/Accommodation request
-                    </a>
-                    <a
-                      t-if="partner.geographical_ids"
-                      type="button"
-                      class="btn"
-                      role="button" 
-                      href="/info/hardship/request"
-                      style="background-color:  #ab8631; !important; color: #fff"
-                    >
-                    <i class="fa fa-eye mx-2"/>Show your Location 
-                    </a>
-                    <t t-set="show_placement" t-value="0"/>
-                    <t t-foreach="partner.archive_ids" t-as="archive">
-                      <t t-if="archive.is_show_student">
-                        <t t-set="show_placement" t-value="show_placement + 1"/>
-                      </t>
-                    </t>
-                    <a
-                      t-if="partner.archive_ids and show_placement >= 1"
-                      type="button"
-                      class="btn"
-                      role="button" 
-                      href="/placement/history"
-                      style="background-color:  #ab8631; !important; color: #fff"
-                    >
-                    <i class="fa fa-eye mx-2"/>Show your Placement History
-                    </a>
-                    <a
-                      t-if="hardship_request"
-                      type="button"
-                      class="btn my-2"
-                      role="button" 
-                      href="/hardship/request/inforamtion"
-                      style="background-color:  #ab8631; !important; color: #fff"
-                    >
-                      <i class="fa fa-eye mx-2"/>My hardship details
-                    </a>
-                  </div>
-                </div>
               </form>
+            </div>
+            <div class="tab-pane fade my-4" id="preferred_address" role="tabpanel"
+              aria-labelledby="preferred-address-tab">
+              <table class="table table-striped table-bordered shadow-sm text-center mt-4">
+                <thead style="background-color:#b4904f; color: #000000">
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Zip code</th>
+                    <th scope="col">State</th>
+                    <th scope="col">City</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr t-foreach="locations" t-as="val">
+                    <td>
+                      <t t-esc="val_index + 1" />
+                    </td>
+                    <td>
+                      <t t-esc="val.zip_code" />
+                    </td>
+                    <td>
+                      <t t-esc="val.state" />
+                    </td>
+                    <td>
+                      <t t-esc="val.city" />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="tab-pane fade my-4" id="placement_history" role="tabpanel"
+              aria-labelledby="placement-history-tab">
+              <table class="table table-striped table-bordered shadow-sm text-center mt-4">
+                <thead style="background-color:#b4904f; color: #000000">
+                  <tr>
+                    <th scope="col">Facility</th>
+                    <th scope="col">Clinical Experience Type</th>
+                    <th scope="col">Term</th>
+                    <th scope="col">Year</th>
+                    <th scope="col">Setting Type</th>
+                    <th scope="col">Student Preferred City</th>
+                    <th scope="col">Student Preferred State</th>
+                    <th scope="col">Student Preferred Zip Code</th>
+                    <th scope="col">Placement Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr t-foreach="archive_ids" t-as="val">
+                    <t t-if="val.is_show_student">
+                      <td>
+                        <a t-attf-href="/show/facility/#{val.facility_id.id}">
+                          <i class="fa fa-eye mx-2" />
+                          <t t-esc="val.facility_id.name" />
+                        </a>
+                      </td>
+                      <td>
+                        <t
+                          t-esc="dict(val._fields['placement_type'].selection).get(val.placement_type)" />
+                      </td>
+                      <td>
+                        <t
+                          t-esc="dict(val._fields['placement_term'].selection).get(val.placement_term)" />
+                      </td>
+                      <td>
+                        <t t-esc="val.year" />
+                      </td>
+                      <td>
+                        <t t-esc="dict(val._fields['setting'].selection).get(val.setting)" />
+                      </td>
+                      <td>
+                        <t t-esc="val.city" />
+                      </td>
+                      <td>
+                        <t t-esc="val.state" />
+                      </td>
+                      <td>
+                        <t t-esc="val.geographical_id.zip_code" />
+                      </td>
+                      <td>
+                        <t
+                          t-esc="dict(val._fields['placement_status'].selection).get(val.placement_status)" />
+                      </td>
+                    </t>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="tab-pane fade my-4" id="preferred_setting" role="tabpanel"
+              aria-labelledby="preferred-setting-tab">
+              <table class="table table-striped table-bordered shadow-sm text-center mt-4">
+                <thead style="background-color:#b4904f; color: #000000">
+                  <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Type Setting</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr t-foreach="preferred_setting_ids" t-as="val">
+                    <td>
+                      <t t-esc="val.name" />
+                    </td>
+                    <td>
+                      <t t-esc="val.type_setting" />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="tab-pane fade my-4" id="post_placement_managament" role="tabpanel"
+              aria-labelledby="post-placement-managament-tab">
+              ...
+            </div>
+            <div class="tab-pane fade my-4" id="medical_document" role="tabpanel"
+              aria-labelledby="medical-document-tab">
+              <table class="table table-striped table-bordered shadow-sm text-center mt-4">
+                <thead style="background-color:#b4904f; color: #000000">
+                  <tr>
+                    <th scope="col">Attachment Type</th>
+                    <th scope="col">Expiration Date</th>
+                    <th scope="col">Attachment</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr t-foreach="medical_attachment_ids" t-as="val">
+                    <td>
+                      <t t-esc="val.attachment_type.name" />
+                    </td>
+                    <td>
+                      <t t-esc="val.expiration_date" />
+                    </td>
+                    <td>
+                      <field name="attachment_ids" widget="attachment_list" />
+                      <t t-foreach="val.attachment_ids" t-as="attachment">
+                          <a 
+                            type="button"
+                            class="btn my-2"
+                            role="button" 
+                            style="background-color:  #ab8631; !important; color: #fff"
+                            t-attf-href="/download/attachment/#{attachment.id}"
+                            >
+                            <i class="fa fa-download" />
+                          </a>
+                          <t t-esc="attachment.name" /><br/>
+                      </t>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="tab-pane fade my-4" id="notes" role="tabpanel" aria-labelledby="notes-tab">
+              <div class="container">
+                <div class="row my-4">
+                  <h6>
+                    <t t-esc="partner.comment" />
+                  </h6>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </t>
+      </div>
+    </t>
   </template>
 
-<template id="my_account_link" name="template_name" inherit_id="portal.my_account_link">
-  <xpath expr="//a[@href='/my/home']" position="replace">
-    <!-- href="/my/home" -->
-    <a href="/my/home" role="menuitem" class="dropdown-item ps-3">
-        <i class="fa fa-fw fa-id-card-o me-1 small text-muted"/> My Profile
-    </a>
-</xpath>
-</template>
+  <template id="my_account_link" name="template_name" inherit_id="portal.my_account_link">
+    <xpath expr="//a[@href='/my/home']" position="replace">
+      <!-- href="/my/home" -->
+      <a href="/my/home" role="menuitem" class="dropdown-item ps-3">
+        <i class="fa fa-fw fa-id-card-o me-1 small text-muted" /> My Profile </a>
+    </xpath>
+  </template>
 </odoo>

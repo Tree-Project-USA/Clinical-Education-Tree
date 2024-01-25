@@ -1,18 +1,7 @@
 from odoo import _, http
 from odoo.http import request, route
 
-class PlacementHistory(http.Controller):
-    
-    @http.route("/placement/history", type="http", website=True, auth="user", Methods=["GET"])
-    def placementhistory(self):
-        values = {}
-        res_partner_id = request.env.user.partner_id
-        archive_ids = request.env['archive'].sudo().search([
-                ('student_id', '=', res_partner_id.id), 
-        ])
-        print(archive_ids)
-        values["archive_ids"] = archive_ids
-        return request.render("website_base.placement_history_template", values)
+class Facility(http.Controller):
     
     @http.route('/show/facility/<int:id>', website=True, type='http', auth="user")
     def show_facility(self, id=None, **kw):
@@ -25,6 +14,7 @@ class PlacementHistory(http.Controller):
             values = {
                 "department_ids": facility_id.mapped("department_ids"),
                 "scce_ids": facility_id.mapped("scce_ids"),
+                "placement_history_ids": facility_id.mapped("archive_ids"),
                 "partner_id": partner_id ,
                 "facility_id": facility_id ,
                 "archive_ids": archive_ids,
