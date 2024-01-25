@@ -72,6 +72,8 @@ class Archive(models.Model):
     is_declined = fields.Boolean("Is Declined", tracking=True)
     department_id = fields.Many2one(comodel_name='facility.department' , related='archive_offer_id.department_id', store=True,  readonly=False)
     term = fields.Char(string='Term', compute='_compute_term', store=True)
+    main_offer_student_id = fields.Many2one(comodel_name='res.partner', string='Main offer Student')
+    is_show_portal = fields.Boolean(string='Show in Portal')
     
     @api.depends('placement_term', 'year')
     def _compute_term(self):

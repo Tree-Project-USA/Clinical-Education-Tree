@@ -6,7 +6,7 @@ odoo.define("website_base.website_update_scce_information", function(require) {
 
     var QWeb = core.qweb;
     var _t = core._t;
-    publicWidget.registry.UpdateInformation = publicWidget.Widget.extend({
+    publicWidget.registry.UpdateInformationScce = publicWidget.Widget.extend({
         selector: ".scce_profile",
         events: {
             'input .updated': '_ShowButton',

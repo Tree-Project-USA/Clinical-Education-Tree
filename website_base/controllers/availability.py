@@ -4,7 +4,7 @@ from odoo.exceptions import ValidationError
 
 class SubmitAvailability(http.Controller):
     @http.route('/submit/availability/<int:id>', website=True, type='http', auth="user")
-    def submitavailability(self, id=None, **kw):
+    def submit_availability(self, id=None, **kw):
         values = {}
         partner_id = request.env.user.partner_id
         if request.httprequest.method == "GET":
@@ -38,11 +38,11 @@ class SubmitAvailability(http.Controller):
             facility_id = request.env["medical.facility"].sudo().search([("id", "=", id)])
             archive_ids = request.env['archive'].sudo().search([
                 ('facility_id', '=', facility_id.id), 
-                ('placement_status', '=', 'pending')
             ])
             values = {
                 "department_ids": facility_id.mapped("department_ids").filtered(lambda q: partner_id.id in q.scce_ids.mapped('scce_id').ids),
                 "scce_ids": facility_id.mapped("scce_ids"),
+                "placement_history_ids": facility_id.mapped("archive_ids"),
                 "partner_id": partner_id ,
                 "facility_id": facility_id ,
                 "archive_ids": archive_ids,
@@ -52,15 +52,15 @@ class SubmitAvailability(http.Controller):
             request.session['facility_id'] =  facility_id.id
             return request.render("website_base.show_placement_offer_facility_template", values)
         
-    @http.route('/assigned/student/<int:id>', website=True, type='http', auth="user")
-    def assigned_student(self, id=None, **kw):
-        values = {}
+    @http.route('/confirm/student/<int:id>', website=True, type='http', auth="user")
+    def confirm_student(self, id=None, **kw):
         facility_id = request.session.get('facility_id', False)
         archive_id = request.env['archive'].sudo().search([
             ('id', '=', id),
         ])
         archive_id.sudo().write({
-            "placement_status": "confirmed"
+            "placement_status": "confirmed",
+            "is_show_portal": True,
         })
         return request.redirect_query(
                             "/facility/placement/offer/%s" % facility_id)
@@ -72,11 +72,13 @@ class SubmitAvailability(http.Controller):
             ('id', '=', id),
         ])
         archive_id.sudo().write({
-            "placement_status": "not_placed"
+            "placement_status": "not_placed",
+            "is_show_portal": True,
+            "main_offer_student_id": archive_id.student_id.id,
         })
 
-        return request.redirect_query(
-                            "/facility/placement/offer/%s" % facility_id)
+        return request.redirect_query("/facility/placement/offer/%s" % facility_id)
+        
     @http.route('/cancel/eassigned/student/<int:id>', website=True, type='http', auth="user")
     def cancel_assigned_student(self, id=None, **kw):
         facility_id = request.session.get('facility_id', False)
@@ -84,13 +86,37 @@ class SubmitAvailability(http.Controller):
             ('id', '=', id),
         ])
         archive_id.sudo().write({
-            "placement_status": "not_placed"
+            "placement_status": "not_placed",
+            "is_show_portal": True,
+            "main_offer_student_id": archive_id.student_id.id,
         })
         archive_id.archive_offer_id.write({
             "active": False,
         })
-        return request.redirect_query(
-                            "/facility/placement/offer/%s" % facility_id)
+        return request.redirect_query("/facility/placement/offer/%s" % facility_id)
+        
+    @http.route('/replay/student/<int:id>', website=True, type='http', auth="user")
+    def cancel_assigned_student(self, id=None, **kw):
+        facility_id = request.session.get('facility_id', False)
+        archive_id = request.env['archive'].sudo().search([
+            ('id', '=', id),
+        ])
+        if archive_id.main_offer_student_id == archive_id.archive_offer_id.student_id:
+            archive_id.sudo().write({
+                "active": True,
+                "placement_status": "pending",
+            })
+            return request.redirect_query("/facility/placement/offer/%s" % facility_id)
+        elif not archive_id.archive_offer_id.student_id:
+            archive_id.sudo().write({
+                "active": True,
+                "placement_status": "pending",
+            })
+            return request.redirect_query("/facility/placement/offer/%s" % facility_id)
+        else:
+            # TODO: Add code here when avalible other offer student
+            error = _("This placement offer has been taken by other student")
+            return request.redirect_query("/facility/placement/offer/%s" % facility_id, {"error": error})
         
     @http.route('/profile/student/<int:id>', website=True, type='http', auth="user")
     def profile_student(self, id=None, facility_id=None, **kw):

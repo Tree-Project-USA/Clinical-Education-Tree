@@ -4,7 +4,6 @@ from odoo.http import request
 import base64
 import werkzeug
 
-
 class CustomerPortals(http.Controller):
 
     @http.route('/download_attachment', type='http', auth="public")
@@ -121,10 +120,3 @@ class CustomerPortals(http.Controller):
     @http.route("/success/hardship/request", type="http", website=True, auth="user")
     def success_hardship_request(self):
         return request.render("website_base.success_request_template")
-    
-    @http.route("/info/hardship/request", type="http", website=True, auth="user")
-    def info_hardship_request(self):
-        values = {}
-        partner_id = request.env.user.partner_id
-        values["locations"] = partner_id.geographical_ids
-        return request.render("website_base.locations_students_info_template", values)
