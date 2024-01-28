@@ -48,81 +48,31 @@
                   </div> -->
             </div>
           </div>
-          <div class="row my-4">
-            <div class="col-12 mr-2">
-              <a
-                t-if="not partner.geographical_ids or hardship.state in ['expired','declined']"
-                type="button"
-                class="btn my-2"
-                role="button"
-                href="/add/location"
-                style="background-color:  #ab8631; !important; color: #fff"
-              >
-                <i class="fa fa-pencil" /> Submit Preferred Addresses </a>
-              <a
-                t-if="not partner.preferred_setting_ids"
-                type="button"
-                class="btn my-2"
-                role="button"
-                href="/add/preferred/setting"
-                style="background-color:  #ab8631; !important; color: #fff"
-              >
-                <i class="fa fa-pencil" /> Submit Preferred Settings </a>
-              <a
-                t-if="partner.preferred_setting_ids"
-                type="button"
-                class="btn my-2"
-                role="button"
-                href="/add/preferred/setting"
-                style="background-color:  #ab8631; !important; color: #fff"
-              >
-                <i class="fa fa-pencil" /> Update Preferred Settings </a>
-              <a
-                t-if="not hardship or hardship.state in ['expired','declined']"
-                type="button"
-                class="btn my-2"
-                role="button"
-                href="/hardship/request"
-                style="background-color:  #ab8631; !important; color: #fff"
-              >
-                <i class="fa fa-pencil" />Submit Hardship/Accommodation request </a>
-              <t t-set="show_placement" t-value="0" />
-              <t t-foreach="partner.archive_ids" t-as="archive">
-                <t t-if="archive.is_show_student">
-                  <t t-set="show_placement" t-value="show_placement + 1" />
-                </t>
-              </t>
-              <a
-                t-if="hardship_request"
-                type="button"
-                class="btn my-2"
-                role="button"
-                href="/hardship/request/inforamtion"
-                style="background-color:  #ab8631; !important; color: #fff"
-              >
-                <i class="fa fa-eye mx-2" />My hardship details </a>
-            </div>
-          </div>
           <ul class="nav nav-tabs my-4" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
               <button class="nav-link active" id="student-info-tab" data-bs-toggle="tab"
                 data-bs-target="#student_info" type="button" role="tab" aria-controls="student_info"
                 aria-selected="false">Basic Student Information</button>
             </li>
-            <li class="nav-item" role="presentation" t-if="locations">
+            <li class="nav-item" role="presentation">
               <button class="nav-link" id="preferred-address-tab" data-bs-toggle="tab"
                 data-bs-target="#preferred_address" type="button" role="tab"
                 aria-controls="preferred_address" aria-selected="false">Preferred Address</button>
             </li>
-            <li class="nav-item" role="presentation" t-if="archive_ids">
-              <button class="nav-link" id="placement-history-tab" data-bs-toggle="tab"
-                data-bs-target="#placement_history" type="button" role="tab"
-                aria-controls="placement_history" aria-selected="true">Placement History</button>
-            </li>
-            <li class="nav-item" role="presentation" t-if="preferred_setting_ids">
+            <li class="nav-item" role="presentation">
               <button class="nav-link" id="preferred-setting-tab" data-bs-toggle="tab"
                 data-bs-target="#preferred_setting" type="button" role="tab"
                 aria-controls="preferred_setting" aria-selected="false">Preferred Setting</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="hardship-accommodation-tab" data-bs-toggle="tab"
+                data-bs-target="#hardship_accommodation" type="button" role="tab"
+                aria-controls="hardship-accommodation" aria-selected="false">Hardship/Accommodation</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="placement-history-tab" data-bs-toggle="tab"
+                data-bs-target="#placement_history" type="button" role="tab"
+                aria-controls="placement_history" aria-selected="true">Student Placement Managment</button>
             </li>
             <li class="nav-item" role="presentation">
               <button class="nav-link" id="post-placement-managament-tab" data-bs-toggle="tab"
@@ -130,14 +80,10 @@
                 aria-controls="post_placement_managament" aria-selected="false">Post Placement
                 Managament</button>
             </li>
-            <li class="nav-item" role="presentation" t-if="medical_attachment_ids">
+            <li class="nav-item" role="presentation">
               <button class="nav-link" id="medical-document-tab" data-bs-toggle="tab"
                 data-bs-target="#medical_document" type="button" role="tab"
                 aria-controls="medical_document" aria-selected="false">Medical Document</button>
-            </li>
-            <li class="nav-item" role="presentation" t-if="partner.comment">
-              <button class="nav-link" id="notes-tab" data-bs-toggle="tab" data-bs-target="#notes"
-                type="button" role="tab" aria-controls="notes" aria-selected="false">Notes</button>
             </li>
           </ul>
           <div class="tab-content" id="myTabContent">
@@ -185,8 +131,10 @@
                 <div class="row mt-2">
                   <div class="col-lg-6">
                     <div class="form-group row">
-                      <label for="staticEmail" class="col-form-label">Home Address <i
-                          class="fa fa-pencil" /></label>
+                      <label for="staticEmail" class="col-form-label">Home Address
+                        <i
+                          class="fa fa-pencil" />
+                      </label>
                       <div>
                         <input
                           type="text"
@@ -202,8 +150,10 @@
                 <div class="row mt-2">
                   <div class="col-lg-6">
                     <div class="form-group row">
-                      <label for="staticEmail" class="col-form-label">Home Phone <i
-                          class="fa fa-pencil" /></label>
+                      <label for="staticEmail" class="col-form-label">Home Phone
+                        <i
+                          class="fa fa-pencil" />
+                      </label>
                       <div>
                         <input
                           type="text"
@@ -221,8 +171,10 @@
                 <div class="row mt-2">
                   <div class="col-lg-6">
                     <div class="form-group row">
-                      <label for="staticEmail" class="col-form-label">Personal Phone <i
-                          class="fa fa-pencil" /></label>
+                      <label for="staticEmail" class="col-form-label">Personal Phone
+                        <i
+                          class="fa fa-pencil" />
+                      </label>
                       <div>
                         <input
                           type="text"
@@ -240,8 +192,10 @@
                 <div class="row mt-2">
                   <div class="col-lg-6">
                     <div class="form-group row">
-                      <label for="staticEmail" class="col-form-label">Personal Email Address <i
-                          class="fa fa-pencil" /></label>
+                      <label for="staticEmail" class="col-form-label">Personal Email Address
+                        <i
+                          class="fa fa-pencil" />
+                      </label>
                       <div>
                         <input
                           type="email"
@@ -360,13 +314,25 @@
             </div>
             <div class="tab-pane fade my-4" id="preferred_address" role="tabpanel"
               aria-labelledby="preferred-address-tab">
-              <table class="table table-striped table-bordered shadow-sm text-center mt-4">
-                <thead style="background-color:#b4904f; color: #000000">
+              <div class="my-4">
+                <a
+                t-if="not partner.geographical_ids or hardship_id.state in ['expired','declined']"
+                type="button"
+                class="btn my-2"
+                role="button"
+                href="/add/location"
+                style="background-color:  #ab8631; !important; color: #000000"
+              >
+                  <i class="fa fa-pencil" /> Submit
+                </a>
+              </div>
+              <table class="table table-striped table-bordered shadow-sm text-center my-4">
+                <thead style="background-color:#ab8631; color: #000000">
                   <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Zip code</th>
-                    <th scope="col">State</th>
-                    <th scope="col">City</th>
+                    <th style="width: 5rem;">#</th>
+                    <th>Zip code</th>
+                    <th>State</th>
+                    <th>City</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -387,29 +353,233 @@
                 </tbody>
               </table>
             </div>
+            <div class="tab-pane fade my-4" id="preferred_setting" role="tabpanel"
+              aria-labelledby="preferred-setting-tab">
+              <div class="my-4">
+                <a
+                  t-if="not partner.preferred_setting_ids"
+                  type="button"
+                  class="btn my-2"
+                  role="button"
+                  href="/add/preferred/setting"
+                  style="background-color:  #ab8631; !important; color: #000000"
+                >
+                  <i class="fa fa-pencil" /> Submit
+                </a>
+                <a
+                  t-if="partner.preferred_setting_ids"
+                  type="button"
+                  class="btn my-2"
+                  role="button"
+                  href="/add/preferred/setting"
+                  style="background-color:  #ab8631; !important; color: #000000"
+                >
+                  <i class="fa fa-pencil" /> Update
+                </a>
+              </div>
+              <table class="table table-striped table-bordered shadow-sm text-center my-4" t-if="partner.preferred_setting_ids">
+                <thead style="background-color:#ab8631; color: #000000">
+                  <tr>
+                    <th style="width: 5rem;">#</th>
+                    <th>Name</th>
+                    <th>Type Setting</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr t-foreach="preferred_setting_ids" t-as="val">
+                    <td><t t-esc="val_index + 1"/></td>
+                    <td>
+                      <t t-esc="val.name" />
+                    </td>
+                    <td>
+                      <t t-esc="val.type_setting" />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="tab-pane fade my-4" id="hardship_accommodation" role="tabpanel"
+              aria-labelledby="hardship-accommodation-tab">
+              <div class="my-4">
+                <a
+                  t-if="not hardship_id or hardship_id.state in ['expired','declined']"
+                  type="button"
+                  class="btn my-2"
+                  role="button"
+                  href="/hardship/request"
+                  style="background-color:  #ab8631; !important; color: #000000"
+                >
+                  <i class="fa fa-pencil" />Submit
+                </a>
+              </div>
+              <div class="container hardship_information" t-if="hardship_id">
+                <input
+                    type="hidden"
+                    id="state"
+                    t-att-value="hardship_id.state"
+                />
+                <div class="d-flex align-items-center flex-wrap text-center style_stage mt-4">
+                  <span id="initial_submission" class="initial_submission">Initial Submission</span>
+                  <span id="under_review" class="under_review">Under Review</span>
+                  <span id="update_required" class="update_required" >Update Required</span>
+                  <span id="approved" class="approved">Approved</span>
+                  <span id="declined" class="declined">Declined</span>
+                  <span id="expired" class="expired">Expired</span>
+                </div>
+                <ul class="nav nav-tabs my-4" id="myTab" role="tablist">
+                  <t t-set="files" t-value="0"/>
+                  <t t-foreach="hardship_ids" t-as="file">
+                    <t t-if="file.attachment_confirm or file.attachment_cancel">
+                      <t t-set="files" t-value="files + 1"/>
+                    </t>
+                  </t>
+                  <li class="nav-item" role="presentation" t-if="hardship_id.geographical_ids">
+                    <button class="nav-link active" id="geographical-ids-tab" data-bs-toggle="tab" data-bs-target="#geographical_ids"
+                      type="button" role="tab" aria-controls="geographical_ids" aria-selected="false">Hardship Preferred Addresses</button>
+                  </li>
+                  <li class="nav-item" role="presentation" t-if="files">
+                    <button class="nav-link" id="files-tab" data-bs-toggle="tab" data-bs-target="#files"
+                      type="button" role="tab" aria-controls="files" aria-selected="false">Attachment</button>
+                  </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                  <div class="tab-pane fade my-4 show active" id="geographical_ids" role="tabpanel"
+                    aria-labelledby="geographical-ids-tab">
+                    <div class="row">
+                      <div class="col-12">
+                        <table class="table table-striped table-bordered shadow-sm text-center my-4">
+                          <thead style="background-color:#ab8631; color: #000000">
+                            <tr>
+                              <th style="width: 5rem;">#</th>
+                              <th>Zip code</th>
+                              <th>State</th>
+                              <th>City</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr t-foreach="hardship_id.geographical_ids" t-as="val">
+                              <td>
+                                <t t-esc="val_index + 1" />
+                              </td>
+                              <td>
+                                <t t-esc="val.zip_code" />
+                              </td>
+                              <td>
+                                <t t-esc="val.state" />
+                              </td>
+                              <td>
+                                <t t-esc="val.city" />
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tab-pane fade my-4" id="files" role="tabpanel"
+                    aria-labelledby="files-tab">
+                    <div class="row">
+                      <div class="col-12">
+                        <table class="table table-striped table-bordered shadow-sm text-center my-4">
+                          <thead style="background-color:#ab8631; color: #000000">
+                            <tr>
+                              <th style="width: 5rem;">#</th>
+                              <th>Attachments</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr class="project_cost_line"  t-foreach="hardship_ids" t-as="file">
+                              <t t-if="file.attachment_confirm or file.attachment_cancel">
+                                <td>
+                                  <div class="form-group">
+                                    <span t-esc="file_index + 1"/>
+                                  </div>
+                                </td>
+                                <td>
+                                  <div t-if="file.attachment_confirm">
+                                    <p>Approval File</p>
+                                    <a 
+                                            type="button"
+                                            class="btn my-2"
+                                            role="button" 
+                                            style="background-color:  #ab8631; !important; color: #fff"
+                                            t-attf-href="/web/content/hardship.request/#{file.id}/attachment_confirm?download=true"
+                                          >
+                                      <i class="fa fa-download" />
+                                    </a>
+                                    <a 
+                                            type="button"
+                                            class="btn my-2"
+                                            role="button" 
+                                            style="background-color:  #ab8631; !important; color: #fff"
+                                            t-attf-href="/web/content/hardship.request/#{file.id}/attachment_confirm"
+                                            target="new"
+                                          >
+                                      <i class="fa fa-eye"/>
+                                    </a>
+                                    <t t-esc="file.date_attachment_confirm"/>
+                                  </div>
+                                  <div t-if="file.attachment_cancel">
+                                    <p>Declination File</p>
+                                    <a 
+                                            t-if="file.attachment_cancel"
+                                            type="button"
+                                            class="btn my-2"
+                                            role="button" 
+                                            style="background-color:  #ab8631; !important; color: #fff"
+                                            t-attf-href="/web/content/hardship.request/#{file.id}/attachment_cancel?download=true"
+                                          >
+                                      <i class="fa fa-download" />
+                                    </a>
+                                    <a 
+                                            t-if="file.attachment_cancel"
+                                            type="button"
+                                            class="btn my-2"
+                                            role="button" 
+                                            style="background-color:  #ab8631; !important; color: #fff"
+                                            t-attf-href="/web/content/hardship.request/#{file.id}/attachment_cancel"
+                                            target="new"
+                                          >
+                                      <i class="fa fa-eye"/>
+                                    </a>
+                                    <t t-esc="file.date_attachment_cancel"/>
+                                  </div>
+                                </td>
+                              </t>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div class="tab-pane fade my-4" id="placement_history" role="tabpanel"
               aria-labelledby="placement-history-tab">
               <table class="table table-striped table-bordered shadow-sm text-center mt-4">
                 <thead style="background-color:#b4904f; color: #000000">
                   <tr>
-                    <th scope="col">Facility</th>
-                    <th scope="col">Clinical Experience Type</th>
-                    <th scope="col">Term</th>
-                    <th scope="col">Year</th>
-                    <th scope="col">Setting Type</th>
-                    <th scope="col">Student Preferred City</th>
-                    <th scope="col">Student Preferred State</th>
-                    <th scope="col">Student Preferred Zip Code</th>
-                    <th scope="col">Placement Status</th>
+                    <th style="width: 5rem;">#</th>
+                    <th>Facility</th>
+                    <th>Clinical Experience Type</th>
+                    <th>Term</th>
+                    <th>Year</th>
+                    <th>Setting Type</th>
+                    <th>Student Preferred City</th>
+                    <th>Student Preferred State</th>
+                    <th>Student Preferred Zip Code</th>
+                    <th>Placement Status</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr t-foreach="archive_ids" t-as="val">
                     <t t-if="val.is_show_student">
+                      <td><t t-esc="val_index + 1"/></td>
                       <td>
-                        <a t-attf-href="/show/facility/#{val.facility_id.id}">
+                        <a t-attf-href="/show/department/#{val.department_id.id}">
                           <i class="fa fa-eye mx-2" />
-                          <t t-esc="val.facility_id.name" />
+                          <t t-esc="val.department_id.name" />
                         </a>
                       </td>
                       <td>
@@ -444,33 +614,24 @@
                 </tbody>
               </table>
             </div>
-            <div class="tab-pane fade my-4" id="preferred_setting" role="tabpanel"
-              aria-labelledby="preferred-setting-tab">
-              <table class="table table-striped table-bordered shadow-sm text-center mt-4">
-                <thead style="background-color:#b4904f; color: #000000">
-                  <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Type Setting</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr t-foreach="preferred_setting_ids" t-as="val">
-                    <td>
-                      <t t-esc="val.name" />
-                    </td>
-                    <td>
-                      <t t-esc="val.type_setting" />
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
             <div class="tab-pane fade my-4" id="post_placement_managament" role="tabpanel"
               aria-labelledby="post-placement-managament-tab">
               ...
             </div>
             <div class="tab-pane fade my-4" id="medical_document" role="tabpanel"
               aria-labelledby="medical-document-tab">
+              <div class="my-4">
+                <a
+                  t-if="not attachment_request_id or attachment_request_id.state in ['cancel']"
+                  type="button"
+                  class="btn my-2"
+                  role="button"
+                  href="/attachment/request"
+                  style="background-color:  #ab8631; !important; color: #000000"
+                >
+                  <i class="fa fa-pencil" />Submit
+                </a>
+              </div>
               <table class="table table-striped table-bordered shadow-sm text-center mt-4">
                 <thead style="background-color:#b4904f; color: #000000">
                   <tr>
@@ -490,42 +651,33 @@
                     <td>
                       <field name="attachment_ids" widget="attachment_list" />
                       <t t-foreach="val.attachment_ids" t-as="attachment">
-                          <a 
+                        <a 
                             type="button"
                             class="btn my-2"
                             role="button" 
-                            style="background-color:  #ab8631; !important; color: #fff"
+                            style="background-color:  #ab8631; !important; color: #000000"
                             t-attf-href="/download/attachment/#{attachment.id}"
                             >
-                            <i class="fa fa-download" />
-                          </a>
-                          <t t-esc="attachment.name" /><br/>
+                          <i class="fa fa-download" />
+                        </a>
+                        <t t-esc="attachment.name" />
+                        <br/>
                       </t>
                     </td>
                   </tr>
                 </tbody>
               </table>
             </div>
-            <div class="tab-pane fade my-4" id="notes" role="tabpanel" aria-labelledby="notes-tab">
-              <div class="container">
-                <div class="row my-4">
-                  <h6>
-                    <t t-esc="partner.comment" />
-                  </h6>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
     </t>
   </template>
-
   <template id="my_account_link" name="template_name" inherit_id="portal.my_account_link">
     <xpath expr="//a[@href='/my/home']" position="replace">
-      <!-- href="/my/home" -->
       <a href="/my/home" role="menuitem" class="dropdown-item ps-3">
-        <i class="fa fa-fw fa-id-card-o me-1 small text-muted" /> My Profile </a>
+        <i class="fa fa-fw fa-id-card-o me-1 small text-muted" /> My Profile
+      </a>
     </xpath>
   </template>
 </odoo>

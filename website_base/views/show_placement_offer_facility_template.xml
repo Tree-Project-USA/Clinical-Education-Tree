@@ -37,12 +37,12 @@
                       </table>
                       <div>
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
-                          <li class="nav-item" role="presentation" t-if="archive_ids">
+                          <li class="nav-item activ" role="presentation" t-if="archive_ids">
                             <button class="nav-link active" id="assigned-student-tab" data-bs-toggle="tab" data-bs-target="#assigned_student" type="button" role="tab" aria-controls="assigned_student" aria-selected="false">Assigned Student/s</button>
                           </li>
-                          <li class="nav-item" role="presentation">
+                          <!-- <li class="nav-item" role="presentation">
                             <button class="nav-link" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Department</button>
-                          </li>
+                          </li> -->
                           <li class="nav-item" role="presentation">
                             <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">SCCE Information</button>
                           </li>
@@ -51,21 +51,31 @@
                           </li>
                         </ul>
                         <div class="tab-content" id="myTabContent">
-                          <div class="tab-pane fade show active" id="assigned_student" role="tabpanel" aria-labelledby="assigned-student-tab">
+                          <t t-set="status" t-value="0"/>
+                          <t t-foreach="archive_ids" t-as="archive">
+                            <t t-if="archive.placement_status == 'pending'">
+                              <t t-set="status" t-value="status + 1"/>
+                            </t>
+                          </t>
+                          <div class="tab-pane fade show active" id="assigned_student" role="tabpanel" aria-labelledby="assigned-student-tab" t-if="archive_ids and status &gt; 0">
                             <table class="table table-striped table-bordered shadow-sm text-center my-5">
                               <thead style="background-color:#ab8631; color: #000">
                                 <tr>
-                                  <th scope="col">Student Name</th>
-                                  <th scope="col">Clinical Experience Type</th>
-                                  <th scope="col">Setting Type</th>
-                                  <th scope="col">Term</th>
-                                  <th scope="col">Year</th>
-                                  <th scope="col"></th>
+                                  <th style="width: 5rem;">#</th>
+                                  <th>Department</th>
+                                  <th>Student Name</th>
+                                  <th>Clinical Experience Type</th>
+                                  <th>Setting Type</th>
+                                  <th>Term</th>
+                                  <th>Year</th>
+                                  <th></th>
                                 </tr>
                               </thead>
                               <tbody>
                                 <tr t-foreach="archive_ids" t-as="val">
                                   <t t-if="val.active == True and (val.placement_status == 'pending' or val.is_show_portal == True)">
+                                    <td><t t-esc="val_index + 1"/></td>
+                                    <td><t t-esc="val.department_id.name"/></td>
                                     <td><t t-esc="val.student_id.name"/></td>
                                     <td>
                                       <t t-if="val.placement_type in ['tce1', 'tce2']">
@@ -138,7 +148,7 @@
                               </tbody>
                             </table>
                           </div>
-                          <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
+                          <!-- <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
                             <table class="table table-striped table-bordered shadow-sm text-center my-5">
                               <thead style="background-color:#ab8631; color: #000">
                                 <tr>
@@ -157,7 +167,7 @@
                                 </tr>
                               </tbody>
                             </table>
-                          </div>
+                          </div> -->
                           <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                             <table class="table table-striped table-bordered shadow-sm text-center my-5">
                               <thead style="background-color:#ab8631; color: #000">

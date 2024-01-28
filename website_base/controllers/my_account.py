@@ -17,13 +17,19 @@ class CustomerPortals(CustomerPortal):
             hardship_id = request.env["hardship.request"].sudo().search([
                 ('student_id', '=', res_partner_id.id)
             ], limit=1, order="id desc")
+            attachment_request_id = request.env["attachment.request"].sudo().search([
+                ('student_id', '=', res_partner_id.id)
+            ], limit=1, order="id desc")
+            print(attachment_request_id)
             archive_ids = request.env['archive'].sudo().search([
                 ('student_id', '=', res_partner_id.id), 
             ])
-            print(archive_ids)
+            hardship_ids = request.env["hardship.request"].sudo().search([
+                ('student_id', '=', res_partner_id.id)])
+            values["hardship_id"] = hardship_id
+            values["hardship_ids"] = hardship_ids
             values["archive_ids"] = archive_ids
             values["partner"] = res_partner_id
-            values["hardship"] = hardship_id
             values["locations"] = res_partner_id.geographical_ids
             values["preferred_setting_ids"] = res_partner_id.preferred_setting_ids
             values["medical_attachment_ids"] = res_partner_id.medical_attachment_ids
