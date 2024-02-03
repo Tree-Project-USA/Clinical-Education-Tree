@@ -20,7 +20,7 @@
                             method="post"
                             enctype="multipart/form-data"
                         >
-                        <div t-if="company_id.hardship_form_attachment" class="modal fade" id="download_attachment" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div t-if="hardship_form_attachment" class="modal fade" id="download_attachment" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                           </div>
                             <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                             <input type="hidden" name="len_attachment" value="1" />
@@ -45,7 +45,7 @@
                                             <a 
                                               id="add_attachments" 
                                               class="btn m-2"
-                                              style="background-color:#ab8631;color:#fff;" 
+                                              style="background-color:#ab8631;color:#000000;" 
                                             >
                                               <h6>Add Attachment</h6>
                                             </a>
@@ -72,12 +72,12 @@
                             </div>
                           <div class="clearfix oe_login_buttons mt-4">
                               <button type="submit"
-                                      class="custom_create btn btn-block" style="background-color:#ab8631;color:#fff;">
+                                      class="custom_create btn btn-block" style="background-color:#ab8631;color:#000000;">
                                   Submit
                               </button>
                               <a href="/my/home"
                                     class="float-end custom_create btn btn-block "
-                                    style="background-color:#ab8631;color:#fff;">
+                                    style="background-color:#ab8631;color:#000000;">
                                     Back To My Profile
                                 </a>
                           </div>

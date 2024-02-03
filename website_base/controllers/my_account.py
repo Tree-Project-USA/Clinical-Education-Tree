@@ -32,7 +32,7 @@ class CustomerPortals(CustomerPortal):
             values["partner"] = res_partner_id
             values["locations"] = res_partner_id.geographical_ids
             values["preferred_setting_ids"] = res_partner_id.preferred_setting_ids
-            values["medical_attachment_ids"] = res_partner_id.medical_attachment_ids
+            values["medical_attachment_id"] = attachment_request_id
             return request.render("website_base.user_profile_templates", values)
         else:
             scce_facility_ids = request.env["scce.facility"].sudo().search([

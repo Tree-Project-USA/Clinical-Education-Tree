@@ -12,7 +12,6 @@ class CustomerPortals(http.Controller):
         attachment = request.env['res.config.settings'].sudo().browse(attachment_id)
 
         if attachment.hardship_form_attachment:
-            print("ahmed")
             filecontent = base64.b64decode(attachment.hardship_form_attachment)
             headers = [
                 ('Content-Type', 'application/octet-stream'),
@@ -20,14 +19,12 @@ class CustomerPortals(http.Controller):
             ]
             return request.make_response(filecontent, headers)
         else:
-            print("salim")
             return request.not_found()
         
     @http.route("/attachment/request", type="http", website=True, auth="user")
     def attachment_request(self):
         values = {}
         partner_id = request.env.user.partner_id
-        
         attachment_request_id = request.env["attachment.request"].sudo().search([
             ('student_id', '=', partner_id.id),
             ], limit=1, order="id desc")
@@ -55,13 +52,16 @@ class CustomerPortals(http.Controller):
                 for attachments in range(0, int(kw.get("len_attachment"))):
                     line_attachment= (0,0,{
                         'attachment_type': kw.get("attachment_type_id_" + str(attachments)),
-                        'expiration_date': kw.get("attachment_type_id_" + str(attachments)),
-                        # 'attachment_ids': base64.b64encode(kw.get("attachment_ids_" + str(attachments), False).read()),
+                        'expiration_date': kw.get("expiration_date_" + str(attachments)),
+                        'attachment_ids': [(0,0,{
+                            "name": kw.get("attachment_ids_" + str(attachments)).filename,
+                            "datas": base64.b64encode(kw.get("attachment_ids_" + str(attachments), False).read()),  
+                        })],
                     })
                     attachment_list.append(line_attachment)
-                    
+
                 attachment_request_id.sudo().write({
-                    "medical_attachment_ids": line_attachment,
+                    "medical_attachment_ids": attachment_list,
                 })
                 return request.redirect("/success/attachment/request")
             except Exception as e:

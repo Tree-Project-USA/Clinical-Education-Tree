@@ -37,7 +37,7 @@ odoo.define("website_base.attachment_request", function(require) {
                             <div class="form-group input-material">
                                 <input type="date" 
                                     class="form-control" 
-                                    name="expiration_date_` + counter_attachments + `" 
+                                    name="expiration_date_` +  + `" 
                                     id="expiration_date_` + counter_attachments + `"
                                 />
                             </div>
@@ -47,13 +47,23 @@ odoo.define("website_base.attachment_request", function(require) {
                 <td class="row-index">
                     <div class="row">
                         <div class="col-12">
-                            <div class="form-group input-material">
+                        <div class="file-upload" id="file-upload_` + counter_attachments + `">
+                            <div class="file-select">
+                                <div class="file-select-button" id="fileName_` + counter_attachments + `">
+                                    Choose File
+                                </div>
+                                <div class="file-select-name" id="noFile_` + counter_attachments + `">
+                                    Drag and drop your file here
+                                </div> 
                                 <input type="file" 
-                                    class="form-control" 
-                                    name="attachment_ids_` + counter_attachments + `" 
-                                    id="attachment_ids_` + counter_attachments + `"
+                                    multiple
+                                    accept=".jpg, .jpeg, .png, .pdf, .docx, .xls, .pptx"
+                                    required
+                                    name="datas_${counter_attachments}"
+                                    id="chooseFile_${counter_attachments}"
                                 />
                             </div>
+                        </div>
                         </div>
                     </div>
                 </td>
@@ -81,21 +91,20 @@ odoo.define("website_base.attachment_request", function(require) {
                     $('input[name="len_file"]').attr('value', counter_attachments)
                 }
             });
-
-            // var ChooseFile = '#chooseFile_' + counter_attachments
-            // var FileUpload = '#file-upload_' + counter_attachments
-            // var NoFile = '#noFile_' + counter_attachments
-            // $(ChooseFile).bind('change', function () {
-            //     var filename = $(ChooseFile).val();
-            //     if (/^\s*$/.test(filename)) {
-            //       $(FileUpload).removeClass('active');
-            //       $(NoFile).text("Drag and drop your file here"); 
-            //     }
-            //     else {
-            //       $(FileUpload).addClass('active');
-            //       $(NoFile).text(filename.replace("C:\\fakepath\\", "")); 
-            //     }
-            //   });
+            var ChooseFile = '#chooseFile_' + counter_attachments
+            var FileUpload = '#file-upload_' + counter_attachments
+            var NoFile = '#noFile_' + counter_attachments
+            $(ChooseFile).bind('change', function () {
+                var filename = $(ChooseFile).val();
+                if (/^\s*$/.test(filename)) {
+                  $(FileUpload).removeClass('active');
+                  $(NoFile).text("Drag and drop your file here"); 
+                }
+                else {
+                  $(FileUpload).addClass('active');
+                  $(NoFile).text(filename.replace("C:\\fakepath\\", "")); 
+                }
+            });
 
             Array.prototype.remove = function() {
                 var what, a = arguments,
