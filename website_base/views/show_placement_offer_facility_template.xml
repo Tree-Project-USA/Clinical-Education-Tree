@@ -15,33 +15,16 @@
                     <div class="text-center mt-4">
                         <h2>Department Information</h2>
                     </div>
-                    <table class="table table-striped table-bordered shadow-sm text-center mt-5">
-                        <thead style="background-color:#ab8631; color: #000">
-                          <tr>
-                            <th scope="col">Facility Name</th>
-                            <th scope="col">Facility Address</th>
-                            <th scope="col">City</th>
-                            <th scope="col">State</th>
-                            <th scope="col">Zip Code</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td><t t-esc="facility_id.name"/></td>
-                            <td><t t-esc="facility_id.address"/></td>
-                            <td><t t-esc="facility_id.city"/></td>
-                            <td><t t-esc="facility_id.state"/></td>
-                            <td><t t-esc="facility_id.zip"/></td>
-                          </tr>
-                        </tbody>
-                      </table>
-                      <div>
+                      <div class="pt64">
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
                           <li class="nav-item activ" role="presentation">
                             <button class="nav-link active" id="assigned-student-tab" data-bs-toggle="tab" data-bs-target="#assigned_student" type="button" role="tab" aria-controls="assigned_student" aria-selected="false">Assigned Student/s</button>
                           </li>
                           <li class="nav-item" role="presentation">
                             <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">SCCE Information</button>
+                          </li>
+                          <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="ci-information-tab" data-bs-toggle="tab" data-bs-target="#ci_information" type="button" role="tab" aria-controls="ci_information" aria-selected="false">CI Information</button>
                           </li>
                           <li class="nav-item" role="presentation">
                             <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#placement_history" type="button" role="tab" aria-controls="placement_history" aria-selected="false">Placement History</button>
@@ -148,26 +131,6 @@
                               </tbody>
                             </table>
                           </div>
-                          <!-- <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
-                            <table class="table table-striped table-bordered shadow-sm text-center my-5">
-                              <thead style="background-color:#ab8631; color: #000">
-                                <tr>
-                                  <th scope="col">Name</th>
-                                  <th scope="col">City</th>
-                                  <th scope="col">State</th>
-                                  <th scope="col">ZIP Code</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr t-foreach="department_ids" t-as="val">
-                                  <td><t t-esc="val.name"/></td>
-                                  <td><t t-esc="val.city"/></td>
-                                  <td><t t-esc="val.state"/></td>
-                                  <td><t t-esc="val.geographical_id.zip_code"/></td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </div> -->
                           <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                             <table class="table table-striped table-bordered shadow-sm text-center my-5">
                               <thead style="background-color:#ab8631; color: #000">
@@ -185,6 +148,21 @@
                                   <td><t t-esc="val.phone"/></td>
                                   <td><t t-esc="val.email"/></td>
                                 </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                          <div class="tab-pane fade" id="ci_information" role="tabpanel" aria-labelledby="ci-information-tab">
+                            <table class="table table-striped table-bordered shadow-sm text-center my-5">
+                              <thead style="background-color:#ab8631; color: #000">
+                                <tr>
+                                  <th scope="col">First Name</th>
+                                  <th scope="col">Last Name</th>
+                                  <th scope="col">Phone</th>
+                                  <th scope="col">Email</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                
                               </tbody>
                             </table>
                           </div>

@@ -20,7 +20,6 @@ class CustomerPortals(CustomerPortal):
             attachment_request_id = request.env["attachment.request"].sudo().search([
                 ('student_id', '=', res_partner_id.id)
             ], limit=1, order="id desc")
-            print(attachment_request_id)
             archive_ids = request.env['archive'].sudo().search([
                 ('student_id', '=', res_partner_id.id), 
             ])
