@@ -15,6 +15,7 @@
                 <field name="student_id"/>
                 <field name="facility_id"/>
                 <field name="placement_type"/>
+                <field name="experience_id"/>
                 <field name="setting"/>
                 <field name="placement_term"/>
                 <field name="year"/>
@@ -43,6 +44,8 @@
                             <field name="facility_id"/>
                         </group>
                         <group>
+                            <field name="company_id"/>
+                            <field name="experience_id"/>
                             <field name="placement_type"/>
                             <field name="placement_term" readonly="1"/>
                         </group>
@@ -86,6 +89,8 @@
                 <field name="student_id"/>
                 <field name="facility_id"/>
                 <field name="placement_type"/>
+                <field name="experience_id"/>
+                <field name="company_id"/>
                 <field name="placement_term"/>
                 <field name="year"/>
                 <field name="geographical_id"/>

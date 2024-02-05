@@ -24,6 +24,9 @@ class Archive(models.Model):
     city = fields.Char(related='geographical_id.city')
     state = fields.Char(related='geographical_id.state')
     zip_code = fields.Char(related='geographical_id.zip_code')
+    experience_id = fields.Many2one(comodel_name='clinical.experience', string='Clinical Experience', domain="[('company_id', '=', company_id)]", required=True)
+    company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.user.company_id)
+    
     placement_type = fields.Selection([
         ('ice', 'ICE'),
         ('tce1', 'TCE1'),
@@ -115,60 +118,7 @@ class Archive(models.Model):
             if comp_archive:
                 raise ValidationError("Student (%s) is already Matching In (%s) for (%s)" % (rec.student_id.name, rec.facility_id.name,rec.placement_type))
     
-    # @api.constrains('student_id', 'placement_type', 'placement_status', 'setting')
-    # def _check_placement_status_SSSSS(self):
-    #     for rec in self:
-    #         comp_ice = self.env['archive'].search_count([('student_id', '=', rec.student_id.id), ('placement_type', '=', 'ice'), ('placement_status', 'in', ['completed', 'confirmed'])])
-    #         comp_tce1 = self.env['archive'].search_count([('student_id', '=', rec.student_id.id), ('placement_type', '=', 'tce1'), ('placement_status', 'in', ['completed', 'confirmed'])])
-    #         comp_tce2 = self.env['archive'].search_count([('student_id', '=', rec.student_id.id), ('placement_type', '=', 'tce2'), ('placement_status', 'in', ['completed', 'confirmed'])])
-    #         if comp_tce2:
-    #             if comp_tce1:
-    #                 pass
-    #             else:
-    #                 raise ValidationError("Student %s should take TCE 1 term before TCE 2" % (rec.student_id.name))
-    #         if comp_tce1:
-    #             if comp_ice:
-    #                 pass
-    #             else:
-    #                 raise ValidationError("Student %s should not take TCE term before ICE" % (rec.student_id.name))
-            
-    #         comp_all = self.env['archive'].search_count([('student_id', '=', rec.student_id.id), ('placement_status', 'in', ['completed', 'confirmed'])])
-    #         if comp_all >= 3:
-    #             count_ip = self.env['archive'].search_count([('student_id', '=', rec.student_id.id), ('placement_status', 'in', ['completed', 'confirmed']), ('setting', '=', 'ip')])
-    #             if not count_ip:
-    #                 raise ValidationError("Student %s must have at least one setting type IP" % (rec.student_id.name))
-    #         count_ip = self.env['archive'].search_count([('student_id', '=', rec.student_id.id), ('placement_status', 'in', ['completed', 'confirmed']), ('setting', '=', 'ip')])
-    #         if count_ip > 1:
-    #             raise ValidationError("Student %s already take  IP Setting" % (rec.student_id.name))
-        
-    # @api.constrains('student_id','placement_type', 'facility_id', 'placement_status', 'setting')
-    # def _check_placement_type(self):
-    #     for rec in self:
-    #         if self.env['archive'].search_count([('student_id', '=', rec.student_id.id), ('placement_status', 'in', ['confirmed', 'completed']), ('id', '!=', rec.id), ('setting', '=', 'ip')]):
-    #             raise ValidationError(_("Student %s already take  IP Setting" % (rec.student_id.name)))
-            
-            # if self.env['archive'].search([('student_id', '=', rec.student_id.id), ('facility_id', '=', rec.facility_id.id), ('placement_status', 'in', ['approved', 'completed', 'pending']), ('id', '!=', rec.id)]) and not rec.student_id.is_with_hardship:
-            #     raise ValidationError("Student %s is already placed to %s facility" % (rec.student_id.name, rec.facility_id.name))    
-            
-            # if self.env['archive'].search([('student_id', '=', rec.student_id.id), ('placement_type', '=', rec.placement_type), ('placement_status', 'in', ['approved', 'completed']), ('id', '!=', rec.id)]):
-            #     raise ValidationError("Student %s is already taken in %s term before" % (rec.student_id.name, rec.placement_type))
-            
-            # if rec.placement_type == 'ice':
-            #     archive_id = self.env['archive'].search([('student_id', '=', rec.student_id.id), ('placement_type', '=', 'ice'), ('placement_status', 'in', ['approved', 'completed']), ('id', '!=', rec.id)])
-            #     if archive_id:
-            #         raise ValidationError("Term ICE Pass")
-            
-            # if rec.placement_type == 'tce1':
-            #     archive_id = self.env['archive'].search([('student_id', '=', rec.student_id.id), ('placement_type', '=', 'ice'), ('placement_status', 'in', ['approved', 'completed']), ('id', '!=', rec.id)])
-            #     if not archive_id:
-            #         raise ValidationError("Student %s is Shuld Take ICE term before TCE1" % (rec.student_id.name))
-            
-            # if rec.placement_type == 'tce2':
-            #     archive_id = self.env['archive'].search([('student_id', '=', rec.student_id.id), ('placement_type', '=', 'tce1'), ('placement_status', 'in', ['approved', 'completed']), ('id', '!=', rec.id)])
-            #     if not archive_id:
-            #         raise ValidationError("Student %s is Shuld Take TCE1 term before TCE2" % (rec.student_id.name))
-            
-    
+
     def write(self, vals):
         print(vals)
         res = super(Archive, self).write(vals)

@@ -20,3 +20,4 @@ from . import alternative_schedule
 from . import facility_department
 from . import attachment
 from . import attachment_request
+from . import clinical_experience

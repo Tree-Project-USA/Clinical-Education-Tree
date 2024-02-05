@@ -75,6 +75,8 @@
                                             <field name="facility_id" invisible="1"/>
                                             <field name="department_ids" invisible="1"/>
                                             <field name="department_id" attrs="{'column_invisible':[('parent.is_single_facility', '=', True)], 'required':[('parent.is_single_facility', '=', False)]}"/>
+                                            <field name="company_id"/>
+                                            <field name="experience_id" required="1"/>
                                             <field name="placement_type" required="1"/>
                                             <field name="placement_term" required="1"/>
                                             <field name="year" force_save="1" required="1"/> 
@@ -112,6 +114,8 @@
                     <field name="offer_line_id"/>
                     <field name="setting"/>
                     <field name="placement_type"/>
+                    <field name="experience_id"/>
+                    <field name="company_id"/>
                     <field name="placement_term"/>
                     <field name="year"/>
                     <field name="term"/>

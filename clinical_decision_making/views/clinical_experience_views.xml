@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- View clinical.experience View Tree -->
+    <record id="view_clinical_experience_tree" model="ir.ui.view">
+        <field name="name">view.clinical.experience.tree</field>
+        <field name="model">clinical.experience</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom" decoration-muted="(not active)" delete="false">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="company_id"/>
+                <field name="active" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <!-- Action clinical.experience -->
+    <record id="action_clinical_experience" model="ir.actions.act_window">
+        <field name="name">Clinical Experience</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">clinical.experience</field>
+        <field name="context">{'active_test': False, 'delete' : False}</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+</odoo>

@@ -198,7 +198,7 @@
 
     <menuitem
         id="configuration_menu"
-        name="Setting"
+        name="Configuration"
         parent="menu_root_cpdm"
         sequence="6"/>
         
@@ -244,13 +244,15 @@
         action="clinical_decision_making.action_attachment_type"
         parent="configuration_menu"
         sequence="100"/>
+
+    <menuitem
+        id="clinical_experience_menu"
+        name="Clinical Experience"
+        action="clinical_decision_making.action_clinical_experience"
+        parent="configuration_menu"
+        sequence="15"
+        />
     
-    <!-- <menuitem
-        id="location_setting_menu"
-        name="Locations"
-        action="location_setting_action"
-        parent="student_details_menu"
-        sequence="2"/> -->
 
     <menuitem
         id="archive_menu"

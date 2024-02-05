@@ -35,6 +35,8 @@ class PlacementOffer(models.Model):
         ('ice', 'ICE'),
         ('tce', 'TCE'),
     ], string='Clinical Experience Type')
+    # experience_id = fields.Many2one(comodel_name='clinical.experience', string='Clinical Experience', domain="[('company_id', '=', company_id)]", required=True)
+    company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.user.company_id)
     placement_term = fields.Selection([
         ('fall', 'Fall'),
         ('spring', 'Spring'),
@@ -82,6 +84,7 @@ class PlacementOffer(models.Model):
                 archive_offer_model.create({
                     'department_id': self.main_department_id.id if self.is_single_facility else line_id.department_id.id,
                     'placement_type': line_id.placement_type,
+                    'experience_id': line_id.experience_id.id,
                     'placement_term': line_id.placement_term,
                     'year': line_id.year,
                     'offer_id': self.id,
@@ -186,6 +189,8 @@ class PlacementOfferLine(models.Model):
     state = fields.Char(related='geographical_id.state')
     geographical_id = fields.Many2one(comodel_name='geographical', related='department_id.geographical_id')
     department_ids = fields.Many2many(comodel_name='facility.department', compute="_get_facility_departments")
+    archive_offer_ids = fields.One2many(comodel_name='archive.offer', inverse_name='offer_line_id', string='Archive Offer')
+    
     
     @api.depends('facility_id')
     def _get_facility_departments(self):
@@ -196,6 +201,8 @@ class PlacementOfferLine(models.Model):
         ('ice', 'ICE'),
         ('tce', 'TCE'),
     ], string='Clinical Experience Type')
+    experience_id = fields.Many2one(comodel_name='clinical.experience', string='Clinical Experience', domain="[('company_id', '=', company_id)]", required=True)
+    company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.user.company_id)
     placement_term = fields.Selection([
         ('fall', 'Fall'),
         ('spring', 'Spring'),

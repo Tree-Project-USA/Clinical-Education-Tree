@@ -36,7 +36,9 @@ class FacilityDepartment(models.Model):
     )
     archive_ids = fields.One2many(comodel_name='archive', inverse_name='department_id', string='Placement History')
     archive_count = fields.Integer(compute='_compute_count', string='Placement History Count')
-            
+    company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.user.company_id)
+    archive_offer_ids = fields.One2many(comodel_name='archive.offer', inverse_name='department_id', string='Archive Offer')
+
     def _compute_count(self):
         for rec in self:
             rec.student_count = len(self.env['archive'].with_context(active_test=False).search([('department_id', '=', rec.id), ('placement_status', 'in', ['completed', 'confirmed'])]).mapped('student_id'))
