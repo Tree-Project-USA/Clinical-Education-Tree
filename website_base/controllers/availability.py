@@ -146,6 +146,22 @@ class SubmitAvailability(http.Controller):
         values = {}
         student_id = request.env["res.partner"].sudo().search([("id", "=", id)])
         values["student_id"] = student_id
+        hardship_ids = request.env["hardship.request"].sudo().search([
+                ('student_id', '=', student_id.id)])
+        hardship_id = request.env["hardship.request"].sudo().search([
+                ('student_id', '=', student_id.id)
+            ], limit=1, order="id desc")
+        archive_ids = request.env['archive'].sudo().search([
+                ('student_id', '=', student_id.id), 
+            ])
+        attachment_request_id = request.env["attachment.request"].sudo().search([
+                ('student_id', '=', student_id.id)
+            ], limit=1, order="id desc")
+        values["hardship_ids"] = hardship_ids
+        values["hardship_id"] = hardship_id
+        values["archive_ids"] = archive_ids
+        values["locations"] = student_id.geographical_ids
+        values["medical_attachment_id"] = attachment_request_id
         values["facility_id"] = request.session.get('facility_id', False)
         return request.render("website_base.student_profile_templates", values)
     
