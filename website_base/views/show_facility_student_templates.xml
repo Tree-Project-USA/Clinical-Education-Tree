@@ -1,141 +1,176 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <template id="show_facility_student_template" name="Show Facility Student">
-        <t t-call="website.layout">
-            <div class="container">
-              <div class="alert alert-danger w-10 mx-auto text-center" t-if="error"
-                  role="alert">
-                  <strong>
-                      <t t-esc="error" />
-                  </strong>
+  <template id="show_facility_student_template" name="Show Facility Student">
+    <t t-call="website.layout">
+      <div class="container">
+        <div class="alert alert-danger w-10 mx-auto text-center" t-if="error"
+          role="alert">
+          <strong>
+            <t t-esc="error" />
+          </strong>
+        </div>
+        <form
+          class="availability"
+        >
+          <div class="text-center mt-4">
+            <h2>Facility Information</h2>
+          </div>
+          <table class="table table-striped table-bordered shadow-sm mt-5">
+            <thead style="background-color:#ab8631; color: #000">
+              <tr class="text-center">
+                <th style="width: 15rem;">Name</th>
+                <th>Setting</th>
+                <th style="width: 10rem;">Street</th>
+                <th style="width: 10rem;">City</th>
+                <th style="width: 10rem;">State</th>
+                <th>SCCE</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr t-foreach="department_id" t-as="val">
+                <td class="text-center">
+                  <t t-esc="val.name" />
+                </td>
+                <td class="text-right">
+                  <t t-foreach="val.setting_ids" t-as="setting">
+                    <t t-esc="setting_index + 1" />- <span t-esc="setting.name" /><br />
+                  </t>
+                </td>
+                <td class="text-center">
+                  <t t-esc="val.street" />
+                </td>
+                <td class="text-center">
+                  <t t-esc="val.city" />
+                </td>
+                <td class="text-center">
+                  <t t-esc="val.state" />
+                </td>
+                <td class="text-center">
+                  <t t-foreach="val.scce_ids" t-as="scce">
+                    <t t-esc="scce_index + 1" />- <span t-esc="scce.first_name" />
+                                <span
+                      t-esc="scce.last_name" /><br />
+                  </t>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div>
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+              <li class="nav-item active" role="presentation">
+                <button class="nav-link active" id="profile-tab" data-bs-toggle="tab"
+                  data-bs-target="#profile" type="button" role="tab" aria-controls="profile"
+                  aria-selected="false">SCCE Information</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="ci-information-tab" data-bs-toggle="tab"
+                  data-bs-target="#ci_information" type="button" role="tab"
+                  aria-controls="ci_information" aria-selected="false">CI Information</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="placement-history-tap" data-bs-toggle="tab"
+                  data-bs-target="#placement_history" type="button" role="tab"
+                  aria-controls="placement_history" aria-selected="false">Facility Placement History</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="post-placement-managament-tab" data-bs-toggle="tab"
+                  data-bs-target="#post_placement_managament" type="button" role="tab"
+                  aria-controls="post_placement_managament" aria-selected="false">Post Placement
+                  Managament</button>
+              </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+              <div class="tab-pane fade my-4 show active" id="profile" role="tabpanel"
+                aria-labelledby="profile-tab">
+                <table class="table table-striped table-bordered shadow-sm text-center my-5">
+                  <thead style="background-color:#ab8631; color: #000">
+                    <tr>
+                      <th scope="col">First Name</th>
+                      <th scope="col">Last Name</th>
+                      <th scope="col">Phone</th>
+                      <th scope="col">Email</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr t-foreach="scce_ids" t-as="val">
+                      <td>
+                        <t t-esc="val.first_name" />
+                      </td>
+                      <td>
+                        <t t-esc="val.last_name" />
+                      </td>
+                      <td>
+                        <t t-esc="val.phone" />
+                      </td>
+                      <td>
+                        <t t-esc="val.email" />
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
-              <form
-                class="availability"
-              >
-                    <div class="text-center mt-4">
-                        <h2>Facility Information</h2>
-                    </div>
-                    <table class="table table-striped table-bordered shadow-sm text-center mt-5">
-                        <thead style="background-color:#ab8631; color: #000">
-                          <tr>
-                            <th scope="col">Facility Name</th>
-                            <th scope="col">Facility Address</th>
-                            <th scope="col">City</th>
-                            <th scope="col">State</th>
-                            <th scope="col">Zip Code</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td><t t-esc="facility_id.name"/></td>
-                            <td><t t-esc="facility_id.address"/></td>
-                            <td><t t-esc="facility_id.city"/></td>
-                            <td><t t-esc="facility_id.state"/></td>
-                            <td><t t-esc="facility_id.zip"/></td>
-                          </tr>
-                        </tbody>
-                      </table>
-                      <div>
-                        <ul class="nav nav-tabs" id="myTab" role="tablist">
-                          <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Department</button>
-                          </li>
-                          <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">SCCE Information</button>
-                          </li>
-                          <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="placement-history-tap" data-bs-toggle="tab" data-bs-target="#placement_history" type="button" role="tab" aria-controls="placement_history" aria-selected="false">Placement History</button>
-                          </li>
-                        </ul>
-                        <div class="tab-content" id="myTabContent">
-                          <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                            <table class="table table-striped table-bordered shadow-sm text-center my-5">
-                              <thead style="background-color:#ab8631; color: #000">
-                                <tr>
-                                  <th scope="col">Name</th>
-                                  <th scope="col">City</th>
-                                  <th scope="col">State</th>
-                                  <th scope="col">ZIP Code</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr t-foreach="department_ids" t-as="val">
-                                  <td><t t-esc="val.name"/></td>
-                                  <td><t t-esc="val.city"/></td>
-                                  <td><t t-esc="val.state"/></td>
-                                  <td><t t-esc="val.geographical_id.zip_code"/></td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </div>
-                          <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                            <table class="table table-striped table-bordered shadow-sm text-center my-5">
-                              <thead style="background-color:#ab8631; color: #000">
-                                <tr>
-                                  <th scope="col">First Name</th>
-                                  <th scope="col">Last Name</th>
-                                  <th scope="col">Phone</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr t-foreach="scce_ids" t-as="val">
-                                  <td><t t-esc="val.first_name"/></td>
-                                  <td><t t-esc="val.last_name"/></td>
-                                  <td><t t-esc="val.phone"/></td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </div>
-                          <div class="tab-pane fade" id="placement_history" role="tabpanel" aria-labelledby="placement-history-tap">
-                            <table class="table table-striped table-bordered shadow-sm text-center mt-4">
-                              <thead style="background-color:#ab8631; color: #000000">
-                                <tr>
-                                  <th scope="col">Department</th>
-                                  <th scope="col">Student Name</th>
-                                  <th scope="col">Clinical Experience Type</th>
-                                  <th scope="col">Setting Type</th>
-                                  <th scope="col">Term</th>
-                                  <th scope="col">Year</th>
-                                  <th scope="col">City</th>
-                                  <th scope="col">State</th>
-                                  <th scope="col">Facility Zip Code</th>
-                                  <th scope="col">Placement Status</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                  <tr t-foreach="placement_history_ids" t-as="val">
-                                    <td><t t-esc="val.department_id.name"/></td>
-                                    <td><t t-esc="val.student_id.name"/></td>
-                                    <td>
-                                      <t t-if="val.placement_type in ['tce1', 'tce2']">
-                                        TCE
-                                      </t>
-                                      <t t-else="">
-                                        ICE
-                                      </t>
-                                    </td>
-                                    <td><t t-esc="dict(val._fields['setting'].selection).get(val.setting)"/></td>
-                                    <td><t t-esc="dict(val._fields['placement_term'].selection).get(val.placement_term)"/></td>
-                                    <td><t t-esc="val.year"/></td>
-                                    <td><t t-esc="val.city"/></td>
-                                    <td><t t-esc="val.state"/></td>
-                                    <td><t t-esc="val.facility_id.geographical_id.zip_code"/></td>
-                                    <td><t t-esc="dict(val._fields['placement_status'].selection).get(val.placement_status)"/></td>
-                                  </tr>
-                              </tbody>
-                            </table>
-                          </div>
-                        </div>
-                    </div>
-                    <div class="clearfix oe_login_buttons my-4">
-                        <a href="/my/home"
-                            class="float-end custom_create btn btn-block "
-                            style="background-color:#ab8631;color:#fff;">
-                            Back To My Profile
-                        </a>
-                    </div>
-                </form>
+              <div class="tab-pane fade my-4" id="ci_information" role="tabpanel"
+                aria-labelledby="ci-information-tab">
+                <p>ci information</p>
+              </div>
+              <div class="tab-pane fade my-4" id="placement_history" role="tabpanel"
+                aria-labelledby="placement-history-tap">
+                <table class="table table-striped table-bordered shadow-sm text-center mt-4">
+                  <thead style="background-color:#ab8631; color: #000000">
+                    <tr>
+                      <th style="width: 5rem;">#</th>
+                      <th>Clinical Experience Type</th>
+                      <th>Setting Type</th>
+                      <th>Term</th>
+                      <th>Year</th>
+                      <th>PTSE1</th>
+                      <th>PTSE2</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr t-foreach="archive_ids" t-as="val">
+                      <td>
+                        <t t-esc="val_index + 1" />
+                      </td>
+                      <td>
+                        <t t-if="val.placement_type in ['tce1', 'tce2']">
+                          TCE
+                        </t>
+                        <t t-else="">
+                          ICE
+                        </t>
+                      </td>
+                      <td>
+                        <t t-esc="dict(val._fields['setting'].selection).get(val.setting)" />
+                      </td>
+                      <td>
+                        <t
+                          t-esc="dict(val._fields['placement_term'].selection).get(val.placement_term)" />
+                      </td>
+                      <td>
+                        <t t-esc="val.year" />
+                      </td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="tab-pane fade my-4" id="post_placement_managament" role="tabpanel"
+                aria-labelledby="post-placement-managament-tab">
+                ...
+              </div>
             </div>
-        </t>
-    </template>
+          </div>
+          <div class="clearfix oe_login_buttons my-4">
+            <a href="/my/home"
+              class="float-end custom_create btn btn-block "
+              style="background-color:#ab8631;color:#000000;">
+              Back To My Profile
+            </a>
+          </div>
+        </form>
+      </div>
+    </t>
+  </template>
 </odoo>

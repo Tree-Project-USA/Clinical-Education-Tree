@@ -4,25 +4,21 @@
         <t t-call="website.layout">
             <div class="container">
                 <form
-                t-att-action="'/submit/availability/%s' % (facility_id.id)"
-                    class="availability"
-                    method="post"
-                    enctype="multipart/form-data"
+                  action="/submit/availability"
+                  class="availability"
+                  method="post"
+                  enctype="multipart/form-data"
                 >
                 <input type="hidden" name="csrf_token"
                     t-att-value="request.csrf_token()" />
-                <input type="hidden" name="facility_id" id="facility_id"
-                    t-att-value="facility_id.id" />
                     <input type="hidden" name="len_department" value="1" />
                     <div class="row mt-4">
                         <div>
                             <table class="table add_file table-bordered">
                               <thead>
                                 <tr>
-                                  <th class="text-center" colspan="7">Departments</th>
-                                </tr>
-                                <tr>
-                                    <th class="text-center">Department</th>
+                                    <th style="width: 20rem" class="text-center">University</th>
+                                    <th style="width: 20rem" class="text-center">Department</th>
                                     <th class="text-center">CE Type</th>
                                     <th class="text-center">Term</th>
                                     <th class="text-center">Year</th>

@@ -26,6 +26,13 @@ odoo.define("website_base.departments", function(require) {
             const department_new_tag =
             `<tr class="department-list" id="zip_` + counter_availability + `">
             <td class="row-index">
+                <select name="company_id_` + counter_availability + `" 
+                    id="company_id_` + counter_availability + `"
+                    class="form-control col-xl-12 custom-select company_id_` + counter_availability + `" required="1">
+                    <option  value="" selected="selected" disabled="1">` + option + `</option>
+                </select>
+            </td>
+            <td class="row-index">
                 <select name="department_id_` + counter_availability + `" 
                     id="department_id_` + counter_availability + `"
                     class="form-control col-xl-12 custom-select department_id_` + counter_availability + `" required="1">
@@ -133,15 +140,22 @@ odoo.define("website_base.departments", function(require) {
                 return this;
             };
             var department = "#department_id_" + counter_availability;
+            var company = "#company_id_" + counter_availability;
             var year = "#term_" + counter_availability;
             var facility_id = $("#facility_id").val()
             ajax.jsonRpc("/departments", 'call', {
                 'id': facility_id,
             }).then(function(result) {
+                _.each(result["company_ids"], function(value){
+                    $(company).append($('<option>', {
+                        value: value.id,
+                        text: value.name,
+                    }))
+                })
                 _.each(result["department_ids"], function(value){
                     $(department).append($('<option>', {
                         value: value.id,
-                        text: value.name,
+                        text: value.name + '/' + value.street + '/' + value.city + '/' + value.state,
                     }))
                 })
                 _.each(result["SELECTION_YEAR_RANGE"], function(value){

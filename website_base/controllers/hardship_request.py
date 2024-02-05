@@ -31,8 +31,6 @@ class CustomerPortals(http.Controller):
         hardship_id = request.env["hardship.request"].sudo().search([
             ('student_id', '=', partner_id.id),
             ], limit=1, order="id desc")
-        company_id = request.env['res.company'].sudo().search([])
-        values["company_id"] =  company_id
         if hardship_id and hardship_id.state not in ["declined", "expired"]:
             return request.redirect("/my/home")
         return request.render("website_base.hardship_request_template", values)
