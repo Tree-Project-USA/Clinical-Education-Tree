@@ -12,10 +12,6 @@ class Program(models.Model):
     num_terms = fields.Integer(string='Number of terms', default=1)
     active = fields.Boolean(string='Active')
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.user.company_id)
-    
-    ice_term = fields.Integer(string='ICE term Number')
-    tce1_term = fields.Integer(string='TCE1 term Number')
-    tce2_term = fields.Integer(string='TCE2 term Number')
     program_experience_term_ids = fields.One2many(comodel_name='program.experience.term', inverse_name='program_id', string='Program Clinical Experience Terms', store=True)
     
     def action_open_program_experience_term(self):
@@ -55,11 +51,13 @@ class Program(models.Model):
         return res
     
     
-    # @api.constrains('num_terms', 'ice_term', 'tce1_term', 'tce2_term')
-    # def _check_num_terms(self):
-    #     for rec in self:
-    #         if rec.ice_term > rec.num_terms or rec.tce1_term > rec.num_terms or rec.tce2_term > rec.num_terms:
-    #             raise ValidationError("Number of terms must be greater than any other field.")
+    @api.constrains('num_terms', 'program_experience_term_ids', 'program_experience_term_ids.term')
+    def _check_num_terms(self):
+        for rec in self:
+            for record in rec.program_experience_term_ids:
+                if rec.num_terms < record.term:
+                    print((record.experience_id.name, record.term, rec.name, rec.num_terms))
+                    raise ValidationError("The Clinical Experience (%s) with term number (%s) is greater than Program Duration (%s) (%s) terms. " % (record.experience_id.name, record.term, rec.name, rec.num_terms))
             
 
 class ProgramExperienceTerm(models.Model):

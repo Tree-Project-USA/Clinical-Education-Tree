@@ -43,10 +43,6 @@ class PlacementRequest(models.Model):
             
     # Filters
     experience_id = fields.Many2one(comodel_name='clinical.experience', string='Clinical Experience', domain="[('company_id', '=', company_id)]", required=True)
-    placement_type = fields.Selection([
-        ('ice', 'ICE'),
-        ('tce', 'TCE')
-        ], string='Clinical Experience Type', default='ice', required=True)
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.user.company_id)
     year = fields.Selection(selection=SELECTION_YEAR_RANGE, string='Year', default='2000', required=True)
     placement_term = fields.Selection([
@@ -258,9 +254,9 @@ class PlacementRequest(models.Model):
                     allow_offers -= x
             archive_offer_ids = archive_offer_ids.filtered(lambda x: x.offer_id.id in  allow_offers.ids)
             
-            student_archive = self.env['archive'].sudo().search([('student_id', '=', student_id.id), ('placement_type', '=', 'ice'), ('placement_status', '!=', 'not_placed')])
-            if student_archive:
-                continue
+            # student_archive = self.env['archive'].sudo().search([('student_id', '=', student_id.id), ('placement_type', '=', 'ice'), ('placement_status', '!=', 'not_placed')])
+            # if student_archive:
+            #     continue
             
             archive_offer_ids = archive_offer_ids.filtered(lambda archive_offer_id: archive_offer_id.is_linked == False)
             archive_offer_department_ids = archive_offer_ids.mapped('department_id')

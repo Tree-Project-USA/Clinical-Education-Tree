@@ -8,7 +8,6 @@
                 <field name="name"/>
                 <field name="company_id"/>
                 <field name="experience_id"/>
-                <field name="placement_type"/>
                 <field name="placement_term"/>
                 <field name="year"/>
                 <field name="student_ids" widget="many2many_tags" optional="hide"/>
@@ -53,7 +52,6 @@
                         <group>
                             <field name="company_id"/>
                             <field name="experience_id"/>
-                            <field name="placement_type"/>
                             <field name="placement_term"/>
                             <field name="year"/>
                         </group>

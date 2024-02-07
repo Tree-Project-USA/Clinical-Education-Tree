@@ -31,10 +31,6 @@ class PlacementOffer(models.Model):
             ('offer_matched', 'Offer Matched'),
             ('offer_cancel', 'Offer Canceled'),
         ], string='Status', default='offer_details_entered')
-    placement_type = fields.Selection([
-        ('ice', 'ICE'),
-        ('tce', 'TCE'),
-    ], string='Clinical Experience Type')
     # experience_id = fields.Many2one(comodel_name='clinical.experience', string='Clinical Experience', domain="[('company_id', '=', company_id)]", required=True)
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.user.company_id)
     placement_term = fields.Selection([
@@ -83,7 +79,6 @@ class PlacementOffer(models.Model):
             for x in range(line_id.offers):
                 archive_offer_model.create({
                     'department_id': self.main_department_id.id if self.is_single_facility else line_id.department_id.id,
-                    'placement_type': line_id.placement_type,
                     'experience_id': line_id.experience_id.id,
                     'placement_term': line_id.placement_term,
                     'year': line_id.year,
@@ -197,10 +192,6 @@ class PlacementOfferLine(models.Model):
         for rec in self:
             rec.department_ids = rec.facility_id.department_ids
     
-    placement_type = fields.Selection([
-        ('ice', 'ICE'),
-        ('tce', 'TCE'),
-    ], string='Clinical Experience Type')
     experience_id = fields.Many2one(comodel_name='clinical.experience', string='Clinical Experience', domain="[('company_id', '=', company_id)]", required=True)
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.user.company_id)
     placement_term = fields.Selection([

@@ -9,9 +9,6 @@
                     <field name="name"/>
                     <field name="num_terms"/>
                     <field name="company_id" />
-                    <field name="ice_term" string="ICE term"/>
-                    <field name="tce1_term" string="TCE 1 term"/>
-                    <field name="tce2_term" string="TCE 2 term"/>
                     <button name="action_open_program_experience_term" type="object" icon="fa-external-link" title="Open Program terms"/>
                     <field name="active" widget="boolean_toggle"/>
                 </tree>

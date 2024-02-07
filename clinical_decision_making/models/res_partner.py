@@ -40,13 +40,7 @@ class ResPartner(models.Model):
     start_term = fields.Char(string='Start Term', compute='_compute_term_fields', store=True)
     graduation_term = fields.Char(string='Graduation Term/Year', compute='_compute_term_fields', store=True)
     is_with_hardship = fields.Boolean(string='is_with_hardship', compute='_compute_is_with_hardship',  store=True)
-    ice_term = fields.Char(string='ICE Term', store=True)
-    tce1_term = fields.Char(string='TCE1 Term', store=True)
-    tce2_term = fields.Char(string='TCE2 Term', store=True)
-    is_take_ip = fields.Boolean(compute='_compute_is_take_ip', string='Is Take IP')
-    is_complete_ice = fields.Boolean(compute='_compute_term',string='Is Complate Ice', store=True)
-    is_complete_tce1 = fields.Boolean(compute='_compute_term', string='Is Complate Tec1', store=True)
-    is_complete_tce2 = fields.Boolean(compute='_compute_term', string='Is Complate Tec2', store=True)   
+    is_take_ip = fields.Boolean(compute='_compute_is_take_ip', string='Is Take IP')   
     aval_archive_ids = fields.Many2many(comodel_name='archive', string='Archive', compute='get_aval_archive_ids', readonly=False)
     preferred_setting_ids = fields.Many2many(comodel_name='preferred.setting', string='Preferred Setting')
     hardship_count = fields.Integer(compute='_compute_hardship_count', string='HardShip Count')
@@ -117,13 +111,6 @@ class ResPartner(models.Model):
         for rec in self:
             rec.is_take_ip = True if rec.archive_ids.filtered(lambda x: x.setting == 'ip' and x.placement_status != 'not_placed') else False
     
-    @api.depends('archive_ids')
-    def _compute_term(self):
-        for rec in self:
-            rec.is_complete_ice = True if self.env['archive'].search([('student_id', '=', rec.id), ('placement_type', '=', 'ice'), ('placement_status', 'in', ['completed',])]) else False
-            rec.is_complete_tce1 = True if self.env['archive'].search([('student_id', '=', rec.id), ('placement_type', '=', 'tce1'), ('placement_status', 'in', ['completed',])]) else False
-            rec.is_complete_tce2 = True if self.env['archive'].search([('student_id', '=', rec.id), ('placement_type', '=', 'tce2'), ('placement_status', 'in', ['completed',])]) else False
-        
     @api.depends('hardship_ids', 'hardship_ids.state')
     def _compute_is_with_hardship(self):
         for rec in self:
@@ -132,15 +119,12 @@ class ResPartner(models.Model):
     @api.depends('start_year', 'start_term_type', 'program_id', 'alternative_schedule_ids', 'alternative_schedule_ids.state', 'alternative_schedule_ids.year', 'alternative_schedule_ids.term')
     def _compute_term_fields(self):
         for rec in self:
-            # try:
+            try:
                 if rec.start_year and rec.start_term_type  and rec.program_id:
                     rec.start_term = self.convert_term_year(rec.start_term_type, rec.start_year)
                     alternative_schedule = [self.convert_term_year(x.term, x.year) for x in rec.alternative_schedule_ids.filtered(lambda x:x.state == 'confirmed')]
                     graduation_t, graduation_y = rec.calculate_end_term(rec.start_term_type, rec.start_year, rec.program_id.num_terms, alternative_schedule)
                     rec.graduation_term = self.convert_term_year(graduation_t, graduation_y)
-                    print([rec.start_term_type, rec.start_year, rec.program_id.num_terms, 5, alternative_schedule])
-                    print(self.get_specific_term_year(rec.start_term_type, rec.start_year, rec.program_id.num_terms, 5, alternative_schedule))
-                    print(rec.program_id.program_experience_term_ids)
                     experience_schedual_ids = [
                         (0, 0, {
                             'experience_id': schedual_id.experience_id.id,
@@ -169,11 +153,11 @@ class ResPartner(models.Model):
                     rec.graduation_term = ''
                     rec.experience_schedual_ids = []
                     
-            # except Exception as e:
-            #     print(e)
-            #     rec.start_term = ''
-            #     rec.graduation_term = ''
-            #     rec.experience_schedual_ids = []
+            except Exception as e:
+                print(e)
+                rec.start_term = ''
+                rec.graduation_term = ''
+                rec.experience_schedual_ids = []
 
                     
     def action_open_hardship(self):
@@ -332,6 +316,8 @@ class ResPartner(models.Model):
             if counter == target_term_index:
                 return terms[current_index], current_year
     
+    def get_student_schedual(self, experience_id):
+        return self.experience_schedual_ids.filtered(lambda x: x.experience_id.id == experience_id)
     @api.model
     def convert_term_year(self, term, year):
         term_abbr = ""

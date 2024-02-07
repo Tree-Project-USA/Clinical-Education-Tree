@@ -24,14 +24,8 @@ class Archive(models.Model):
     city = fields.Char(related='geographical_id.city')
     state = fields.Char(related='geographical_id.state')
     zip_code = fields.Char(related='geographical_id.zip_code')
-    experience_id = fields.Many2one(comodel_name='clinical.experience', string='Clinical Experience', domain="[('company_id', '=', company_id)]", required=True)
+    experience_id = fields.Many2one(comodel_name='clinical.experience', string='Clinical Experience', domain="[('company_id', '=', company_id)]", required=True, tracking=True)
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.user.company_id)
-    
-    placement_type = fields.Selection([
-        ('ice', 'ICE'),
-        ('tce1', 'TCE1'),
-        ('tce2', 'TCE2'),
-    ], string='Clinical Experience Type', store=True, tracking=True)
     setting = fields.Selection([
         ('op', 'OP'),
         ('ip', 'IP'),
@@ -69,9 +63,7 @@ class Archive(models.Model):
     ], string='Match State', tracking=True)
     archive_offer_id = fields.Many2one('archive.offer', string='Archive Offer', domain="[('student_id', '=', False), ('term', '=', term)]")
     is_show_student = fields.Boolean("Show to Student")
-    ice_term = fields.Char(string='ICE Term', related='student_id.ice_term', store=True,)
-    tce1_term = fields.Char(string='TCE1 Term', related='student_id.tce1_term', store=True,)
-    tce2_term = fields.Char(string='TCE2 Term', related='student_id.tce2_term', store=True,)
+
     is_declined = fields.Boolean("Is Declined", tracking=True)
     department_id = fields.Many2one(comodel_name='facility.department' , related='archive_offer_id.department_id', store=True,  readonly=False)
     term = fields.Char(string='Term', compute='_compute_term', store=True)
@@ -111,12 +103,12 @@ class Archive(models.Model):
         self.is_declined = False
         self.placement_status = 'not_placed'
 
-    @api.constrains('student_id', 'placement_type', 'placement_status', 'setting')
+    @api.constrains('student_id', 'experience_id', 'placement_status', 'setting')
     def _check_placement_status(self):
         for rec in self:
-            comp_archive = self.env['archive'].search_count([('student_id', '=', rec.student_id.id), ('id', '!=', rec.id), ('placement_type', '=', rec.placement_type), ('placement_status', 'in', ['confirmed', 'completed'])]) and rec.placement_status in ['confirmed', 'completed']
+            comp_archive = self.env['archive'].search_count([('student_id', '=', rec.student_id.id), ('id', '!=', rec.id), ('experience_id', '=', rec.experience_id.id), ('placement_status', 'in', ['confirmed', 'completed'])]) and rec.placement_status in ['confirmed', 'completed']
             if comp_archive:
-                raise ValidationError("Student (%s) is already Matching In (%s) for (%s)" % (rec.student_id.name, rec.facility_id.name,rec.placement_type))
+                raise ValidationError("Student (%s) is already Matching In (%s) for (%s)" % (rec.student_id.name, rec.facility_id.name, rec.experience_id.name))
     
 
     def write(self, vals):
@@ -125,7 +117,7 @@ class Archive(models.Model):
         if 'placement_status' in vals:
             for rec in self:
                 if rec.placement_status == 'confirmed':
-                    self.search([('id', '!=', self.id), ('student_id', '=', self.student_id.id), ('placement_type', '=', self.placement_type), ('placement_term', '=', self.placement_term)]).write({
+                    self.search([('id', '!=', self.id), ('student_id', '=', self.student_id.id), ('experience_id', '=', self.experience_id.id), ('placement_term', '=', self.placement_term)]).write({
                         'placement_status': 'not_placed'
                     })
                     
@@ -149,23 +141,14 @@ class Archive(models.Model):
 
         return term, int(year)
 
-    @api.depends('student_id', 'placement_type')
+    @api.depends('student_id', 'experience_id')
     def _compute_term_year(self):
         for rec in self:
-            if rec.student_id and rec.placement_type:
-                if rec.placement_type == "ice" and rec.student_id.ice_term:
-                    term,year = rec.convert_abbr_to_term_year(rec.student_id.ice_term)
-                    rec.year = str(year)
-                    rec.placement_term = term.lower()
-                elif rec.placement_type == "tce1" and rec.student_id.tce1_term:
-                    term,year = rec.convert_abbr_to_term_year(rec.student_id.tce1_term)
-                    rec.year = str(year)
-                    rec.placement_term = term.lower()
-                elif rec.placement_type == "tce2" and rec.student_id.tce2_term:
-                    term,year = rec.convert_abbr_to_term_year(rec.student_id.tce2_term)
-                    rec.year = str(year)
-                    rec.placement_term = term.lower()
-            
+            if rec.student_id and rec.experience_id:
+                schedual_id = rec.student_id.get_student_schedual(rec.experience_id.id)
+                rec.year = schedual_id.year
+                rec.placement_term = schedual_id.placement_term
+
     def action_approve(self):
         self.write({
          'match_state': 'approve',
@@ -212,7 +195,7 @@ class Archive(models.Model):
         return action
     
     def confirm_placement_status(self):
-        self.search([('id', '!=', self.id), ('student_id', '=', self.student_id.id), ('placement_type', '=', self.placement_type), ('placement_term', '=', self.placement_term)]).write({
+        self.search([('id', '!=', self.id), ('student_id', '=', self.student_id.id), ('experience_id', '=', self.experience_id.id), ('placement_term', '=', self.placement_term)]).write({
             'placement_status': 'not_placed'
         })
 
