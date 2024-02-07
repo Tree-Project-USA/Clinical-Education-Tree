@@ -17,10 +17,9 @@ class ArchiveOffer(models.Model):
     offer_id = fields.Many2one(comodel_name='placement.offer', string='Offer')
     offer_line_id = fields.Many2one(comodel_name='placement.offer.line', string='Line')
     setting = fields.Selection(related='offer_line_id.setting', store=True)
-    placement_type = fields.Selection([
-        ('ice', 'ICE'),
-        ('tce', 'TCE'),
-    ], string='Clinical Experience Type', required=True)
+    experience_id = fields.Many2one(comodel_name='clinical.experience', string='Clinical Experience', domain="[('company_id', '=', company_id)]", required=True)
+    company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.user.company_id)
+
     placement_term = fields.Selection([
         ('fall', 'Fall'),
         ('spring', 'Spring'),

@@ -15,7 +15,7 @@ access_medical_facility,medical.facility,model_medical_facility,,1,1,1,1
 access_placement_offer,placement.offer,model_placement_offer,,1,1,1,1
 access_placement_offer_line,placement.offer.line,model_placement_offer_line,,1,1,1,1
 
-access_program,program,model_program,,1,1,1,1
+access_program,program,model_program,,1,1,1,0
 access_placement_request,placement.request,model_placement_request,,1,1,1,1
 
 access_archive_offer,archive.offer,model_archive_offer,,1,1,1,1
@@ -32,3 +32,6 @@ access_active_facility_depend_wizard_manager,active_facility_depend_wizard_manag
 access_attachments_manager,attachments_manager,model_attachments,,1,1,1,1
 access_attachment_type_manager,attachment_type_manager,model_attachment_type,,1,1,1,1
 access_attachment_request_manager,attachment_request_manager,model_attachment_request,,1,1,1,1
+access_clinical_experience_manager,clinical_experience_manager,model_clinical_experience,,1,1,1,0
+access_program_experience_term_manager,program_experience_term_manager,model_program_experience_term,,1,1,1,1
+access_clinical_experience_schedual_manager,clinical_experience_schedual_manager,model_clinical_experience_schedual,,1,1,1,1

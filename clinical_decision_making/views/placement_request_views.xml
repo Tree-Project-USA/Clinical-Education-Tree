@@ -4,9 +4,10 @@
         <field name="name">placement.request.tree</field>
         <field name="model">placement.request</field>
         <field name="arch" type="xml">
-            <tree string="Placement Requests" decoration-info="placement_type == 'ice'" decoration-success="placement_type == 'tce'">
+            <tree string="Placement Requests">
                 <field name="name"/>
-                <field name="placement_type"/>
+                <field name="company_id"/>
+                <field name="experience_id"/>
                 <field name="placement_term"/>
                 <field name="year"/>
                 <field name="student_ids" widget="many2many_tags" optional="hide"/>
@@ -49,7 +50,8 @@
                     </div>
                     <group>
                         <group>
-                            <field name="placement_type"/>
+                            <field name="company_id"/>
+                            <field name="experience_id"/>
                             <field name="placement_term"/>
                             <field name="year"/>
                         </group>

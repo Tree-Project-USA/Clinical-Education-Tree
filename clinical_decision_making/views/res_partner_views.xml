@@ -15,9 +15,6 @@
                 <field name="email"/>
                 <field name="personal_phone"/>
                 <field name="home_address"/>
-                <field name="ice_term"/>
-                <field name="tce1_term"/>
-                <field name="tce2_term"/>
             </tree>
         </field>
     </record>
@@ -36,9 +33,6 @@
                 <field name="personal_phone"/>
                 <field name="home_address"/>
                 <field name="contact_address"/>
-                <field name="ice_term"/>
-                <field name="tce1_term"/>
-                <field name="tce2_term"/>
             </search>
         </field>
     </record>
@@ -95,11 +89,9 @@
                                 <field name="last_name" class="o_address_state" required="1" placeholder="Student Last Name"/>
                             </div>
                             <field name="is_with_hardship" invisible="1"/>
-                            <field name="is_complete_ice"  invisible="1"/>
-                            <field name="is_complete_tce1" invisible="1"/>
-                            <field name="is_complete_tce2" invisible="1"/>
                             <field name="campus" readonly="1"/>
                             <field name="program_id"/>
+                            <field name="company_id"/>
                             <field name="program_type" readonly="1"/>
                             <field name="start_year"/>
                             <field name="start_term_type"/>
@@ -113,13 +105,24 @@
                             <field name="personal_phone"/>
                             <field name="personal_email_address"/>
                             <field name="email" string="University Email Address" required="1"/>
-                            <field name="ice_term"/>
-                            <field name="tce1_term"/>
-                            <field name="tce2_term"/>
                         </group>
                     </group>
 
                     <notebook colspan="4">
+                        <page name='experience_schedual' string="Clinical Experience Schedule">
+                            <field name="experience_schedual_ids">
+                                <tree>
+                                    <field name="student_id" invisible="1"/>
+                                    <field name="company_id" groups="base.group_multi_company"/>
+                                    <field name="experience_id"/>
+                                    <field name="name" string="Term/ Year"/>
+                                    <field name="placement_term"/>
+                                    <field name="year"/>
+                                    <field name="state" widget="badge" decoration-muted="state == 'not_taked'" decoration-success="state == 'taked'"/>
+                                </tree>
+                            </field>
+                        </page>
+                        
                         <page string="Preferred Addresses" name="student_geographical" autofocus="autofocus">
                             <field name="geographical_ids" mode="tree">
                                 <tree editable="bottom" create="false">
@@ -139,7 +142,8 @@
                                     <field name="is_declined" invisible="1"/>
                                     <field name="facility_id" required="1" attrs="{'readonly': [('is_declined', '=', True)]}"/>
                                     <field name="department_id" required="1" attrs="{'readonly': [('is_declined', '=', True)]}"/>
-                                    <field name="placement_type" required="1" attrs="{'readonly': [('is_declined', '=', True)]}"/>
+                                    <field name="company_id" required="1" attrs="{'readonly': [('is_declined', '=', True)]}"/>
+                                    <field name="experience_id" required="1" attrs="{'readonly': [('is_declined', '=', True)]}"/>
                                     <field name="placement_term" readonly="1" force_save="1"/>
                                     <field name="year" readonly="1" force_save="1"/>
                                     <field name="setting" required="1" attrs="{'readonly': [('is_declined', '=', True)]}"/>
@@ -177,7 +181,7 @@
                                 </tree>
                             </field>
                         </page>
-                        
+
                         <page name='internal_notes' string="Notes">
                             <field name="comment" placeholder="Internal notes..."/>
                         </page>
