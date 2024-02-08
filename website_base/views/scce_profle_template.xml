@@ -149,16 +149,6 @@
                           <td colspan="1"><t t-esc="val.zip"/></td>
                           <td colspan="1">
                             <a
-                             t-if="not val.offer_ids"
-                              type="button"
-                              class="btn my-2"
-                              role="button" 
-                              t-attf-href="/submit/availability/#{val.id}"
-                              style="background-color:  #ab8631; !important; color: #fff"
-                            >
-                              <i class="fa fa-pencil"/> Submit Availability
-                            </a>
-                            <a
                               t-if="val.offer_ids"
                               type="button"
                               class="btn my-2"

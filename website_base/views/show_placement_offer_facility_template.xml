@@ -58,12 +58,7 @@
                                     <td><t t-esc="val.department_id.name"/></td>
                                     <td><t t-esc="val.student_id.name"/></td>
                                     <td>
-                                      <t t-if="val.placement_type in ['tce1', 'tce2']">
-                                        TCE
-                                      </t>
-                                      <t t-else="">
-                                        ICE
-                                      </t>
+                                      <t t-esc="val.experience_id.name"/>
                                     </td>
                                     <td><t t-esc="dict(val._fields['setting'].selection).get(val.setting)"/></td>
                                     <td><t t-esc="dict(val._fields['placement_term'].selection).get(val.placement_term)"/></td>
@@ -190,12 +185,7 @@
                                     <td><t t-esc="val.facility_id.geographical_id.zip_code"/></td>
                                     <td><t t-esc="val.student_id.name"/></td>
                                     <td>
-                                      <t t-if="val.placement_type in ['tce1', 'tce2']">
-                                        TCE
-                                      </t>
-                                      <t t-else="">
-                                        ICE
-                                      </t>
+                                      <t t-esc="val.experience_id.name"/>
                                     </td>
                                     <td><t t-esc="dict(val._fields['setting'].selection).get(val.setting)"/></td>
                                     <td><t t-esc="dict(val._fields['placement_term'].selection).get(val.placement_term)"/></td>

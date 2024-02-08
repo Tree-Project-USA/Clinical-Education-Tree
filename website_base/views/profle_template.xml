@@ -577,8 +577,7 @@
                         </a>
                       </td>
                       <td>
-                        <t
-                          t-esc="dict(val._fields['placement_type'].selection).get(val.placement_type)" />
+                        <t t-esc="val.experience_id.name"/>
                       </td>
                       <td>
                         <t
