@@ -14,7 +14,7 @@ class SubmitAvailability(http.Controller):
             def create_line_ids(department, kw):
                 return (0, 0, {
                 'department_id': kw[f"department_id_{department}"],
-                'placement_type': kw[f"placement_type_{department}"],
+                'experience_id': kw[f"experience_id_{department}"],
                 'placement_term': kw[f"placement_term_{department}"],
                 'year': kw[f"term_{department}"],
                 'setting': kw[f"setting_{department}"],
@@ -170,6 +170,7 @@ class SubmitAvailability(http.Controller):
         values = {}
         department_ids = request.env["facility.department"].sudo().search([])
         company_ids = request.env["res.company"].sudo().search([])
+        clinical_experience_ids = request.env["clinical.experience"].sudo().search([])
         SELECTION_YEAR_RANGE = [{
                     'id': str(i),
                 } for i in range(2020, 2500)]
@@ -184,7 +185,12 @@ class SubmitAvailability(http.Controller):
                     'id': company.id,
                     'name': company.name if company.name else '',
                 } for company in company_ids]
+        experiences = [{
+                    'id': experience.id,
+                    'name': experience.name if experience.name else '',
+                } for experience in clinical_experience_ids]
         values["department_ids"] = departments
         values["company_ids"] = companys
+        values["clinical_experience_ids"] = experiences
         values["SELECTION_YEAR_RANGE"] = SELECTION_YEAR_RANGE
         return values

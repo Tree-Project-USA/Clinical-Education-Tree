@@ -40,11 +40,10 @@ odoo.define("website_base.departments", function(require) {
                 </select>
             </td>
             <td class="row-index">
-                <select name="placement_type_` + counter_availability + `"  
-                    class="form-control col-xl-12 custom-select placement_type_` + counter_availability + `">
-                    <option  value="" selected="selected">` + option + `</option>
-                    <option  value="ice">ICE</option>
-                    <option value="tce">TCE</option>
+                <select name="experience_id_` + counter_availability + `" 
+                    id="experience_id_` + counter_availability + `"
+                    class="form-control col-xl-12 custom-select experience_id_` + counter_availability + `" required="1">
+                    <option  value="" selected="selected" disabled="1">` + option + `</option>
                 </select>
             </td>
             <td class="row-index">
@@ -140,6 +139,7 @@ odoo.define("website_base.departments", function(require) {
                 return this;
             };
             var department = "#department_id_" + counter_availability;
+            var experience = "#experience_id_" + counter_availability;
             var company = "#company_id_" + counter_availability;
             var year = "#term_" + counter_availability;
             var facility_id = $("#facility_id").val()
@@ -156,6 +156,12 @@ odoo.define("website_base.departments", function(require) {
                     $(department).append($('<option>', {
                         value: value.id,
                         text: value.name + '/' + value.street + '/' + value.city + '/' + value.state,
+                    }))
+                })
+                _.each(result["clinical_experience_ids"], function(value){
+                    $(experience).append($('<option>', {
+                        value: value.id,
+                        text: value.name,
                     }))
                 })
                 _.each(result["SELECTION_YEAR_RANGE"], function(value){
