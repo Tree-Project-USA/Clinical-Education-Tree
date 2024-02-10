@@ -54,13 +54,21 @@ class ClinicalExperienceSchedual(models.Model):
     state = fields.Selection([
             ('not_taked', 'Not Taked'),
             ('taked', 'Taked'),
-        ], string='Status', default='not_taked')
+        ], string='Status', compute='_compute_student_experience_state')
     placement_term = fields.Selection([
         ('fall', 'Fall'),
         ('spring', 'Spring'),
         ('summer', 'Summer'),
     ], string='Term',)
     year = fields.Selection(selection=SELECTION_YEAR_RANGE, string='Year')
+
+    @api.depends('experience_id', 'name')
+    def _compute_student_experience_state(self):
+        for rec in self:
+            if self.env['archive'].search([('student_id', '=', rec.student_id.id), ('experience_id', '=', rec.experience_id.id), ('placement_status', 'in', ['confirmed', 'completed'])]):
+                rec.state = 'taked'
+            else:
+                rec.state = 'not_taked'
 
     @api.depends('placement_term', 'year')
     def _compute_term_name(self):
