@@ -78,3 +78,7 @@ header .navbar-brand.logo img {
     display: none;
     white-space: nowrap;
 }
+
+.o_footer_copyright{
+    display: none;
+}
