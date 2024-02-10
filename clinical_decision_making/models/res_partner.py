@@ -136,7 +136,6 @@ class ResPartner(models.Model):
                         for schedual_id in rec.program_id.program_experience_term_ids #.filtered(lambda x:x.experience_id.active == True)
                     ]
                     # TODO : Add code here to to remove last experience_schedual_ids , Use with store=True
-                    print(experience_schedual_ids)
                     rec.experience_schedual_ids = experience_schedual_ids
                     print('-------------------------------- Alternative Schedule: ', alternative_schedule)
                     
@@ -264,7 +263,11 @@ class ResPartner(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
-            vals['studentid'] = self._get_studentid_sequence()
+            try:
+                    vals['studentid'] = self.sudo()._get_studentid_sequence()
+            except:
+                    vals['studentid'] = ''
+        
         return super(ResPartner, self.with_context(pass_validation=True)).create(vals_list)
 
     @api.constrains('preferred_setting_ids')
