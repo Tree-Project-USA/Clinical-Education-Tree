@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="s_banar">
+      <section class="s_banner parallax s_parallax_is_fixed pt96 pb96 o_colored_level" data-scroll-background-ratio="1" data-snippet="s_banner" data-name="Banner" style="background-image: none;">
+        <span class="s_parallax_bg oe_img_bg" style="background-image: url('/them_cpdm/static/src/img/library_image_03.jpg'); background-position: 50% 0;"/>
+        <div class="container">
+          <div class="row s_nb_column_fixed o_grid_mode" style="--grid-item-padding-y: 32px; --grid-item-padding-x: 15px;" data-row-count="4">
+            <div class="jumbotron rounded o_cc o_cc1 o_colored_level o_grid_item g-col-lg-6 g-height-4 col-lg-6" data-name="Box" style="z-index: 1; grid-area: 1 / 4 / 5 / 10;">
+              <p>
+                <span style="font-size: 18px;">​Get in touch with us in revolutionizing the DPT program landscape with Clin Ed TREE – where simplicity meets precision in clinical education management!</span>
+              </p>
+              <p data-bs-original-title="" title="" aria-describedby="tooltip668118">
+                <a class="mb-2 btn btn-primary" href="/contactus" data-bs-original-title="" title="">Contact Us</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </template>
+</odoo>

@@ -1,0 +1,76 @@
+// -------------------------------------------------------------------------- //
+// COLORS
+// -------------------------------------------------------------------------- //
+
+$o-color-palettes: map-merge($o-color-palettes,
+    (
+        'deem': (
+            'o-color-1': #a6ab75,
+            'o-color-2': #a6ab75,
+            'o-color-3': #FFFFFF,
+            'o-color-4': #c4d2ae,
+            'o-color-5': #326434,
+            'primary': #a6ab75,
+        ),
+
+        'deem_header': (
+            'o-color-1': #a6ab75,
+            'o-color-2': #326434,
+            'o-color-3': #52127c,
+            'o-color-4': #c4d2ae,
+            'o-color-5': #326434,
+            'primary': #a6ab75,
+        ),
+        
+        'deem_footer': (
+            'o-color-1': #a6ab75,
+            'o-color-2': #ffffff,
+            'o-color-3': #a6ab75,
+            'o-color-4': #c4d2ae,
+            'o-color-5': #a6ab75,
+            'primary': #a6ab75,
+
+        ),
+    )
+);
+
+$o-selected-color-palettes-names: append($o-selected-color-palettes-names, 'deem');
+$o-selected-color-palettes-names: append($o-selected-color-palettes-names, 'deem_header');
+$o-selected-color-palettes-names: append($o-selected-color-palettes-names, 'deem_footer');
+
+
+// -------------------------------------------------------------------------- //
+// PRESETS
+// -------------------------------------------------------------------------- //
+
+$o-website-values-palettes: (
+    (
+        // Colors
+        'color-palettes-name': 'deem',
+        // // Header
+        'header-template': 'deem_header',
+        // 'logo-height': 4rem,
+
+        // // Footer
+        'footer-template': 'deem_footer',
+    ),
+);
+
+.nav-link.active{
+    color: var(--o-color-2) !important;
+}
+
+a.nav-link.text-o-color-2:hover{
+    color: var(--o-color-2) !important;
+}
+
+header .navbar-nav .js_language_selector button.dropdown-toggle {
+    font-size: var(--body-font-size);
+    color: inherit !important;
+}
+
+@media (min-width: 767.98px) { 
+    #navbarDiv {
+        height: 60px;
+    }
+ }

@@ -6,7 +6,7 @@
             <div class="container">
                 <div class="loading-indicator text-center"
                      style="display: flex;flex-direction: column;align-items: center;justify-content: center;height: 90vh;">
-                    <div class="spinner-border" style ="width:15vh; height:15vh; color:#ab8631" role="status">
+                    <div class="spinner-border" style ="width:15vh; height:15vh; color:#326434" role="status">
                         <span class="visually-hidden"></span>
                     </div>
                 </div>
@@ -51,7 +51,7 @@
                             <div class="row mt-4">
                                 <div>
                                     <table class="table table-borderless mt-3 total_project_costs">
-                                        <thead>
+                                        <thead style="color:# a6ab75;">
                                             <tr>
                                                 <td>
                                                     <strong>
@@ -88,12 +88,12 @@
                             <div class="clearfix oe_login_buttons mt-4">
                                 <button type="submit"
                                     class="custom_create btn btn-block"
-                                    style="background-color:#ab8631;color:#fff;">
+                                    style="background-color:#326434;color:#fff;">
                                     Submit
                                 </button>
                                 <a href="/my/home"
                                     class="float-end custom_create btn btn-block"
-                                    style="background-color:#ab8631;color:#fff;">
+                                    style="background-color:#326434;color:#fff;">
                                     Back To My Profile
                                 </a>
                             </div>
