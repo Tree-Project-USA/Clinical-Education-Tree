@@ -1,0 +1,80 @@
+:root {
+    --Orang: #DE6B2B;
+    --wight: #E7EFE0;
+    --wight_r: #F6F9F4;
+}
+
+.bg-none{
+    background-color: transparent !important;
+}
+
+.rtl{
+    direction: rtl;
+}
+
+body{
+    background: #FFFFFF;
+}
+
+#wrapwrap {
+    background-color: #152F26;
+}
+
+#wrapwrap > main{
+    background-color: #FFFFFF !important;
+}
+
+.navbar-light .navbar-toggler-icon {
+    background-image: url(/them_cpdm/static/src/img/snippets/logo-compny/menu.png) !important;
+}
+
+.navbar {
+    margin-bottom: 0;
+}
+
+header .navbar-brand.logo img {
+    height: 60px !important;
+}
+
+.navbar #top_menu {
+    align-items: center;
+}
+
+#sign_in{
+    color: var(--Orang) !important;
+}
+
+.img-char{
+    margin-left: 2rem;
+}
+
+.badge-primary {
+    color: #FFFFFF;
+    background-color: var(--Orang) !important;
+}
+
+#wrapwrap.o_header_overlay > header:not(.o_header_affixed):not(.o_top_menu_collapse_shown) > .navbar {
+    background-color: #152f26b5 !important;
+    border-color: transparent;
+    color: var(--wight_r) !important;
+}
+
+.navbar-light, #wrapwrap.o_header_overlay > header:not(.o_header_affixed):not(.o_top_menu_collapse_shown) > .navbar {
+    background-color: #0202028f !important;
+    color: var(--wight_r) !important;
+}
+
+.nav-link {
+    color: var(--wight_r) !important;
+}
+
+.js_change_lang {
+    border: 1px solid;
+    border-radius: 2rem;
+    padding: 5px;
+}
+
+.navbar .btn {
+    display: none;
+    white-space: nowrap;
+}

@@ -315,13 +315,13 @@
                 class="btn my-2"
                 role="button"
                 href="/add/location"
-                style="background-color:  #ab8631; !important; color: #000000"
+                style="background-color:#326434; color: #fff"
               >
                   <i class="fa fa-pencil" /> Submit
                 </a>
               </div>
               <table class="table table-striped table-bordered shadow-sm text-center my-4"  t-if="locations">
-                <thead style="background-color:#ab8631; color: #000000">
+                <thead style="background-color:#326434; color: #fff">
                   <tr>
                     <th style="width: 5rem;">#</th>
                     <th>Zip code</th>
@@ -356,7 +356,7 @@
                   class="btn my-2"
                   role="button"
                   href="/add/preferred/setting"
-                  style="background-color:  #ab8631; !important; color: #000000"
+                  style="background-color:#326434; color: #fff"
                 >
                   <i class="fa fa-pencil" /> Submit
                 </a>
@@ -366,13 +366,13 @@
                   class="btn my-2"
                   role="button"
                   href="/add/preferred/setting"
-                  style="background-color:  #ab8631; !important; color: #000000"
+                  style="background-color:#326434; color: #fff"
                 >
                   <i class="fa fa-pencil" /> Update
                 </a>
               </div>
               <table class="table table-striped table-bordered shadow-sm text-center my-4" t-if="partner.preferred_setting_ids">
-                <thead style="background-color:#ab8631; color: #000000">
+                <thead style="background-color:#326434; color: #fff">
                   <tr>
                     <th style="width: 5rem;">#</th>
                     <th>Name</th>
@@ -401,7 +401,7 @@
                   class="btn my-2"
                   role="button"
                   href="/hardship/request"
-                  style="background-color:  #ab8631; !important; color: #000000"
+                  style="background-color:#326434; color: #fff"
                 >
                   <i class="fa fa-pencil" />Submit
                 </a>
@@ -442,7 +442,7 @@
                     <div class="row">
                       <div class="col-12">
                         <table class="table table-striped table-bordered shadow-sm text-center my-4">
-                          <thead style="background-color:#ab8631; color: #000000">
+                          <thead style="background-color:#326434; color: #fff">
                             <tr>
                               <th style="width: 5rem;">#</th>
                               <th>Zip code</th>
@@ -475,7 +475,7 @@
                     <div class="row">
                       <div class="col-12">
                         <table class="table table-striped table-bordered shadow-sm text-center my-4">
-                          <thead style="background-color:#ab8631; color: #000000">
+                          <thead style="background-color:#326434; color: #fff">
                             <tr>
                               <th style="width: 5rem;">#</th>
                               <th>Attachments</th>
@@ -496,7 +496,7 @@
                                             type="button"
                                             class="btn my-2"
                                             role="button" 
-                                            style="background-color:  #ab8631; !important; color: #fff"
+                                            style="background-color:  #326434; !important; color: #fff"
                                             t-attf-href="/web/content/hardship.request/#{file.id}/attachment_confirm?download=true"
                                           >
                                       <i class="fa fa-download" />
@@ -505,7 +505,7 @@
                                             type="button"
                                             class="btn my-2"
                                             role="button" 
-                                            style="background-color:  #ab8631; !important; color: #fff"
+                                            style="background-color:  #326434; !important; color: #fff"
                                             t-attf-href="/web/content/hardship.request/#{file.id}/attachment_confirm"
                                             target="new"
                                           >
@@ -520,7 +520,7 @@
                                             type="button"
                                             class="btn my-2"
                                             role="button" 
-                                            style="background-color:  #ab8631; !important; color: #fff"
+                                            style="background-color:  #326434; !important; color: #fff"
                                             t-attf-href="/web/content/hardship.request/#{file.id}/attachment_cancel?download=true"
                                           >
                                       <i class="fa fa-download" />
@@ -530,7 +530,7 @@
                                             type="button"
                                             class="btn my-2"
                                             role="button" 
-                                            style="background-color:  #ab8631; !important; color: #fff"
+                                            style="background-color:  #326434; !important; color: #fff"
                                             t-attf-href="/web/content/hardship.request/#{file.id}/attachment_cancel"
                                             target="new"
                                           >
@@ -552,7 +552,7 @@
             <div class="tab-pane fade my-4" id="placement_history" role="tabpanel"
               aria-labelledby="placement-history-tab">
               <table class="table table-striped table-bordered shadow-sm text-center mt-4">
-                <thead style="background-color:#b4904f; color: #000000">
+                <thead style="background-color:#326434; color: #fff">
                   <tr>
                     <th style="width: 5rem;">#</th>
                     <th>Department</th>
@@ -616,7 +616,7 @@
                   class="btn my-2"
                   role="button"
                   href="/attachment/request"
-                  style="background-color:  #ab8631; !important; color: #000000"
+                  style="background-color:#326434; color: #fff"
                 >
                   <i class="fa fa-pencil" />Add Medical Document
                 </a>
@@ -650,7 +650,7 @@
                 <div class="tab-pane fade my-4 show active" id="medical_attachment_ids" role="tabpanel"
                   aria-labelledby="medical-attachment-ids-tab">
                   <table class="table table-striped table-bordered shadow-sm text-center mt-4" t-if="medical_attachment_id.medical_attachment_ids">
-                    <thead style="background-color:#b4904f; color: #000000">
+                    <thead style="background-color:#326434; color: #fff">
                       <tr>
                         <th scope="col">Attachment Type</th>
                         <th scope="col">Expiration Date</th>
@@ -672,7 +672,7 @@
                                 type="button"
                                 class="btn my-2"
                                 role="button" 
-                                style="background-color:  #ab8631; !important; color: #000000"
+                                style="background-color:#326434; color: #fff"
                                 t-attf-href="/download/attachment/#{attachment.id}"
                                 >
                               <i class="fa fa-download" />

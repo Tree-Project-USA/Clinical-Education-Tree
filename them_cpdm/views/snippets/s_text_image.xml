@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <template id="s_text_image">
+      <section class="s_text_image o_colored_level pt64 pb72" data-snippet="s_image_text" data-name="Image - Text" style="background-image: none;">
+        <div class="container">
+          <div class="row align-items-center">
+            <div class="col-lg-6 pt16 pb16 o_colored_level o_animate o_animate_on_scroll o_anim_fade_in" data-scroll-zone-start="0" data-scroll-zone-end="100" style="animation-delay: -0.574473s;">
+              <img src="/them_cpdm/static/src/img/library_image_16.jpg" class="img img-fluid mx-auto o_animate o_animate_on_scroll rounded o_anim_zoom_out" alt="" loading="eager" data-original-id="1272" data-original-src="/website/static/src/img/snippets_demo/s_image_text.jpg" data-mimetype="image/jpeg" data-bs-original-title="" title="" aria-describedby="tooltip342823" data-scroll-zone-start="0" data-scroll-zone-end="100" style="animation-delay: -0.55762s;"/>
+            </div>
+            <div class="col-lg-6 pt16 pb16 o_colored_level o_animate o_animate_on_scroll o_anim_fade_in" data-bs-original-title="" title="" aria-describedby="tooltip768327" style="animation-delay: -0.510222s;" data-scroll-zone-start="0" data-scroll-zone-end="100">
+              <p data-bs-original-title="" title="" aria-describedby="tooltip22942" style="text-align: justify;">
+                <span style="font-size: 24px;">Welcome to Clin Ed TREE, the groundbreaking Clinical Education Management Software designed to streamline and enhance the entire DPT program experience. This innovative platform focuses on simplifying processes, ensuring placement quality, and minimizing administrative burdens for all stakeholders.</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </template>
+</odoo>

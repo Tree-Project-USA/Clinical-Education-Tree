@@ -15,7 +15,7 @@
                     <div class="row mt-4">
                         <div>
                             <table class="table add_file table-bordered">
-                              <thead>
+                              <thead style="color:# a6ab75;">
                                 <tr>
                                     <th style="width: 20rem" class="text-center">University</th>
                                     <th style="width: 20rem" class="text-center">Department</th>
@@ -37,7 +37,7 @@
                                     <a 
                                       id="add_departments" 
                                       class="btn m-2"
-                                      style="background-color:#ab8631;color:#fff;" 
+                                      style="background-color:#326434;color:#fff;" 
                                     >
                                       <h6>Add Department</h6>
                                     </a>
@@ -50,12 +50,12 @@
                     <div class="clearfix oe_login_buttons mt-4">
                         <button type="submit"
                             class="custom_create btn btn-block"
-                            style="background-color:#ab8631;color:#fff;">
+                            style="background-color:#326434;color:#fff;">
                             Submit
                         </button>
                         <a href="/my/home"
                             class="float-end custom_create btn btn-block "
-                            style="background-color:#ab8631;color:#fff;">
+                            style="background-color:#326434;color:#fff;">
                             Back To My Profile
                         </a>
                     </div>

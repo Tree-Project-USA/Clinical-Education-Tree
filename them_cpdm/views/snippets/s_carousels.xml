@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="s_carousel">
+        <section class="s_carousel_wrapper" data-vxml="001" data-snippet="s_carousel" data-name="Carousel" style="">
+            <div class="s_carousel s_carousel_default carousel slide" data-bs-interval="10000" id="myCarousel1707572602016" style="background-image: none;">
+                <div class="carousel-inner">
+                <div class="carousel-item o_colored_level oe_img_bg o_bg_img_center pt256 pb256 active" style="background-image: url('/them_cpdm/static/src/img/s_picture_default_image.jpg');" data-name="Slide">
+                    <div class="container oe_unremovable">
+                    <div class="row content">
+                        <div class="carousel-content col-lg-6 o_colored_level">
+                        <h2><span style="font-size: 62px;"><strong>Clin Ed TREE</strong></span>&amp;nbsp;<font/><br/></h2>
+                        <p>
+                            <span style="font-size: 24px;">
+                            <strong>Clin Ed TREE – Revolutionizing DPT Clinical Placement Management!&amp;nbsp;</strong>
+                            </span>
+                            <br/>
+                        </p>
+                        <!-- <p data-bs-original-title="" title="" aria-describedby="tooltip98091">
+                            <a href="/contactus" class="btn btn-primary mb-2 o_default_snippet_text">Contact us</a>
+                        </p> -->
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </section>
+    </template>
+</odoo>
