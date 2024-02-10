@@ -28,7 +28,7 @@ class ArchiveOffer(models.Model):
     year = fields.Selection(selection=SELECTION_YEAR_RANGE, string='Year', required=True)
     term = fields.Char(string='Term', compute='_compute_term', store=True)
     
-    @api.depends('placement_term', 'year', 'offer_id', 'offer_id.placement_term', 'offer_id.year')
+    @api.depends('placement_term', 'year', 'offer_id')
     def _compute_term(self):
         for rec in self:
             if rec.year and rec.placement_term:

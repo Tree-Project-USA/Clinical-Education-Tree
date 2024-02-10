@@ -11,8 +11,6 @@
                     <field name="priority" optional="show" widget="priority" nolabel="1" invisible="1"/>
                     <field name="name" invisible="1"/>
                     <field name="facility_id" string="Facility"/>
-                    <field name="year"/>
-                    <field name="placement_term"/>
                     <field name="state" widget="badge" 
                     decoration-primary="state == 'offer_matched'" 
                     decoration-success="state == 'offer_still_available'" 

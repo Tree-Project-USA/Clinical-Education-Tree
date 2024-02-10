@@ -133,7 +133,7 @@ class ResPartner(models.Model):
                             'placement_term': self.get_specific_term_year(rec.start_term_type, rec.start_year, rec.program_id.num_terms, schedual_id.term, alternative_schedule)[0],
                             'year': str(self.get_specific_term_year(rec.start_term_type, rec.start_year, rec.program_id.num_terms, schedual_id.term, alternative_schedule)[1]),
                         })
-                        for schedual_id in rec.program_id.program_experience_term_ids
+                        for schedual_id in rec.program_id.program_experience_term_ids #.filtered(lambda x:x.experience_id.active == True)
                     ]
                     # TODO : Add code here to to remove last experience_schedual_ids , Use with store=True
                     print(experience_schedual_ids)
