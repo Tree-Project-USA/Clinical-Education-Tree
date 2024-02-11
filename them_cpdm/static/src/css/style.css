@@ -25,7 +25,7 @@ body{
 }
 
 .navbar-light .navbar-toggler-icon {
-    background-image: url(/them_cpdm/static/src/img/snippets/logo-compny/menu.png) !important;
+    background-image: url(/them_cpdm/static/src/img/menu.png) !important;
 }
 
 .navbar {
