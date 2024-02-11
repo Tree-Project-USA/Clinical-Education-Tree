@@ -16,6 +16,7 @@ class SubmitAvailability(http.Controller):
                 'department_id': kw[f"department_id_{department}"],
                 'experience_id': kw[f"experience_id_{department}"],
                 'placement_term': kw[f"placement_term_{department}"],
+                'company_id': kw[f"company_id_{department}"],
                 'year': kw[f"term_{department}"],
                 'setting': kw[f"setting_{department}"],
                 'offers': kw[f"offers_{department}"],
