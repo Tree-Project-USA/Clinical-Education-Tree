@@ -13,9 +13,8 @@ class ResPartner(models.Model):
     _inherit = 'res.partner'
     
     is_student = fields.Boolean(string='Is Student', default=False)
-    studentid = fields.Char(string='Student ID', copy=False)
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.user.company_id, required=True)
-    name = fields.Char(string='Student Name', compute='_compute_name', store=True, default='Student Name')
+    name = fields.Char(string='Student Name', compute='_compute_name', store=True, default='Name')
     first_name = fields.Char(string='First Name', required=True)
     last_name = fields.Char(string='Last Name', required=True )
     cohort_label = fields.Char(string='Cohort', compute='_compute_term_fields', store=True)# TODO: Remoove this line
@@ -186,8 +185,7 @@ class ResPartner(models.Model):
             record.name = f"{record.first_name if record.first_name else ''} {record.last_name if record.last_name else ''}"
     
     def check_zip_code_distance(self, geographical_ids):
-        max_distance_mel = self.env['ir.config_parameter'].sudo(
-        ).get_param('max_distance_mel')
+        max_distance_mel = self.env.company.max_distance_mel
         
         for geographical_id in geographical_ids:
             zipcoe_ids, dis_and_geo = geographical_id.get_distance_with_multi_zip_codes(geographical_ids - geographical_id)
@@ -196,8 +194,7 @@ class ResPartner(models.Model):
                     raise ValidationError(_('The Distance Between zip codes (%s) and (%s) is (%s) and  too small that the distance required to (%s) miles'% (geographical_id.zip_code , zip_code.zip_code, distance, max_distance_mel)))
     
     def check_validation_zip_code_state(self, geographical_ids):
-        max_zipcodes_state = self.env['ir.config_parameter'].sudo().get_param('max_zipcodes_state') or 3
-        max_zipcodes_state = int(max_zipcodes_state)
+        max_zipcodes_state = self.env.company.max_zipcodes_state or 3
 
         for geographical_id in geographical_ids:
             zipcoe_ids = geographical_id.get_zip_codes_state(geographical_ids)
@@ -221,8 +218,7 @@ class ResPartner(models.Model):
             return
 
         if not self.env.context.get('pass_validation', False) or not self.is_with_hardship:
-            normal_number_zipcodes = self.env['ir.config_parameter'].sudo().get_param('normal_number_zipcodes') or 5
-            normal_number_zipcodes = int(normal_number_zipcodes)
+            normal_number_zipcodes = self.env.company.max_hardship_zipcodes or 5
             print(normal_number_zipcodes)
             if len(self.geographical_ids) < normal_number_zipcodes or len(self.geographical_ids) > normal_number_zipcodes:
                     raise ValidationError(_('Count of zip codes shuld be %s' % normal_number_zipcodes))
@@ -233,41 +229,9 @@ class ResPartner(models.Model):
             self.check_zip_code_distance(self.geographical_ids)
             self.check_validation_zip_code_state(self.geographical_ids)
 
-    def _check_unique_studentid(self, studentid):
-        if studentid:
-            pattern = r'^\d+$'
-            if not re.match(pattern, studentid):
-                raise ValidationError(_('The Student ID Must Contain Numbers Only'))
-            students_ids = self.env['res.partner'].search_count(
-                    [
-                    ("studentid", "in", [studentid]),
-                    ("is_student", "=", True)
-                    ])
-            if students_ids > 1:
-                raise ValidationError(_(f'The Student ID : {studentid} Already Exists'))
-
-    @api.model
-    def _get_studentid_sequence(self):
-        code = self.env['ir.sequence'].next_by_code('res_partner_sequence')
-        students_ids = self.env['res.partner'].search_count(
-            [
-            ("studentid", "=", code),
-            ("is_student", "=", True)
-            ])
-        if not students_ids:
-            return code
-        else:
-            return self._get_studentid_sequence()
-
 
     @api.model_create_multi
-    def create(self, vals_list):
-        for vals in vals_list:
-            try:
-                    vals['studentid'] = self.sudo()._get_studentid_sequence()
-            except:
-                    vals['studentid'] = ''
-        
+    def create(self, vals_list):       
         return super(ResPartner, self.with_context(pass_validation=True)).create(vals_list)
 
     @api.constrains('preferred_setting_ids')
@@ -339,7 +303,7 @@ class ResPartner(models.Model):
 
     def get_accepted_distance_facility(self, facility_ids, facility_distance_mel=50):
         print(facility_distance_mel)
-        facility_distance_mel = float(facility_distance_mel) or float(self.env['ir.config_parameter'].sudo().get_param('clinical_distance_mel')) or 50
+        facility_distance_mel = float(facility_distance_mel) or self.env.company.clinical_distance_mel or 50
         accepted_facility_ids = set()
 
         geographical_ids = self.mapped('geographical_ids')
@@ -359,7 +323,7 @@ class ResPartner(models.Model):
         return  (min(data, key=lambda x: x[1])[0], min(data, key=lambda x: x[1])[2]) if min(data, key=lambda x: x[1]) else (False, False)
     
     def get_nearby_facility_zipcode(self, facility_id):
-        facility_distance_mel = float(self.env['ir.config_parameter'].sudo().get_param('clinical_distance_mel')) or 50
+        facility_distance_mel = self.env.company.clinical_distance_mel or 50
         geographical_ids = self.mapped('geographical_ids')        
         for geographical_id in geographical_ids:
             distance, dis_and_geo = geographical_id.self.get_distance_with_zip_code(facility_id.geographical_id)

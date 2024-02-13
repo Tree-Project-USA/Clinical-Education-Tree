@@ -223,13 +223,23 @@
         action="scce_action"
         parent="clinic_details_menu"
         sequence="3"/>
+<!-- 
+        <record id="action_un_form" model="ir.actions.act_window">
+            <field name="name">Companies</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.company</field>
+            <field name="view_mode">tree,form</field>
+            <field name="res_id">4</field>
 
-    <!-- <menuitem
-        id="geographical_menu"
-        name="Zip Codes Data"
-        action="geographical_action"
+        </record>
+
+
+    <menuitem
+        id="university_profile_menu"
+        name="University Profile"
+        action="action_un_form"
         parent="configuration_menu"
-        sequence="99"/> -->
+        sequence="1"/> -->
 
     <menuitem
         id="program_menu"

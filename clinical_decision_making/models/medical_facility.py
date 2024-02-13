@@ -10,10 +10,10 @@ class MedicalFacility(models.Model):
     _description = 'Medical Facility (Site)'
     _rec_name = 'name'
 
+    company_id = fields.Many2one('res.company', string='University', default=lambda self: self.env.user.company_id)
     active = fields.Boolean(string='Active', compute='_compute_active')              
-    facilityid = fields.Char(string='Facility ID', copy=False)
     name = fields.Char(string='Medical Facility Name', required=True)
-    offer_id = fields.One2many('placement.offer', 'facility_id',string='Placement Offers')
+    offer_id = fields.One2many('placement.offer', 'facility_id',string='Placement Offers', domain="[('company_id', '=', company_id)]")
     address = fields.Char(string='Address')
     email = fields.Char(related='scce_primary_id.email')
     geographical_id = fields.Many2one(comodel_name='geographical', string='Zip Code')
@@ -29,18 +29,18 @@ class MedicalFacility(models.Model):
     contract_warning = fields.Boolean(string='Contract Warning', store=True, compute='_compute_contract_warning')
     first_contract_date = fields.Date(compute='_compute_first_contract_date', store=True)
     contracts_count = fields.Integer(compute='_compute_contracts_count', string='Contract Count', tracking=True)
-    scce_ids = fields.One2many(comodel_name='scce.facility', inverse_name='facility_id', string='SCCE Facility', tracking=True)
+    scce_ids = fields.One2many(comodel_name='scce.facility', inverse_name='facility_id', string='SCCE Facility', tracking=True, domain="[('company_id', '=', company_id)]")
     scce_primary_id = fields.Many2one(comodel_name='res.partner', string='Primary SCCE', domain=[('is_scce', '=', True)], tracking=True)
     scce_first_name = fields.Char(related='scce_primary_id.first_name')
     scce_last_name = fields.Char(related='scce_primary_id.last_name')
     offer_ids = fields.One2many(comodel_name='placement.offer', inverse_name='facility_id', string='Offers')
     archive_offer_count = fields.Integer(compute='_compute_archive_offer_count', string='Archive Offer Count')
     department_count = fields.Integer(compute='_compute_department_count', string='Department Count')
-    department_ids = fields.One2many(comodel_name='facility.department', inverse_name='facility_id', string='Facility Department')
+    department_ids = fields.One2many(comodel_name='facility.department', inverse_name='facility_id', string='Facility Department', domain="[('company_id', '=', company_id)]")
     setting_ids = fields.Many2many(comodel_name='preferred.setting', string='Setting', compute='_compute_setting_ids')    
-    main_department_id = fields.Many2one(comodel_name='facility.department', string='Main Department')
-    is_single_facility = fields.Boolean(string='Single Facility', default=True)
-    archive_ids = fields.One2many(comodel_name='archive', inverse_name='facility_id', string='Placement History')
+    main_department_id = fields.Many2one(comodel_name='facility.department', string='Main Department', domain="[('company_id', '=', company_id)]")
+    is_single_facility = fields.Boolean(string='Single Facility', default=True, domain="[('company_id', '=', company_id)]")
+    archive_ids = fields.One2many(comodel_name='archive', inverse_name='facility_id', string='Placement History', domain="[('company_id', '=', company_id)]")
     archive_count = fields.Integer(compute='_compute_archive_count', string='Placement History Count')
     
     
@@ -182,7 +182,7 @@ class MedicalFacility(models.Model):
         return action
         
     def get_accepted_distance_students(self, student_ids):
-        facility_distance_mel = float(self.env['ir.config_parameter'].sudo().get_param('clinical_distance_mel')) or 50
+        facility_distance_mel = self.env.company.clinical_distance_mel or 50
         students = []
         
         for student_id in student_ids:
@@ -194,37 +194,11 @@ class MedicalFacility(models.Model):
         
         return students
     
-    def _check_unique_facilityid(self, facilityid):
-        if facilityid:
-            pattern = r'^\d+$'
-            if not re.match(pattern, facilityid):
-                raise ValidationError(_('The Facility ID Must Contain Numbers Only'))
-            facility_ids = self.env['medical.facility'].search_count(
-                    [
-                    ("facilityid", "in", [facilityid]),
-                    ])
-            if facility_ids > 1:
-                raise ValidationError(_(f'The Facility ID : {facilityid} Already Exists'))
-
-    @api.model
-    def _get_facilityid_sequence(self):
-        code = self.env['ir.sequence'].next_by_code('medical_facility_sequence')
-        facility_ids = self.env['medical.facility'].search_count(
-            [
-            ("facilityid", "=", code),
-            ])
-        if not facility_ids:
-            return code
-        else:
-            return self._get_facilityid_sequence()
-
         
     # CRUD operations
     #------------------------------------------------------------------------------   
     @api.model_create_multi
     def create(self, vals_list):
-        for vals in vals_list:
-            vals['facilityid'] = self._get_facilityid_sequence()
         res = super(MedicalFacility, self.with_context(pass_validation=True)).create(vals_list)
         for rec in res:
             main_department_vals = {
@@ -297,6 +271,7 @@ class SCCEFacility(models.Model):
     last_name = fields.Char(related='scce_id.last_name')
     email = fields.Char(related='scce_id.email')
     phone = fields.Char(related='scce_id.phone')
+    company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.user.company_id)
     is_primary_scce = fields.Boolean(string='Is Primary SCCE', store=True,)
     is_secondary_scce = fields.Boolean(string='Is Secondary SCCE')
 

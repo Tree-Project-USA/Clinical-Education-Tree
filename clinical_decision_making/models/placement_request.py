@@ -18,9 +18,9 @@ class PlacementRequest(models.Model):
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.user.company_id)
     student_ids = fields.Many2many(comodel_name='res.partner', string='Students')
     offer_ids = fields.Many2many(comodel_name='placement.offer', string='offers')
-    archive_offer_ids = fields.Many2many(comodel_name='archive.offer', string='archive offers')
+    archive_offer_ids = fields.Many2many(comodel_name='archive.offer', string='archive offers', check_company=True)
     facility_ids = fields.Many2many('medical.facility', string='Medical Facilities')
-    department_ids = fields.Many2many('facility.department', string='Department')    
+    department_ids = fields.Many2many('facility.department', string='Department', check_company=True)    
     student_count = fields.Integer(compute='_compute_count')
     offer_count = fields.Integer(compute='_compute_count')
     archive_offer_count = fields.Integer(compute='_compute_count')
@@ -42,7 +42,7 @@ class PlacementRequest(models.Model):
             request.archive_offer_count = len(request.archive_offer_ids)
             
     # Filters
-    experience_id = fields.Many2one(comodel_name='clinical.experience', string='Clinical Experience', domain="[('company_id', '=', company_id)]", required=True)
+    experience_id = fields.Many2one(comodel_name='clinical.experience', string='Clinical Experience', domain="[('company_id', '=', company_id)]", required=True, check_company=True)
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.user.company_id)
     year = fields.Selection(selection=SELECTION_YEAR_RANGE, string='Year', default='2000', required=True)
     placement_term = fields.Selection([
@@ -61,7 +61,7 @@ class PlacementRequest(models.Model):
     apply_location = fields.Boolean(string='Apply Distance', default=True, help="The chosen option will override the accepted distance to medical facilities.")
     
     def _get_default_distance(self):
-        return float(self.env['ir.config_parameter'].sudo().get_param('clinical_distance_mel')) or 50
+        return self.env.company.clinical_distance_mel or 50
     
     location_dist = fields.Float(string='Distance', default=_get_default_distance)
     
@@ -160,7 +160,7 @@ class PlacementRequest(models.Model):
         
     def get_filter_data(self):
         student_domain = []
-        location_dist = float(self.env['ir.config_parameter'].sudo().get_param('clinical_distance_mel')) or 50
+        location_dist = self.env.company.clinical_distance_mel or 50
         
         term = self.convert_term_year(self.placement_term, self.year)
         
@@ -195,7 +195,8 @@ class PlacementRequest(models.Model):
         return student_ids, archive_offer_ids, location_dist
         
     def apply_filters(self):
-        location_dist = float(self.env['ir.config_parameter'].sudo().get_param('clinical_distance_mel')) or 50
+        print(self.env.context)
+        location_dist = self.env.company.clinical_distance_mel or 50
         
         # Apply filter for location_dist
         if self.apply_location and self.location_dist:
@@ -304,7 +305,7 @@ class PlacementRequest(models.Model):
                 
 
     def get_student_matching_report(self, student_id, placement_status, setting, geographical_id, department_id, priority, facility_distance_mel):
-        facility_distance_mel = facility_distance_mel or float(self.env['ir.config_parameter'].sudo().get_param('clinical_distance_mel')) or 50
+        facility_distance_mel = facility_distance_mel or self.env.company.clinical_distance_mel or 50
         distance, dis_and_geo = geographical_id.get_distance_with_zip_code(department_id.geographical_id)
         term = self.convert_term_year(self.placement_term, self.year)
         

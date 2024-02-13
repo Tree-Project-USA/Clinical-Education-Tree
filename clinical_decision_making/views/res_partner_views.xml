@@ -9,7 +9,6 @@
         <field name="priority">0</field>
         <field name="arch" type="xml">
             <tree>
-                <field name="studentid"/>
                 <field name="name"/>
                 <field name="cohort_label"/>
                 <field name="email"/>
@@ -27,7 +26,6 @@
         <field name="arch" type="xml">
             <search>
                 <field name="name"/>
-                <field name="studentid"/>
                 <field name="cohort_label"/>
                 <field name="email"/>
                 <field name="personal_phone"/>
@@ -72,9 +70,6 @@
                     </div>
                     <widget name="web_ribbon" title="Not Active" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
                     <div>
-                        <h3>
-                            <field name="studentid" placeholder="Student ID" attrs="{'readonly': [('id', '!=', False)]}"/>
-                        </h3>
                         <h1>
                             <field name="name" placeholder="Student Name" required="1"/>
                         </h1>
@@ -91,7 +86,7 @@
                             <field name="is_with_hardship" invisible="1"/>
                             <field name="campus" readonly="1"/>
                             <field name="program_id"/>
-                            <field name="company_id"/>
+                            <field name="company_id" string="university" readonly="1"/>
                             <field name="program_type" readonly="1"/>
                             <field name="start_year"/>
                             <field name="start_term_type"/>
@@ -115,10 +110,10 @@
                                     <field name="student_id" invisible="1"/>
                                     <field name="company_id" groups="base.group_multi_company"/>
                                     <field name="experience_id"/>
-                                    <field name="name" string="Term/ Year"/>
                                     <field name="placement_term"/>
                                     <field name="year"/>
-                                    <field name="state" widget="badge" decoration-muted="state == 'not_taked'" decoration-success="state == 'taked'"/>
+                                    <field name="archive_create_date"/>
+                                    <field name="placement_status" widget="badge"/>
                                 </tree>
                             </field>
                         </page>
@@ -136,9 +131,9 @@
                             <field name="archive_ids" mode="tree">
                                 <tree editable="bottom" delete="false">
                                     <field name="student_id" invisible="1"/>
-                                    <field name="term"/>
+                                    <field name="term" invisible="1"/>
                                     <field name="department_id" required="1" attrs="{'readonly': [('is_declined', '=', True)]}"/>
-                                    <field name="archive_offer_id"/>
+                                    <field name="archive_offer_id" invisible="1"/>
                                     <field name="is_declined" invisible="1"/>
                                     <field name="facility_id" required="1" attrs="{'readonly': [('is_declined', '=', True)]}"/>
                                     <field name="department_id" required="1" attrs="{'readonly': [('is_declined', '=', True)]}"/>
@@ -175,6 +170,7 @@
                         <page name='medical_attachment_ids' string="Medical Document">
                             <field name="medical_attachment_ids" string="Attach a file" mode="tree">
                                 <tree editable="bottom" delete="false">
+                                    <field name="company_id" string="university" readonly="1"/>
                                     <field name="attachment_type"/>
                                     <field name="expiration_date"/>
                                     <field name="attachment_ids" widget="many2many_attachment_preview"/>

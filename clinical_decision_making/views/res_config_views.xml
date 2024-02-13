@@ -56,12 +56,12 @@
                                     <field name="contract_notify_months" class="oe_inline"/>
                                 </div>
                             </div>
-                            <div class="content-group">
+                            <!-- <div class="content-group">
                                 <div class="mt16">
                                     <label for="hardship_attachment" string="Hardship Attachment"/>
                                     <field name="hardship_attachment" class="oe_inline"/>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </xpath>

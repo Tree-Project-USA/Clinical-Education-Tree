@@ -36,8 +36,7 @@ class Geographical(models.Model):
     
     @api.model
     def get_locstion_informations(self, zipcode):
-        token = self.env['ir.config_parameter'].sudo(
-        ).get_param('zip_code_token')
+        token = self.env.company.zip_code_token
         try:
             if token:
                 url = "https://www.zipcodeapi.com/rest/%s/info.json/%s/degrees" % (token, zipcode)

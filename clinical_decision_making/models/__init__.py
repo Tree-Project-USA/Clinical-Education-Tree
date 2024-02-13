@@ -2,7 +2,7 @@
 
 from . import res_partner
 # from . import cohort
-from . import res_config
+# from . import res_config
 from . import hardship_request
 from . import geographical_data
 from . import medical_contract
@@ -21,3 +21,5 @@ from . import facility_department
 from . import attachment
 from . import attachment_request
 from . import clinical_experience
+from . import res_company
+from . import ir_ui_menu

@@ -8,7 +8,6 @@
         <field name="model">medical.facility</field>
         <field name="arch" type="xml">
             <tree>
-                <field name="facilityid"/>
                 <field name="name" string="Facility Name"/>
                 <field name="scce_first_name" string="SCCE First Name"/>
                 <field name="scce_last_name" string="SCCE Last Name"/>
@@ -27,7 +26,6 @@
         <field name="arch" type="xml">
             <search>
                 <field name="name"/>
-                <field name="facilityid"/>
                 <field name="email"/>
                 <field name="address"/>
                 <field name="geographical_id"/>
@@ -78,15 +76,7 @@
                                 </span>
                             </div>
                         </button>
-                        <!-- <button
-                            name="print_report"
-                            type="object"
-                            string="Contact Attachment File"
-                            class="oe_highlight"
-                            icon="fa-download"
-                            attrs="{'invisible' : [('contract_attachment', '=', False)]}"
-                            >
-                        </button> -->
+
                         <button name="action_open_facility_department" type="object" class="oe_stat_button" string="Department">
                             <field name="department_count" widget="statinfo" string="Departments"/>
                         </button>
@@ -106,10 +96,9 @@
                         </button>
                     </div>
                     <group>
-                        <label for="facilityid" string="Facility ID"/>
-                        <field name="facilityid" required="1"/>
                         <label for="name" string="Facility Name"/>
                         <field name="name"/>
+                        <field name="company_id" string="university" readonly="1"/>
                         <group>
                             <field name="email" string="Facility Email Address"/>
                             <field name="address" string="Facility Address"/>
@@ -130,6 +119,7 @@
                             <field name="department_ids">
                                 <tree editable="bottom" decoration-primary="is_main_department==True">
                                     <field name="is_main_department" invisible="1"/>
+                                    <field name="company_id" string="university" readonly="1"/>
                                     <field name="facility_id" invisible="1"/>
                                     <field name="name" required="1"/>
                                     <field name="scce_ids" domain="[('id', 'in', parent.scce_ids)]" widget="many2many_tags"/>
@@ -159,7 +149,7 @@
                                 <tree>
                                     <field name="department_id"/>
                                     <field name="student_id"/>
-                                    <field name="company_id"/>
+                                    <field name="company_id" string="university" readonly="1"/>
                                     <field name="experience_id"/>
                                     <field name="setting"/>
                                     <field name="placement_term"/>

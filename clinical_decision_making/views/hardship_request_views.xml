@@ -9,7 +9,6 @@
         <field name="priority">0</field>
         <field name="arch" type="xml">
             <tree>
-                <field name="studentid"/>
                 <field name="student_id"/>
                 <field name="create_date"/>
                 <field name="expiration_date"/>
@@ -23,7 +22,6 @@
         <field name="model">hardship.request</field>
         <field name="arch" type="xml">
             <search>
-                <field name="studentid"/>
                 <field name="student_id"/>
                 <field name="create_date"/>
                 <field name="expiration_date"/>
@@ -52,7 +50,6 @@
                     <widget name="web_ribbon" title="Update Required" bg_color="bg-warning" attrs="{'invisible': [('state', '!=', 'update_required')]}"/>
                     <widget name="web_ribbon" title="Approved" bg_color="bg-success" attrs="{'invisible': [('state', '!=', 'approved')]}"/>
                     <group>
-                        <field name="studentid"/>
                         <field name="student_id" attrs="{'readonly': [('state', 'in', ('expired', 'approved'))]}"/>
                         <field name="create_date"/>
                         <field name="expiration_date"/>

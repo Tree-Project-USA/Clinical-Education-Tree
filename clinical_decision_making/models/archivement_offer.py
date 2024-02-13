@@ -10,14 +10,14 @@ class ArchiveOffer(models.Model):
     _rec_name = 'department_id'
     
     active = fields.Boolean(string='Active', default=True)
-    student_id = fields.Many2one(comodel_name='res.partner', string='Student')
+    student_id = fields.Many2one(comodel_name='res.partner', string='Student', check_company=True)
     is_linked = fields.Boolean('is Joined', default=False, readonly=True)
-    department_id = fields.Many2one(comodel_name='facility.department' , string='Department')
+    department_id = fields.Many2one(comodel_name='facility.department' , string='Department', check_company=True)
     facility_id = fields.Many2one(comodel_name='medical.facility', related='department_id.facility_id', store=True,)
-    offer_id = fields.Many2one(comodel_name='placement.offer', string='Offer')
-    offer_line_id = fields.Many2one(comodel_name='placement.offer.line', string='Line')
+    offer_id = fields.Many2one(comodel_name='placement.offer', string='Offer', check_company=True)
+    offer_line_id = fields.Many2one(comodel_name='placement.offer.line', string='Line', check_company=True)
     setting = fields.Selection(related='offer_line_id.setting', store=True)
-    experience_id = fields.Many2one(comodel_name='clinical.experience', string='Clinical Experience', domain="[('company_id', '=', company_id)]", required=True)
+    experience_id = fields.Many2one(comodel_name='clinical.experience', string='Clinical Experience', domain="[('company_id', '=', company_id)]", required=True, check_company=True)
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.user.company_id)
 
     placement_term = fields.Selection([
