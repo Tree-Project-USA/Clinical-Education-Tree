@@ -12,13 +12,14 @@ class AlternativeSchedule(models.Model):
     _name = 'alternative.schedule'
     _description = "Student Alternative Schedule"
 
-    student_id = fields.Many2one(comodel_name='res.partner', string='Student', ondelete='cascade')
+    student_id = fields.Many2one(comodel_name='res.partner', string='Student', ondelete='cascade', check_company=True)
     term = fields.Selection([
         ('fall', 'Fall'),
         ('spring', 'Spring'),
         ('summer', 'Summer'),
     ], string='Term Skipped', required=True)
     year = fields.Selection(selection=SELECTION_YEAR_RANGE, string='Year Skipped', required=True)
+    company_id = fields.Many2one('res.company', string='University', default=lambda self: self.env.user.company_id)
     state = fields.Selection(
         string=_('State'),
         selection=[

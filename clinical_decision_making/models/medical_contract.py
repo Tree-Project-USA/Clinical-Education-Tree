@@ -83,6 +83,7 @@ class FacilityContracts(models.Model):
     name = fields.Char('Contract Reference', required=True)
     contract_attachment = fields.Binary(string='Contract Attachment', attachment=True)
     facility_id = fields.Many2one(comodel_name='medical.facility', string='Medical Facility')
+    company_id = fields.Many2one('res.company', related='facility_id.company_id', store=True)
     date_start = fields.Date('Start Date', required=True)
     date_end = fields.Date('End Date', required=True)
     notes = fields.Html('Notes')
@@ -125,7 +126,7 @@ class FacilityContracts(models.Model):
 
     # Cron job
     def action_require_renewal(self):
-        contract_notify_months = int(self.env['ir.config_parameter'].sudo().get_param('contract_notify_months')) or 6
+        contract_notify_months = self.env.company.contract_notify_months or 6
         current_date = datetime.now()
         future_date = current_date + timedelta(days=contract_notify_months*30)
         contract_ids = self.env['facility.contract'].sudo().search([("state","=","open"),("date_end" , "<", future_date)])

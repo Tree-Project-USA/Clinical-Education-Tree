@@ -9,6 +9,7 @@ class PreferredSetting(models.Model):
 
 
     name = fields.Char()
+    company_id = fields.Many2one('res.company', string='University', default=lambda self: self.env.user.company_id)
     type_setting = fields.Selection(
         string="Type",
         selection=[

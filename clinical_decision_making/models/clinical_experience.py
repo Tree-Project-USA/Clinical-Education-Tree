@@ -47,9 +47,9 @@ class ClinicalExperienceSchedual(models.Model):
     _order = "sequence"
 
     name = fields.Char(string='Term', compute='_compute_term_name', store=True,)
-    experience_id = fields.Many2one(comodel_name='clinical.experience', string='Clinical Experience', domain="[('company_id', '=', company_id)]")
+    experience_id = fields.Many2one(comodel_name='clinical.experience', string='Clinical Experience', domain="[('company_id', '=', company_id)]", check_company=True)
     sequence = fields.Integer(related='experience_id.sequence', store=True)
-    student_id = fields.Many2one(comodel_name='res.partner', string='Student')
+    student_id = fields.Many2one(comodel_name='res.partner', string='Student', check_company=True)
     company_id = fields.Many2one('res.company', related='student_id.company_id')
     state = fields.Selection([
             ('not_taked', 'Not Taked'),
@@ -61,7 +61,32 @@ class ClinicalExperienceSchedual(models.Model):
         ('summer', 'Summer'),
     ], string='Term',)
     year = fields.Selection(selection=SELECTION_YEAR_RANGE, string='Year')
+    archive_create_date = fields.Datetime(
+        string=_('Archive Create Date'),
+        compute='_compute_experience_placement'
+    )
+    placement_status = fields.Selection([
+            ('decline', 'Decline'),
+            ('not_placed', 'Not Placed'),
+            ('matched', 'Matched'),
+            ('decline', 'Declined'),
+            ('approved', 'Approved'),
+            ('pending', 'Pending'),
+            ('confirmed', 'Confirmed'),
+            ('completed', 'Completed'),
+        ], compute='_compute_experience_placement', string='Placement Status')
 
+    @api.depends('experience_id')
+    def _compute_experience_placement(self):
+        for rec in self:
+            archive_id = self.env['archive'].search([('student_id', '=', rec.student_id.id), ('experience_id', '=', rec.experience_id.id)], limit=1, order="id desc")
+            if archive_id:
+                rec.archive_create_date = archive_id.create_date
+                rec.placement_status = archive_id.placement_status
+            else:
+                rec.archive_create_date = False
+                rec.placement_status = False
+    
     @api.depends('experience_id', 'name')
     def _compute_student_experience_state(self):
         for rec in self:

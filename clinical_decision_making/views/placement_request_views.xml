@@ -6,7 +6,7 @@
         <field name="arch" type="xml">
             <tree string="Placement Requests">
                 <field name="name"/>
-                <field name="company_id"/>
+                <field name="company_id" string="university" readonly="1"/>
                 <field name="experience_id"/>
                 <field name="placement_term"/>
                 <field name="year"/>
@@ -50,7 +50,7 @@
                     </div>
                     <group>
                         <group>
-                            <field name="company_id"/>
+                            <field name="company_id" string="university" readonly="1"/>
                             <field name="experience_id"/>
                             <field name="placement_term"/>
                             <field name="year"/>
@@ -73,7 +73,7 @@
                     <notebook>
                         <page string="Match">
                             <field name="archive_ids">
-                                <tree edit="false" create="false" delete="false">
+                                <tree edit="false" create="false" delete="false" class="cdm">
                                     <field name="student_id" invisible="1" attrs="{'readonly': [('is_declined', '=', True)]}"/>
                                     <field name="first_name" attrs="{'readonly': [('is_declined', '=', True)]}"/>
                                     <field name="last_name" attrs="{'readonly': [('is_declined', '=', True)]}"/>
@@ -82,7 +82,7 @@
                                     <field name="student_criteria" colspan="6" attrs="{'readonly': [('is_declined', '=', True)]}"/>
                                     <field name="placement_status" invisible="1" attrs="{'readonly': [('is_declined', '=', True)]}"/>
                                     <field name="is_declined" invisible="1"/>
-                                    <field name="match_state" string="ADCE/DCE Decision" widget="badge" decoration-danger="match_state == 'decline'" decoration-success="match_state  == 'approve'"/>
+                                    <field name="match_state" string="Status" widget="badge" decoration-danger="match_state == 'decline'" decoration-success="match_state  == 'approve'"/>
                                     <button name="action_approve" type="object" string="Approve" class="btn btn-outline-success" attrs="{'invisible': ['|', ('match_state', '!=', False), ('placement_status', '!=', 'matched')]}"/>
                                     <button name="action_decline" type="object" string="Decline and Release Offer" class="btn-outline-danger"  attrs="{'invisible': ['|', ('match_state', '!=', False), ('placement_status', '!=', 'matched')]}"/>
                                     <button name="declined_student_offer" type="object" string="Permanently Decline" class="btn btn-outline-danger"  attrs="{'invisible': ['|', ('match_state', '!=', False), ('placement_status', '!=', 'matched')]}"/>

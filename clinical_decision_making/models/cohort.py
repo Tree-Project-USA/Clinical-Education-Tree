@@ -403,7 +403,7 @@ class Cohort(models.Model):
         'tce1_site_id', 
         'tce2_site_id')
     def _compute_accepted_distances(self):
-        clinical_distance_mel = self.env['ir.config_parameter'].sudo().get_param('clinical_distance_mel')
+        clinical_distance_mel = self.env.company.clinical_distance_mel
         def check_accepted_distance(zip_code_one, zip_code_two):
             if zip_code_one and zip_code_two:
                 distance = get_distance(zip_code_one, zip_code_two)
@@ -619,7 +619,7 @@ class CPDMTree(models.Model):
         # for rec in data:...
             
     def run_automatching_process(self):
-        clinical_distance_mel = self.env['ir.config_parameter'].sudo().get_param('clinical_distance_mel')
+        clinical_distance_mel = self.env.company.clinical_distance_mel
         
         def check_accepted_distance(zip_code_one, zip_code_two):
             if zip_code_one and zip_code_two:

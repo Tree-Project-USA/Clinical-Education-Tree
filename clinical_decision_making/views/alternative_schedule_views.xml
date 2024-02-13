@@ -7,6 +7,7 @@
         <field name="model">alternative.schedule</field>
         <field name="arch" type="xml">
             <tree string="Alternative Schedule">
+                <field name="company_id" string="university" readonly="1"/>
                 <field name="student_id" invisible="1"/>
                 <field name="term"/>
                 <field name="year"/>
@@ -37,6 +38,7 @@
             <form>
                 <sheet>
                     <group>
+                        <field name="company_id" string="university" readonly="1"/>
                         <field name="student_id" invisible="1"/>
                         <field name="term"/>
                         <field name="year"/>

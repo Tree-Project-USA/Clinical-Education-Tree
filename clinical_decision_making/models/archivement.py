@@ -13,18 +13,17 @@ class Archive(models.Model):
     _rec_name = 'department_id'
         
     active = fields.Boolean(string='Active', default=True)
-    studentid = fields.Char(related='student_id.studentid')
-    student_id = fields.Many2one(comodel_name='res.partner', string='Student Name', tracking=True)
+    student_id = fields.Many2one(comodel_name='res.partner', string='Student Name', tracking=True, check_company=True)
     first_name = fields.Char(related='student_id.first_name')
     last_name = fields.Char(related='student_id.last_name')
     facility_id = fields.Many2one('medical.facility', string='Facility', related='department_id.facility_id', readonly=True)
-    offer_id = fields.Many2one(comodel_name='placement.offer', string="Offer")
-    request_id = fields.Many2one(comodel_name='placement.request', string="Placement Request")
+    offer_id = fields.Many2one(comodel_name='placement.offer', string="Offer", check_company=True)
+    request_id = fields.Many2one(comodel_name='placement.request', string="Placement Request", check_company=True)
     geographical_id = fields.Many2one(comodel_name='geographical', string='Facility Zip Code', tracking=True)
     city = fields.Char(related='geographical_id.city')
     state = fields.Char(related='geographical_id.state')
     zip_code = fields.Char(related='geographical_id.zip_code')
-    experience_id = fields.Many2one(comodel_name='clinical.experience', string='Clinical Experience', domain="[('company_id', '=', company_id)]", required=True, tracking=True)
+    experience_id = fields.Many2one(comodel_name='clinical.experience', string='Clinical Experience', required=True, tracking=True, check_company=True)
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.user.company_id)
     setting = fields.Selection([
         ('op', 'OP'),
@@ -61,7 +60,7 @@ class Archive(models.Model):
         ('approve', 'Approved'),
         ('decline', 'Declined'),
     ], string='Match State', tracking=True)
-    archive_offer_id = fields.Many2one('archive.offer', string='Archive Offer', domain="[('student_id', '=', False), ('term', '=', term)]")
+    archive_offer_id = fields.Many2one('archive.offer', string='Archive Offer', domain="[('student_id', '=', False), ('term', '=', term)]", check_company=True)
     is_show_student = fields.Boolean("Show to Student")
 
     is_declined = fields.Boolean("Is Declined", tracking=True)

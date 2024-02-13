@@ -16,9 +16,9 @@ class FacilityDepartment(models.Model):
     name = fields.Char(string='Name', required=True)
     complete_name = fields.Char('Complete Name', compute='_compute_complete_name', recursive=True, store=True)
     facility_id = fields.Many2one(comodel_name='medical.facility', string='Facility', ondelete='cascade')
-    facility_scce_ids = fields.Many2many(comodel_name='scce.facility', string='Facility SCCE', compute='_compute_facility_scce')
-    scce_ids = fields.Many2many(comodel_name='scce.facility', string='SCCE', domain="[('id', 'in', facility_scce_ids)]")
-    setting_ids = fields.Many2many(comodel_name='preferred.setting', string='Setting')
+    facility_scce_ids = fields.Many2many(comodel_name='scce.facility', string='Facility SCCE', compute='_compute_facility_scce', check_company=True)
+    scce_ids = fields.Many2many(comodel_name='scce.facility', string='SCCE', domain="[('id', 'in', facility_scce_ids)]", check_company=True)
+    setting_ids = fields.Many2many(comodel_name='preferred.setting', string='Setting', check_company=True)
     street = fields.Char(string='Street')
     city = fields.Char(related='geographical_id.city')
     state = fields.Char(related='geographical_id.state')
@@ -34,10 +34,10 @@ class FacilityDepartment(models.Model):
         ],
         compute='_compute_active_state',
     )
-    archive_ids = fields.One2many(comodel_name='archive', inverse_name='department_id', string='Placement History')
+    archive_ids = fields.One2many(comodel_name='archive', inverse_name='department_id', string='Placement History', check_company=True)
     archive_count = fields.Integer(compute='_compute_count', string='Placement History Count')
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.user.company_id)
-    archive_offer_ids = fields.One2many(comodel_name='archive.offer', inverse_name='department_id', string='Archive Offer')
+    archive_offer_ids = fields.One2many(comodel_name='archive.offer', inverse_name='department_id', string='Archive Offer', check_company=True)
 
     def _compute_count(self):
         for rec in self:

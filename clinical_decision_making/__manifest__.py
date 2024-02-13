@@ -9,6 +9,7 @@
     'license': 'LGPL-3',
     'depends': ['base', 'base_address_extended', 'mail', 'portal', 'odx_m2m_attachment_preview'],
     "data": [
+        "security/cdm_security.xml",
         "security/ir.model.access.csv",
         "data/cron_servises.xml",
         "data/tree_data.xml",
@@ -27,7 +28,7 @@
         "views/res_partner_views.xml",
         "views/scce_views.xml",
         "views/tree_matching_views.xml",
-        "views/res_config_views.xml",
+        # "views/res_config_views.xml",
         "views/preferred_setting.xml",
         "views/alternative_schedule_views.xml",
         "views/portal_wizard_views_inherit.xml",
@@ -38,8 +39,9 @@
         "wizards/facility_contract_renewal_wizard.xml",
         "wizards/active_facility_depend_wizard.xml",
         "views/clinical_experience_views.xml",
+        "views/res_users_views.xml",
         "views/menu.xml",
-        "security/ir.model.access.csv"
+        "views/res_company_views.xml"
     ],
     'assets': {
         'web.assets_backend': [

@@ -58,3 +58,16 @@
     }
 
 }
+
+.cdm {
+
+    th:nth-child(10).o_list_button::after {
+        content: "ADCE/DCE Decision";
+        margin-left: 5px;
+        background-color: #eaeaea;
+        color: #333;
+        padding: 2px 4px;
+        border-radius: 4px;
+    }
+
+}

@@ -12,7 +12,7 @@ class Program(models.Model):
     num_terms = fields.Integer(string='Number of terms', default=1)
     active = fields.Boolean(string='Active')
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.user.company_id)
-    program_experience_term_ids = fields.One2many(comodel_name='program.experience.term', inverse_name='program_id', string='Program Clinical Experience Terms', store=True)
+    program_experience_term_ids = fields.One2many(comodel_name='program.experience.term', inverse_name='program_id', string='Program Clinical Experience Terms', store=True, check_company=True)
     
     def action_open_program_experience_term(self):
         self.ensure_one()
@@ -66,9 +66,9 @@ class ProgramExperienceTerm(models.Model):
     _rec_name = 'program_id'
     _order = "sequence"
     
-    program_id = fields.Many2one(comodel_name='program', string='Program')
+    program_id = fields.Many2one(comodel_name='program', string='Program', check_company=True)
     company_id = fields.Many2one('res.company', related='program_id.company_id')
-    experience_id = fields.Many2one(comodel_name='clinical.experience', string='Clinical Experience', domain="[('company_id', '=', company_id)]")
+    experience_id = fields.Many2one(comodel_name='clinical.experience', string='Clinical Experience', domain="[('company_id', '=', company_id)]", check_company=True)
     sequence = fields.Integer(related='experience_id.sequence', store=True)
     term = fields.Integer(string='term Number', default=1)
     start_date = fields.Date(string='start Date')
