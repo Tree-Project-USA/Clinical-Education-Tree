@@ -36,9 +36,6 @@ access_clinical_experience_manager,clinical_experience_manager,model_clinical_ex
 access_program_experience_term_manager,program_experience_term_manager,model_program_experience_term,,1,1,1,1
 access_clinical_experience_schedual_manager,clinical_experience_schedual_manager,model_clinical_experience_schedual,,1,1,1,1
 
-<<<<<<< HEAD
 access_res_company_user,res_company_user,base.model_res_company,clinical_decision_making.group_cdm_customer,1,1,1,1
-=======
 access_plcement_management_user,plcement_management_user,model_plcement_management,base.group_user,1,0,0,1
 access_plcement_management_portal,plcement management portal,model_plcement_management,base.group_portal,1,1,1,1
->>>>>>> 9758fdd (ADD PTEC3)
