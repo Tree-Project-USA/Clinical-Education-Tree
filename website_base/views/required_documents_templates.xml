@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="required_document_template" name="Attachment Request">
+        <t t-call="website.layout">
+            <div id="form_temp">
+                <div id="wrap" class="oe_structure oe_empty my-4">
+                    <div
+                        class="alert alert-danger w-10 mx-auto text-center"
+                        t-if="error"
+                        role="alert"
+                    >
+                        <strong>
+                            <t t-esc="error"/>
+                        </strong>
+                    </div>
+                    <div class="container">
+                        <form  
+                            action="/create/required/documents" 
+                            class="required_document"
+                            method="post"
+                            enctype="multipart/form-data"
+                        >
+                        <div t-if="hardship_form_attachment" class="modal fade" id="download_attachment" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                          </div>
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <input type="hidden" name="len_type_documents" value="1" />
+                            <div class="file row mt-4">
+                                <div>
+                                    <table class="table add_attachment table-bordered">
+                                      <thead style="color:# a6ab75;">
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>ID</th>
+                                            <th>Description</th>
+                                            <th class="text-center" />
+                                        </tr>
+                                      </thead>
+                                      <tbody id="add_type_document">
+                                        
+                                      </tbody>
+                                    
+                                      <tfooter>
+                                        <tr>
+                                          <td colspan="4">
+                                            <a 
+                                              id="add_type_documents" 
+                                              class="btn m-2"
+                                              style="background-color:#326434;color:#fff;" 
+                                            >
+                                              <h6>Add Type Document</h6>
+                                            </a>
+                                          </td>
+                                        </tr>
+                                      </tfooter>
+                                    </table>
+                                </div>
+                            </div>
+                          <div class="clearfix oe_login_buttons mt-4">
+                              <button type="submit"
+                                      class="custom_create btn btn-block" style="background-color:#326434;color:#fff;">
+                                  Submit
+                              </button>
+                              <a href="/my/home"
+                                    class="float-end custom_create btn btn-block "
+                                    style="background-color:#326434;color:#fff;">
+                                    Back To My Profile
+                                </a>
+                          </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

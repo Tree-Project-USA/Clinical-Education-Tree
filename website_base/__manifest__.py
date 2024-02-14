@@ -33,6 +33,7 @@
         #Report
         'report/report_action.xml',
         'report/ptce3_report_template.xml',
+        "views/required_documents_templates.xml",
     ],
     # only loaded in demonstration mode
     "demo": [],
@@ -53,6 +54,8 @@
             "website_base/static/src/js/attachment_request.js",
             "website_base/static/src/js/state_attachment_request.js",
             "website_base/static/src/js/signature_cpdm.js",
+            "website_base/static/src/js/required_document.js",
+            "website_base/static/src/js/scce_attachment_request.js",
         ],
     },
     "installable": True,

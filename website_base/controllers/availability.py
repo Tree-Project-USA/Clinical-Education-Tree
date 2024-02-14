@@ -169,12 +169,29 @@ class SubmitAvailability(http.Controller):
     @http.route('/departments', website=True, type='json', auth="user", csrf=False)
     def departments(self, id=None, **kw):
         values = {}
-        department_ids = request.env["facility.department"].sudo().search([])
+        
         company_ids = request.env["res.company"].sudo().search([])
-        clinical_experience_ids = request.env["clinical.experience"].sudo().search([])
         SELECTION_YEAR_RANGE = [{
                     'id': str(i),
                 } for i in range(2020, 2500)]
+        companys = [{
+                    'id': company.id,
+                    'name': company.name if company.name else '',
+                } for company in company_ids]
+        values["company_ids"] = companys
+        values["SELECTION_YEAR_RANGE"] = SELECTION_YEAR_RANGE
+        return values
+    
+    @http.route('/inforamtion/company', website=True, type='json', auth="user", csrf=False)
+    def information_company(self, company_id=None, **kw):
+        values = {}
+        company_id = request.env["res.company"].sudo().search([("id", "=", company_id)])
+        department_ids = request.env["facility.department"].sudo().search([("company_id", "=", company_id.id)])
+        clinical_experience_ids = request.env["clinical.experience"].sudo().search([("company_id", "=", company_id.id)])
+        experiences = [{
+                    'id': experience.id,
+                    'name': experience.name if experience.name else '',
+                } for experience in clinical_experience_ids]
         departments = [{
                     'id': department.id,
                     'name': department.name if department.name else '',
@@ -182,16 +199,20 @@ class SubmitAvailability(http.Controller):
                     'city': department.city if department.city else '',
                     'state': department.state if department.state else '',
                 } for department in department_ids]
-        companys = [{
-                    'id': company.id,
-                    'name': company.name if company.name else '',
-                } for company in company_ids]
-        experiences = [{
-                    'id': experience.id,
-                    'name': experience.name if experience.name else '',
-                } for experience in clinical_experience_ids]
-        values["department_ids"] = departments
-        values["company_ids"] = companys
         values["clinical_experience_ids"] = experiences
-        values["SELECTION_YEAR_RANGE"] = SELECTION_YEAR_RANGE
+        values["department_ids"] = departments
         return values
+    
+    # @http.route('/program/experience/term', website=True, type='json', auth="user", csrf=False)
+    # def program_experience_term(self, experience_id=None, **kw):
+    #     print(experience_id)
+    #     values = {}
+    #     program_experience_term_ids = request.env["program"].sudo().search([])
+    #     print(program_experience_term_ids.program_experience_term_ids)
+    #     # program_experiences = [{
+    #     #             'start_date': program_experience.start_date if program_experience.end_date else '',
+    #     #             'end_date': program_experience.end_date if program_experience.end_date else '',
+    #     #         } for program_experience in program_experience_term_ids]
+    #     # print(program_experiences)
+    #     # values["program_experience_term_ids"] = program_experiences
+    #     return values

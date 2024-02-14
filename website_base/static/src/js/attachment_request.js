@@ -37,7 +37,7 @@ odoo.define("website_base.attachment_request", function(require) {
                             <div class="form-group input-material">
                                 <input type="date" 
                                     class="form-control" 
-                                    name="expiration_date_` +  + `" 
+                                    name="expiration_date_` + counter_attachments + `" 
                                     id="expiration_date_` + counter_attachments + `"
                                 />
                             </div>
@@ -47,7 +47,7 @@ odoo.define("website_base.attachment_request", function(require) {
                 <td class="row-index">
                     <div class="row">
                         <div class="col-12">
-                        <div class="file-upload" id="file-upload_` + counter_attachments + `">
+                        <div class="file-upload" id="file_upload_` + counter_attachments + `">
                             <div class="file-select">
                                 <div class="file-select-button" id="fileName_` + counter_attachments + `">
                                     Choose File
@@ -92,7 +92,7 @@ odoo.define("website_base.attachment_request", function(require) {
                 }
             });
             var ChooseFile = '#chooseFile_' + counter_attachments
-            var FileUpload = '#file-upload_' + counter_attachments
+            var FileUpload = '#file_upload_' + counter_attachments
             var NoFile = '#noFile_' + counter_attachments
             $(ChooseFile).bind('change', function () {
                 var filename = $(ChooseFile).val();

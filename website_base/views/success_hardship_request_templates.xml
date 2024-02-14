@@ -96,4 +96,36 @@
     </div>
   </t>
   </template>
+   <template id="success_required_document" name="Procedure Created Successfully">
+    <t t-call="website.layout">
+      <div id="wrap">
+        <div class="container">
+          <div class="col-md-12" style="margin-top:20px">
+            <div class="alert alert-success text-center shadow-sm">
+              <h2>
+                <span t-esc="accept_message" />
+              </h2>
+              <i
+                                class="fa fa-check-circle fa-1x text-success mr-2"
+                                role="img"
+                                aria-label="Success"
+                                title="Success"
+                                style="font-size: 30px"
+                            />
+              <h2>
+                Your Required Documents submitted successfully !
+            </h2>
+            <a 
+              class="btn btn-success" 
+              role="button" 
+              href="/my/home"
+            >
+              My Profile
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </t>
+  </template>
 </odoo>

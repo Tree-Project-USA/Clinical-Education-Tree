@@ -8,7 +8,6 @@ class Facility(http.Controller):
         partner_id = request.env.user.partner_id
         if request.httprequest.method == "GET":
             department_id = request.env["facility.department"].sudo().search([("id", "=", id)])
-            print(department_id.mapped("archive_ids"))
 
             archive_ids = request.env['archive'].sudo().search([
                 ('department_id', '=', department_id.id), 

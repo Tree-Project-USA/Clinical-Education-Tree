@@ -25,13 +25,8 @@ class CustomerPortals(http.Controller):
     def attachment_request(self):
         values = {}
         partner_id = request.env.user.partner_id
-        attachment_request_id = request.env["attachment.request"].sudo().search([
-            ('student_id', '=', partner_id.id),
-            ], limit=1, order="id desc")
         company_id = request.env['res.company'].sudo().search([])
         values["company_id"] =  company_id
-        if attachment_request_id and attachment_request_id.state not in ["cancel"]:
-            return request.redirect("/my/home")
         return request.render("website_base.attachment_request_template", values)
     
     @http.route("/create/attachment/request", type="http", website=True, auth="user", Methods=["POST"])
@@ -54,8 +49,18 @@ class CustomerPortals(http.Controller):
                         'attachment_type': kw.get("attachment_type_id_" + str(attachments)),
                         'expiration_date': kw.get("expiration_date_" + str(attachments)),
                         'attachment_ids': [(0,0,{
-                            "name": kw.get("attachment_ids_" + str(attachments)).filename,
-                            "datas": base64.b64encode(kw.get("attachment_ids_" + str(attachments), False).read()),  
+                            "name": kw.get("datas_" + str(attachments)).filename,
+                            "datas": base64.b64encode(kw.get("datas_" + str(attachments), False).read()),  
+                        })],
+                    })
+                    attachment_list.append(line_attachment)
+                for attachments in range(0, int(kw.get("len_scce_attachment"))):
+                    line_attachment= (0,0,{
+                        'attachment_type': kw.get("scce_attachment_type_id_" + str(attachments)),
+                        'expiration_date': kw.get("scce_expiration_date_" + str(attachments)),
+                        'attachment_ids': [(0,0,{
+                            "name": kw.get("scce_datas_" + str(attachments)).filename,
+                            "datas": base64.b64encode(kw.get("scce_datas_" + str(attachments), False).read()),  
                         })],
                     })
                     attachment_list.append(line_attachment)
@@ -114,6 +119,20 @@ class CustomerPortals(http.Controller):
     def attachments(self, **kw):
         values = {}
         attachment_type_ids = request.env["attachment.type"].sudo().search([])
+        attachments = [{
+                    'id': attachment.id,
+                    'name': attachment.name
+                } for attachment in attachment_type_ids]
+        values["attachment_type_ids"] = attachments
+        return values
+    
+    @http.route('/scce/attachment', website=True, type='json', auth="user", csrf=False)
+    def scce_attachments(self, **kw):
+        values = {}
+        partner_id = request.env.user.partner_id
+        # print(partner_id.name)
+        # print(partner_id.mapped("archive_ids").search([]).mapped("facility_id").search([]).mapped("scce_ids").search([]))
+        attachment_type_ids = request.env["scce.attachment.type"].sudo().search([])
         attachments = [{
                     'id': attachment.id,
                     'name': attachment.name
