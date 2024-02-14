@@ -14,7 +14,7 @@ class ResPartner(models.Model):
     
     is_student = fields.Boolean(string='Is Student', default=False)
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.user.company_id, required=True)
-    name = fields.Char(string='Student Name', compute='_compute_name', store=True, default='Name')
+    name = fields.Char(string='Name', compute='_compute_name', store=True, default='')
     first_name = fields.Char(string='First Name', required=True)
     last_name = fields.Char(string='Last Name', required=True )
     cohort_label = fields.Char(string='Cohort', compute='_compute_term_fields', store=True)# TODO: Remoove this line
@@ -187,7 +187,8 @@ class ResPartner(models.Model):
     @api.depends('first_name', 'last_name')
     def _compute_name(self):
         for record in self:
-            record.name = f"{record.first_name if record.first_name else ''} {record.last_name if record.last_name else ''}"
+            if record.first_name or record.last_name:
+                record.name = f"{record.first_name if record.first_name else ''} {record.last_name if record.last_name else ''}" 
     
     def check_zip_code_distance(self, geographical_ids):
         max_distance_mel = self.env.company.max_distance_mel
