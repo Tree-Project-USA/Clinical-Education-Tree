@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="paperformat_ptce_3" model="report.paperformat">
+        <field name="name">Custom Paperformat for the PTCE 3 report</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">40</field>
+        <field name="margin_bottom">10</field>
+        <field name="margin_left">0</field>
+        <field name="margin_right">0</field>
+        <field name="dpi">96</field>
+    </record>
+
+    <record id="ptce3_report_actions" model="ir.actions.report">
+        <field name="name">Model Report</field>
+        <field name="model">res.partner</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">website_base.ptce_report_template</field>
+        <field name="report_file">website_base.ptce_report_template</field>
+        <field name="paperformat_id" ref="website_base.paperformat_ptce_3"/>
+    </record>
+
+</odoo>

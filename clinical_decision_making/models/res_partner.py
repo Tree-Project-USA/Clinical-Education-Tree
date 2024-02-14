@@ -47,6 +47,11 @@ class ResPartner(models.Model):
     alternative_schedule_ids = fields.One2many('alternative.schedule', 'student_id', string='Alternative Schedule')
     medical_attachment_ids = fields.One2many(comodel_name='attachments', inverse_name='student_id', string='Medical Document')
     experience_schedual_ids = fields.Many2many(comodel_name='clinical.experience.schedual', compute='_compute_term_fields', string='Studnet Experience Schedual')
+    student_signature = fields.Binary(string="Student Signature")
+    student_signature_date = fields.Date(string="Student Signature Date")
+    ci_signature = fields.Binary(string="Clinical Instructor Signature")
+    ci_signature_date = fields.Date(string="Clinical Instructor Signature Date")
+    plcement_management_ids = fields.One2many(comodel_name='plcement.management', inverse_name='student_id', string='Post Plcement Management')
     
     @api.onchange('archive_ids', 'archive_ids.archive_offer_id')
     def _onchange_archive_ids(self):
@@ -339,6 +344,7 @@ class ResPartner(models.Model):
         if any(field in vals for field in ['home_address', 'phone', 'personal_phone', 'personal_email_address']):
             template = self.env.ref('clinical_decision_making.mail_template_send_update_of_personal_information')
             template.sudo().send_mail(self.id, force_send=True)
+        # print(vals,'<<<<<<<<<<<<<<')
         return super(ResPartner, self).write(vals)
 
     @api.onchange('preferred_setting_ids')
@@ -386,4 +392,6 @@ class ResPartner(models.Model):
         else:
             self.active = True
         
-        
+    def _get_report_base_filename(self):
+        self.ensure_one()
+        return '%s %s' % (self.name, 'Signature')

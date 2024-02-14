@@ -7,7 +7,7 @@
     'version': '16.0',
     'description': "",
     'license': 'LGPL-3',
-    'depends': ['base', 'base_address_extended', 'mail', 'portal', 'odx_m2m_attachment_preview'],
+    'depends': ['base', 'base_address_extended', 'mail', 'portal', 'odx_m2m_attachment_preview', 'web_digital_sign'],
     "data": [
         "security/cdm_security.xml",
         "security/ir.model.access.csv",
@@ -40,6 +40,7 @@
         "wizards/active_facility_depend_wizard.xml",
         "views/clinical_experience_views.xml",
         "views/res_users_views.xml",
+        "views/res_partner_ci_views.xml",
         "views/menu.xml",
         "views/res_company_views.xml"
     ],

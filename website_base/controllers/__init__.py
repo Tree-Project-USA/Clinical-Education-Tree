@@ -7,3 +7,4 @@ from . import facility
 from . import availability
 from . import update_scce_information
 from . import attachment_request
+from . import main
