@@ -41,6 +41,8 @@ class CustomerPortals(portal.CustomerPortal):
             # 'clinical_experience_dates': post.get('clinical_experience_dates'),
             'student_signature':  post.get('student_signature'),
             })
+            return request.redirect('/my')
+
             # res_partner_id.write({
             #     'student_signature' : student_signature
             # })
