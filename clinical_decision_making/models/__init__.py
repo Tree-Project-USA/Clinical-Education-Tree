@@ -21,5 +21,10 @@ from . import facility_department
 from . import attachment
 from . import attachment_request
 from . import clinical_experience
+<<<<<<< HEAD
 from . import res_company
 from . import ir_ui_menu
+=======
+from . import res_partner_ci
+from . import plcement_management
+>>>>>>> 9758fdd (ADD PTEC3)

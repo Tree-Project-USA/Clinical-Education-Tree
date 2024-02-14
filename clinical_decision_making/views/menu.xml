@@ -48,6 +48,29 @@
     <field name="act_window_id" ref="scce_action" />
   </record>
 
+    <record id="ci_action" model="ir.actions.act_window">
+        <field name="type">ir.actions.act_window</field>
+        <field name="name">CLINICAL INSTRUCTOR (CI)</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('is_ci', '=', True)]</field>
+        <field name="context">{'default_is_ci': True, 'active_test': False}</field>
+    </record>
+
+  <record id="ci_tree_view" model="ir.actions.act_window.view">
+    <field eval="1" name="sequence" />
+    <field name="view_mode">tree</field>
+    <field name="view_id" ref="clinical_decision_making.ci_view_tree" />
+    <field name="act_window_id" ref="ci_action" />
+  </record>
+
+  <record id="ci_form_view" model="ir.actions.act_window.view">
+    <field eval="2" name="sequence" />
+    <field name="view_mode">form</field>
+    <field name="view_id" ref="clinical_decision_making.ci_view_form" />
+    <field name="act_window_id" ref="ci_action" />
+  </record>
+
     <record id="medical_facility_action" model="ir.actions.act_window">
         <field name="type">ir.actions.act_window</field>
         <field name="name">Facilities</field>
@@ -223,6 +246,13 @@
         action="scce_action"
         parent="clinic_details_menu"
         sequence="3"/>
+        
+        <menuitem
+        id="ci_menu"
+        name="CLINICAL INSTRUCTOR (CI)"
+        action="ci_action"
+        parent="clinic_details_menu"
+        sequence="3"/>
 <!-- 
         <record id="action_un_form" model="ir.actions.act_window">
             <field name="name">Companies</field>
@@ -238,6 +268,12 @@
         id="university_profile_menu"
         name="University Profile"
         action="action_un_form"
+
+
+   <menuitem
+        id="geographical_menu"
+        name="Zip Codes Data"
+        action="geographical_action"
         parent="configuration_menu"
         sequence="1"/> -->
 

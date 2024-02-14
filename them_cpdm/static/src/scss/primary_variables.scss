@@ -10,33 +10,13 @@ $o-color-palettes: map-merge($o-color-palettes,
             'o-color-3': #FFFFFF,
             'o-color-4': #c4d2ae,
             'o-color-5': #326434,
-            'primary': #a6ab75,
-        ),
-
-        'deem_header': (
-            'o-color-1': #a6ab75,
-            'o-color-2': #326434,
-            'o-color-3': #52127c,
-            'o-color-4': #c4d2ae,
-            'o-color-5': #326434,
-            'primary': #a6ab75,
-        ),
-        
-        'deem_footer': (
-            'o-color-1': #a6ab75,
-            'o-color-2': #ffffff,
-            'o-color-3': #a6ab75,
-            'o-color-4': #c4d2ae,
-            'o-color-5': #a6ab75,
-            'primary': #a6ab75,
-
+            'primary': #326434,
+            
         ),
     )
 );
 
 $o-selected-color-palettes-names: append($o-selected-color-palettes-names, 'deem');
-$o-selected-color-palettes-names: append($o-selected-color-palettes-names, 'deem_header');
-$o-selected-color-palettes-names: append($o-selected-color-palettes-names, 'deem_footer');
 
 
 // -------------------------------------------------------------------------- //
@@ -47,12 +27,6 @@ $o-website-values-palettes: (
     (
         // Colors
         'color-palettes-name': 'deem',
-        // // Header
-        'header-template': 'deem_header',
-        // 'logo-height': 4rem,
-
-        // // Footer
-        'footer-template': 'deem_footer',
     ),
 );
 

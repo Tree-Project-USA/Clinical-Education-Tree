@@ -100,6 +100,10 @@
                             <field name="personal_phone"/>
                             <field name="personal_email_address"/>
                             <field name="email" string="University Email Address" required="1"/>
+                            <field name="student_signature" widget="signature" invisible="1" />
+                            <field name="student_signature_date" invisible="1"  />
+                            <field name="ci_signature" widget="signature" invisible="1" />
+                            <field name="ci_signature_date" invisible="1" />
                         </group>
                     </group>
 
@@ -164,7 +168,27 @@
                             </field>
                         </page>
                         
-                        <page name='internal_notes' string="Post Placement Managament">
+                        <page name='post_placement_managament' string="Post Placement Managament">
+                            <field name="plcement_management_ids" mode="tree">
+                            <tree editable="bottom">
+                                <field name='sequence' widget='handle'/>
+                                <field name="student_id"/>
+                                <field name="archive_id" invisible="1"/>
+                                <field name="setting" invisible="1"/>
+                                <field name="name_clinical_education_site"/>
+                                <field name="home_address"/>
+                                <field name="city"/>
+                                <field name="state"/>
+                                <field name="clinical_experience_number"/>
+                                <field name="clinical_experience_dates"/>
+                                <field name="student_signature_date"/>
+                                <field name="ci_signature_date"/>
+                                <field name="year" invisible="1"/>
+                                <field name="parent_id" invisible="1"/>
+                                <field name="display_type" invisible="1"/>
+                            </tree>
+
+                        </field>
                         </page>
 
                         <page name='medical_attachment_ids' string="Medical Document">

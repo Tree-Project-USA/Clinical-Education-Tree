@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="ptse_general_information">
+        <t t-call="portal.portal_layout">
+            <form t-att-action="'/my/report/%s' % slug(department)" id="ptse-form" class="hardship" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
+                <div class="popup-card-error" id="popup-card-error">
+                    <div class="content">
+                        <h3>Erorr</h3>
+                        <p id="content-p">
+                            There is currently no Technician
+                        </p>
+                    </div>
+                </div>
+                <body data-bs-spy="scroll" data-target=".navspy" data-offset="50">
+                    <div class="container o_portal_sidebar">
+                        <div class="row mt16">
+                            <div class="col col-lg-3 d-print-none">
+                                <div class="card bg-white mb-4 sticky-top" id="sidebar_content">
+                                    <div class="card-body text-center pb-2 pt-3">
+                                        <t t-out="title or ''" />
+                                    </div>
+                                    <ul class="list-group list-group-flush flex-wrap flex-row flex-lg-column">
+                                        <li class="list-group-item d-grid align-content-start">
+                                            <button type="submit" id="save"  class="mb8 btn btn-success">
+                                                <i class="fa fa-check" />
+                                                <t>Save</t>
+                                            </button>
+                                            <div class="o_download_pdf btn-toolbar flex-sm-nowrap">
+                                                <div class="btn-group flex-grow-1 me-1 mb-1">
+                                                    <a class="btn btn-secondary o_download_btn" t-attf-href="/my/report?report_type=pdf&amp;download=true" title="Download">
+                                                        <i class="fa fa-download" />
+                                                        Download
+                                                    </a>
+                                                </div>
+                                                <div class="btn-group flex-grow-1 mb-1">
+                                                    <a class="btn btn-secondary o_print_btn o_portal_invoice_print" t-attf-href="/my/report?report_type=pdf" id="print_invoice_report" title="Print" target="_blank">
+                                                        <i class="fa fa-print" />
+                                                        Print
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-9 justify-content-end">
+                                <div id="card" class="card">
+                                    <div id="card_header" class="card-header bg-white" data-anchor="true">
+                                        <h5 class="d-flex mb-1 mb-md-0 h6">
+                                            GENERAL INFORMATION AND SIGNATURES
+                                        </h5>
+                                    </div>
+                                    <div id="card_body" class="card-body">
+                                        <h5>General Information</h5>
+                                        <t t-set="geographical" 
+                                        t-value="request.env['geographical'].sudo().search([('id', 'in', res_partner_id.geographical_ids.ids)], limit=1, order='id desc')"/>
+                                        <div class="mb-3 row">
+                                            <div class="col-12">
+                                                <label class="form-label fw-bold">Student Name:</label>
+                                                <input type="text" class="form-control w-50-input d-inline-block form-control-cpdm" id="name" name="name" t-att-value="res_partner_id.name" />
+                                            </div>
+                                            <div class="col-12">
+                                                <label class="form-label fw-bold">Academic Institution:</label>
+                                                <span>University of St. Augustine (Campus)</span>
+                                                <input type="text" class="form-control w-40-input d-inline-block form-control-cpdm" name="campus" t-att-value="res_partner_id.campus" />
+                                            </div>
+                                            <div class="col-12">
+                                                <label class="form-label fw-bold">Name of Clinical Education Site:</label>
+                                                <input type="text" class="form-control w-40-input d-inline-block form-control-cpdm" name="home_address"  />
+                                            </div>
+                                        </div>
+                                        <div class="row row-cols-1 row-cols-lg-3 ">
+                                            <div class="col">
+                                                <label class="form-label fw-bold">Address:</label>
+                                                <input type="text" class="form-control w-auto d-inline-block form-control-cpdm" name="name_clinical_education_site" t-att-value="res_partner_id.home_address"  required="required"/>
+                                               
+                                            </div>
+                                            <div class="col">
+                                                <label class="form-label fw-bold">City:</label>
+                                                <input type="text" class="form-control w-auto d-inline-block form-control-cpdm" name="city" t-att-value="geographical.city" required="required" />
+                                               
+                                            </div>
+                                            <div class="col">
+                                                <label class="form-label fw-bold">State:</label>
+                                                <input type="text" class="form-control w-auto d-inline-block form-control-cpdm" name="state" t-att-value="geographical.state" required="required" />
+                                              
+                                            </div>
+                                        </div>
+                                        <div class="row row-cols-1 row-cols-lg-2 ">
+                                            <div class="col">
+                                                <label class="form-label fw-bold">Clinical Experience Number:</label>
+                                                <input type="text" class="form-control w-auto d-inline-block form-control-cpdm" name="clinical_experience_number" t-att-value="" />
+                                            </div>
+                                            <div class="col">
+                                                <label class="form-label fw-bold">Clinical Experience Dates:</label>
+                                                <input type="text" class="form-control w-auto d-inline-block form-control-cpdm" name="clinical_experience_dates" t-att-value="" />
+                                            </div>
+                                        </div>
+                                        <h6 class="mt-4">Signatures</h6>
+                                        <p class="mb-4">
+                                            I have reviewed information contained in this Physical
+                                            Therapist Student Evaluation of the clinical education
+                                            experience
+                                            and of the clinical instruction. I recognize that the
+                                            information below is being collected to facilitate
+                                            accreditation
+                                            requirements. I understand that my personal information
+                                            will not be available to students in the academic
+                                            program files.
+                                        </p>
+                                        <div class="row row-cols-1 row-cols-lg-2 ">
+                                            <div class="col">
+                                                <!-- <t t-set="variable" t-value="any(res_partner_id.student_signature)"/> -->
+                                                <!-- <img t-if="res_partner_id.student_signature"  t-att-src="image_data_uri(res_partner_id.student_signature)" style="max-height: 4cm; max-width: 8cm;"/> -->
+                                                <input type="hidden" id="student_signature" name="student_signature" value=""/>
+                                                <canvas id="signature-student" width="400" height="200"></canvas>
+                                                <label class="form-label">STUDENT SIGNATURE</label>
+                                                    <i  id="clear-student" class="fa fa-trash text-danger " />
+                                            </div>
+                                            <div class="col">
+                                                <input type="date" class="form-control form-control-cpdm" name="student_signature_date" value="" />
+                                                <label class="form-label">Date</label>
+                                            </div>
+                                            <div class="col">
+                                                <img t-if="res_partner_id.ci_signature"  t-att-src="image_data_uri(res_partner_id.ci_signature)" style="max-height: 4cm; max-width: 8cm;"/>
+                                                <input type="hidden" id="ci_signature" name="ci_signature" t-att-value="res_partner_id.ci_signature"/>
+                                                <canvas  t-attf-class="#{'' if not res_partner_id.ci_signature else 'd-none'}" id="signature-ci" width="400" height="200"></canvas>
+                                                <label class="form-label">CLINICAL INSTRUCTOR SIGNATURE</label>
+                                                <button type="button" id="clear-ci" class="btn">
+                                                    <i class="fa fa-trash text-danger" />
+                                                </button>
+                                            </div>
+                                            <div class="col">
+                                                <input type="date" class="form-control  form-control-cpdm" name="ci_signature_date" value="" />
+                                                <label class="form-label">Date</label>
+                                            </div>
+                                        </div>
+                                        <!-- ci_ids -->
+                                        <div class="form-check mt-4">
+                                            <input class="form-check-input" type="checkbox" name="new_ci" id="new_ci"/>
+                                            <label class="form-check-label" for="new_ci">
+                                              New CI
+                                            </label>
+                                          </div>
+                                        <div class="form-group mt-1 mb-4 ci">
+                                            <label id="label_line_filter">
+                                                <span id="label_line">CI</span> 
+                                                <span class="star_mark">*</span>
+                                            </label>
+                                            <select id="ci_id" name="ci_id" required="required" class="form-select select2">
+                                                <option> Select </option>
+                                                <t  t-foreach="ci_ids" t-as="ci">
+                                                    <option t-att-value="ci.id">
+                                                        <span t-field="ci.name"/>
+                                                    </option>
+                                                </t>
+                                            </select>
+                                        </div>
+                                        <div class="input-newci d-none">
+                                            <label class="form-label fw-bold">Name CI:</label>
+                                            <input type="text" class="form-control w-40-input d-inline-block form-control-cpdm" id="name_ci" name="name_ci"  />
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <label class="form-label fw-bold">Entry-Level PT Degree earned:</label>
+                                                <input type="text" class="form-control w-40-input d-inline-block form-control-cpdm" id="entry_level_pt_degree_earned" name="entry_level_pt_degree_earned" value="" />
+                                            </div>
+                                        </div>
+                                        <div class="row row-cols-1 row-cols-lg-2 ">
+                                            <div class="col">
+                                                <label class="form-label fw-bold">Highest degree earned:</label>
+                                                <input type="text" class="form-control w-auto d-inline-block form-control-cpdm" id="highest_degree_earned" name="highest_degree_earned" value="" />
+                                            </div>
+                                            <div class="col">
+                                                <label class="form-label fw-bold">Degree Area:</label>
+                                                <input type="text" class="form-control w-auto d-inline-block form-control-cpdm" id="degree_area" name="degree_area" value="" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <label class="form-label fw-bold">Years experience as CI:</label>
+                                                <input type="text" class="form-control w-40-input d-inline-block form-control-cpdm" id="years_experience_ci" name="years_experience_ci" value="" />
+                                            </div>
+                                            <div class="col-12">
+                                                <label class="form-label fw-bold">Years experience as clinician:</label>
+                                                <input type="text" class="form-control w-40-input d-inline-block form-control-cpdm" id="years_experience_clinician" name="years_experience_clinician" value="" />
+                                            </div>
+                                            <div class="col-12">
+                                                <label class="form-label fw-bold">Areas of Expertise:</label>
+                                                <input type="text" class="form-control w-40-input d-inline-block form-control-cpdm" id="areas_expertise" name="areas_expertise" value="" />
+                                            </div>
+                                        </div>
+                                        <div class="row row-cols-1 row-cols-lg-2 ">
+                                            <div class="col">
+                                                <label class="form-label fw-bold">Clinical Certification:</label>
+                                                <input type="text" class="form-control w-auto d-inline-block form-control-cpdm" id="clinical_certification" name="clinical_certification" value="" />
+                                            </div>
+                                            <div class="col">
+                                                <label class="form-label fw-bold">Specify Area:</label>
+                                                <input type="text" class="form-control w-auto d-inline-block form-control-cpdm" id="specify_area" name="specify_area" value="" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <label class="form-label fw-bold">APTA Credentialed CI:</label>
+                                                <input type="text" class="form-control w-40-input d-inline-block form-control-cpdm" id="apta_credentialed_ci" name="apta_credentialed_ci" value="" />
+                                            </div>
+                                            <div class="col-12">
+                                                <label class="form-label fw-bold">Other CI Credential:</label>
+                                                <input type="text" class="form-control w-40-input d-inline-block form-control-cpdm" id="other_ci_credential" name="other_ci_credential" value="" />
+                                            </div>
+                                            <div class="col-12">
+                                                <label class="form-label fw-bold">Professional organization membership:</label>
+                                                <input type="text" class="form-control w-40-input d-inline-block form-control-cpdm" id="professional_organization_membership" name="professional_organization_membership" value="" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="oe_structure mb32" id="oe_structure_portal_sidebar_1" />
+                </body>
+            </form>
+        </t>
+    </template>
+</odoo>

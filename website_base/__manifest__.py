@@ -29,11 +29,16 @@
         "views/student_profile_template.xml",
         "views/show_facility_student_templates.xml",
         "views/attachment_request_templates.xml",
+        "views/ptse3_templates.xml",
+        #Report
+        'report/report_action.xml',
+        'report/ptce3_report_template.xml',
     ],
     # only loaded in demonstration mode
     "demo": [],
     "assets": {
         "web.assets_frontend": [
+            "website_base/static/lib/js/signature_pad.umd.min.js",
             "website_base/static/src/css/profile_user.css",
             "website_base/static/src/css/hardship_information.css",
             "website_base/static/src/scss/style.scss",
@@ -47,6 +52,7 @@
             "website_base/static/src/js/departments.js",
             "website_base/static/src/js/attachment_request.js",
             "website_base/static/src/js/state_attachment_request.js",
+            "website_base/static/src/js/signature_cpdm.js",
         ],
     },
     "installable": True,

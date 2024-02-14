@@ -1,0 +1,45 @@
+# -*- coding: utf-8 -*-
+import logging
+
+from odoo import models, fields, api, _
+from odoo.exceptions import UserError, ValidationError
+
+_logger = logging.getLogger(__name__)
+
+SELECTION_YEAR_RANGE = [(str(i),str(i)) for i in range(2020, 2500)]
+
+
+class PlcementManagement(models.Model):
+    _name = 'plcement.management'
+    _description = _('Plcement Management')
+    _rec_name = 'student_id'
+    _order = 'sequence'
+
+    archive_id = fields.Many2one(comodel_name='archive', string='Archive', ondelete='cascade', readonly=False)
+    ci_id = fields.Many2one(comodel_name='res.partner', string='CI',domain=[('is_ci', '=', True)])
+    student_id = fields.Many2one(comodel_name='res.partner', string='Student',domain=[('is_student', '=', True)])
+    company_id = fields.Many2one(related='student_id.company_id')
+    campus = fields.Char(related='student_id.campus', readonly=False)
+    home_address = fields.Char(related='student_id.home_address', string="Address")
+    name_clinical_education_site = fields.Char(string='Name of Clinical Education Site')
+    city = fields.Char(string='City')
+    state = fields.Char(string='state')
+    clinical_experience_number = fields.Char(string='Clinical Experience Number')
+    clinical_experience_dates = fields.Date(string='Clinical Experience dates')
+    setting = fields.Selection(related='archive_id.setting')
+    placement_term = fields.Selection(related='archive_id.placement_term')
+    year = fields.Selection(related='archive_id.year')
+    parent_id = fields.Many2one(comodel_name='plcement.management', string='Parnet')
+    display_type = fields.Selection([
+        ('line_section', "Section"),
+        ('line_ci', "CI")], default=False, help="Technical field for UX purpose.")
+    sequence = fields.Integer(string='Sequence', default=1)
+    student_signature = fields.Binary(string="Student Signature")
+    student_signature_date = fields.Date(string="Student Signature Date")
+    ci_signature = fields.Binary(string="CI Signature")
+    ci_signature_date = fields.Date(string="CI Signature Date")
+    
+    
+    
+    
+    

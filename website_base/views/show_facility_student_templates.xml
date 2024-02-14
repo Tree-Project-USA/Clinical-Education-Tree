@@ -153,7 +153,9 @@
               </div>
               <div class="tab-pane fade my-4" id="post_placement_managament" role="tabpanel"
                 aria-labelledby="post-placement-managament-tab">
-                ...
+                <a class="btn btn-primary" href="#">PTSE 1</a>
+                <a class="btn btn-primary" href="#">PTSE 2</a>
+                <a class="btn btn-primary" t-att-href="'/my/report/%s' % slug(department_id)">PTSE 3</a>
               </div>
             </div>
           </div>

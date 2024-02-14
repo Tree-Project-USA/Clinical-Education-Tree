@@ -4,7 +4,7 @@
     width: 18rem;
     display: flex;
     right: 0;
-    top: 15%;
+    top: $o-navbar-height;
     position: fixed;
     align-items: flex-start;
     gap: 1rem;
@@ -60,36 +60,78 @@
     display: block;
     width: 94%;
     margin-left: 0.7rem;
-    border: 1px solid #326434;
+    border: 1px solid #ab8631;
 }
 
 .form-select:focus {
-    border-color: #326434;
-    box-shadow: 0 0 0 0.25rem #32643496
+    border-color: #ab8631;
+    box-shadow: 0 0 0 0.25rem #ab863196
 }
 
 .form-control:focus {
-    border-color: #326434;
-    box-shadow: 0 0 0 0.25rem #32643496
+    border-color: #ab8631;
+    box-shadow: 0 0 0 0.25rem #ab863196
 }
 
 .availability .nav-tabs .nav-link.active {
-    color: #326434 !important;
+    color: #ab8631 !important;
 }
 .availability .nav-link {
     color: #000000 !important;
 }
 
 .student_profile .nav-tabs .nav-link.active {
-    color: #326434 !important;
+    color: #ab8631 !important;
 }
 .student_profile .nav-link {
     color: #000000 !important;
 }
 .scce_profile .nav-tabs .nav-link.active {
-    color: #326434 !important;
+    color: #ab8631 !important;
 }
 .scce_profile .nav-link {
     color: #000000 !important;
 }
 
+
+#card_body{
+    .form-label{
+
+    }
+    .form-control-cpdm{
+        border: 0 !important; 
+        border-bottom: 1px solid #525252 !important; 
+        border-radius: 0;
+        font-size: 14px;
+        background-color: $white !important;
+        &:focus{
+            box-shadow: 0 0 0 0 !important;
+        }
+    }
+}
+.w-50-input{
+    width: 50% !important;
+    @include media-breakpoint-down(md) {
+        width: auto !important
+    }
+}
+.w-40-input{
+    width: 40% !important;
+    @include media-breakpoint-down(md) {
+        width: auto !important
+    }
+}
+
+
+.signature-component {
+    canvas {
+      display: block;
+      position: relative;
+      border-bottom: 1px solid;    
+    }
+    img {
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+  }
