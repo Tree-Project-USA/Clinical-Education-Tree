@@ -610,7 +610,6 @@
             <div class="tab-pane fade my-4" id="medical_document" role="tabpanel"
               aria-labelledby="medical-document-tab">
               <div class="my-4 medical_document">
-                <!-- t-if="not medical_attachment_id or medical_attachment_id.state in ['cancel']" -->
                 <a
                   type="button"
                   class="btn my-2"

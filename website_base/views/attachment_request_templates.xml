@@ -16,7 +16,6 @@
                     <div class="container">
                         <form  
                             action="/create/attachment/request" 
-                            class="attachment_request"
                             method="post"
                             enctype="multipart/form-data"
                         >
@@ -24,10 +23,13 @@
                           </div>
                             <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                             <input type="hidden" name="len_attachment" value="1" />
-                            <div class="file row mt-4">
+                            <input type="hidden" name="len_scce_attachment" value="1" />
+                            <div class="row mt-4">
                                 <div>
+                                  <div class="attachment_request">
                                     <table class="table add_attachment table-bordered">
                                       <thead style="color:# a6ab75;">
+                                        <tr>Required Attachment</tr>
                                         <tr>
                                             <th>Attachment Type</th>
                                             <th>Expiration Date</th>
@@ -53,6 +55,37 @@
                                         </tr>
                                       </tfooter>
                                     </table>
+                                  </div>
+                                  <div class="scce_attachment_request">
+                                    <table class="table add_attachment table-bordered">
+                                      <thead style="color:# a6ab75;">
+                                        <tr>SCCE Required Attachment</tr>
+                                        <tr>
+                                            <th>Attachment Type</th>
+                                            <th>Expiration Date</th>
+                                            <th>Attachment</th>
+                                            <th class="text-center" />
+                                        </tr>
+                                      </thead>
+                                      <tbody id="add_scce_attachment">
+                                        
+                                      </tbody>
+                                    
+                                      <tfooter>
+                                        <tr>
+                                          <td colspan="4">
+                                            <a 
+                                              id="add_scce_attachments" 
+                                              class="btn m-2"
+                                              style="background-color:#326434;color:#fff;" 
+                                            >
+                                              <h6>Add Attachment</h6>
+                                            </a>
+                                          </td>
+                                        </tr>
+                                      </tfooter>
+                                    </table>
+                                  </div>
                                 </div>
                             </div>
                             <div class="row mt-4">

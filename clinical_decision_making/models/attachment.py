@@ -14,7 +14,16 @@ class AttachmentType(models.Model):
     portal_id = fields.Char("ID")
     description = fields.Text("Description")
     is_required = fields.Boolean(string="Is Required")
+class ScceAttachmentType(models.Model):
+    _name = "scce.attachment.type"
+    _description = "scce attachment type"
+    _rec_name = "name"
 
+    name = fields.Char("Name", required=True)
+    portal_id = fields.Char("ID")
+    description = fields.Text("Description")
+    is_required = fields.Boolean(string="Is Required")
+    scce_id = fields.Many2one(comodel_name='res.partner', string='SCCE', domain=[('is_scce', '=', True)], tracking=True, required=True, check_company=True)
 
 class Attachment(models.Model):
     _name = "attachments"

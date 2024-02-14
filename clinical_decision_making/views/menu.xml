@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <menuitem name="Clin Ed TREE" id="menu_root_cpdm" />
+    <menuitem 
+        name="Clin Ed TREE" 
+        id="menu_root_cpdm"  
+        web_icon="clinical_decision_making,static/description/icon.jpeg"
+        />
 
     <record id="student_action" model="ir.actions.act_window">
         <field name="name">Student Information</field>
@@ -290,6 +294,13 @@
         action="clinical_decision_making.action_attachment_type"
         parent="configuration_menu"
         sequence="100"/>
+
+    <menuitem
+        id="scce_attachment_type_menu"
+        name="SCCE Attachment Type"
+        action="clinical_decision_making.action_scce_attachment_type"
+        parent="configuration_menu"
+        sequence="101"/>
 
     <menuitem
         id="clinical_experience_menu"

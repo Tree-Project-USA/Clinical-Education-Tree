@@ -19,6 +19,7 @@ class ResPartner(models.Model):
     last_name = fields.Char(string='Last Name', required=True )
     cohort_label = fields.Char(string='Cohort', compute='_compute_term_fields', store=True)# TODO: Remoove this line
     hardship_ids = fields.One2many('hardship.request', 'student_id', string='Hardship')
+    scce_attachment_type_ids = fields.One2many('scce.attachment.type', 'scce_id', string='Hardship')
     home_address = fields.Char(string='Home Address')
     personal_phone = fields.Char(string='Personal Phone')
     personal_email_address = fields.Char(string='Personal Email Address')

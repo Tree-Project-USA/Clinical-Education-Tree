@@ -3,6 +3,10 @@ odoo.define("website_base.departments", function(require) {
     var publicWidget = require("web.public.widget");
     var ajax = require('web.ajax');
     var counter_availability = 0;
+    var previous;
+    var number_of_company;
+    const previous_list = []
+    const services_type_list = []
 
     publicWidget.registry.Departments = publicWidget.Widget.extend({
         selector: ".availability",
@@ -140,6 +144,7 @@ odoo.define("website_base.departments", function(require) {
             };
             var department = "#department_id_" + counter_availability;
             var experience = "#experience_id_" + counter_availability;
+            var date = "#date_" + counter_availability;
             var company = "#company_id_" + counter_availability;
             var year = "#term_" + counter_availability;
             var facility_id = $("#facility_id").val()
@@ -152,24 +157,34 @@ odoo.define("website_base.departments", function(require) {
                         text: value.name,
                     }))
                 })
-                _.each(result["department_ids"], function(value){
-                    $(department).append($('<option>', {
-                        value: value.id,
-                        text: value.name + '/' + value.street + '/' + value.city + '/' + value.state,
-                    }))
-                })
-                _.each(result["clinical_experience_ids"], function(value){
-                    $(experience).append($('<option>', {
-                        value: value.id,
-                        text: value.name,
-                    }))
-                })
                 _.each(result["SELECTION_YEAR_RANGE"], function(value){
                     $(year).append($('<option>', {
                         value: value.id,
                         text: value.id,
                     }))
                 })
+            })
+            $(company).focus(function() {
+                // Store the current value on focus, before it changes
+            }).change(function() {
+                var company_id = $(company).val()
+                ajax.jsonRpc("/inforamtion/company", 'call', { company_id }).then(function(data) {
+                    console.log(data, "ahmed ahmed ahmed")
+                    $(experience).empty();
+                    _.each(data["clinical_experience_ids"], function(value){
+                        $(experience).append($('<option>', {
+                            value: value.id,
+                            text: value.name,
+                        }))
+                    })
+                    $(department).empty();
+                    _.each(data["department_ids"], function(value){
+                        $(department).append($('<option>', {
+                            value: value.id,
+                            text: value.name + '/' + value.street + '/' + value.city + '/' + value.state,
+                        }))
+                    })
+                });
             })
             counter_availability++
             $('input[name="len_department"]').attr('value', counter_availability)
