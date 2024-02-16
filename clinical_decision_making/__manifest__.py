@@ -42,6 +42,7 @@
         "views/res_users_views.xml",
         "views/res_partner_ci_views.xml",
         "views/scce_attachment_type_views.xml",
+        "views/scce_attachment_request_views.xml",
         "views/menu.xml",
         "views/res_company_views.xml"
     ],

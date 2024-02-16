@@ -47,12 +47,12 @@ odoo.define("website_base.scce_attachment_request", function(require) {
                 <td class="row-index">
                     <div class="row">
                         <div class="col-12">
-                        <div class="file-upload" id="file_upload_` + counter_scce_attachments + `">
+                        <div class="file-upload" id="scce_file_upload_` + counter_scce_attachments + `">
                             <div class="file-select">
-                                <div class="file-select-button" id="fileName_` + counter_scce_attachments + `">
+                                <div class="file-select-button" id="scce_fileName_` + counter_scce_attachments + `">
                                     Choose File
                                 </div>
-                                <div class="file-select-name" id="noFile_` + counter_scce_attachments + `">
+                                <div class="file-select-name" id="scce_noFile_` + counter_scce_attachments + `">
                                     Drag and drop your file here
                                 </div> 
                                 <input type="file" 
@@ -60,7 +60,7 @@ odoo.define("website_base.scce_attachment_request", function(require) {
                                     accept=".jpg, .jpeg, .png, .pdf, .docx, .xls, .pptx"
                                     required
                                     name="scce_datas_${counter_scce_attachments}"
-                                    id="chooseFile_${counter_scce_attachments}"
+                                    id="scce_chooseFile_${counter_scce_attachments}"
                                 />
                             </div>
                         </div>
@@ -91,9 +91,9 @@ odoo.define("website_base.scce_attachment_request", function(require) {
                     $('input[name="len_scce_attachment"]').attr('value', counter_scce_attachments)
                 }
             });
-            var ChooseFile = '#chooseFile_' + counter_scce_attachments
-            var FileUpload = '#file_upload_' + counter_scce_attachments
-            var NoFile = '#noFile_' + counter_scce_attachments
+            var ChooseFile = '#scce_chooseFile_' + counter_scce_attachments
+            var FileUpload = '#scce_file_upload_' + counter_scce_attachments
+            var NoFile = '#scce_noFile_' + counter_scce_attachments
             $(ChooseFile).bind('change', function () {
                 var filename = $(ChooseFile).val();
                 if (/^\s*$/.test(filename)) {
