@@ -6,6 +6,8 @@ from . import preferred_setting
 from . import facility
 from . import availability
 from . import update_scce_information
+from . import update_ci_information
 from . import attachment_request
 from . import main
 from . import required_document
+from . import profile_student

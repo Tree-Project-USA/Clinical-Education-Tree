@@ -169,7 +169,6 @@ odoo.define("website_base.departments", function(require) {
             }).change(function() {
                 var company_id = $(company).val()
                 ajax.jsonRpc("/inforamtion/company", 'call', { company_id }).then(function(data) {
-                    console.log(data, "ahmed ahmed ahmed")
                     $(experience).empty();
                     _.each(data["clinical_experience_ids"], function(value){
                         $(experience).append($('<option>', {
@@ -184,6 +183,28 @@ odoo.define("website_base.departments", function(require) {
                             text: value.name + '/' + value.street + '/' + value.city + '/' + value.state,
                         }))
                     })
+                });
+            })
+            $(experience).focus(function() {
+                // Store the current value on focus, before it changes
+            }).change(function() {
+                var experience_id = $(experience).val()
+                ajax.jsonRpc("/program/experience/term", 'call', { experience_id }).then(function(data) {
+                    console.log(data, "ahmed ahmed ahmed")
+                    // $(experience).empty();
+                    // _.each(data["clinical_experience_ids"], function(value){
+                    //     $(experience).append($('<option>', {
+                    //         value: value.id,
+                    //         text: value.name,
+                    //     }))
+                    // })
+                    // $(department).empty();
+                    // _.each(data["department_ids"], function(value){
+                    //     $(department).append($('<option>', {
+                    //         value: value.id,
+                    //         text: value.name + '/' + value.street + '/' + value.city + '/' + value.state,
+                    //     }))
+                    // })
                 });
             })
             counter_availability++

@@ -4,15 +4,6 @@
         <t t-call="website.layout">
             <div id="form_temp">
                 <div id="wrap" class="oe_structure oe_empty my-4">
-                    <div
-                        class="alert alert-danger w-10 mx-auto text-center"
-                        t-if="error"
-                        role="alert"
-                    >
-                        <strong>
-                            <t t-esc="error"/>
-                        </strong>
-                    </div>
                     <div class="container">
                         <form  
                             action="/create/attachment/request" 
@@ -29,7 +20,9 @@
                                   <div class="attachment_request">
                                     <table class="table add_attachment table-bordered">
                                       <thead style="color:# a6ab75;">
-                                        <tr>Required Attachment</tr>
+                                        <tr>
+                                          <th class="text-center" colspan="4">Required Attachment</th>
+                                        </tr>
                                         <tr>
                                             <th>Attachment Type</th>
                                             <th>Expiration Date</th>
@@ -59,7 +52,11 @@
                                   <div class="scce_attachment_request">
                                     <table class="table add_attachment table-bordered">
                                       <thead style="color:# a6ab75;">
-                                        <tr>SCCE Required Attachment</tr>
+                                        <tr>
+                                          <th class="text-center" colspan="4">
+                                            SCCE Required Attachment
+                                          </th>
+                                        </tr>
                                         <tr>
                                             <th>Attachment Type</th>
                                             <th>Expiration Date</th>
@@ -87,21 +84,6 @@
                                     </table>
                                   </div>
                                 </div>
-                            </div>
-                            <div class="row mt-4">
-                              <div class="col-12">
-                                  <div class="form-group green-border-focus">
-                                      <label class="required" for="note">Note</label>
-                                      <textarea
-                                        class="form-control"
-                                        row="3"
-                                        name="note"
-                                        type="text"
-                                        id="note"
-                                      >
-                                      </textarea>
-                                  </div>
-                              </div>
                             </div>
                           <div class="clearfix oe_login_buttons mt-4">
                               <button type="submit"

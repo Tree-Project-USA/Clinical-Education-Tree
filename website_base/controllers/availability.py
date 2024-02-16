@@ -49,8 +49,8 @@ class SubmitAvailability(http.Controller):
 
             return request.render("website_base.success_placement_offer_template")
         
-    @http.route('/facility/placement/offer/<int:id>', website=True, type='http', auth="user")
-    def facility_placement_offer(self, id=None, **kw):
+    @http.route('/facility/scce/placement/offer/<int:id>', website=True, type='http', auth="user")
+    def facility_scce_placement_offer(self, id=None, **kw):
         partner_id = request.env.user.partner_id
         if request.httprequest.method == "GET":
             facility_id = request.env["medical.facility"].sudo().search([("id", "=", id)])
@@ -68,7 +68,30 @@ class SubmitAvailability(http.Controller):
             values.update(dict(request.params))
             dict(request.params)
             request.session['facility_id'] =  facility_id.id
-            return request.render("website_base.show_placement_offer_facility_template", values)
+            return request.render("website_base.show_scce_placement_offer_facility_template", values)
+        
+    @http.route('/facility/ci/placement/offer/<int:id>', website=True, type='http', auth="user")
+    def facility_ci_placement_offer(self, id=None, **kw):
+        partner_id = request.env.user.partner_id
+        if request.httprequest.method == "GET":
+            facility_id = request.env["medical.facility"].sudo().search([("id", "=", id)])
+            facility_department_id = request.env["facility.department"].sudo().search([("facility_id", "=", facility_id.id)])
+            archive_ids = request.env['archive'].sudo().search([
+                ('facility_id', '=', facility_id.id), 
+            ])
+            values = {
+                "department_ids": facility_id.mapped("department_ids").filtered(lambda q: partner_id.id in q.scce_ids.mapped('scce_id').ids),
+                "scce_ids": facility_id.mapped("scce_ids"),
+                "placement_history_ids": facility_id.mapped("archive_ids"),
+                "partner_id": partner_id ,
+                "facility_id": facility_id ,
+                "archive_ids": archive_ids,
+                "facility_department_id": facility_department_id,
+            }
+            values.update(dict(request.params))
+            dict(request.params)
+            request.session['facility_id'] =  facility_id.id
+            return request.render("website_base.show_ci_placement_offer_facility_template", values)
         
     @http.route('/confirm/student/<int:id>', website=True, type='http', auth="user")
     def confirm_student(self, id=None, **kw):
@@ -113,7 +136,6 @@ class SubmitAvailability(http.Controller):
             "is_show_portal": True,
             "main_offer_student_id": archive_id.student_id.id,
         })
-        print(archive_id.archive_offer_id)
         archive_id.archive_offer_id.write({
             "active": False,
         })
@@ -141,30 +163,6 @@ class SubmitAvailability(http.Controller):
             # TODO: Add code here when avalible other offer student
             error = _("This placement offer has been taken by other student")
             return request.redirect_query("/facility/placement/offer/%s" % facility_id, {"error": error})
-        
-    @http.route('/profile/student/<int:id>', website=True, type='http', auth="user")
-    def profile_student(self, id=None, facility_id=None, **kw):
-        values = {}
-        student_id = request.env["res.partner"].sudo().search([("id", "=", id)])
-        values["student_id"] = student_id
-        hardship_ids = request.env["hardship.request"].sudo().search([
-                ('student_id', '=', student_id.id)])
-        hardship_id = request.env["hardship.request"].sudo().search([
-                ('student_id', '=', student_id.id)
-            ], limit=1, order="id desc")
-        archive_ids = request.env['archive'].sudo().search([
-                ('student_id', '=', student_id.id), 
-            ])
-        attachment_request_id = request.env["attachment.request"].sudo().search([
-                ('student_id', '=', student_id.id)
-            ], limit=1, order="id desc")
-        values["hardship_ids"] = hardship_ids
-        values["hardship_id"] = hardship_id
-        values["archive_ids"] = archive_ids
-        values["locations"] = student_id.geographical_ids
-        values["medical_attachment_id"] = attachment_request_id
-        values["facility_id"] = request.session.get('facility_id', False)
-        return request.render("website_base.student_profile_templates", values)
     
     @http.route('/departments', website=True, type='json', auth="user", csrf=False)
     def departments(self, id=None, **kw):
@@ -203,16 +201,16 @@ class SubmitAvailability(http.Controller):
         values["department_ids"] = departments
         return values
     
-    # @http.route('/program/experience/term', website=True, type='json', auth="user", csrf=False)
-    # def program_experience_term(self, experience_id=None, **kw):
-    #     print(experience_id)
-    #     values = {}
-    #     program_experience_term_ids = request.env["program"].sudo().search([])
-    #     print(program_experience_term_ids.program_experience_term_ids)
-    #     # program_experiences = [{
-    #     #             'start_date': program_experience.start_date if program_experience.end_date else '',
-    #     #             'end_date': program_experience.end_date if program_experience.end_date else '',
-    #     #         } for program_experience in program_experience_term_ids]
-    #     # print(program_experiences)
-    #     # values["program_experience_term_ids"] = program_experiences
-    #     return values
+    @http.route('/program/experience/term', website=True, type='json', auth="user", csrf=False)
+    def program_experience_term(self, experience_id=None, **kw):
+        print(experience_id)
+        values = {}
+        clinical_experience_ids = request.env['clinical.experience'].sudo().search([("id", "=", experience_id)])
+        program_experience_term_ids = request.env["program.experience.term"].sudo().search([("experience_id", "=", clinical_experience_ids.id)], limit=1)
+        print(program_experience_term_ids.start_date)
+        program_experiences = [{
+                    'start_date': program_experience.start_date if program_experience.end_date else '',
+                    'end_date': program_experience.end_date if program_experience.end_date else '',
+                } for program_experience in program_experience_term_ids]
+        values["program_experience_term_ids"] = program_experiences
+        return values

@@ -153,7 +153,7 @@
                               type="button"
                               class="btn my-2"
                               role="button" 
-                              t-attf-href="/facility/placement/offer/#{val.id}"
+                              t-attf-href="/facility/scce/placement/offer/#{val.id}"
                               style="background-color:  #326434; !important; color: #fff"
                             >
                             <i class="fa fa-eye mx-2"/> Show Placement Offer
