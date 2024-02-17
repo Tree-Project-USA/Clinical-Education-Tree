@@ -25,3 +25,4 @@ from . import res_company
 from . import ir_ui_menu
 from . import res_partner_ci
 from . import plcement_management
+from . import res_users
