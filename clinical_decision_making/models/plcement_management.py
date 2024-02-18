@@ -15,6 +15,7 @@ class PlcementManagement(models.Model):
     _rec_name = 'student_id'
     _order = 'sequence'
 
+    facility_id = fields.Many2one(comodel_name='medical.facility', string='Facility', ondelete='cascade')
     archive_id = fields.Many2one(comodel_name='archive', string='Archive', ondelete='cascade', readonly=False)
     ci_id = fields.Many2one(comodel_name='res.partner', string='CI',domain=[('is_ci', '=', True)])
     student_id = fields.Many2one(comodel_name='res.partner', string='Student',domain=[('is_student', '=', True)])
@@ -33,11 +34,16 @@ class PlcementManagement(models.Model):
     display_type = fields.Selection([
         ('line_section', "Section"),
         ('line_ci', "CI")], default=False, help="Technical field for UX purpose.")
+    stage_type = fields.Selection([
+        ('ci_details', "CI Details"),
+        ('ptse3', "PTSE 3")],
+        default='ci_details')
     sequence = fields.Integer(string='Sequence', default=1)
     student_signature = fields.Binary(string="Student Signature")
     student_signature_date = fields.Date(string="Student Signature Date")
     ci_signature = fields.Binary(string="CI Signature")
     ci_signature_date = fields.Date(string="CI Signature Date")
+    ptse_3 = fields.Binary(string="PTES 3")
     
     
     

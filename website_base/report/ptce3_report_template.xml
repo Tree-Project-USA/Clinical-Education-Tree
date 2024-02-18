@@ -5,39 +5,43 @@
             <t t-foreach="docs" t-as="o">
         <t t-call="web.external_layout">
             <div class="page">
-                <!-- <div class="container"> -->
-    <!-- Header -->
+
     <h5>Export CI Details to PDF</h5>
     <h3 class="text-center">GENERAL INFORMATION AND SIGNATURES</h3>
     <p>General Information</p>
-    <t t-esc="o"/>
     <div class="oe_structure"/>
     <div class="row" id="informations">
                     <div  class="col-auto col-12 mw-100 mb-2">
                         <strong>Student Name:</strong>
-                        <span class="m-0 border-bottom border-2 d-inline-block w-50" t-field="o.name"/>
+                        <span class="m-0 border-bottom border-2 d-inline-block w-50" t-field="o.student_id.name"/>
                     </div>
                 </div>
                     <div class="row" id="informations">
                     <div  class="col-auto col-3 mw-100 mb-2">
                         <strong>Academic Institution:</strong>
-                        <span>University of St. Augustine (Campus)</span> <span class="m-0 border-bottom border-2 d-inline-block w-50" t-field="o.name"/>
+                        <span>University of St. Augustine (Campus)</span> <span class="m-0 border-bottom border-2 d-inline-block w-50" t-field="o.campus"/>
                     </div>
                     </div>
                     <div class="row" id="informations">
                     <div class="col-auto col-3 mw-100 mb-2" >
                         <strong>Name of Clinical Education Site:</strong>
-                        <span class="m-0 border-bottom border-2 d-inline-block w-50" t-field="o.name"/>
+                        <span class="m-0 border-bottom border-2 d-inline-block w-50" t-field="o.name_clinical_education_site"/>
                     </div>
                     </div>
                     <div class="row" id="informations">
                     <div class="col-auto col-3 mw-100 mb-2">
                         <strong>Address:</strong>
-                        <span class="m-0 border-bottom border-2  d-inline-block w-25" t-field="o.name"/>
+                        <span class="m-0 border-bottom border-2  d-inline-block w-25" t-field="o.home_address"/>
                         <strong>City:</strong>
-                        <span class="m-0 border-bottom border-2  d-inline-block w-25" t-field="o.name"/>
+                        <span class="m-0 border-bottom border-2  d-inline-block w-25" t-field="o.city"/>
                         <strong>State:</strong>
-                        <span class="m-0 border-bottom border-2  d-inline-block w-25" t-field="o.name"/>
+                        <span class="m-0 border-bottom border-2  d-inline-block w-25" t-field="o.state"/>
+                    </div>
+                    <div class="col-auto col-3 mw-100 mb-2">
+                        <strong>Clinical Experience Number:</strong>
+                        <span class="m-0 border-bottom border-2  d-inline-block w-25" t-field="o.clinical_experience_number"/>
+                        <strong>Clinical Experience Dates:</strong>
+                        <span class="m-0 border-bottom border-2  d-inline-block w-25" t-field="o.clinical_experience_dates"/>
                     </div>
                     </div>
                     <h5 class="mt-2">Signatures</h5>
@@ -59,7 +63,7 @@
                             
                         </div>
                         <div class="col-6">
-                            <p class="m-0 border-bottom border-2  d-inline-block w-50" t-field="o.name"/>
+                            <p class="m-0 border-bottom border-2  d-inline-block w-50" t-field="o.student_signature_date"/>
                             <span class="form-label">Date</span>
                         </div>
                     </div>
@@ -71,115 +75,76 @@
                             
                         </div>
                         <div class="col-6">
-                            <p class="m-0 border-bottom border-2  w-50" t-field="o.name"/>
+                            <p class="m-0 border-bottom border-2  w-50" t-field="o.ci_signature_date"/>
                             <span class="form-label">Date</span>
                         </div>
                     </div>
                     <div class="row mt-4">
                         <div class="col-12">
                             <strong class="form-label">Entry-Level PT Degree earned:</strong>
-                            <span class="m-0 border-bottom border-2  d-inline-block w-25" t-field="o.name"/>
+                            <span class="m-0 border-bottom border-2  d-inline-block w-25" t-field="o.ci_id.entry_level_pt_degree_earned"/>
                         </div>
                     </div>
                     
                     <div class="row">
                         <div class="col-6">
                             <strong class="form-label">Highest degree earned:</strong>
-                            <span class="m-0 border-bottom border-2  d-inline-block w-50" t-field="o.name"/>
+                            <span class="m-0 border-bottom border-2  d-inline-block w-50" t-field="o.ci_id.highest_degree_earned"/>
                         </div>
                         <div class="col-6">
                             <strong class="form-label">Degree Area:</strong>
-                            <span class="m-0 border-bottom border-2  d-inline-block w-50" t-field="o.name"/>
+                            <span class="m-0 border-bottom border-2  d-inline-block w-50" t-field="o.ci_id.degree_area"/>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-12">
                             <strong class="form-label">Years experience as CI:</strong>
-                            <span class="m-0 border-bottom border-2  d-inline-block w-50" t-field="o.name"/>
+                            <span class="m-0 border-bottom border-2  d-inline-block w-50" t-field="o.ci_id.years_experience_ci"/>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-12">
                             <strong class="form-label">Years experience as clinician:</strong>
-                            <span class="m-0 border-bottom border-2  d-inline-block w-50" t-field="o.name"/>
+                            <span class="m-0 border-bottom border-2  d-inline-block w-50" t-field="o.ci_id.years_experience_clinician"/>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-12">
                             <strong class="form-label">Areas of Expertise:</strong>
-                            <span class="m-0 border-bottom border-2  d-inline-block w-50" t-field="o.name"/>
+                            <span class="m-0 border-bottom border-2  d-inline-block w-50" t-field="o.ci_id.areas_expertise"/>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-6">
                             <strong class="form-label">Clinical Certification:</strong>
-                            <span class="m-0 border-bottom border-2  d-inline-block w-50" t-field="o.name"/>
+                            <span class="m-0 border-bottom border-2  d-inline-block w-50" t-field="o.ci_id.clinical_certification"/>
                         </div>
                         <div class="col-6">
                             <strong class="form-label">Specify Area:</strong>
-                            <span class="m-0 border-bottom border-2  d-inline-block w-50" t-field="o.name"/>
+                            <span class="m-0 border-bottom border-2  d-inline-block w-50" t-field="o.ci_id.specify_area"/>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-12">
                             <strong class="form-label">APTA Credentialed CI:</strong>
-                            <span class="m-0 border-bottom border-2  d-inline-block w-50" t-field="o.name"/>
+                            <span class="m-0 border-bottom border-2  d-inline-block w-50" t-field="o.ci_id.apta_credentialed_ci"/>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-12">
                             <strong class="form-label">Other CI Credential:</strong>
-                            <span class="m-0 border-bottom border-2  d-inline-block w-50" t-field="o.name"/>
+                            <span class="m-0 border-bottom border-2  d-inline-block w-50" t-field="o.ci_id.other_ci_credential"/>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-12">
                             <strong class="form-label">Professional organization membership:</strong>
-                            <span class="m-0 border-bottom border-2  d-inline-block w-50" t-field="o.name"/>
+                            <span class="m-0 border-bottom border-2  d-inline-block w-50" t-field="o.ci_id.professional_organization_membership"/>
                         </div>
                     </div>
-                    
-    <!-- <div class="mb-3 row">
-        <div class="col-12">
-            <label class="form-label fw-bold">Email:</label>
-            <span class="border-bottom" t-field="o.name" />
-        </div>
-        <div class="col-12">
-            <label class="form-label fw-bold">Academic Institution:</label>
-            <span>University of St. Augustine (Campus)</span>
-            <span class="border-bottom" t-field="o.name" />
-        </div>
-        <div class="col-12">
-            <label class="form-label fw-bold">Name of Clinical Education Site:</label>
-            <span class="border-bottom" t-field="o.name" />
-        </div>
-    </div>
-    <div class="row row-cols-1 row-cols-lg-3 ">
-        <div class="col">
-            <label class="form-label fw-bold">Address:</label>
-            <span class="border-bottom" t-field="o.name" />
-        </div>
-        <div class="col">
-            <label class="form-label fw-bold">City:</label>
-            <span class="border-bottom" t-field="o.name" />
-        </div>
-        <div class="col">
-            <label class="form-label fw-bold">State:</label>
-            <span class="border-bottom" t-field="o.name" />
-        </div>
-    </div>
-    <div class="row row-cols-1 row-cols-lg-2 ">
-        <div class="col">
-            <label class="form-label fw-bold">Clinical Experience Number:</label>
-            <span class="border-bottom" t-field="o.name" />
-        </div>
-        <div class="col">
-            <label class="form-label fw-bold">Clinical Experience Dates:</label>
-            <span class="border-bottom" t-field="o.name" />
-        </div>
-    </div> -->
+   
             </div>
-            <!-- </div> -->
+           
         </t>
 
     </t>

@@ -111,7 +111,40 @@
               </div>
               <div class="tab-pane fade my-4" id="ci_information" role="tabpanel"
                 aria-labelledby="ci-information-tab">
-                <p>ci information</p>
+                <table class="table table-striped table-bordered shadow-sm text-center my-5">
+                  <thead style="background-color:#326434; color: #fff">
+                    <tr>
+                      <th scope="col">First Name</th>
+                      <th scope="col">Last Name</th>
+                      <th scope="col">Phone</th>
+                      <th scope="col">Email</th>
+                      <th scope="col">Ci Details</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr t-foreach="department_id.facility_id.ci_ids" t-as="ci">
+                      <td>
+                        <span t-field="ci.first_name" />
+                      </td>
+                      <td>
+                        <span t-field="ci.last_name" />
+                      </td>
+                      <td>
+                        <span t-field="ci.phone" />
+                      </td>
+                      <td>
+                        <span t-field="ci.email" />
+                      </td>
+                      <td>
+                        <a class="btn btn-primary" t-att-href="'/my/report/%s?ci_id=%s' % (slug(department_id), ci.id)">
+                          CI Details
+                          <i class="fa fa-pencil"/>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <t t-call="website_base.add_new_cis"/>
               </div>
               <div class="tab-pane fade my-4" id="placement_history" role="tabpanel"
                 aria-labelledby="placement-history-tap">
@@ -153,9 +186,59 @@
               </div>
               <div class="tab-pane fade my-4" id="post_placement_managament" role="tabpanel"
                 aria-labelledby="post-placement-managament-tab">
-                <a class="btn btn-primary" href="#">PTSE 1</a>
-                <a class="btn btn-primary" href="#">PTSE 2</a>
-                <a class="btn btn-primary" t-att-href="'/my/report/%s' % slug(department_id)">PTSE 3</a>
+                <table class="table table-striped table-bordered shadow-sm text-center my-5">
+                  <thead style="background-color:#326434; color: #fff">
+                    <tr>
+                      <th scope="col">Student</th>
+                      <th scope="col">Campus</th>
+                      <th scope="col">Home Address</th>
+                      <th scope="col">Name Clinical Education Site</th>
+                      <th scope="col">City</th>
+                      <th scope="col">State</th>
+                      <th scope="col">Clinical Experience Number</th>
+                      <th scope="col">Clinical Experience Dates</th>
+                      <!-- <th scope="col">Ci Details</th> -->
+                      <th scope="col">PTSE 3</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr t-foreach="plcements" t-as="plcement">
+                      <td>
+                        <span t-field="plcement.student_id" />
+                      </td>
+                      <td>
+                        <span t-field="plcement.campus" />
+                      </td>
+                      <td>
+                        <span t-field="plcement.home_address" />
+                      </td>
+                      <td>
+                        <span t-field="plcement.name_clinical_education_site" />
+                      </td>
+                      <td>
+                        <span t-field="plcement.city" />
+                      </td>
+                      <td>
+                        <span t-field="plcement.state" />
+                      </td>
+                      <td>
+                        <span t-field="plcement.clinical_experience_number" />
+                      </td>
+                      <td>
+                        <span t-field="plcement.clinical_experience_dates" />
+                      </td>
+                      <td>
+                        <a t-if="plcement.stage_type == 'ci_details'" class="btn btn-primary" t-att-href="'/my/report/%s' % plcement.id">
+                          CI Details
+                          <i class="fa fa-pencil"/>
+                        </a>
+                        <a t-else="" class="btn btn-primary" t-att-href="'/my/report/%s' % plcement.id">
+                          PTSE 3
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
@@ -169,5 +252,98 @@
         </form>
       </div>
     </t>
+  </template>
+
+  <template id="add_new_cis">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#new_ci_modal">Add New CI</button>
+    <div class="modal fade" id="new_ci_modal" tabindex="-1" aria-labelledby="add_new_ci" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="add_new_ci">Add New CI</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form t-att-action="'/add/ci/%s' % slug(department_id)" id="ptse-form" class="hardship" method="post" enctype="multipart/form-data">
+          <div class="modal-body">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <!-- 
+
+
+
+
+
+
+
+
+
+
+
+ -->
+                <label for="first_name" class="form-label">First Name</label>
+                <input type="text" class="form-control" id="first_name" name="first_name" required="required"/>
+              </div>
+              <div class="col-md-6">
+                <label for="last_name" class="form-label">Last Name</label>
+                <input type="text" class="form-control" id="last_name" required="required"/>
+              </div>
+              <div class="col-md-6">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" required="required"/>
+              </div>
+              <div class="col-md-6">
+                <label for="entry_level_pt_degree_earned" class="form-label">Entry Level PT Degree Earned</label>
+                <input type="text" class="form-control" id="entry_level_pt_degree_earned"/>
+              </div>
+              <div class="col-md-6">
+                <label for="highest_degree_earned" class="form-label">Highest Degree Earned</label>
+                <input type="text" class="form-control" id="highest_degree_earned"/>
+              </div>
+              <div class="col-md-6">
+                <label for="degree_area" class="form-label">Degree Area</label>
+                <input type="text" class="form-control" id="degree_area"/>
+              </div>
+              <div class="col-md-6">
+                <label for="years_experience_ci" class="form-label">Years Experience CI</label>
+                <input type="text" class="form-control" id="years_experience_ci"/>
+              </div>
+              <div class="col-md-6">
+                <label for="years_experience_clinician" class="form-label">Years Experience Clinician</label>
+                <input type="text" class="form-control" id="years_experience_clinician"/>
+              </div>
+              <div class="col-md-6">
+                <label for="areas_expertise" class="form-label">Areas Expertise</label>
+                <input type="text" class="form-control" id="areas_expertise" required="required"/>
+              </div>
+              <div class="col-md-6">
+                <label for="clinical_certification" class="form-label">Clinical Certification</label>
+                <input type="text" class="form-control" id="clinical_certification"/>
+              </div>
+              <div class="col-md-6">
+                <label for="specify_area" class="form-label">Specify Area</label>
+                <input type="text" class="form-control" id="specify_area"/>
+              </div>
+              <div class="col-md-6">
+                <label for="apta_credentialed_ci" class="form-label">Apta Credentialed CI</label>
+                <input type="text" class="form-control" id="apta_credentialed_ci"/>
+              </div>
+              <div class="col-md-6">
+                <label for="other_ci_credential" class="form-label">Other CI Credential</label>
+                <input type="text" class="form-control" id="other_ci_credential"/>
+              </div>
+              <div class="col-md-6">
+                <label for="professional_organization_membership" class="form-label">Professional Organization Membership</label>
+                <input type="text" class="form-control" id="professional_organization_membership"/>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button class="btn btn-primary" type="submit">Save</button>
+          </div>
+        </form>
+        </div>
+      </div>
+    </div>
   </template>
 </odoo>

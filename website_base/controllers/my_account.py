@@ -52,7 +52,7 @@ class CustomerPortals(CustomerPortal):
             return request.render("website_base.scce_profile_template", values)
         elif res_partner_id.is_ci:
             scce_facility_ids = request.env["scce.facility"].sudo().search([
-                ('scce_id', '=', res_partner_id.scce_id.id)]).mapped("facility_id")
+                ('scce_id', 'in', res_partner_id.scce_ids.ids)]).mapped("facility_id")
             values["partner"] = res_partner_id
             values["scce_facility_ids"] = scce_facility_ids
             return request.render("website_base.ci_profile_template", values)

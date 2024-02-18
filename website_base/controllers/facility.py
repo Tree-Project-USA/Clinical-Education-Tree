@@ -13,9 +13,15 @@ class Facility(http.Controller):
                 ('department_id', '=', department_id.id), 
                 ('student_id', '=', partner_id.id),
             ])
+            rec_plcement = request.env['plcement.management'].sudo().search([
+                ('facility_id', '=', department_id.facility_id.id), 
+                ('student_id', '=', partner_id.id),
+            ])
+            print(department_id.facility_id)
             values = {
                 "department_id": department_id,
                 "scce_ids": department_id.mapped("scce_ids"),
+                "plcements": rec_plcement,
                 "archive_ids": archive_ids,
             }
             return request.render("website_base.show_facility_student_template", values)

@@ -30,7 +30,7 @@
                     </group>
                     <group>
                         <group>
-                            <field name="scce_id"/>
+                            <field name="scce_ids" widget="many2many_tags" domain="[('is_scce', '=', True)]"/>
                             <field name="is_ci" invisible="1"/>
                             <field name="entry_level_pt_degree_earned"/>
                             <field name="highest_degree_earned"/>

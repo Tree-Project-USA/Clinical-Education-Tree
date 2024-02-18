@@ -17,7 +17,7 @@
 
     <record id="ptce3_report_actions" model="ir.actions.report">
         <field name="name">Model Report</field>
-        <field name="model">res.partner</field>
+        <field name="model">plcement.management</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">website_base.ptce_report_template</field>
         <field name="report_file">website_base.ptce_report_template</field>

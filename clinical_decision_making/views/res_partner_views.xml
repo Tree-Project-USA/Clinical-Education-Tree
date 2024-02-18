@@ -180,8 +180,10 @@
                                 <field name="state"/>
                                 <field name="clinical_experience_number"/>
                                 <field name="clinical_experience_dates"/>
+                                <field name="student_signature"/>
                                 <field name="student_signature_date"/>
                                 <field name="ci_signature_date"/>
+                                <field name="ptse_3"/>
                                 <field name="year" invisible="1"/>
                                 <field name="parent_id" invisible="1"/>
                                 <field name="display_type" invisible="1"/>

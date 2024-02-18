@@ -144,6 +144,16 @@
                                 </tree>
                             </field>
                         </page>
+                        <page string="CI Information">
+                            <field name="ci_ids" widget="one2many" readonly="1" mode="tree">
+                                <tree editable="bottom">
+                                    <field name="first_name"/>
+                                    <field name="last_name"/>
+                                    <field name="email"/>
+                                    <field name="phone"/>
+                                </tree>
+                            </field>
+                        </page>
                         <page string="Placement History">
                             <field name="archive_ids" options="{'no_open': True, 'no_create': True, 'create': False}" widget="one2many">
                                 <tree>
