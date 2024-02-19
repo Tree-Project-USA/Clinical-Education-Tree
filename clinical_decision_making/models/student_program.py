@@ -8,9 +8,9 @@ class Program(models.Model):
     _description = 'Student Program'
     _rec_name = 'name'
     
-    name = fields.Char(string='Name')
+    name = fields.Char(string='Program Name')
     num_terms = fields.Integer(string='Number of terms', default=1)
-    active = fields.Boolean(string='Active')
+    active = fields.Boolean(string='Status')
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.user.company_id)
     program_experience_term_ids = fields.One2many(comodel_name='program.experience.term', inverse_name='program_id', string='Program Clinical Experience Terms', store=True, check_company=True)
     

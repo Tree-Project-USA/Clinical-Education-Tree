@@ -46,8 +46,8 @@ class ResPartner(models.Model):
     hardship_count = fields.Integer(compute='_compute_hardship_count', string='HardShip Count')
     alternative_schedule_count = fields.Integer(compute='_compute_alternative_schedule_count', string='Alternative Schedule Count')
     alternative_schedule_ids = fields.One2many('alternative.schedule', 'student_id', string='Alternative Schedule')
-    medical_attachment_ids = fields.One2many(comodel_name='attachments', inverse_name='student_id', string='Required Document')
-    scce_medical_attachment_ids = fields.One2many(comodel_name='scce.attachments', inverse_name='student_id', string='SCCE Required Document')
+    medical_attachment_ids = fields.One2many(comodel_name='attachments', inverse_name='student_id', string='Program Required Document')
+    scce_medical_attachment_ids = fields.One2many(comodel_name='scce.attachments', inverse_name='student_id', string='Site Required Document')
     experience_schedual_ids = fields.Many2many(comodel_name='clinical.experience.schedual', compute='_compute_term_fields', string='Studnet Experience Schedual')
     student_signature = fields.Binary(string="Student Signature")
     student_signature_date = fields.Date(string="Student Signature Date")
@@ -310,7 +310,6 @@ class ResPartner(models.Model):
         return term_year
 
     def get_accepted_distance_facility(self, facility_ids, facility_distance_mel=50):
-        print(facility_distance_mel)
         facility_distance_mel = float(facility_distance_mel) or self.env.company.clinical_distance_mel or 50
         accepted_facility_ids = set()
 
@@ -347,7 +346,6 @@ class ResPartner(models.Model):
         if any(field in vals for field in ['home_address', 'phone', 'personal_phone', 'personal_email_address']):
             template = self.env.ref('clinical_decision_making.mail_template_send_update_of_personal_information')
             template.sudo().send_mail(self.id, force_send=True)
-        # print(vals,'<<<<<<<<<<<<<<')
         return super(ResPartner, self).write(vals)
 
     @api.onchange('preferred_setting_ids')

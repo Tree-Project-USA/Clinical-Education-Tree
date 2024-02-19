@@ -129,7 +129,7 @@ class TreeMatching(models.Model):
         # Site Setting
         
     aval_facility_id = fields.Many2many(comodel_name='medical.facility', string='Aval medical.facility' ,compute='_compute_aval_facility_id')
-    facility_id = fields.Many2one(comodel_name='medical.facility', string='Medical Facility')
+    facility_id = fields.Many2one(comodel_name='medical.facility', string='Clinical Site')
     offer_id = fields.Many2one(comodel_name='placement.offer', realted='offer_line_id.offer_id')
     offer_line_id = fields.Many2one(comodel_name='placement.offer.line', string="Setting Intership")
     setting = fields.Selection(related='offer_line_id.setting')

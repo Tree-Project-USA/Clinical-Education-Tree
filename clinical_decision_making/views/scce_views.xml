@@ -10,7 +10,7 @@
                 <field name="last_name"/>
                 <field name="email"/>
                 <field name="phone"/>
-                <button name="action_open_facility" type="object" icon="fa-external-link" string="Affiliated Facility" title="Open Facility"/>
+                <button name="action_open_facility" type="object" icon="fa-external-link" string="Affiliated Clinical Site" title="Open Clinical Site"/>
             </tree>
         </field>
     </record>
@@ -23,12 +23,12 @@
                 <sheet>
                 <div class="oe_button_box" name="button_box">
                     <button class="oe_stat_button" type="object" 
-                        string="Medical Facility" 
+                        string="Clinical Site" 
                         name="action_open_facility" 
                         icon="fa-hospital-o">
                         <span>
                             <field name="facility_count"/>
-                            Affiliated<br/>Facility
+                            Affiliated<br/>Clinical Site
                         </span>
                     </button>
                 </div>

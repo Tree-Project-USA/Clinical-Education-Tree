@@ -6,7 +6,7 @@
         <field name="name">view.active.facility.depend.wizard.form</field>
         <field name="model">active.facility.depend.wizard</field>
         <field name="arch" type="xml">
-            <form string="Active Facility Depend Wizard">
+            <form string="Active Clinical Site Depend Wizard">
                     <div class="mb-3">
                         Select which department to apply activation.
                     </div>
@@ -36,7 +36,7 @@
 
     <!-- Action active.facility.depend.wizard -->
     <record id="action_active_facility_depend_wizard" model="ir.actions.act_window">
-        <field name="name">Active Facility Depend Wizard</field>
+        <field name="name">Active Clinical Site Depend Wizard</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">active.facility.depend.wizard</field>
         <field name="view_mode">form</field>

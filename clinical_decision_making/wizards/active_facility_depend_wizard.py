@@ -9,9 +9,9 @@ _logger = logging.getLogger(__name__)
 
 class ActiveFacilityDependWizard(models.TransientModel):
     _name = 'active.facility.depend.wizard'
-    _description = _('Active Facility Depend Wizard')
+    _description = _('Active Clinical Site Depend Wizard')
 
-    facility_id = fields.Many2one(comodel_name='medical.facility', string='Medical Facility')
+    facility_id = fields.Many2one(comodel_name='medical.facility', string='Clinical Site')
     department_ids = fields.One2many(comodel_name='facility.department', related='facility_id.department_ids')
 
 

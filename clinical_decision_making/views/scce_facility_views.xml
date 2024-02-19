@@ -6,8 +6,7 @@
         <field name="name">view.scce.facility.tree</field>
         <field name="model">scce.facility</field>
         <field name="arch" type="xml">
-            <tree string="Scce Facility">
-                
+            <tree string="Scce Clinical Site">
                 <field name="scce_id"/>
                 <field name="first_name"/>
                 <field name="last_name"/>

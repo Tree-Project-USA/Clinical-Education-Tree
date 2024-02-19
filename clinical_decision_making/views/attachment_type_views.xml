@@ -8,7 +8,6 @@
         <field name="arch" type="xml">
             <tree>
                 <field name="name"/>
-                <field name="portal_id"/>
                 <field name="description"/>
                 <field name="is_required"/>
             </tree>
@@ -20,13 +19,12 @@
         <field name="name">view.attachment.type.form</field>
         <field name="model">attachment.type</field>
         <field name="arch" type="xml">
-            <form string="Attachment Type">
+            <form string="Program Attachment Type">
                 <header></header>
                 <sheet>
                     <group>
                         <group>
                             <field name="name"/>
-                            <field name="portal_id"/>
                         </group>
                         <group>
                             <field name="description"/>
@@ -40,7 +38,7 @@
 
     <!-- Action attachment.type -->
     <record id="action_attachment_type" model="ir.actions.act_window">
-        <field name="name">Attachment Type</field>
+        <field name="name">Program Attachment Type</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">attachment.type</field>
         <field name="view_mode">tree,form</field>

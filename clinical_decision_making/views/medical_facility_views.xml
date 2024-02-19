@@ -2,17 +2,17 @@
 <odoo>
     <data>
 
-    <!-- Medical Facility Views -->
+    <!-- Medical Clinical Site Views -->
     <record id="medical_facility_view_tree" model="ir.ui.view">
         <field name="name">medical.facility.view.tree</field>
         <field name="model">medical.facility</field>
         <field name="arch" type="xml">
             <tree>
-                <field name="name" string="Facility Name"/>
+                <field name="name" string="Clinical Site Name"/>
                 <field name="scce_first_name" string="SCCE First Name"/>
                 <field name="scce_last_name" string="SCCE Last Name"/>
                 <field name="email" string="SCCE Email Address"/>
-                <field name="address" string="Facility Address"/>
+                <field name="address" string="Clinical Site Address"/>
                 <field name="city"/>
                 <field name="state"/>
                 <field name="geographical_id"/>
@@ -83,25 +83,22 @@
                         <button
                             name="action_open_placement_offer"
                             type="object"
-                            string="Offers"
+                            string="Current Offers"
                             class="oe_highlight"
                             icon="fa-ticket"
                             >
-                        </button>
-                        <button name="action_view_placement_history" type="object" class="oe_stat_button" string="Placement History">
-                            <field name="archive_count" widget="statinfo" string="Placement History"/>
                         </button>
                         <button name="action_open_placement_archive_offer" type="object" class="oe_stat_button" string="Avalible Offers">
                             <field name="archive_offer_count" widget="statinfo" string="Offers History"/>
                         </button>
                     </div>
                     <group>
-                        <label for="name" string="Facility Name"/>
+                        <label for="name" string="Clinical Site Name"/>
                         <field name="name"/>
-                        <field name="company_id" string="university" readonly="1"/>
+                        <field name="company_id" string="University" readonly="1"/>
                         <group>
-                            <field name="email" string="Facility Email Address"/>
-                            <field name="address" string="Facility Address"/>
+                            <field name="email" string="SCCE Email Address"/>
+                            <field name="address" string="Clinical Site Address"/>
                             <field name="scce_primary_id" string="SCCE Primary" invisible="1"/>
                             <field name="scce_first_name" string="SCCE Last Name" invisible="1"/>
                             <field name="scce_last_name" string="SCCE Last Name" invisible="1"/>
@@ -119,7 +116,7 @@
                             <field name="department_ids">
                                 <tree editable="bottom" decoration-primary="is_main_department==True">
                                     <field name="is_main_department" invisible="1"/>
-                                    <field name="company_id" string="university" readonly="1"/>
+                                    <field name="company_id" string="University" readonly="1"/>
                                     <field name="facility_id" invisible="1"/>
                                     <field name="name" required="1"/>
                                     <field name="scce_ids" domain="[('id', 'in', parent.scce_ids)]" widget="many2many_tags"/>
@@ -159,7 +156,7 @@
                                 <tree>
                                     <field name="department_id"/>
                                     <field name="student_id"/>
-                                    <field name="company_id" string="university" readonly="1"/>
+                                    <field name="company_id" string="University" readonly="1"/>
                                     <field name="experience_id"/>
                                     <field name="setting"/>
                                     <field name="placement_term"/>
@@ -171,6 +168,9 @@
                                     <field name="is_show_student" widget="boolean_toggle" />
                                 </tree>
                             </field>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="note"/>
                         </page>
                     </notebook>
                 </sheet>

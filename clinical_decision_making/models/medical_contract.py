@@ -12,13 +12,13 @@ class FacilityContractHistory(models.Model):
     _order = 'is_under_contract'
     
     contract_id = fields.Many2one('facility.contract', readonly=True)
-    facility_id = fields.Many2one('medical.facility', string='Medical Facility', readonly=True)
+    facility_id = fields.Many2one('medical.facility', string='Clinical Site', readonly=True)
     display_name = fields.Char(compute='_compute_display_name')
     name = fields.Char('Contract Name', readonly=True)
     date_start = fields.Date('Start Date', readonly=True)
     date_end = fields.Date('End Date', readonly=True)
     is_under_contract = fields.Boolean('Is Currently Under Contract', readonly=True)
-    responsible_id = fields.Many2one('res.users', string='Facility Responsible', readonly=True)
+    responsible_id = fields.Many2one('res.users', string='Clinical Site Responsible', readonly=True)
     state = fields.Selection([
         ('draft', 'New'),
         ('open', 'Running'),
@@ -77,12 +77,12 @@ class FacilityContractHistory(models.Model):
 class FacilityContracts(models.Model):
     _name = 'facility.contract'
     _inherit = ['mail.thread', 'mail.activity.mixin']
-    _description = 'Medical Facility Contract'
+    _description = 'Clinical Site Contract'
     _rec_name = 'facility_id'
     
     name = fields.Char('Contract Reference', required=True)
     contract_attachment = fields.Binary(string='Contract Attachment', attachment=True)
-    facility_id = fields.Many2one(comodel_name='medical.facility', string='Medical Facility')
+    facility_id = fields.Many2one(comodel_name='medical.facility', string='Clinical Site')
     company_id = fields.Many2one('res.company', related='facility_id.company_id', store=True)
     date_start = fields.Date('Start Date', required=True)
     date_end = fields.Date('End Date', required=True)

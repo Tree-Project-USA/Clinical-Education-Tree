@@ -77,7 +77,7 @@
             <li class="nav-item" role="presentation">
               <button class="nav-link" id="medical-document-tab" data-bs-toggle="tab"
                 data-bs-target="#medical_document" type="button" role="tab"
-                aria-controls="medical_document" aria-selected="false">Required Document</button>
+                aria-controls="medical_document" aria-selected="false">Program Required Document</button>
             </li>
           </ul>
           <div class="tab-content" id="myTabContent">
@@ -624,12 +624,12 @@
                 <li class="nav-item" role="presentation">
                   <button class="nav-link active" id="medical-attachment-ids-tab" data-bs-toggle="tab"
                     data-bs-target="#medical_attachment_ids" type="button" role="tab" aria-controls="medical_attachment_ids"
-                    aria-selected="false">Required Document</button>
+                    aria-selected="false">Program Required Document</button>
                 </li>
                 <li class="nav-item" role="presentation">
                   <button class="nav-link" id="scce_medical-attachment-ids-tab" data-bs-toggle="tab"
                     data-bs-target="#scce_medical_attachment_ids" type="button" role="tab" aria-controls="scce_medical_attachment_ids"
-                    aria-selected="false">SCCE Required Document</button>
+                    aria-selected="false">Site Required Document</button>
                 </li>
                 <li class="nav-item" role="presentation">
                   <button class="nav-link" id="student-medical-attachment-ids-tab" data-bs-toggle="tab"

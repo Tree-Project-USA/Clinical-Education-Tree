@@ -51,7 +51,7 @@
     </record>
 
     <record id="facility_department_comp_rule" model="ir.rule">
-        <field name="name">Facility Department multi-company</field>
+        <field name="name">Clinical Site Department multi-company</field>
         <field name="model_id" ref="model_facility_department"/>
         <field name="domain_force">[('company_id', 'in', company_ids)]</field>
     </record>
@@ -99,19 +99,19 @@
     </record>
 
     <record id="medical_facility_comp_rule" model="ir.rule">
-        <field name="name">Medical Facility multi-company</field>
+        <field name="name">Medical Clinical Site multi-company</field>
         <field name="model_id" ref="model_medical_facility"/>
         <field name="domain_force">[('company_id', 'in', company_ids)]</field>
     </record>
 
     <record id="facility_contract_comp_rule" model="ir.rule">
-        <field name="name">Facility Contract multi-company</field>
+        <field name="name">Clinical Site Contract multi-company</field>
         <field name="model_id" ref="model_facility_contract"/>
         <field name="domain_force">[('company_id', 'in', company_ids)]</field>
     </record>
 
     <record id="scce_facility_comp_rule" model="ir.rule">
-        <field name="name">SCCE Facility multi-company</field>
+        <field name="name">SCCE Clinical Site multi-company</field>
         <field name="model_id" ref="model_scce_facility"/>
         <field name="domain_force">[('company_id', 'in', company_ids)]</field>
     </record>

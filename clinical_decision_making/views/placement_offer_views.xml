@@ -10,7 +10,7 @@
                 <tree>
                     <field name="priority" optional="show" widget="priority" nolabel="1" invisible="1"/>
                     <field name="name" invisible="1"/>
-                    <field name="facility_id" string="Facility"/>
+                    <field name="facility_id" string="Clinical Site"/>
                     <field name="state" widget="badge" 
                     decoration-primary="state == 'offer_matched'" 
                     decoration-success="state == 'offer_still_available'" 
@@ -49,14 +49,14 @@
                                 <h1 class="d-flex">
                                     <field name="priority" widget="priority" class="me-3"/>
                                     <field name="name" readonly="1"/>
-                                    <field name="company_id" string="university" readonly="1"/>
+                                    <field name="company_id" string="University" readonly="1"/>
                                     <br/>
                                 </h1>
                             </div>
                             <group>
                                 <group>
                                     <!-- <field name="student_id"/> -->
-                                    <field name="facility_id" string="Facility" attrs="{'readonly': [('state', '!=', 'offer_details_entered')]}"/>
+                                    <field name="facility_id" string="Clinical Site" attrs="{'readonly': [('state', '!=', 'offer_details_entered')]}"/>
                                     <field name="main_department_id" attrs="{'invisible':[('is_single_facility', '=', False)]}"/>
 
                                 </group>
@@ -73,7 +73,7 @@
                                             <field name="facility_id" invisible="1"/>
                                             <field name="department_ids" invisible="1"/>
                                             <field name="department_id" attrs="{'column_invisible':[('parent.is_single_facility', '=', True)], 'required':[('parent.is_single_facility', '=', False)]}"/>
-                                            <field name="company_id" string="university" readonly="1"/>
+                                            <field name="company_id" string="University" readonly="1"/>
                                             <field name="experience_id" required="1"/>
                                             <field name="placement_term" required="1"/>
                                             <field name="year" force_save="1" required="1"/> 
@@ -111,7 +111,7 @@
                     <field name="offer_line_id"/>
                     <field name="setting"/>
                     <field name="experience_id"/>
-                    <field name="company_id" string="university" readonly="1"/>
+                    <field name="company_id" string="University" readonly="1"/>
                     <field name="placement_term"/>
                     <field name="year"/>
                     <field name="term"/>

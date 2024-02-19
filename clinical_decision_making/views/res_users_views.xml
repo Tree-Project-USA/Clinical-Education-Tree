@@ -10,7 +10,7 @@
                    ref="mail_bot.res_users_view_form_preferences" />
             <field name="arch" type="xml">
                 <field name="odoobot_state" position="after">
-                    <field name="company_id" string="university" readonly="1"/>
+                    <field name="company_id" string="University" readonly="1"/>
                 </field>
 
             </field>

@@ -19,7 +19,7 @@ class PlacementRequest(models.Model):
     student_ids = fields.Many2many(comodel_name='res.partner', string='Students')
     offer_ids = fields.Many2many(comodel_name='placement.offer', string='offers')
     archive_offer_ids = fields.Many2many(comodel_name='archive.offer', string='archive offers', check_company=True)
-    facility_ids = fields.Many2many('medical.facility', string='Medical Facilities')
+    facility_ids = fields.Many2many('medical.facility', string='Clinical Sites')
     department_ids = fields.Many2many('facility.department', string='Department', check_company=True)    
     student_count = fields.Integer(compute='_compute_count')
     offer_count = fields.Integer(compute='_compute_count')
@@ -58,7 +58,7 @@ class PlacementRequest(models.Model):
     apply_setting = fields.Boolean(string='IP Setting Met ?', default=True)
     
     # Location Criteria
-    apply_location = fields.Boolean(string='Apply Distance', default=True, help="The chosen option will override the accepted distance to medical facilities.")
+    apply_location = fields.Boolean(string='Apply Distance', default=True, help="The chosen option will override the accepted distance to Clinical Site.")
     
     def _get_default_distance(self):
         return self.env.company.clinical_distance_mel or 50

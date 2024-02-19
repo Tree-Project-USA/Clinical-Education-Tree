@@ -9,14 +9,14 @@ _logger = logging.getLogger(__name__)
 
 class FacilityDepartment(models.Model):
     _name = 'facility.department'
-    _description = _('Facility Department')
+    _description = _('Clinical Site Department')
     _rec_name = 'complete_name'
 
     active = fields.Boolean(string='Active', default=True)
     name = fields.Char(string='Name', required=True)
     complete_name = fields.Char('Complete Name', compute='_compute_complete_name', recursive=True, store=True)
-    facility_id = fields.Many2one(comodel_name='medical.facility', string='Facility', ondelete='cascade')
-    facility_scce_ids = fields.Many2many(comodel_name='scce.facility', string='Facility SCCE', compute='_compute_facility_scce', check_company=True)
+    facility_id = fields.Many2one(comodel_name='medical.facility', string='Clinical Site', ondelete='cascade')
+    facility_scce_ids = fields.Many2many(comodel_name='scce.facility', string='Clinical Site SCCE', compute='_compute_facility_scce', check_company=True)
     scce_ids = fields.Many2many(comodel_name='scce.facility', string='SCCE', domain="[('id', 'in', facility_scce_ids)]", check_company=True)
     setting_ids = fields.Many2many(comodel_name='preferred.setting', string='Setting', check_company=True)
     street = fields.Char(string='Street')
@@ -27,7 +27,7 @@ class FacilityDepartment(models.Model):
     student_count = fields.Integer(compute='_compute_count', string='Student Count')
     archive_offer_count = fields.Integer(compute='_compute_count')
     active_state = fields.Selection(
-        string=_('Activation'),
+        string=_('Contract Status'),
         selection=[
             ('active', 'Active'),
             ('not_active', 'Not Active'),

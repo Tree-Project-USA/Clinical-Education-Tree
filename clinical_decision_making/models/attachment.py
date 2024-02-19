@@ -6,7 +6,7 @@ from odoo.exceptions import ValidationError
 
 class AttachmentType(models.Model):
     _name = "attachment.type"
-    _description = "attachment type"
+    _description = "Program attachment type"
     _rec_name = "name"
 
     name = fields.Char("Name", required=True)
@@ -16,7 +16,7 @@ class AttachmentType(models.Model):
     is_required = fields.Boolean(string="Is Required")
 class ScceAttachmentType(models.Model):
     _name = "scce.attachment.type"
-    _description = "scce attachment type"
+    _description = "Site Attachment Type"
     _rec_name = "name"
 
     name = fields.Char("Name", required=True)
@@ -37,6 +37,7 @@ class Attachment(models.Model):
     attachment_ids = fields.Many2many(comodel_name='ir.attachment', string="Attachments", tracking=True, check_company=True)   
     expiration_date = fields.Date(string='Expiration Date')   
     note = fields.Text(string="Note")
+    
 class ScceAttachment(models.Model):
     _name = "scce.attachments"
     _rec_name = "scce_attachment_type"

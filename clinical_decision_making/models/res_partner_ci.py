@@ -9,9 +9,9 @@ import re
 class ResPartner(models.Model):
     _inherit = 'res.partner'
     
-    partner_d = fields.Many2one('res.partner', string='Facility')
+    partner_d = fields.Many2one('res.partner', string='Clinical Site')
     scce_ids = fields.One2many('res.partner','partner_d', string='SCCE')
-    facility_id = fields.Many2one('medical.facility', string='Facility')
+    facility_id = fields.Many2one('medical.facility', string='Clinical Site')
     is_ci = fields.Boolean(string='Is CI', default=False)
     entry_level_pt_degree_earned = fields.Char(string="Entry-Level PT Degree earned")
     highest_degree_earned = fields.Char(string="Highest degree earned")

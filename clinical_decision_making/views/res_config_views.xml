@@ -52,7 +52,7 @@
                             </div>
                             <div class="content-group">
                                 <div class="mt16">
-                                    <label for="contract_notify_months" string="Months for notify Facility"/>
+                                    <label for="contract_notify_months" string="Months for notify Clinical Site"/>
                                     <field name="contract_notify_months" class="oe_inline"/>
                                 </div>
                             </div>

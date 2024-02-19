@@ -77,7 +77,7 @@
 
     <record id="medical_facility_action" model="ir.actions.act_window">
         <field name="type">ir.actions.act_window</field>
-        <field name="name">Facilities</field>
+        <field name="name">Clinical Sites</field>
         <field name="res_model">medical.facility</field>
         <field name="context">{'active_test': False}</field>
         <field name="view_mode">tree,form</field>
@@ -85,7 +85,7 @@
 
     <record id="placement_offer_action" model="ir.actions.act_window">
         <field name="type">ir.actions.act_window</field>
-        <field name="name">Placement Offers</field>
+        <field name="name">Offers</field>
         <field name="res_model">placement.offer</field>
         <field name="view_mode">tree,form</field>
     </record>
@@ -212,20 +212,20 @@
         sequence="2"/>
     <menuitem
         id="attachment_request_menu"
-        name="Required Documnet"
+        name="Program Required Document"
         action="clinical_decision_making.action_attachment_request"
         parent="student_details_menu"
         sequence="3"/>
     <menuitem
         id="scce_attachment_request_menu"
-        name="SCCE Medical Documnet"
+        name="Site Required Document"
         action="clinical_decision_making.action_scce_attachment_request"
         parent="student_details_menu"
         sequence="4"/>
     
     <menuitem
         id="clinic_details_menu"
-        name="Facilities"
+        name="Clinical Sites"
         parent="menu_root_cpdm"
         sequence="4"/>
 
@@ -238,14 +238,14 @@
 
     <menuitem
         id="placement_offer_menu"
-        name="Placement Offers"
+        name="Offers"
         action="placement_offer_action"
         parent="menu_root_cpdm"
         sequence="5"/>
 
     <menuitem
         id="facility_menu"
-        name="Facilities"
+        name="Clinical Sites"
         action="medical_facility_action"
         parent="clinic_details_menu"
         sequence="2"/>
@@ -265,7 +265,7 @@
         sequence="3"/>
 
         <record id="action_un_form" model="ir.actions.server">
-            <field name="name">University Profile Action</field>
+            <field name="name">Program Profile Action</field>
             <field name="model_id" ref="base.model_res_users"/>
             <field name="state">code</field>
             <field name="code">
@@ -276,7 +276,7 @@ action = user.action_open_user_company()
 
     <menuitem
         id="university_profile_menu"
-        name="University Profile"
+        name="Program Profile"
         parent="configuration_menu"
         action="action_un_form"
         sequence="1"/>
@@ -290,14 +290,14 @@ action = user.action_open_user_company()
     
     <menuitem
         id="attachment_type_menu"
-        name="Attachment Type"
+        name="Program Attachment Type"
         action="clinical_decision_making.action_attachment_type"
         parent="configuration_menu"
         sequence="100"/>
 
     <menuitem
         id="scce_attachment_type_menu"
-        name="SCCE Attachment Type"
+        name="Site Attachment Type"
         action="clinical_decision_making.action_scce_attachment_type"
         parent="configuration_menu"
         sequence="101"/>

@@ -10,17 +10,17 @@ class ResPartner(models.Model):
     _inherit = 'res.partner'
     
     is_scce = fields.Boolean(string='Is SCCE', default=False)
-    facility_count = fields.Integer(compute='_compute_facility_count', string='Facility Count', store=False)
+    facility_count = fields.Integer(compute='_compute_facility_count', string='Clinical Site Count', store=False)
     
     def _compute_facility_count(self):
         for rec in self:
-            rec.facility_count = len(self.env['medical.facility'].search([('scce_ids', 'in', self.ids)]))
+            rec.facility_count = len(self.env['scce.facility'].search([('scce_id', 'in', self.ids)]).mapped('facility_id'))
     
     
     def action_open_facility(self):
-        facility_ids = self.env['medical.facility'].search([('scce_ids', 'in', self.ids)])
+        facility_ids = self.env['scce.facility'].search([('scce_id', 'in', self.ids)]).mapped('facility_id')
         return {
-            'name': _("Medical Facility"),
+            'name': _("Clinical Site"),
             'type': 'ir.actions.act_window',
             'view_mode': 'tree,form',
             'res_model': 'medical.facility',
@@ -39,7 +39,7 @@ class SCCE(models.Model):
     last_name = fields.Char(string='Last Name', required=True)
     email = fields.Char(string='Email Address')
     phone = fields.Char(string='Phone Number')
-    facility_count = fields.Integer(compute='_compute_facility_count', string='Facility Count', store=False)
+    facility_count = fields.Integer(compute='_compute_facility_count', string='Clinical Site Count', store=False)
     
     def _compute_facility_count(self):
         for rec in self:
@@ -53,7 +53,7 @@ class SCCE(models.Model):
     def action_open_facility(self):
         facility_ids = self.env['medical.facility'].search([('scce_ids', 'in', self.ids)])
         return {
-            'name': _("Medical Facility"),
+            'name': _("Clinical Site"),
             'type': 'ir.actions.act_window',
             'view_mode': 'tree,form',
             'res_model': 'medical.facility',

@@ -6,7 +6,7 @@
         <field name="arch" type="xml">
             <tree string="Placement Requests">
                 <field name="name"/>
-                <field name="company_id" string="university" readonly="1"/>
+                <field name="company_id" string="University" readonly="1"/>
                 <field name="experience_id"/>
                 <field name="placement_term"/>
                 <field name="year"/>
@@ -38,7 +38,7 @@
                             <field name="archive_offer_ids" invisible="1"/>
                         </button>
                         <button class="oe_stat_button" name="action_view_facilities" type="object" icon="fa-building">
-                            <field name="facility_count" string="facilities" widget="statinfo"/>
+                            <field name="facility_count" string="Clinical Sites" widget="statinfo"/>
                             <field name="facility_ids" invisible="1" force_save="1" readonly="1"/>
                         </button>
                     </div>
@@ -50,7 +50,7 @@
                     </div>
                     <group>
                         <group>
-                            <field name="company_id" string="university" readonly="1"/>
+                            <field name="company_id" string="Program" readonly="1"/>
                             <field name="experience_id"/>
                             <field name="placement_term"/>
                             <field name="year"/>

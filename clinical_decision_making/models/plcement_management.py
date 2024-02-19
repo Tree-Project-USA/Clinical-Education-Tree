@@ -15,7 +15,7 @@ class PlcementManagement(models.Model):
     _rec_name = 'student_id'
     _order = 'sequence'
 
-    facility_id = fields.Many2one(comodel_name='medical.facility', string='Facility', ondelete='cascade')
+    facility_id = fields.Many2one(comodel_name='medical.facility', string='Clinical Site', ondelete='cascade')
     archive_id = fields.Many2one(comodel_name='archive', string='Archive', ondelete='cascade', readonly=False)
     ci_id = fields.Many2one(comodel_name='res.partner', string='CI',domain=[('is_ci', '=', True)])
     student_id = fields.Many2one(comodel_name='res.partner', string='Student',domain=[('is_student', '=', True)])

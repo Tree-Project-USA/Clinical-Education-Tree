@@ -14,10 +14,10 @@ class ClinicalExperience(models.Model):
     _description = _('Clinical Experience')
     _order = "sequence"
 
-    active = fields.Boolean(string='Active')
-    name = fields.Char(string='Name')
+    active = fields.Boolean(string='Status')
+    name = fields.Char(string='Clinical Experience Name')
     sequence = fields.Integer(string='Sequence', default=1)
-    company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.user.company_id)
+    company_id = fields.Many2one('res.company', string='Program', default=lambda self: self.env.user.company_id)
     
     @api.model
     def get_previous_next_experiences(self):

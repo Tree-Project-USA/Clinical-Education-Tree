@@ -7,12 +7,12 @@ import re
 class MedicalFacility(models.Model):
     _name = 'medical.facility'
     _inherit = ['mail.thread']
-    _description = 'Medical Facility (Site)'
+    _description = 'Clinical Site'
     _rec_name = 'name'
 
     company_id = fields.Many2one('res.company', string='University', default=lambda self: self.env.user.company_id)
     active = fields.Boolean(string='Active', compute='_compute_active')              
-    name = fields.Char(string='Medical Facility Name', required=True)
+    name = fields.Char(string='Clinical Site Name', required=True)
     offer_id = fields.One2many('placement.offer', 'facility_id',string='Placement Offers', domain="[('company_id', '=', company_id)]")
     address = fields.Char(string='Address')
     email = fields.Char(related='scce_primary_id.email')
@@ -20,30 +20,30 @@ class MedicalFacility(models.Model):
     city = fields.Char(related='geographical_id.city')
     state = fields.Char(related='geographical_id.state')
     zip = fields.Char(related='geographical_id.zip_code')
-    contract_ids = fields.One2many('facility.contract', 'facility_id', string='Medical Facility Contracts')
+    contract_ids = fields.One2many('facility.contract', 'facility_id', string='Clinical Site Contracts')
     contract_id = fields.Many2one(
         'facility.contract', string='Current Contract',
-        domain="[('company_id', '=', company_id), ('facility_id', '=', id)]", help='Current contract of the facility', tracking=True)
+        domain="[('company_id', '=', company_id), ('facility_id', '=', id)]", help='Current contract of the Clinical Site', tracking=True)
 
     contract_attachment = fields.Binary(string="Contract Attachment", store=True, compute='_compute_contract_warning', tracking=True)
     contract_warning = fields.Boolean(string='Contract Warning', store=True, compute='_compute_contract_warning')
     first_contract_date = fields.Date(compute='_compute_first_contract_date', store=True)
     contracts_count = fields.Integer(compute='_compute_contracts_count', string='Contract Count', tracking=True)
-    scce_ids = fields.One2many(comodel_name='scce.facility', inverse_name='facility_id', string='SCCE Facility', tracking=True, domain="[('company_id', '=', company_id)]")
+    scce_ids = fields.One2many(comodel_name='scce.facility', inverse_name='facility_id', string='Clinical Site SCCE', tracking=True, domain="[('company_id', '=', company_id)]")
     scce_primary_id = fields.Many2one(comodel_name='res.partner', string='Primary SCCE', domain=[('is_scce', '=', True)], tracking=True)
     scce_first_name = fields.Char(related='scce_primary_id.first_name')
     scce_last_name = fields.Char(related='scce_primary_id.last_name')
     offer_ids = fields.One2many(comodel_name='placement.offer', inverse_name='facility_id', string='Offers')
     archive_offer_count = fields.Integer(compute='_compute_archive_offer_count', string='Archive Offer Count')
     department_count = fields.Integer(compute='_compute_department_count', string='Department Count')
-    department_ids = fields.One2many(comodel_name='facility.department', inverse_name='facility_id', string='Facility Department', domain="[('company_id', '=', company_id)]")
+    department_ids = fields.One2many(comodel_name='facility.department', inverse_name='facility_id', string='Clinical Site Department', domain="[('company_id', '=', company_id)]")
     setting_ids = fields.Many2many(comodel_name='preferred.setting', string='Setting', compute='_compute_setting_ids')    
     main_department_id = fields.Many2one(comodel_name='facility.department', string='Main Department', domain="[('company_id', '=', company_id)]")
-    is_single_facility = fields.Boolean(string='Single Facility', default=True, domain="[('company_id', '=', company_id)]")
+    is_single_facility = fields.Boolean(string='Single Clinical Site', default=True, domain="[('company_id', '=', company_id)]")
     archive_ids = fields.One2many(comodel_name='archive', inverse_name='facility_id', string='Placement History', domain="[('company_id', '=', company_id)]")
     archive_count = fields.Integer(compute='_compute_archive_count', string='Placement History Count')
     ci_ids = fields.Many2many(comodel_name='res.partner', string='CI',domain=[('is_ci', '=', True)], check_company=True)
-
+    note = fields.Text(string="Note")
     
     def facility_multi_department(self):
         self.write({
@@ -143,7 +143,7 @@ class MedicalFacility(models.Model):
     def action_open_placement_offer(self):
         offer_ids = self.env['placement.offer'].search([('facility_id', '=', self.id)])
         return {
-            'name': _("Facility Placement Offer"),
+            'name': _("Clinical Site Placement Offer"),
             'type': 'ir.actions.act_window',
             'view_mode': 'tree,form',
             'res_model': 'placement.offer',
@@ -234,7 +234,7 @@ class MedicalFacility(models.Model):
     # def action_open_department_archive(self):
     #     department_ids = self.env['facility.department'].search([('id', 'in', self.facility_id.department_ids.ids)])
     #     return {
-    #         'name': _("Medical Facility"),
+    #         'name': _("Medical Clinical Site"),
     #         'type': 'ir.actions.act_window',
     #         'view_mode': 'tree,form',
     #         'res_model': 'medical.facility',
@@ -263,10 +263,10 @@ class MedicalFacility(models.Model):
 class SCCEFacility(models.Model):
 
     _name = 'scce.facility'
-    _description = 'SCCE Facility'
+    _description = 'Clinical Site SCCE'
     _rec_name = 'scce_id'
     
-    facility_id = fields.Many2one('medical.facility', string='Facility')
+    facility_id = fields.Many2one('medical.facility', string='Clinical Site')
     scce_id = fields.Many2one('res.partner', string='SCCE', domain=[('is_scce', '=', True)])
     first_name = fields.Char(related='scce_id.first_name')
     last_name = fields.Char(related='scce_id.last_name')
