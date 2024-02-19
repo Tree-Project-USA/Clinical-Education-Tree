@@ -43,7 +43,7 @@ class MedicalFacility(models.Model):
     archive_ids = fields.One2many(comodel_name='archive', inverse_name='facility_id', string='Placement History', domain="[('company_id', '=', company_id)]")
     archive_count = fields.Integer(compute='_compute_archive_count', string='Placement History Count')
     ci_ids = fields.Many2many(comodel_name='res.partner', string='CI',domain=[('is_ci', '=', True)], check_company=True)
-    note = fields.Text(string="Note")
+    comment = fields.Html(string='Notes')
     
     def facility_multi_department(self):
         self.write({

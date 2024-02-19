@@ -169,8 +169,8 @@
                                 </tree>
                             </field>
                         </page>
-                        <page string="Notes" name="notes">
-                            <field name="note"/>
+                        <page name='internal_notes' string="Notes">
+                            <field name="comment" placeholder="notes..."/>
                         </page>
                     </notebook>
                 </sheet>
