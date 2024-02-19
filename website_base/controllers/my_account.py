@@ -39,6 +39,8 @@ class CustomerPortals(CustomerPortal):
             values["partner"] = res_partner_id
             values["locations"] = res_partner_id.geographical_ids
             values["preferred_setting_ids"] = res_partner_id.preferred_setting_ids
+            values["medical_attachment_ids"] = res_partner_id.medical_attachment_ids
+            values["scce_medical_attachment_ids"] = res_partner_id.scce_medical_attachment_ids
             values["medical_attachment_id"] = medical_attachment_id
             values["scce_medical_attachment_id"] = scce_medical_attachment_id
             values["attachment_type_id"] = attachment_type_id
@@ -48,11 +50,16 @@ class CustomerPortals(CustomerPortal):
             scce_facility_ids = request.env["scce.facility"].sudo().search([
                 ('scce_id', '=', res_partner_id.id)]).mapped("facility_id")
             values["partner"] = res_partner_id
+            scce_list = []
+            for i in res_partner_id.search([("is_ci", "=", True)]).mapped("scce_ids"):
+                scce_list.append(i.id)
+            values["ci"] = request.env["res.partner"].sudo().search([("is_ci", "=", True), ("scce_ids", "in", scce_list)])
             values["scce_facility_ids"] = scce_facility_ids
             return request.render("website_base.scce_profile_template", values)
         elif res_partner_id.is_ci:
             scce_facility_ids = request.env["scce.facility"].sudo().search([
                 ('scce_id', 'in', res_partner_id.scce_ids.ids)]).mapped("facility_id")
+            
             values["partner"] = res_partner_id
             values["scce_facility_ids"] = scce_facility_ids
             return request.render("website_base.ci_profile_template", values)

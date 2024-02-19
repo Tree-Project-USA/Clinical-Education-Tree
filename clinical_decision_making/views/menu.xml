@@ -211,19 +211,6 @@
         parent="student_details_menu"
         sequence="2"/>
     <menuitem
-        id="attachment_request_menu"
-        name="Program Required Document"
-        action="clinical_decision_making.action_attachment_request"
-        parent="student_details_menu"
-        sequence="3"/>
-    <menuitem
-        id="scce_attachment_request_menu"
-        name="Site Required Document"
-        action="clinical_decision_making.action_scce_attachment_request"
-        parent="student_details_menu"
-        sequence="4"/>
-    
-    <menuitem
         id="clinic_details_menu"
         name="Clinical Sites"
         parent="menu_root_cpdm"

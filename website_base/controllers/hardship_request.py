@@ -12,7 +12,6 @@ class CustomerPortals(http.Controller):
         attachment = request.env['res.config.settings'].sudo().browse(attachment_id)
 
         if attachment.hardship_form_attachment:
-            print("ahmed")
             filecontent = base64.b64decode(attachment.hardship_form_attachment)
             headers = [
                 ('Content-Type', 'application/octet-stream'),
@@ -20,7 +19,6 @@ class CustomerPortals(http.Controller):
             ]
             return request.make_response(filecontent, headers)
         else:
-            print("salim")
             return request.not_found()
         
     @http.route("/hardship/request", type="http", website=True, auth="user")

@@ -17,7 +17,6 @@ class Facility(http.Controller):
                 ('facility_id', '=', department_id.facility_id.id), 
                 ('student_id', '=', partner_id.id),
             ])
-            print(department_id.facility_id)
             values = {
                 "department_id": department_id,
                 "scce_ids": department_id.mapped("scce_ids"),

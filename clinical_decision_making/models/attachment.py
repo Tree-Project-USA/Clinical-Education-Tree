@@ -21,7 +21,7 @@ class ScceAttachmentType(models.Model):
 
     name = fields.Char("Name", required=True)
     company_id = fields.Many2one('res.company', string='University', default=lambda self: self.env.user.company_id)
-    portal_id = fields.Char("ID")
+    portal_id = fields.Char("Portal ID")
     description = fields.Text("Description")
     is_required = fields.Boolean(string="Is Required")
     scce_id = fields.Many2one(comodel_name='res.partner', string='SCCE', domain=[('is_scce', '=', True)], tracking=True, required=True, check_company=True)
@@ -37,6 +37,37 @@ class Attachment(models.Model):
     attachment_ids = fields.Many2many(comodel_name='ir.attachment', string="Attachments", tracking=True, check_company=True)   
     expiration_date = fields.Date(string='Expiration Date')   
     note = fields.Text(string="Note")
+    state = fields.Selection([
+            ('under_review', 'Under Review'),            
+            ('required_update', 'Required Update'),
+            ('confirmed', 'Confirmed'),
+            ('cancel', 'Cancelled'),
+        ], string='Status')
+    
+    def action_under_review(self):
+        self.write(
+            {
+                'state':  'under_review'
+            }
+        )
+    def action_required_update(self):
+        self.write(
+            {
+                'state':  'required_update'
+            }
+        )
+    def action_confirmed(self):
+        self.write(
+            {
+                'state': 'confirmed' 
+            }
+        )
+    def action_cancel(self):
+        self.write(
+            {
+                'state': 'cancel' 
+            }
+        )
     
 class ScceAttachment(models.Model):
     _name = "scce.attachments"
@@ -49,4 +80,34 @@ class ScceAttachment(models.Model):
     attachment_ids = fields.Many2many(comodel_name='ir.attachment', string="Attachments", tracking=True, check_company=True)   
     expiration_date = fields.Date(string='Expiration Date')   
     note = fields.Text(string="Note")
-
+    state = fields.Selection([
+            ('under_review', 'Under Review'),            
+            ('required_update', 'Required Update'),
+            ('confirmed', 'Confirmed'),
+            ('cancel', 'Cancelled'),
+        ], string='Status')
+    
+    def action_under_review(self):
+        self.write(
+            {
+                'state':  'under_review'
+            }
+        )
+    def action_required_update(self):
+        self.write(
+            {
+                'state':  'required_update'
+            }
+        )
+    def action_confirmed(self):
+        self.write(
+            {
+                'state': 'confirmed' 
+            }
+        )
+    def action_cancel(self):
+        self.write(
+            {
+                'state': 'cancel' 
+            }
+        )

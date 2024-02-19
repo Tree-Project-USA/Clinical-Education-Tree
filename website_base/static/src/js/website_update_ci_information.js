@@ -44,6 +44,7 @@ odoo.define("website_base.website_update_ci_information", function(require) {
             $("#apta_credentialed_ci").prop({ "required": true, })
             $("#other_ci_credential").prop({ "required": true, })
             $("#professional_organization_membership").prop({ "required": true, })
+            
         },
         /**
          * @private

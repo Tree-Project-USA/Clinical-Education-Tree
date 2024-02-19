@@ -21,7 +21,6 @@ class AttachmentRequest(http.Controller):
             ('student_id', '=', partner_id.id),
             ])
         if kw and request.httprequest.method == "POST":
-            print(kw)
             try:
                 attachment_list = []
                 scce_attachment_list = []

@@ -23,6 +23,11 @@ odoo.define("website_base.departments", function(require) {
             this._onClickDepartment();
         },
 
+        start: function () {
+            this.$(".custom-select").select2();
+        },
+
+
         _onClickDepartment: function(ev) {
             var option = "select..."
             const department_id = "#" + $(".department-list:last").attr("id");
@@ -33,21 +38,21 @@ odoo.define("website_base.departments", function(require) {
                 <select name="company_id_` + counter_availability + `" 
                     id="company_id_` + counter_availability + `"
                     class="form-control col-xl-12 custom-select company_id_` + counter_availability + `" required="1">
-                    <option  value="" selected="selected" disabled="1">` + option + `</option>
+                    <option  value="" selected="selected">` + option + `</option>
                 </select>
             </td>
             <td class="row-index">
                 <select name="department_id_` + counter_availability + `" 
                     id="department_id_` + counter_availability + `"
                     class="form-control col-xl-12 custom-select department_id_` + counter_availability + `" required="1">
-                    <option  value="" selected="selected" disabled="1">` + option + `</option>
+                    <option  value="" selected="selected">` + option + `</option>
                 </select>
             </td>
             <td class="row-index">
                 <select name="experience_id_` + counter_availability + `" 
                     id="experience_id_` + counter_availability + `"
                     class="form-control col-xl-12 custom-select experience_id_` + counter_availability + `" required="1">
-                    <option  value="" selected="selected" disabled="1">` + option + `</option>
+                    <option  value="" selected="selected">` + option + `</option>
                 </select>
             </td>
             <td class="row-index">
@@ -63,12 +68,12 @@ odoo.define("website_base.departments", function(require) {
                 <select name="term_` + counter_availability + `" 
                     id="term_` + counter_availability + `"
                     class="form-control col-xl-12 custom-select term_` + counter_availability + `" required="1">
-                    <option  value="" selected="selected" disabled="1">` + option + `</option>
+                    <option  value="" selected="selected">` + option + `</option>
                 </select>
             </td>
             <td class="row-index">
                 <select name="setting_` + counter_availability + `"  
-                    class="form-control col-xl-12 custom-selectsetting_` + counter_availability + `">
+                    class="form-control col-xl-12 custom-select setting_` + counter_availability + `">
                     <option  value="" selected="selected">` + option + `</option>
                     <option  value="op">OP</option>
                     <option value="ip">IP</option>
@@ -190,7 +195,6 @@ odoo.define("website_base.departments", function(require) {
             }).change(function() {
                 var experience_id = $(experience).val()
                 ajax.jsonRpc("/program/experience/term", 'call', { experience_id }).then(function(data) {
-                    console.log(data, "ahmed ahmed ahmed")
                     // $(experience).empty();
                     // _.each(data["clinical_experience_ids"], function(value){
                     //     $(experience).append($('<option>', {

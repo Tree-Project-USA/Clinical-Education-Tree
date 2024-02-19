@@ -184,3 +184,8 @@
 .navbar-light .text-muted{
   color: #a6ab75 !important;
 }
+
+.select2-container .select2-choice {
+  height: 35px !important;
+  background-color: #fff !important;
+}

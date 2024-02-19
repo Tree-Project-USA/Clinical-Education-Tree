@@ -46,14 +46,35 @@ class ResPartner(models.Model):
     hardship_count = fields.Integer(compute='_compute_hardship_count', string='HardShip Count')
     alternative_schedule_count = fields.Integer(compute='_compute_alternative_schedule_count', string='Alternative Schedule Count')
     alternative_schedule_ids = fields.One2many('alternative.schedule', 'student_id', string='Alternative Schedule')
-    medical_attachment_ids = fields.One2many(comodel_name='attachments', inverse_name='student_id', string='Program Required Document')
-    scce_medical_attachment_ids = fields.One2many(comodel_name='scce.attachments', inverse_name='student_id', string='Site Required Document')
+    
+    def get_default_required_document(self):
+        attachment = []
+        for type_id in self.env['attachment.type'].search([]):
+             attachment += [(0, 0, {
+                'company_id': self.env.user.company_id,
+                'attachment_type': type_id.id,
+             })]
+        return attachment
+    
+    def get_default_scce_document(self):
+        attachment = []
+        for type_id in self.env['scce.attachment.type'].search([]):
+             attachment += [(0, 0, {
+                'company_id': self.env.user.company_id,
+                'scce_attachment_type': type_id.id,
+             })]
+        return attachment
+    
+    medical_attachment_ids = fields.One2many(comodel_name='attachments', inverse_name='student_id', string='Required Document', default=get_default_required_document)
+    scce_medical_attachment_ids = fields.One2many(comodel_name='scce.attachments', inverse_name='student_id', string='SCCE Required Document', default=get_default_scce_document)
     experience_schedual_ids = fields.Many2many(comodel_name='clinical.experience.schedual', compute='_compute_term_fields', string='Studnet Experience Schedual')
     student_signature = fields.Binary(string="Student Signature")
     student_signature_date = fields.Date(string="Student Signature Date")
     ci_signature = fields.Binary(string="Clinical Instructor Signature")
     ci_signature_date = fields.Date(string="Clinical Instructor Signature Date")
-    plcement_management_ids = fields.One2many(comodel_name='plcement.management', inverse_name='student_id', string='Post Plcement Management')
+    plcement_management_ids = fields.One2many(comodel_name='plcement.management', inverse_name='student_id', string='Post Placement Management')
+    
+            
     
     @api.onchange('archive_ids', 'archive_ids.archive_offer_id')
     def _onchange_archive_ids(self):

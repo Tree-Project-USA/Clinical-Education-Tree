@@ -107,9 +107,9 @@
                         </group>
                     </group>
 
-                    <notebook colspan="4">
-                        <page name='experience_schedual' string="Clinical Experience Schedule">
-                            <field name="experience_schedual_ids">
+                    <notebook>                           
+                            <page name='experience_schedual' string="Experience Schedule">
+                                <field name="experience_schedual_ids">
                                 <tree>
                                     <field name="student_id" invisible="1"/>
                                     <field name="company_id" groups="base.group_multi_company"/>
@@ -194,23 +194,34 @@
                         </field>
                         </page>
 
-                        <page name='medical_attachment_ids' string="Program Required Document">
-                            <field name="medical_attachment_ids" string="Attach a file" mode="tree">
-                                <tree editable="bottom" delete="false">
-                                    <field name="company_id" string="University" readonly="1"/>
-                                    <field name="attachment_type"/>
-                                    <field name="expiration_date"/>
-                                    <field name="attachment_ids" widget="many2many_attachment_preview"/>
+                        <page name='medical_attachment_ids' string="Required Document">
+                            <field name="medical_attachment_ids" string="Attach a file" mode="tree" context="{'create': False}">
+                                <tree editable="bottom" delete="false" create="false">
+                                    <field name="company_id" string="university" readonly="1" />
+                                    <field name="attachment_type" readonly="1" force_save="1"/>
+                                    <field name="expiration_date" />
+                                    <field name="attachment_ids" widget="many2many_attachment_preview" />
+                                    
+                                    <field name="state" widget="badge" decoration-muted="state == 'under_review'"  decoration-danger="state == 'cancel'"  decoration-success="state == 'confirmed'" decoration-warning="state == 'required_update'"/>
+                                    <button name="action_under_review" string="Under Review" type="object" attrs="{'invisible': [('state', 'not in', ['cancel']), ('state', '!=', False)]}"/>
+                                    <button name="action_required_update" string="Required Update" type="object" attrs="{'invisible': ['|', ('state', 'not in', ['under_review']), ('state', '=', False)]}"/>
+                                    <button name="action_confirmed" string="Confirmed" type="object" attrs="{'invisible': ['|', ('state', 'not in', ['under_review', 'required_update']), ('state', '=', False)]}"/>
+                                    <button name="action_cancel" string="Cancelled" type="object" attrs="{'invisible': ['|', ('state', 'in', ['cancel']), ('state', '=', False)]}"/>
                                 </tree>
                             </field>
                         </page>
-                        <page name='scce_medical_attachment_ids' string="Site Required Document">
-                            <field name="scce_medical_attachment_ids" string="Attach a file" mode="tree">
-                                <tree editable="bottom" delete="false">
-                                    <field name="company_id" string="University" readonly="1"/>
-                                    <field name="scce_attachment_type"/>
+                        <page name='scce_medical_attachment_ids' string="SCCE Document">
+                            <field name="scce_medical_attachment_ids" string="Attach a file" mode="tree" context="{'create': False}">
+                                <tree editable="bottom" delete="false" create="false">
+                                    <field name="company_id" string="university" readonly="1"/>
+                                    <field name="scce_attachment_type" readonly="1" force_save="1"/>
                                     <field name="expiration_date"/>
                                     <field name="attachment_ids" widget="many2many_attachment_preview"/>
+                                    <field name="state" widget="badge" decoration-muted="state == 'under_review'"  decoration-danger="state == 'cancel'"  decoration-success="state == 'confirmed'" decoration-warning="state == 'required_update'"/>
+                                    <button name="action_under_review" string="Under Review" type="object" attrs="{'invisible': [('state', 'not in', ['cancel']), ('state', '!=', False)]}"/>
+                                    <button name="action_required_update" string="Required Update" type="object" attrs="{'invisible': ['|', ('state', 'not in', ['under_review']), ('state', '=', False)]}"/>
+                                    <button name="action_confirmed" string="Confirmed" type="object" attrs="{'invisible': ['|', ('state', 'not in', ['under_review', 'required_update']), ('state', '=', False)]}"/>
+                                    <button name="action_cancel" string="Cancelled" type="object" attrs="{'invisible': ['|', ('state', 'in', ['cancel']), ('state', '=', False)]}"/>
                                 </tree>
                             </field>
                         </page>

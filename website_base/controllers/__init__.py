@@ -11,3 +11,4 @@ from . import attachment_request
 from . import main
 from . import required_document
 from . import profile_student
+from . import add_update_delete_ci
