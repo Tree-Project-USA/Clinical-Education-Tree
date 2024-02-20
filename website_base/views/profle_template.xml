@@ -678,23 +678,11 @@
                             </td>
                             <td>
                                 <div t-if="not val.attachment_ids">
-                                  <div class="file-upload" id="file_upload">
-                                    <div class="file-select">
-                                        <div class="file-select-button" id="fileName">
-                                            Choose File
-                                        </div>
-                                        <div class="file-select-name" id="noFile">
-                                            Drag and drop your file here
-                                        </div> 
-                                        <input type="file" 
-                                            class="updated"
-                                            multiple="multiple"
-                                            accept=".jpg, .jpeg, .png, .pdf, .docx, .xls, .pptx"
-                                            required="required"
-                                            name="datas"
-                                            id="chooseFile"
-                                        />
-                                    </div>
+                                  <div id="dropArea" style="
+                                    text-align: center;
+                                  " class="input-group custom-file-button">
+                                    <label class="input-group-text" for="fileInput">Drag and Drop</label>
+                                    <input class="form-control" type="file" id="fileInput" />
                                   </div>
                                 </div>
                                 <div t-if="val.attachment_ids">
@@ -768,23 +756,11 @@
                             </td>
                             <td>
                                 <div t-if="not val.attachment_ids">
-                                  <div class="file-upload" id="file_upload">
-                                    <div class="file-select">
-                                        <div class="file-select-button" id="fileName">
-                                            Choose File
-                                        </div>
-                                        <div class="file-select-name" id="noFile">
-                                            Drag and drop your file here
-                                        </div> 
-                                        <input type="file" 
-                                            class="updated"
-                                            multiple="multiple"
-                                            accept=".jpg, .jpeg, .png, .pdf, .docx, .xls, .pptx"
-                                            required="required"
-                                            name="datas"
-                                            id="chooseFile"
-                                        />
-                                    </div>
+                                  <div id="dropArea2" style="
+                                    text-align: center;
+                                  " class="input-group custom-file-button">
+                                    <label class="input-group-text" for="fileInput2">Drag and Drop</label>
+                                    <input class="form-control" type="file" id="fileInput2" />
                                   </div>
                                 </div>
                                 <div t-if="val.attachment_ids">
