@@ -33,17 +33,12 @@
                   <li class="nav-item" role="presentation">
                     <button class="nav-link active" id="scce-information-tab" data-bs-toggle="tab"
                       data-bs-target="#scce_information" type="button" role="tab" aria-controls="scce_information"
-                      aria-selected="false">Basic CI Information</button>
+                      aria-selected="false">CI Information</button>
                   </li>
                   <li class="nav-item" role="presentation">
                     <button class="nav-link" id="medical-attachment-ids-tab" data-bs-toggle="tab"
                       data-bs-target="#medical_attachment_ids" type="button" role="tab" aria-controls="medical_attachment_ids"
                       aria-selected="false">Facility Information</button>
-                  </li>
-                  <li class="nav-item" role="presentation">
-                    <button class="nav-link " id="ci-information-tab" data-bs-toggle="tab"
-                      data-bs-target="#ci_information" type="button" role="tab" aria-controls="ci_information"
-                      aria-selected="false">CI Information</button>
                   </li>
                 </ul>
                 <div class="tab-content" id="myTabContent">
@@ -299,8 +294,9 @@
                           <td colspan="1"><t t-esc="val.state"/></td>
                           <td colspan="1"><t t-esc="val.zip"/></td>
                           <td colspan="1">
+                            <t t-set="student" t-value="request.env['archive'].sudo().search([('facility_id', '=', val.id)])"/>
                             <a
-                              t-if="val.offer_ids"
+                              t-if="val.offer_ids and student"
                               type="button"
                               class="btn my-2"
                               role="button" 

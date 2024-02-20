@@ -60,6 +60,7 @@
             "website_base/static/src/js/required_document.js",
             "website_base/static/src/js/scce_attachment_request.js",
             "website_base/static/src/js/website_update_ci_information.js",
+            # "website_base/static/src/js/website_update_student_attachment.js",
         ],
     },
     "installable": True,

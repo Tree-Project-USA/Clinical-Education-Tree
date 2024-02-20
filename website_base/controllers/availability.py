@@ -64,6 +64,7 @@ class SubmitAvailability(http.Controller):
                 "partner_id": partner_id ,
                 "facility_id": facility_id ,
                 "archive_ids": archive_ids,
+                "ci_id": facility_id.mapped("ci_ids")
             }
             values.update(dict(request.params))
             dict(request.params)
@@ -203,11 +204,9 @@ class SubmitAvailability(http.Controller):
     
     @http.route('/program/experience/term', website=True, type='json', auth="user", csrf=False)
     def program_experience_term(self, experience_id=None, **kw):
-        print(experience_id)
         values = {}
         clinical_experience_ids = request.env['clinical.experience'].sudo().search([("id", "=", experience_id)])
         program_experience_term_ids = request.env["program.experience.term"].sudo().search([("experience_id", "=", clinical_experience_ids.id)], limit=1)
-        print(program_experience_term_ids.start_date)
         program_experiences = [{
                     'start_date': program_experience.start_date if program_experience.end_date else '',
                     'end_date': program_experience.end_date if program_experience.end_date else '',

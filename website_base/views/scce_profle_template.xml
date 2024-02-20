@@ -33,7 +33,7 @@
                   <li class="nav-item" role="presentation">
                     <button class="nav-link active" id="scce-information-tab" data-bs-toggle="tab"
                       data-bs-target="#scce_information" type="button" role="tab" aria-controls="scce_information"
-                      aria-selected="false">Basic SCCE Information</button>
+                      aria-selected="false">SCCE Information</button>
                   </li>
                   <li class="nav-item" role="presentation">
                     <button class="nav-link" id="medical-attachment-ids-tab" data-bs-toggle="tab"
@@ -148,8 +148,9 @@
                           <td colspan="1"><t t-esc="val.state"/></td>
                           <td colspan="1"><t t-esc="val.zip"/></td>
                           <td colspan="1">
+                            <t t-set="student" t-value="request.env['archive'].sudo().search([('facility_id', '=', val.id)])"/>
                             <a
-                              t-if="val.offer_ids"
+                              t-if="val.offer_ids and student"
                               type="button"
                               class="btn my-2"
                               role="button" 
@@ -167,36 +168,526 @@
                     aria-labelledby="ci-information-tab">
                     <div class="row mt-2">
                       <div class="col-12">
-                        <a
-                          type="button"
-                          class="btn my-2"
-                          role="button" 
-                          style="background-color:  #326434; !important; color: #fff"
-                        >
-                          <i class="fa fa-pencil"/> Add New CI
-                        </a>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo"><i class="fa fa-pencil"/>Add New CI</button>
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                          <div class="modal-dialog modal-xl">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">New CI</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                <form 
+                                  action="/add/new/ci"
+                                  method="post"
+                                  enctype="multipart/form-data"
+                                >
+                                  <div class="row mt-4">
+                                    <div class="col-lg-4">
+                                      <div class="form-group row">
+                                        <label for="staticEmail" class="col-form-label">First Name</label>
+                                        <div>
+                                          <input
+                                            type="text"
+                                            id="first_name"
+                                            class="form-control"
+                                            name="first_name"
+                                            t-att-value=""
+                                          />
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                      <div class="form-group row">
+                                        <label for="staticEmail" class="col-form-label">Last Name</label>
+                                        <div>
+                                          <input
+                                            type="text"
+                                            id="last_name"
+                                            class="form-control"
+                                            name="last_name"
+                                            t-att-value=""
+                                          />
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                      <div class="form-group row">
+                                        <label for="staticEmail" class="col-form-label">Phone</label>
+                                        <div>
+                                          <input
+                                            type="text"
+                                            id="phone"
+                                            class="form-control"
+                                            name="phone"
+                                            t-att-value=""
+                                          />
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="row mt-4">
+                                    <div class="col-lg-4">
+                                      <div class="form-group row">
+                                        <label for="staticEmail" class="col-form-label">Email</label>
+                                        <div>
+                                          <input
+                                            type="text"
+                                            id="email"
+                                            class="form-control"
+                                            name="email"
+                                            t-att-value=""
+                                          />
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                      <div class="form-group row">
+                                        <label for="staticEmail" class="col-form-label">Entry Level PT Degree Earned</label>
+                                        <div>
+                                          <input
+                                            type="text"
+                                            id="entry_level_pt_degree_earned"
+                                            class="form-control"
+                                            name="entry_level_pt_degree_earned"
+                                            t-att-value=""
+                                          />
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                      <div class="form-group row">
+                                        <label for="staticEmail" class="col-form-label">Highest Degree Earned</label>
+                                        <div>
+                                          <input
+                                            type="text"
+                                            id="highest_degree_earned"
+                                            class="form-control"
+                                            name="highest_degree_earned"
+                                            t-att-value=""
+                                          />
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="row mt-4">
+                                    <div class="col-lg-4">
+                                      <div class="form-group row">
+                                        <label for="staticEmail" class="col-form-label">Aegree Area</label>
+                                        <div>
+                                          <input
+                                            type="text"
+                                            id="degree_area"
+                                            class="form-control"
+                                            name="degree_area"
+                                            t-att-value=""
+                                          />
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                      <div class="form-group row">
+                                        <label for="staticEmail" class="col-form-label">Years Experience CI</label>
+                                        <div>
+                                          <input
+                                            type="text"
+                                            id="years_experience_ci"
+                                            class="form-control"
+                                            name="years_experience_ci"
+                                            t-att-value=""
+                                          />
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                      <div class="form-group row">
+                                        <label for="staticEmail" class="col-form-label">Years Experience Clinician</label>
+                                        <div>
+                                          <input
+                                            type="text"
+                                            id="years_experience_clinician"
+                                            class="form-control "
+                                            name="years_experience_clinician"
+                                            t-att-value=""
+                                          />
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="row mt-4">
+                                    <div class="col-lg-4">
+                                      <div class="form-group row">
+                                        <label for="staticEmail" class="col-form-label">Areas Expertise</label>
+                                        <div>
+                                          <input
+                                            type="text"
+                                            id="areas_expertise"
+                                            class="form-control "
+                                            name="areas_expertise"
+                                            t-att-value=""
+                                          />
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                      <div class="form-group row">
+                                        <label for="staticEmail" class="col-form-label">Clinical Certification</label>
+                                        <div>
+                                          <input
+                                            type="text"
+                                            id="clinical_certification"
+                                            class="form-control "
+                                            name="clinical_certification"
+                                            t-att-value=""
+                                          />
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                      <div class="form-group row">
+                                        <label for="staticEmail" class="col-form-label">Specify Area</label>
+                                        <div>
+                                          <input
+                                            type="text"
+                                            id="specify_area"
+                                            class="form-control "
+                                            name="specify_area"
+                                            t-att-value=""
+                                          />
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="row mt-4">
+                                    <div class="col-lg-4">
+                                      <div class="form-group row">
+                                        <label for="staticEmail" class="col-form-label">Other CI Credential</label>
+                                        <div>
+                                          <input
+                                            type="text"
+                                            id="other_ci_credential"
+                                            class="form-control "
+                                            name="other_ci_credential"
+                                            t-att-value=""
+                                          />
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                      <div class="form-group row">
+                                        <label for="staticEmail" class="col-form-label">Other CI Credential</label>
+                                        <div>
+                                          <input
+                                            type="text"
+                                            id="other_ci_credential"
+                                            class="form-control "
+                                            name="other_ci_credential"
+                                            t-att-value=""
+                                          />
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                      <div class="form-group row">
+                                        <label for="staticEmail" class="col-form-label">Professional Organization Membership</label>
+                                        <div>
+                                          <input
+                                            type="text"
+                                            id="professional_organization_membership"
+                                            class="form-control "
+                                            name="professional_organization_membership"
+                                            t-att-value=""
+                                          />
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                      <div class="form-group row">
+                                        <label for="staticEmail" class="col-form-label">Department</label>
+                                        <select id="facility_id" name="facility_id"
+                                            class="form-select select2" required="required">
+                                            <option value="">Choose Department</option>
+                                            <t t-foreach="scce_facility_ids or []" t-as="facility">
+                                                <option t-att-value="facility.id">
+                                                    <t t-esc="facility.name" />
+                                                </option>
+                                            </t>
+                                        </select>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <button class="btn btn-primary my-4">Submit</button>
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    <table class="table table-striped table-bordered shadow-sm text-center mt-2">
+                    <table class="table table-striped table-bordered shadow-sm mt-2">
                       <thead style="background-color:#326434; color: #fff">
                         <tr>
-                          <th>First Name</th>
-                          <th>Last Name</th>
-                          <th>Phone</th>
-                          <th>Email</th>
-                          <th style="width: 25rem;"></th>
+                          <th class="text-center">First Name</th>
+                          <th class="text-center">Last Name</th>
+                          <th class="text-center">Phone</th>
+                          <th class="text-center">Email</th>
+                          <th class="text-center" style="width: 25rem;"></th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td>
-                            <a class="btn btn-danger"><i class="fa fa-trash"/></a>
-                            <a class="btn btn-warning"><i class="fa fa-pencil"/>Update CI Information</a>
+                        <tr t-foreach="ci" t-as="val">
+                          <td class="text-center"><t t-esc="val.first_name"/></td>
+                          <td class="text-center"><t t-esc="val.last_name"/></td>
+                          <td class="text-center"><t t-esc="val.phone"/></td>
+                          <td class="text-center"><t t-esc="val.email"/></td>
+                          <td class="text-center">
+                            <a t-attf-href="/delete/ci/#{val.id}" class="btn btn-danger"><i class="fa fa-trash"/></a>
+                            <a class="btn btn-warning" type="button"  data-bs-toggle="modal"
+                            t-att-data-bs-target="'#modal_{}'.format(val.id)"
+                            ><i class="fa fa-pencil"/>Update CI Information</a>
                           </td>
+                          <div class="modal fade update_ci_information" t-attf-id="modal_{{val.id}}"
+                          tabindex="-1" aria-hidden="true">
+                              <div class="modal-dialog modal-xl">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Update CI Information</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                  </div>
+                                  <div class="modal-body">
+                                    <form
+                                      action="/save/changes/ci_information/scce"
+                                      method="post"
+                                      enctype="multipart/form-data"
+                                    >
+                                    <input type="hidden" id="scce_ids" name="scce_ids"
+                                        t-att-value="val.id" />
+                                    <div class="row mt-4">
+                                      <div class="col-lg-4">
+                                        <div class="form-group row">
+                                          <label for="staticEmail" class="col-form-label">First Name</label>
+                                          <div>
+                                            <input
+                                              type="text"
+                                              id="first_name_ci"
+                                              class="form-control"
+                                              name="first_name"
+                                              t-att-value="val.first_name"
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="col-lg-4">
+                                        <div class="form-group row">
+                                          <label for="staticEmail" class="col-form-label">Last Name</label>
+                                          <div>
+                                            <input
+                                              type="text"
+                                              id="last_name_ci"
+                                              class="form-control"
+                                              name="last_name"
+                                              t-att-value="val.last_name"
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="col-lg-4">
+                                        <div class="form-group row">
+                                          <label for="staticEmail" class="col-form-label">Phone</label>
+                                          <div>
+                                            <input
+                                              type="text"
+                                              id="phone_ci"
+                                              class="form-control"
+                                              name="phone"
+                                              t-att-value="val.phone"
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="row mt-4">
+                                      <div class="col-lg-4">
+                                        <div class="form-group row">
+                                          <label for="staticEmail" class="col-form-label">Email</label>
+                                          <div>
+                                            <input
+                                              type="text"
+                                              id="email_ci"
+                                              class="form-control"
+                                              name="email"
+                                              t-att-value="val.email"
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="col-lg-4">
+                                        <div class="form-group row">
+                                          <label for="staticEmail" class="col-form-label">Entry Level PT Degree Earned</label>
+                                          <div>
+                                            <input
+                                              type="text"
+                                              id="entry_level_pt_degree_earned_ci"
+                                              class="form-control"
+                                              name="entry_level_pt_degree_earned"
+                                              t-att-value="val.entry_level_pt_degree_earned"
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="col-lg-4">
+                                        <div class="form-group row">
+                                          <label for="staticEmail" class="col-form-label">Highest Degree Earned</label>
+                                          <div>
+                                            <input
+                                              type="text"
+                                              id="highest_degree_earned_ci"
+                                              class="form-control"
+                                              name="highest_degree_earned"
+                                              t-att-value="val.highest_degree_earned"
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="row mt-4">
+                                      <div class="col-lg-4">
+                                        <div class="form-group row">
+                                          <label for="staticEmail" class="col-form-label">Aegree Area</label>
+                                          <div>
+                                            <input
+                                              type="text"
+                                              id="degree_area_ci"
+                                              class="form-control"
+                                              name="degree_area"
+                                              t-att-value="val.degree_area"
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="col-lg-4">
+                                        <div class="form-group row">
+                                          <label for="staticEmail" class="col-form-label">Years Experience CI</label>
+                                          <div>
+                                            <input
+                                              type="text"
+                                              id="years_experience_ci_ci"
+                                              class="form-control"
+                                              name="years_experience_ci"
+                                              t-att-value="val.years_experience_ci"
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="col-lg-4">
+                                        <div class="form-group row">
+                                          <label for="staticEmail" class="col-form-label">Years Experience Clinician</label>
+                                          <div>
+                                            <input
+                                              type="text"
+                                              id="years_experience_clinician_ci"
+                                              class="form-control"
+                                              name="years_experience_clinician"
+                                              t-att-value="val.years_experience_clinician"
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="row mt-4">
+                                      <div class="col-lg-4">
+                                        <div class="form-group row">
+                                          <label for="staticEmail" class="col-form-label">Areas Expertise</label>
+                                          <div>
+                                            <input
+                                              type="text"
+                                              id="areas_expertise_ci"
+                                              class="form-control"
+                                              name="areas_expertise"
+                                              t-att-value="val.areas_expertise"
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="col-lg-4">
+                                        <div class="form-group row">
+                                          <label for="staticEmail" class="col-form-label">Clinical Certification</label>
+                                          <div>
+                                            <input
+                                              type="text"
+                                              id="clinical_certification_ci"
+                                              class="form-control"
+                                              name="clinical_certification"
+                                              t-att-value="val.clinical_certification"
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="col-lg-4">
+                                        <div class="form-group row">
+                                          <label for="staticEmail" class="col-form-label">Specify Area</label>
+                                          <div>
+                                            <input
+                                              type="text"
+                                              id="specify_area_ci"
+                                              class="form-control"
+                                              name="specify_area"
+                                              t-att-value="val.specify_area"
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="row mt-4">
+                                      <div class="col-lg-4">
+                                        <div class="form-group row">
+                                          <label for="staticEmail" class="col-form-label">Other CI Credential</label>
+                                          <div>
+                                            <input
+                                              type="text"
+                                              id="other_ci_credential_ci"
+                                              class="form-control"
+                                              name="other_ci_credential"
+                                              t-att-value="val.other_ci_credential"
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="col-lg-4">
+                                        <div class="form-group row">
+                                          <label for="staticEmail" class="col-form-label">Apta Credentialed CI</label>
+                                          <div>
+                                            <input
+                                              type="text"
+                                              id="apta_credentialed_ci_ci"
+                                              class="form-control"
+                                              name="apta_credentialed_ci"
+                                              t-att-value="val.apta_credentialed_ci"
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="col-lg-4">
+                                        <div class="form-group row">
+                                          <label for="staticEmail" class="col-form-label">Professional Organization Membership</label>
+                                          <div>
+                                            <input
+                                              type="text"
+                                              id="professional_organization_membership_ci"
+                                              class="form-control"
+                                              name="professional_organization_membership"
+                                              t-att-value="val.professional_organization_membership"
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <button class="btn btn-warning my-2">Update</button>
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                         </tr>
                       </tbody>
                     </table>

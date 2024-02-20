@@ -111,6 +111,7 @@
               </div>
               <div class="tab-pane fade my-4" id="ci_information" role="tabpanel"
                 aria-labelledby="ci-information-tab">
+                <t t-call="website_base.add_new_cis"/>
                 <table class="table table-striped table-bordered shadow-sm text-center my-5">
                   <thead style="background-color:#326434; color: #fff">
                     <tr>
@@ -144,7 +145,6 @@
                     </tr>
                   </tbody>
                 </table>
-                <t t-call="website_base.add_new_cis"/>
               </div>
               <div class="tab-pane fade my-4" id="placement_history" role="tabpanel"
                 aria-labelledby="placement-history-tap">
