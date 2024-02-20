@@ -202,14 +202,19 @@ class SubmitAvailability(http.Controller):
         values["department_ids"] = departments
         return values
     
-    @http.route('/program/experience/term', website=True, type='json', auth="user", csrf=False)
-    def program_experience_term(self, experience_id=None, **kw):
-        values = {}
-        clinical_experience_ids = request.env['clinical.experience'].sudo().search([("id", "=", experience_id)])
-        program_experience_term_ids = request.env["program.experience.term"].sudo().search([("experience_id", "=", clinical_experience_ids.id)], limit=1)
-        program_experiences = [{
-                    'start_date': program_experience.start_date if program_experience.end_date else '',
-                    'end_date': program_experience.end_date if program_experience.end_date else '',
-                } for program_experience in program_experience_term_ids]
-        values["program_experience_term_ids"] = program_experiences
-        return values
+    # @http.route('/program/experience/term', website=True, type='json', auth="user", csrf=False)
+    # def program_experience_term(self, experience_id=None, **kw):
+    #     values = {}
+    #     clinical_experience_ids = request.env['clinical.experience'].sudo().search([("id", "=", experience_id)])
+    #     print(clinical_experience_ids)
+    #     program_experience_term_ids = request.env["program.experience.term"].sudo().search([("experience_id", "=", clinical_experience_ids.id)])
+    #     x = program_experience_term_ids.filtered(lambda ex_id : ex_id.experience_id.id == clinical_experience_ids.id)
+    #     print(x)
+    #     # program_experiences = [{
+    #     #             'start_date': program_experience.start_date if program_experience.end_date else '',
+    #     #             'end_date': program_experience.end_date if program_experience.end_date else '',
+    #     #         } for program_experience in program_experience_term_ids]
+    #     # for i in program_experiences:
+    #     #     print(i)
+    #     # values["program_experience_term_ids"] = program_experiences
+    #     return values
