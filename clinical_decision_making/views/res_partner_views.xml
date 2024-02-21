@@ -172,20 +172,11 @@
                         <page name='post_placement_managament' string="Post Placement Managament">
                             <field name="plcement_management_ids" mode="tree">
                             <tree editable="bottom">
-                                <field name='sequence' widget='handle'/>
-                                <field name="student_id"/>
-                                <field name="archive_id" invisible="1"/>
-                                <field name="setting" invisible="1"/>
-                                <field name="name_clinical_education_site"/>
-                                <field name="home_address"/>
-                                <field name="city"/>
-                                <field name="state"/>
-                                <field name="clinical_experience_number"/>
-                                <field name="clinical_experience_dates"/>
-                                <field name="student_signature"/>
-                                <field name="student_signature_date"/>
-                                <field name="ci_signature_date"/>
-                                <field name="ptse_3"/>
+                                <field name='sequence' invisible="1"/>
+                                <field name="ci_id"/>
+                                <field name="ci_details_status"/>
+                                <field name="ptse_3" widget="binary" string="CI Details" attrs="{'invisible': [('ci_details_status', '=', 'completed')]}"/>
+                                <field name="ptse_3" widget="binary" string="PTSE 3" attrs="{'invisible': [('ci_details_status', '=', 'not_started')]}"/>
                                 <field name="year" invisible="1"/>
                                 <field name="parent_id" invisible="1"/>
                                 <field name="display_type" invisible="1"/>

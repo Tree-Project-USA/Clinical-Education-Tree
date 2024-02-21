@@ -22,6 +22,7 @@ class Facility(http.Controller):
                 "scce_ids": department_id.mapped("scce_ids"),
                 "plcements": rec_plcement,
                 "archive_ids": archive_ids,
+                "error": request.params.get('error') if request.params.get('error') else False,
             }
             return request.render("website_base.show_facility_student_template", values)
   

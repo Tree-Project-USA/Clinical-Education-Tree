@@ -264,7 +264,7 @@ class SCCEFacility(models.Model):
 
     _name = 'scce.facility'
     _description = 'Clinical Site SCCE'
-    _rec_name = 'scce_id'
+    _rec_name = 'complete_name'
     
     facility_id = fields.Many2one('medical.facility', string='Clinical Site')
     scce_id = fields.Many2one('res.partner', string='SCCE', domain=[('is_scce', '=', True)])
@@ -275,7 +275,7 @@ class SCCEFacility(models.Model):
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.user.company_id)
     is_primary_scce = fields.Boolean(string='Is Primary SCCE', store=True,)
     is_secondary_scce = fields.Boolean(string='Is Secondary SCCE')
-
+    complete_name = fields.Char('Complete Name', compute='_compute_complete_name', recursive=True, store=True)
     
     def action_set_primary(self):
         self.ensure_one()
@@ -295,4 +295,11 @@ class SCCEFacility(models.Model):
                 'is_secondary_scce': False
             })
         self.is_secondary_scce = True
+        
+    @api.depends('scce_id.name', 'facility_id.name')
+    def _compute_complete_name(self):
+        for facility in self:
+            facility.complete_name = '%s / %s' % (facility.facility_id.name, facility.scce_id.name)
+           
+    
         

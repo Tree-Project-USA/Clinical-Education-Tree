@@ -40,6 +40,12 @@
                       data-bs-target="#medical_attachment_ids" type="button" role="tab" aria-controls="medical_attachment_ids"
                       aria-selected="false">Facility Information</button>
                   </li>
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="post-placement-managament-tab" data-bs-toggle="tab"
+                      data-bs-target="#post_placement_managament" type="button" role="tab"
+                      aria-controls="post_placement_managament" aria-selected="false">Post Placement
+                      Managament</button>
+                  </li>
                 </ul>
                 <div class="tab-content" id="myTabContent">
                   <div class="tab-pane fade my-4 show active" id="scce_information" role="tabpanel"
@@ -310,6 +316,43 @@
                       </tbody>
                     </table>
                   </div>
+                  <div class="tab-pane fade my-4" id="post_placement_managament" role="tabpanel"
+                  aria-labelledby="post-placement-managament-tab">
+                  <table class="table table-striped table-bordered shadow-sm text-center my-5">
+                    <thead style="background-color:#326434; color: #fff">
+                      <tr>
+                        <th scope="col">Student</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">CI Details</th>
+                        <th scope="col">Write Date</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr t-foreach="plcement_ids" t-as="plcement">
+                        <td>
+                          <span t-field="plcement.student_id" />
+                        </td>
+                        <td>
+                          <span t-field="plcement.student_id.email" />
+                        </td>
+                        <td>
+                          <span t-field="plcement.ci_details_status" />
+                        </td>
+                        <td>
+                          <a t-if="plcement.stage_type == 'ci_details'" class="btn btn-primary" t-att-href="'/ci/details/%s' % (plcement.id)">
+                            CI Details
+                            <i class="fa fa-pencil"/>
+                            </a>
+                            <span t-else="">-</span>
+                        </td>
+                        <td>
+                          <span t-field="plcement.write_date" t-options='{"widget": "date"}'/>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
                 </div>
           </div>
         </div>

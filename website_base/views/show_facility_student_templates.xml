@@ -9,7 +9,7 @@
             <t t-esc="error" />
           </strong>
         </div>
-        <form
+        <div
           class="availability"
         >
           <div class="text-center mt-4">
@@ -112,23 +112,23 @@
               <div class="tab-pane fade my-4" id="ci_information" role="tabpanel"
                 aria-labelledby="ci-information-tab">
                 <t t-call="website_base.add_new_cis"/>
-                <table class="table table-striped table-bordered shadow-sm text-center my-5">
+                <t t-if="not department_id.facility_id.ci_ids">
+                  <p>There are currently no CI.</p>
+              </t>
+                <table t-if="department_id.facility_id.ci_ids" class="table table-striped table-bordered shadow-sm text-center my-5">
                   <thead style="background-color:#326434; color: #fff">
                     <tr>
-                      <th scope="col">First Name</th>
-                      <th scope="col">Last Name</th>
+                      <th scope="col">Name</th>
                       <th scope="col">Phone</th>
                       <th scope="col">Email</th>
                       <th scope="col">Ci Details</th>
+                      <th scope="col">Status</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr t-foreach="department_id.facility_id.ci_ids" t-as="ci">
                       <td>
-                        <span t-field="ci.first_name" />
-                      </td>
-                      <td>
-                        <span t-field="ci.last_name" />
+                        <span t-field="ci.name" />
                       </td>
                       <td>
                         <span t-field="ci.phone" />
@@ -137,10 +137,15 @@
                         <span t-field="ci.email" />
                       </td>
                       <td>
-                        <a class="btn btn-primary" t-att-href="'/my/report/%s?ci_id=%s' % (slug(department_id), ci.id)">
+                        <a t-if="not ci.ci_details_status" class="btn btn-primary" t-att-href="'/student/details/%s?ci_id=%s' % (department_id.id, ci.id)">
                           CI Details
                           <i class="fa fa-pencil"/>
                         </a>
+                        <span t-else="">-</span>
+                      </td>
+                      <td>
+                        <span t-if="ci.ci_details_status" t-field="ci.ci_details_status" />
+                        <span t-else="">-</span>
                       </td>
                     </tr>
                   </tbody>
@@ -189,52 +194,46 @@
                 <table class="table table-striped table-bordered shadow-sm text-center my-5">
                   <thead style="background-color:#326434; color: #fff">
                     <tr>
-                      <th scope="col">Student</th>
-                      <th scope="col">Campus</th>
-                      <th scope="col">Home Address</th>
-                      <th scope="col">Name Clinical Education Site</th>
-                      <th scope="col">City</th>
-                      <th scope="col">State</th>
-                      <th scope="col">Clinical Experience Number</th>
-                      <th scope="col">Clinical Experience Dates</th>
-                      <!-- <th scope="col">Ci Details</th> -->
+                      <th scope="col">CI</th>
+                      <th scope="col">Status</th>
+                      <th scope="col">CI Details</th>
+                      <th scope="col">PTSE 1</th>
+                      <th scope="col">PTSE 2</th>
                       <th scope="col">PTSE 3</th>
+                      <th scope="col">Write Date</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr t-foreach="plcements" t-as="plcement">
                       <td>
-                        <span t-field="plcement.student_id" />
+                        <span t-field="plcement.ci_id" />
                       </td>
                       <td>
-                        <span t-field="plcement.campus" />
+                        <span t-field="plcement.ci_details_status" />
                       </td>
                       <td>
-                        <span t-field="plcement.home_address" />
-                      </td>
-                      <td>
-                        <span t-field="plcement.name_clinical_education_site" />
-                      </td>
-                      <td>
-                        <span t-field="plcement.city" />
-                      </td>
-                      <td>
-                        <span t-field="plcement.state" />
-                      </td>
-                      <td>
-                        <span t-field="plcement.clinical_experience_number" />
-                      </td>
-                      <td>
-                        <span t-field="plcement.clinical_experience_dates" />
-                      </td>
-                      <td>
-                        <a t-if="plcement.stage_type == 'ci_details'" class="btn btn-primary" t-att-href="'/my/report/%s' % plcement.id">
+                        <a t-if="plcement.stage_type == 'ci_details'" class="btn btn-primary" t-att-href="'/ci/details/%s' % (plcement.id)">
                           CI Details
                           <i class="fa fa-pencil"/>
-                        </a>
-                        <a t-else="" class="btn btn-primary" t-att-href="'/my/report/%s' % plcement.id">
+                          </a>
+                          <span t-else="">-</span>
+                      </td>
+                      <td>
+                      -
+                      </td>
+                      <td>
+                        -
+                      </td>
+                      <td>
+                        
+                        <a t-if="plcement.stage_type == 'ptse3'" class="btn btn-primary" t-att-href="'/ci/details/%s' % (plcement.id)">
                           PTSE 3
-                        </a>
+                          <i class="fa fa-eye mx-2"/>
+                          </a>
+                          <span t-else="">-</span>
+                      </td>
+                      <td>
+                        <span t-field="plcement.write_date" t-options='{"widget": "date"}'/>
                       </td>
                     </tr>
                   </tbody>
@@ -249,7 +248,7 @@
               Back To My Profile
             </a>
           </div>
-        </form>
+        </div>
       </div>
     </t>
   </template>
@@ -263,85 +262,71 @@
             <h1 class="modal-title fs-5" id="add_new_ci">Add New CI</h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-          <form t-att-action="'/add/ci/%s' % slug(department_id)" id="ptse-form" class="hardship" method="post" enctype="multipart/form-data">
           <div class="modal-body">
+            <form t-att-action="'/add/ci/%s' % (department_id.id)"  method="post" enctype="multipart/form-data">
             <div class="row g-3">
               <div class="col-md-6">
-                <!-- 
-
-
-
-
-
-
-
-
-
-
-
- -->
                 <label for="first_name" class="form-label">First Name</label>
                 <input type="text" class="form-control" id="first_name" name="first_name" required="required"/>
               </div>
               <div class="col-md-6">
                 <label for="last_name" class="form-label">Last Name</label>
-                <input type="text" class="form-control" id="last_name" required="required"/>
+                <input type="text" class="form-control" id="last_name" name="last_name" required="required"/>
               </div>
               <div class="col-md-6">
                 <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" required="required"/>
+                <input type="email" class="form-control" id="email" name="email" required="required"/>
               </div>
               <div class="col-md-6">
                 <label for="entry_level_pt_degree_earned" class="form-label">Entry Level PT Degree Earned</label>
-                <input type="text" class="form-control" id="entry_level_pt_degree_earned"/>
+                <input type="text" class="form-control" id="entry_level_pt_degree_earned" name="entry_level_pt_degree_earned" required="required"/>
               </div>
               <div class="col-md-6">
                 <label for="highest_degree_earned" class="form-label">Highest Degree Earned</label>
-                <input type="text" class="form-control" id="highest_degree_earned"/>
+                <input type="text" class="form-control" id="highest_degree_earned" name="highest_degree_earned" required="required"/>
               </div>
               <div class="col-md-6">
                 <label for="degree_area" class="form-label">Degree Area</label>
-                <input type="text" class="form-control" id="degree_area"/>
+                <input type="text" class="form-control" id="degree_area" name="degree_area" required="required"/>
               </div>
               <div class="col-md-6">
                 <label for="years_experience_ci" class="form-label">Years Experience CI</label>
-                <input type="text" class="form-control" id="years_experience_ci"/>
+                <input type="text" class="form-control" id="years_experience_ci" name="years_experience_ci" required="required"/>
               </div>
               <div class="col-md-6">
                 <label for="years_experience_clinician" class="form-label">Years Experience Clinician</label>
-                <input type="text" class="form-control" id="years_experience_clinician"/>
+                <input type="text" class="form-control" id="years_experience_clinician" name="years_experience_clinician" required="required"/>
               </div>
               <div class="col-md-6">
                 <label for="areas_expertise" class="form-label">Areas Expertise</label>
-                <input type="text" class="form-control" id="areas_expertise" required="required"/>
+                <input type="text" class="form-control" id="areas_expertise" name="areas_expertise" required="required"/>
               </div>
               <div class="col-md-6">
                 <label for="clinical_certification" class="form-label">Clinical Certification</label>
-                <input type="text" class="form-control" id="clinical_certification"/>
+                <input type="text" class="form-control" id="clinical_certification" name="clinical_certification" required="required"/>
               </div>
               <div class="col-md-6">
                 <label for="specify_area" class="form-label">Specify Area</label>
-                <input type="text" class="form-control" id="specify_area"/>
+                <input type="text" class="form-control" id="specify_area" name="specify_area" required="required"/>
               </div>
               <div class="col-md-6">
                 <label for="apta_credentialed_ci" class="form-label">Apta Credentialed CI</label>
-                <input type="text" class="form-control" id="apta_credentialed_ci"/>
+                <input type="text" class="form-control" id="apta_credentialed_ci" name="apta_credentialed_ci" required="required"/>
               </div>
               <div class="col-md-6">
                 <label for="other_ci_credential" class="form-label">Other CI Credential</label>
-                <input type="text" class="form-control" id="other_ci_credential"/>
+                <input type="text" class="form-control" id="other_ci_credential" name="other_ci_credential" required="required"/>
               </div>
               <div class="col-md-6">
                 <label for="professional_organization_membership" class="form-label">Professional Organization Membership</label>
-                <input type="text" class="form-control" id="professional_organization_membership"/>
+                <input type="text" class="form-control" id="professional_organization_membership" name="professional_organization_membership" required="required"/>
               </div>
             </div>
+            <div class="modal-footer">
+              <button class="btn btn-primary" type="submit">Submit</button>
+            </div>
+          </form>
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button class="btn btn-primary" type="submit">Save</button>
-          </div>
-        </form>
         </div>
       </div>
     </div>
