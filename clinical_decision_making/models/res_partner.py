@@ -247,7 +247,7 @@ class ResPartner(models.Model):
             return
 
         if not self.env.context.get('pass_validation', False) or not self.is_with_hardship:
-            normal_number_zipcodes = self.env.company.max_hardship_zipcodes or 5
+            normal_number_zipcodes = self.env.company.normal_number_zipcodes or 5
             print(normal_number_zipcodes)
             if len(self.geographical_ids) < normal_number_zipcodes or len(self.geographical_ids) > normal_number_zipcodes:
                     raise ValidationError(_('Count of zip codes shuld be %s' % normal_number_zipcodes))
