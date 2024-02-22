@@ -14,6 +14,27 @@ class AttachmentType(models.Model):
     portal_id = fields.Char("ID")
     description = fields.Text("Description")
     is_required = fields.Boolean(string="Is Required")
+    
+    
+    @api.model
+    def create(self, values):
+        # Add code here
+        res = super(AttachmentType, self).create(values)
+        res.create_student_scce_attachment()
+        return res
+
+    def create_student_attachment(self):
+        student_ids = self.env["res.partner"].search(
+            [("is_student", "=", True), ("company_id", "=", self.company_id.id)])
+        for rec in student_ids:
+            rec.write({
+                "medical_attachment_ids": [(0, 0,
+                                                 {
+                                                     "company_id": self.company_id.id,
+                                                     "attachment_type": self.id
+
+                                                 })]
+            })
 class ScceAttachmentType(models.Model):
     _name = "scce.attachment.type"
     _description = "Site Attachment Type"
@@ -25,7 +46,27 @@ class ScceAttachmentType(models.Model):
     description = fields.Text("Description")
     is_required = fields.Boolean(string="Is Required")
     scce_id = fields.Many2one(comodel_name='res.partner', string='SCCE', domain=[('is_scce', '=', True)], tracking=True, required=True, check_company=True)
+ 
+ 
+    @api.model
+    def create(self, values):
+        # Add code here
+        res = super(ScceAttachmentType, self).create(values)
+        res.create_student_scce_attachment()
+        return res
 
+    def create_student_scce_attachment(self):
+        student_ids = self.env["res.partner"].search(
+            [("is_student", "=", True), ("company_id", "=", self.company_id.id)])
+        for rec in student_ids:
+            rec.write({
+                "scce_medical_attachment_ids": [(0, 0,
+                                                 {
+                                                     "company_id": self.company_id.id,
+                                                     "scce_attachment_type": self.id
+
+                                                 })]
+            })
 class Attachment(models.Model):
     _name = "attachments"
     _rec_name = "attachment_type"
