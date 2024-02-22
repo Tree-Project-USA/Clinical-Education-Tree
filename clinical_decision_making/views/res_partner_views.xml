@@ -185,7 +185,7 @@
                         </field>
                         </page>
 
-                        <page name='medical_attachment_ids' string="Required Document">
+                        <page name='medical_attachment_ids' string="Program Required Document">
                             <field name="medical_attachment_ids" string="Attach a file" mode="tree" context="{'create': False}">
                                 <tree editable="bottom" delete="false" create="false">
                                     <field name="company_id" string="University" groups="base.group_multi_company" />
@@ -201,7 +201,7 @@
                                 </tree>
                             </field>
                         </page>
-                        <page name='scce_medical_attachment_ids' string="SCCE Document">
+                        <page name='scce_medical_attachment_ids' string="Site Required Document">
                             <field name="scce_medical_attachment_ids" string="Attach a file" mode="tree" context="{'create': False}">
                                 <tree editable="bottom" delete="false" create="false">
                                     <field name="company_id" string="University" groups="base.group_multi_company"/>
