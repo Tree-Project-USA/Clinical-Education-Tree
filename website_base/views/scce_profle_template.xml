@@ -182,6 +182,8 @@
                                   method="post"
                                   enctype="multipart/form-data"
                                 >
+                                <input type="hidden" name="csrf_token"
+                                t-att-value="request.csrf_token()" />
                                   <div class="row mt-4">
                                     <div class="col-lg-4">
                                       <div class="form-group row">
@@ -456,10 +458,12 @@
                                   </div>
                                   <div class="modal-body">
                                     <form
-                                      action="/save/changes/ci_information/scce"
+                                      action="/update/ci/information"
                                       method="post"
                                       enctype="multipart/form-data"
                                     >
+                                    <input type="hidden" name="csrf_token"
+                                    t-att-value="request.csrf_token()" />
                                     <input type="hidden" id="scce_ids" name="scce_ids"
                                         t-att-value="val.id" />
                                     <div class="row mt-4">

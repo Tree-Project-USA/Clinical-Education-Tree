@@ -658,20 +658,22 @@
                               </div>
                               <div t-if="not val.expiration_date">
                                 <input type="date" 
-                                        class="form-control updated" 
+                                        class="form-control" 
                                         name="expiration_date" 
                                         id="expiration_date"
+                                        required="required"
                                         t-att-value="val.expiration_date"
                                     />
                               </div>
                             </td>
                             <td>
-                                <div t-if="not val.attachment_ids">
+                                <div id= "dropContainer" t-if="not val.attachment_ids">
+                                  <!-- <input type="file" id="fileInput" /> -->
                                   <div id="dropArea" style="
                                     text-align: center;
                                   " class="input-group custom-file-button">
                                     <label class="input-group-text" for="fileInput">Drag and Drop</label>
-                                    <input class="form-control" type="file" id="fileInput" />
+                                    <input class="form-control" name="datas" type="file" id="fileInput" accept=".jpg, .jpeg, .png, .pdf, .docx, .xls, .pptx" required="required"/>
                                   </div>
                                 </div>
                                 <div t-if="val.attachment_ids">
@@ -689,7 +691,7 @@
                                 </div>
                             </td>
                             <td>
-                              <button class="btn btn-primary" t-if="val.state in ['under_review'] or not val.state">submit</button>
+                              <button class="btn btn-primary" t-if="not val.state">submit</button>
                               <span t-if="val.state == 'under_review'" class="badge bg-dark" t-esc="dict(val._fields['state'].selection).get(val.state)"/>
                               <span t-if="val.state == 'confirmed'" class="badge bg-success" t-esc="dict(val._fields['state'].selection).get(val.state)"/>
                               <span t-if="val.state == 'required_update'" class="badge bg-warning" t-esc="dict(val._fields['state'].selection).get(val.state)"/>
@@ -736,9 +738,10 @@
                               </div>
                               <div t-if="not val.expiration_date">
                                 <input type="date" 
-                                        class="form-control updated" 
+                                        class="form-control" 
                                         name="expiration_date" 
                                         id="expiration_date"
+                                        required="required"
                                         t-att-value="val.expiration_date"
                                     />
                               </div>
@@ -749,7 +752,7 @@
                                     text-align: center;
                                   " class="input-group custom-file-button">
                                     <label class="input-group-text" for="fileInput2">Drag and Drop</label>
-                                    <input class="form-control" type="file" id="fileInput2" />
+                                    <input class="form-control" name="datas" type="file" id="fileInput2" required="required"/>
                                   </div>
                                 </div>
                                 <div t-if="val.attachment_ids">
@@ -767,7 +770,7 @@
                                 </div>
                             </td>
                             <td>
-                              <button class="btn btn-primary" t-if="val.state in ['under_review'] or not val.state">submit</button>
+                              <button class="btn btn-primary" t-if="not val.state">submit</button>
                               <span t-if="val.state == 'under_review'" class="badge bg-dark" t-esc="dict(val._fields['state'].selection).get(val.state)"/>
                               <span t-if="val.state == 'confirmed'" class="badge bg-success" t-esc="dict(val._fields['state'].selection).get(val.state)"/>
                               <span t-if="val.state == 'required_update'" class="badge bg-warning" t-esc="dict(val._fields['state'].selection).get(val.state)"/>
