@@ -20,7 +20,7 @@ class AttachmentType(models.Model):
     def create(self, values):
         # Add code here
         res = super(AttachmentType, self).create(values)
-        res.create_student_scce_attachment()
+        res.create_student_attachment()
         return res
 
     def create_student_attachment(self):
