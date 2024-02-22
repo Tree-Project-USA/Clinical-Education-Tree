@@ -8,8 +8,8 @@
                 <tree editable="bottom" decoration-muted="(not active)">
                     <field name="name"/>
                     <field name="num_terms"/>
-                    <field name="company_id" string="University" readonly="1"/>
-                    <button name="action_open_program_experience_term" type="object" title="Open Program terms" string="Show Clinical Experience"/>
+                    <field name="company_id" string="University" groups="base.group_multi_company"/>
+                    <button name="action_open_program_experience_term" type="object" title="Open Program terms" string="Enter Clinical Experience"/>
                     <field name="active" widget="boolean_toggle"/>
                 </tree>
             </field>
@@ -22,11 +22,11 @@
             <field name="arch" type="xml">
                 <form string="">
                     <sheet>
-                        <field name="company_id" string="University" readonly="1"/>
+                        <field name="company_id" string="University" groups="base.group_multi_company"/>
                         <field name="program_experience_term_ids">
                             <tree editable="bottom" create="false" delete="false">
                                 <field name="program_id" invisible="1"/>
-                                <field name="company_id" string="University" readonly="1"/>
+                                <field name="company_id" string="University" groups="base.group_multi_company"/>
                                 <field name="experience_id" readonly="1"/>
                                 <field name="term" required="1"/>
                                 <field name="start_date" required="1"/>

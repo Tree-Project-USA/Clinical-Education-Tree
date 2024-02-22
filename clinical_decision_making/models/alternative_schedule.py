@@ -12,7 +12,7 @@ class AlternativeSchedule(models.Model):
     _name = 'alternative.schedule'
     _description = "Student Alternative Schedule"
 
-    student_id = fields.Many2one(comodel_name='res.partner', string='Student', ondelete='cascade', check_company=True)
+    student_id = fields.Many2one(comodel_name='res.partner', string='Student', ondelete='cascade')
     term = fields.Selection([
         ('fall', 'Fall'),
         ('spring', 'Spring'),

@@ -13,18 +13,18 @@ class Archive(models.Model):
     _rec_name = 'department_id'
         
     active = fields.Boolean(string='Active', default=True)
-    student_id = fields.Many2one(comodel_name='res.partner', string='Student Name', tracking=True, check_company=True)
+    student_id = fields.Many2one(comodel_name='res.partner', string='Student Name', tracking=True)
     first_name = fields.Char(related='student_id.first_name')
     last_name = fields.Char(related='student_id.last_name')
     facility_id = fields.Many2one('medical.facility', string='Clinical Site', related='department_id.facility_id', readonly=True)
-    offer_id = fields.Many2one(comodel_name='placement.offer', string="Offer", check_company=True)
-    request_id = fields.Many2one(comodel_name='placement.request', string="Placement Request", check_company=True)
+    offer_id = fields.Many2one(comodel_name='placement.offer', string="Offer")
+    request_id = fields.Many2one(comodel_name='placement.request', string="Placement Request")
     geographical_id = fields.Many2one(comodel_name='geographical', string='Clinical Site Zip Code', tracking=True)
     city = fields.Char(related='geographical_id.city')
     state = fields.Char(related='geographical_id.state')
     zip_code = fields.Char(related='geographical_id.zip_code')
-    experience_id = fields.Many2one(comodel_name='clinical.experience', string='Clinical Experience', required=True, tracking=True, check_company=True)
-    company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.user.company_id)
+    experience_id = fields.Many2one(comodel_name='clinical.experience', string='Clinical Experience', required=True, tracking=True)
+    company_id = fields.Many2one('res.company', string='University', default=lambda self: self.env.user.company_id)
     setting = fields.Selection([
         ('op', 'OP'),
         ('ip', 'IP'),
@@ -60,7 +60,7 @@ class Archive(models.Model):
         ('approve', 'Approved'),
         ('decline', 'Declined'),
     ], string='Match State', tracking=True)
-    archive_offer_id = fields.Many2one('archive.offer', string='Archive Offer', domain="[('student_id', '=', False), ('term', '=', term)]", check_company=True)
+    archive_offer_id = fields.Many2one('archive.offer', string='Archive Offer', domain="[('student_id', '=', False), ('term', '=', term)]")
     is_show_student = fields.Boolean("Show to Student")
 
     is_declined = fields.Boolean("Is Declined", tracking=True)
@@ -183,7 +183,7 @@ class Archive(models.Model):
         
             
     def action_view_student(self):
-        action = self.env.ref('clinical_decision_making.student_action').read()[0]
+        action = self.env.ref('clinical_decision_making.student_action').sudo().read()[0]
         action['domain'] = [('id', 'in', self.student_id.ids)]
         action.update({
             'view_mode': 'form',

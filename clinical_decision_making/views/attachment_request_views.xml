@@ -10,7 +10,7 @@
                 <field name="student_id"/>
                 <field name="create_date"/>
                 <field name="state" widget="badge" decoration-muted="state == 'draft'"  decoration-danger="state == 'cancel'" decoration-success="state == 'confirmed'"/>
-                <field name="company_id" invisible="1"/>
+                <field name="company_id" groups="base.group_multi_company"/>
             </tree>
         </field>
     </record>
@@ -35,13 +35,13 @@
                     <widget name="web_ribbon" title="Approved" bg_color="bg-success" attrs="{'invisible': [('state', '!=', 'confirmed')]}"/>
                     <group>
                         <field name="student_id" attrs="{'readonly': [('state', 'in', ('confirmed', 'cancel'))]}"/>
-                        <field name="company_id" invisible="1"/>
+                        <field name="company_id" groups="base.group_multi_company"/>
                     </group>
                 <notebook>
                     <page string="Attachment" name="medical_attachment_ids">
                     <field name="medical_attachment_ids" string="Attach a file" mode="tree">
                         <tree editable="bottom" delete="false">
-                            <field name="company_id" string="University" readonly="1"/>
+                            <field name="company_id" string="University" groups="base.group_multi_company"/>
                             <field name="attachment_type"/>
                             <field name="expiration_date"/>
                             <field name="attachment_ids" widget="many2many_attachment_preview"/>

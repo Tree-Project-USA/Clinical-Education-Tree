@@ -25,7 +25,7 @@ class FacilityContractHistory(models.Model):
         ('close', 'Expired'),
         ('cancel', 'Cancelled')
     ], string='Status', readonly=True)
-    company_id = fields.Many2one('res.company', string='Company', readonly=True)
+    company_id = fields.Many2one('res.company', string='University', readonly=True)
     company_country_id = fields.Many2one('res.country', string="Company country", related='company_id.country_id', readonly=True)
     country_code = fields.Char(related='company_country_id.code', depends=['company_country_id'], readonly=True)
     contract_ids = fields.One2many('facility.contract', string='Contracts', compute='_compute_contract_ids', readonly=True, compute_sudo=True)

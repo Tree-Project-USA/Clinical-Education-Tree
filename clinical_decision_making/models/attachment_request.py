@@ -12,8 +12,8 @@ class AttachmentRequest(models.Model):
     _description = _('Attachment Request')
     _rec_name = 'student_id'
 
-    student_id = fields.Many2one(comodel_name='res.partner', string='Student Name', domain=[('is_student', '=', True)], tracking=True, required=True, check_company=True)
-    medical_attachment_ids = fields.One2many(comodel_name='attachments', inverse_name='request_id', string='Medical Document', check_company=True)
+    student_id = fields.Many2one(comodel_name='res.partner', string='Student Name', domain=[('is_student', '=', True)], tracking=True, required=True)
+    medical_attachment_ids = fields.One2many(comodel_name='attachments', inverse_name='request_id', string='Medical Document')
     note = fields.Text('Internal Notes', tracking=True)
     state = fields.Selection(
         selection=[
@@ -30,7 +30,7 @@ class AttachmentRequest(models.Model):
         default='under_review',
     )
     company_id = fields.Many2one(
-        'res.company', string='Company', default=lambda self: self.env.user.company_id)
+        'res.company', string='University', default=lambda self: self.env.user.company_id)
     
     def confirm_attachment(self):
         self.write({
@@ -69,8 +69,8 @@ class ScceAttachmentRequest(models.Model):
     _description = _('SCCE Attachment Request')
     _rec_name = 'student_id'
 
-    student_id = fields.Many2one(comodel_name='res.partner', string='Student Name', domain=[('is_student', '=', True)], tracking=True, required=True, check_company=True)
-    scce_medical_attachment_ids = fields.One2many(comodel_name='scce.attachments', inverse_name='request_id', string='Medical Document', check_company=True)
+    student_id = fields.Many2one(comodel_name='res.partner', string='Student Name', domain=[('is_student', '=', True)], tracking=True, required=True)
+    scce_medical_attachment_ids = fields.One2many(comodel_name='scce.attachments', inverse_name='request_id', string='Medical Document')
     note = fields.Text('Internal Notes', tracking=True)
     state = fields.Selection(
         selection=[
@@ -87,7 +87,7 @@ class ScceAttachmentRequest(models.Model):
         default='under_review',
     )
     company_id = fields.Many2one(
-        'res.company', string='Company', default=lambda self: self.env.user.company_id)
+        'res.company', string='University', default=lambda self: self.env.user.company_id)
     
     def confirm_attachment(self):
         self.write({

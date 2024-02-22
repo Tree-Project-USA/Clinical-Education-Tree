@@ -13,7 +13,7 @@ class ResPartner(models.Model):
     _inherit = 'res.partner'
     
     is_student = fields.Boolean(string='Is Student', default=False)
-    company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.user.company_id, required=True)
+    company_id = fields.Many2one('res.company', string='University', default=lambda self: self.env.user.company_id, required=True)
     name = fields.Char(string='Name', compute='_compute_name', store=True, default='')
     first_name = fields.Char(string='First Name', required=True)
     last_name = fields.Char(string='Last Name', required=True )
@@ -29,7 +29,7 @@ class ResPartner(models.Model):
     is_reach_maximum_zip_code = fields.Boolean(string='Reach Maximum Zip Code', default=False)
     deny_show_student = fields.Boolean()
     geographical_ids = fields.Many2many(comodel_name='geographical', string='Geographical')
-    program_id = fields.Many2one(comodel_name='program', string='Program Duration', domain="[('company_id', '=', company_id)]")
+    program_id = fields.Many2one(comodel_name='program', string='Program Duration')
     program_type = fields.Char(string='Program Type', default='DPT')
     start_term_type = fields.Selection([
         ('fall', 'Fall'),
@@ -247,7 +247,7 @@ class ResPartner(models.Model):
             return
 
         if not self.env.context.get('pass_validation', False) or not self.is_with_hardship:
-            normal_number_zipcodes = self.env.company.max_hardship_zipcodes or 5
+            normal_number_zipcodes = self.env.company.normal_number_zipcodes or 5
             print(normal_number_zipcodes)
             if len(self.geographical_ids) < normal_number_zipcodes or len(self.geographical_ids) > normal_number_zipcodes:
                     raise ValidationError(_('Count of zip codes shuld be %s' % normal_number_zipcodes))
@@ -402,7 +402,7 @@ class ResPartner(models.Model):
     # Smart Button Action Methods
     #------------------------------------------------------------------------------   
     def action_view_alternative_schedule(self):
-        action = self.env.ref('clinical_decision_making.action_alternative_schedule').read()[0]
+        action = self.env.ref('clinical_decision_making.action_alternative_schedule').sudo().read()[0]
         action['domain'] = [('id', 'in', self.alternative_schedule_ids.ids)]
         action['context'] = {'create': False, 'delete': False, 'edit': False}
         return action

@@ -13,7 +13,7 @@ class MedicalFacility(models.Model):
     company_id = fields.Many2one('res.company', string='University', default=lambda self: self.env.user.company_id)
     active = fields.Boolean(string='Active', compute='_compute_active')              
     name = fields.Char(string='Clinical Site Name', required=True)
-    offer_id = fields.One2many('placement.offer', 'facility_id',string='Placement Offers', domain="[('company_id', '=', company_id)]")
+    offer_id = fields.One2many('placement.offer', 'facility_id',string='Placement Offers')
     address = fields.Char(string='Address')
     email = fields.Char(related='scce_primary_id.email')
     geographical_id = fields.Many2one(comodel_name='geographical', string='Zip Code')
@@ -29,20 +29,20 @@ class MedicalFacility(models.Model):
     contract_warning = fields.Boolean(string='Contract Warning', store=True, compute='_compute_contract_warning')
     first_contract_date = fields.Date(compute='_compute_first_contract_date', store=True)
     contracts_count = fields.Integer(compute='_compute_contracts_count', string='Contract Count', tracking=True)
-    scce_ids = fields.One2many(comodel_name='scce.facility', inverse_name='facility_id', string='Clinical Site SCCE', tracking=True, domain="[('company_id', '=', company_id)]")
+    scce_ids = fields.One2many(comodel_name='scce.facility', inverse_name='facility_id', string='Clinical Site SCCE', tracking=True)
     scce_primary_id = fields.Many2one(comodel_name='res.partner', string='Primary SCCE', domain=[('is_scce', '=', True)], tracking=True)
     scce_first_name = fields.Char(related='scce_primary_id.first_name')
     scce_last_name = fields.Char(related='scce_primary_id.last_name')
     offer_ids = fields.One2many(comodel_name='placement.offer', inverse_name='facility_id', string='Offers')
     archive_offer_count = fields.Integer(compute='_compute_archive_offer_count', string='Archive Offer Count')
     department_count = fields.Integer(compute='_compute_department_count', string='Department Count')
-    department_ids = fields.One2many(comodel_name='facility.department', inverse_name='facility_id', string='Clinical Site Department', domain="[('company_id', '=', company_id)]")
+    department_ids = fields.One2many(comodel_name='facility.department', inverse_name='facility_id', string='Clinical Site Department')
     setting_ids = fields.Many2many(comodel_name='preferred.setting', string='Setting', compute='_compute_setting_ids')    
-    main_department_id = fields.Many2one(comodel_name='facility.department', string='Main Department', domain="[('company_id', '=', company_id)]")
-    is_single_facility = fields.Boolean(string='Single Clinical Site', default=True, domain="[('company_id', '=', company_id)]")
-    archive_ids = fields.One2many(comodel_name='archive', inverse_name='facility_id', string='Placement History', domain="[('company_id', '=', company_id)]")
+    main_department_id = fields.Many2one(comodel_name='facility.department', string='Main Department')
+    is_single_facility = fields.Boolean(string='Single Clinical Site', default=True)
+    archive_ids = fields.One2many(comodel_name='archive', inverse_name='facility_id', string='Placement History')
     archive_count = fields.Integer(compute='_compute_archive_count', string='Placement History Count')
-    ci_ids = fields.Many2many(comodel_name='res.partner', string='CI',domain=[('is_ci', '=', True)], check_company=True)
+    ci_ids = fields.Many2many(comodel_name='res.partner', string='CI',domain=[('is_ci', '=', True)])
     comment = fields.Html(string='Notes')
     
     def facility_multi_department(self):
@@ -76,7 +76,8 @@ class MedicalFacility(models.Model):
     @api.depends('department_ids', 'department_ids.setting_ids')
     def _compute_setting_ids(self):
         for rec in self:
-            rec.setting_ids = rec.department_ids.mapped('setting_ids')
+            # rec.setting_ids = rec.department_ids.mapped('setting_ids')
+            rec.setting_ids = False
         
     @api.depends('contract_id', 'contract_id.state')
     def _compute_contract_warning(self):
@@ -174,7 +175,7 @@ class MedicalFacility(models.Model):
     
     def action_view_placement_history(self):
         self.ensure_one()
-        action = self.env.ref('clinical_decision_making.archive_action').read()[0]
+        action = self.env.ref('clinical_decision_making.archive_action').sudo().read()[0]
         action['view_mode'] = 'tree'
         action['views'] = [(self.env.ref('clinical_decision_making.archive_view_tree').id, 'tree')]
         action['view_id'] = self.env.ref('clinical_decision_making.archive_view_tree').id
@@ -272,7 +273,7 @@ class SCCEFacility(models.Model):
     last_name = fields.Char(related='scce_id.last_name')
     email = fields.Char(related='scce_id.email')
     phone = fields.Char(related='scce_id.phone')
-    company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.user.company_id)
+    company_id = fields.Many2one('res.company', string='University', default=lambda self: self.env.user.company_id)
     is_primary_scce = fields.Boolean(string='Is Primary SCCE', store=True,)
     is_secondary_scce = fields.Boolean(string='Is Secondary SCCE')
     complete_name = fields.Char('Complete Name', compute='_compute_complete_name', recursive=True, store=True)

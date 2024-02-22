@@ -52,7 +52,7 @@
                     <group>
                         <group>
                             <field name="facility_id" required="1"/>
-                            <field name="company_id" string="University" readonly="1"/>
+                            <field name="company_id" string="University" groups="base.group_multi_company"/>
                             <field name="street" attrs="{'readonly': [('is_main_department', '=', True)]}"/>
                             <field name="geographical_id" required="1" attrs="{'readonly': [('is_main_department', '=', True)]}"/>
                         </group>
@@ -80,7 +80,7 @@
                                 <tree>
                                     <field name="student_id"/>
                                     <field name="facility_id"/>
-                                    <field name="company_id" string="University" readonly="1"/>
+                                    <field name="company_id" string="University" groups="base.group_multi_company"/>
                                     <field name="experience_id"/>
                                     <field name="setting"/>
                                     <field name="placement_term"/>

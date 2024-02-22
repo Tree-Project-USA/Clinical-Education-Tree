@@ -86,7 +86,7 @@
                             <field name="is_with_hardship" invisible="1"/>
                             <field name="campus" readonly="1"/>
                             <field name="program_id"/>
-                            <field name="company_id" string="University" readonly="1"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
                             <field name="program_type" readonly="1"/>
                             <field name="start_year"/>
                             <field name="start_term_type"/>
@@ -128,7 +128,7 @@
                                     <field name="student_id" invisible="1"/>
                                     <field name="term" invisible="1"/>
                                     <field name="archive_offer_id" invisible="1"/>
-                                    <field name="company_id" string="University" readonly="1"/>
+                                    <field name="company_id" string="University" groups="base.group_multi_company"/>
                                     <field name="is_declined" invisible="1"/>
                                     <field name="facility_id" readonly="1"/>
                                     <field name="department_id" required="1" attrs="{'readonly': [('is_declined', '=', True)]}"/>
@@ -188,7 +188,7 @@
                         <page name='medical_attachment_ids' string="Required Document">
                             <field name="medical_attachment_ids" string="Attach a file" mode="tree" context="{'create': False}">
                                 <tree editable="bottom" delete="false" create="false">
-                                    <field name="company_id" string="university" readonly="1" />
+                                    <field name="company_id" string="University" groups="base.group_multi_company" />
                                     <field name="attachment_type" readonly="1" force_save="1"/>
                                     <field name="expiration_date" />
                                     <field name="attachment_ids" widget="many2many_attachment_preview" />
@@ -204,7 +204,7 @@
                         <page name='scce_medical_attachment_ids' string="SCCE Document">
                             <field name="scce_medical_attachment_ids" string="Attach a file" mode="tree" context="{'create': False}">
                                 <tree editable="bottom" delete="false" create="false">
-                                    <field name="company_id" string="university" readonly="1"/>
+                                    <field name="company_id" string="University" groups="base.group_multi_company"/>
                                     <field name="scce_attachment_type" readonly="1" force_save="1"/>
                                     <field name="expiration_date"/>
                                     <field name="attachment_ids" widget="many2many_attachment_preview"/>

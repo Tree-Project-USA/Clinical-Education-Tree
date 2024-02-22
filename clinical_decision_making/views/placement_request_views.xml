@@ -6,7 +6,7 @@
         <field name="arch" type="xml">
             <tree string="Placement Requests">
                 <field name="name"/>
-                <field name="company_id" string="University" readonly="1"/>
+                <field name="company_id" string="University" groups="base.group_multi_company"/>
                 <field name="experience_id"/>
                 <field name="placement_term"/>
                 <field name="year"/>
@@ -50,7 +50,7 @@
                     </div>
                     <group>
                         <group>
-                            <field name="company_id" string="Program" readonly="1"/>
+                            <field name="company_id" string="University" groups="base.group_multi_company"/>
                             <field name="experience_id"/>
                             <field name="placement_term"/>
                             <field name="year"/>

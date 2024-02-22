@@ -47,9 +47,9 @@ class ClinicalExperienceSchedual(models.Model):
     _order = "sequence"
 
     name = fields.Char(string='Term', compute='_compute_term_name', store=True,)
-    experience_id = fields.Many2one(comodel_name='clinical.experience', string='Clinical Experience', domain="[('company_id', '=', company_id)]", check_company=True)
+    experience_id = fields.Many2one(comodel_name='clinical.experience', string='Clinical Experience')
     sequence = fields.Integer(related='experience_id.sequence', store=True)
-    student_id = fields.Many2one(comodel_name='res.partner', string='Student', check_company=True)
+    student_id = fields.Many2one(comodel_name='res.partner', string='Student')
     company_id = fields.Many2one('res.company', related='student_id.company_id')
     state = fields.Selection([
             ('not_taked', 'Not Taked'),

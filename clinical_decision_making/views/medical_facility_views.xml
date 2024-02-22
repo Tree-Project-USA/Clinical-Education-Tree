@@ -95,7 +95,7 @@
                     <group>
                         <label for="name" string="Clinical Site Name"/>
                         <field name="name"/>
-                        <field name="company_id" string="University" readonly="1"/>
+                        <field name="company_id" string="University" groups="base.group_multi_company"/>
                         <group>
                             <field name="email" string="SCCE Email Address"/>
                             <field name="address" string="Clinical Site Address"/>
@@ -116,7 +116,7 @@
                             <field name="department_ids">
                                 <tree editable="bottom" decoration-primary="is_main_department==True">
                                     <field name="is_main_department" invisible="1"/>
-                                    <field name="company_id" string="University" readonly="1"/>
+                                    <field name="company_id" string="University" groups="base.group_multi_company"/>
                                     <field name="facility_id" invisible="1"/>
                                     <field name="name" required="1"/>
                                     <field name="scce_ids" domain="[('id', 'in', parent.scce_ids)]" widget="many2many_tags"/>
@@ -156,7 +156,7 @@
                                 <tree>
                                     <field name="department_id"/>
                                     <field name="student_id"/>
-                                    <field name="company_id" string="University" readonly="1"/>
+                                    <field name="company_id" string="University" groups="base.group_multi_company"/>
                                     <field name="experience_id"/>
                                     <field name="setting"/>
                                     <field name="placement_term"/>
