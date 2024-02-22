@@ -281,7 +281,7 @@ class PlacementRequest(models.Model):
             if ip_offers:
                 if not student_id.is_take_ip and ip_offers:
                     hardship_department_id, geographical_id = student_id.get_nearest_facility(ip_offers.mapped('department_id'))
-                    offer_id = hardship_department_id.offer_ids.mapped('archive_offer_ids').filtered(lambda archive_offer_id: archive_offer_id.is_linked == False  and archive_offer_id.setting == 'ip')[0]
+                    offer_id = hardship_department_id.archive_offer_ids.filtered(lambda archive_offer_id: archive_offer_id.is_linked == False and archive_offer_id.setting == 'ip')[0]
                     archive_offer_id = offer_id
                     archive_offer_department_id = offer_id.department_id
             
