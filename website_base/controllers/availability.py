@@ -108,7 +108,7 @@ class SubmitAvailability(http.Controller):
             "active": True,
         })
         return request.redirect_query(
-                            "/facility/scce/placement/offer/%s" % facility_id)
+                            "/facility/placement/offer/%s" % facility_id)
         
     @http.route('/declin/eassigned/student/<int:id>', website=True, type='http', auth="user")
     def declin_assigned_student(self, id=None, **kw):
@@ -124,7 +124,7 @@ class SubmitAvailability(http.Controller):
         archive_id.archive_offer_id.write({
             "active": True,
         })
-        return request.redirect_query("/facility/scce/placement/offer/%s" % facility_id)
+        return request.redirect_query("/facility/placement/offer/%s" % facility_id)
         
     @http.route('/cancel/eassigned/student/<int:id>', website=True, type='http', auth="user")
     def cancel_assigned_student(self, id=None, **kw):
@@ -140,7 +140,7 @@ class SubmitAvailability(http.Controller):
         archive_id.archive_offer_id.write({
             "active": False,
         })
-        return request.redirect_query("/facility/scce/placement/offer/%s" % facility_id)
+        return request.redirect_query("/facility/placement/offer/%s" % facility_id)
         
     @http.route('/replay/student/<int:id>', website=True, type='http', auth="user")
     def reaplay_assigned_student(self, id=None, **kw):
@@ -153,17 +153,17 @@ class SubmitAvailability(http.Controller):
                 "active": True,
                 "placement_status": "pending",
             })
-            return request.redirect_query("/facility/scce/placement/offer/%s" % facility_id)
+            return request.redirect_query("/facility/placement/offer/%s" % facility_id)
         elif not archive_id.archive_offer_id.student_id:
             archive_id.sudo().write({
                 "active": True,
                 "placement_status": "pending",
             })
-            return request.redirect_query("/facility/scce/placement/offer/%s" % facility_id)
+            return request.redirect_query("/facility/placement/offer/%s" % facility_id)
         else:
             # TODO: Add code here when avalible other offer student
             error = _("This placement offer has been taken by other student")
-            return request.redirect_query("/facility/scce/placement/offer/%s" % facility_id, {"error": error})
+            return request.redirect_query("/facility/placement/offer/%s" % facility_id, {"error": error})
     
     @http.route('/departments', website=True, type='json', auth="user", csrf=False)
     def departments(self, id=None, **kw):

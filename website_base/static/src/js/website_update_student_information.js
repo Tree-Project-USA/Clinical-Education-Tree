@@ -45,19 +45,21 @@ odoo.define("website_base.website_update_student_information", function(require)
             var personal_phone = $("#personal_phone").val()
             var personal_email_address = $("#personal_email_address").val()
             let popupConfirm = $(".popup-card-confirm")[0]
-            ajax.jsonRpc("/save/changes/information", 'call', {
-                'home_address': home_address,
-                'phone': phone,
-                'personal_phone': personal_phone,
-                'personal_email_address': personal_email_address,
-            }).then(function(data) {
+            if (home_address && phone && personal_phone && personal_email_address) {
+                ajax.jsonRpc("/save/changes/information", 'call', {
+                    'home_address': home_address,
+                    'phone': phone,
+                    'personal_phone': personal_phone,
+                    'personal_email_address': personal_email_address,
+                }).then(function(data) {
 
 
-            })
-            $(popupConfirm).css("transform", "translateX(0)");
-            setTimeout(function() {
-                $(popupConfirm).css("transform", "translateX(500px)");
-            }, 4000);
+                })
+                $(popupConfirm).css("transform", "translateX(0)");
+                setTimeout(function() {
+                    $(popupConfirm).css("transform", "translateX(500px)");
+                }, 4000);
+            }
         },
 
     })
