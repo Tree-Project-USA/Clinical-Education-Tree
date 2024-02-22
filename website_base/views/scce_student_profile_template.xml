@@ -649,7 +649,7 @@
                                             type="button"
                                             class="btn btn-outline-success my-2"
                                             role="button" 
-                                            t-attf-href="/confirm/attachment/scce/#{val.scce_attachment_type.id}"
+                                            t-attf-href="/confirm/attachment/scce/#{val.scce_attachment_type.id}/#{student_id.id}"
                                             >
                                             Confirm
                                           </a>
