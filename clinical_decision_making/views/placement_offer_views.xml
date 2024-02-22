@@ -49,7 +49,7 @@
                                 <h1 class="d-flex">
                                     <field name="priority" widget="priority" class="me-3"/>
                                     <field name="name" readonly="1"/>
-                                    <field name="company_id" string="University" readonly="1"/>
+                                    <field name="company_id" string="University" groups="base.group_multi_company"/>
                                     <br/>
                                 </h1>
                             </div>
@@ -73,7 +73,7 @@
                                             <field name="facility_id" invisible="1"/>
                                             <field name="department_ids" invisible="1"/>
                                             <field name="department_id" attrs="{'column_invisible':[('parent.is_single_facility', '=', True)], 'required':[('parent.is_single_facility', '=', False)]}"/>
-                                            <field name="company_id" string="University" readonly="1"/>
+                                            <field name="company_id" string="University" groups="base.group_multi_company"/>
                                             <field name="experience_id" required="1"/>
                                             <field name="placement_term" required="1"/>
                                             <field name="year" force_save="1" required="1"/> 
@@ -111,7 +111,7 @@
                     <field name="offer_line_id"/>
                     <field name="setting"/>
                     <field name="experience_id"/>
-                    <field name="company_id" string="University" readonly="1"/>
+                    <field name="company_id" string="University" groups="base.group_multi_company"/>
                     <field name="placement_term"/>
                     <field name="year"/>
                     <field name="term"/>

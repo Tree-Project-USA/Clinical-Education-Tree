@@ -16,9 +16,9 @@ class FacilityDepartment(models.Model):
     name = fields.Char(string='Name', required=True)
     complete_name = fields.Char('Complete Name', compute='_compute_complete_name', recursive=True, store=True)
     facility_id = fields.Many2one(comodel_name='medical.facility', string='Clinical Site', ondelete='cascade')
-    facility_scce_ids = fields.Many2many(comodel_name='scce.facility', string='Clinical Site SCCE', compute='_compute_facility_scce', check_company=True)
-    scce_ids = fields.Many2many(comodel_name='scce.facility', string='SCCE', domain="[('id', 'in', facility_scce_ids)]", check_company=True)
-    setting_ids = fields.Many2many(comodel_name='preferred.setting', string='Setting', check_company=True)
+    facility_scce_ids = fields.Many2many(comodel_name='scce.facility', string='Clinical Site SCCE', compute='_compute_facility_scce')
+    scce_ids = fields.Many2many(comodel_name='scce.facility', string='SCCE', domain="[('id', 'in', facility_scce_ids)]")
+    setting_ids = fields.Many2many(comodel_name='preferred.setting', string='Setting')
     street = fields.Char(string='Street')
     city = fields.Char(related='geographical_id.city')
     state = fields.Char(related='geographical_id.state')
@@ -34,10 +34,10 @@ class FacilityDepartment(models.Model):
         ],
         compute='_compute_active_state',
     )
-    archive_ids = fields.One2many(comodel_name='archive', inverse_name='department_id', string='Placement History', check_company=True)
+    archive_ids = fields.One2many(comodel_name='archive', inverse_name='department_id', string='Placement History')
     archive_count = fields.Integer(compute='_compute_count', string='Placement History Count')
-    company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.user.company_id)
-    archive_offer_ids = fields.One2many(comodel_name='archive.offer', inverse_name='department_id', string='Archive Offer', check_company=True)
+    company_id = fields.Many2one('res.company', string='University', default=lambda self: self.env.user.company_id)
+    archive_offer_ids = fields.One2many(comodel_name='archive.offer', inverse_name='department_id', string='Archive Offer')
 
     def _compute_count(self):
         for rec in self:
@@ -75,7 +75,7 @@ class FacilityDepartment(models.Model):
     #------------------------------------------------------------------------------
     def action_view_students(self):
         student_ids = self.env['archive'].search([('department_id', '=', self.id), ('placement_status', 'in', ['completed', 'confirmed'])]).mapped('student_id')
-        action = self.env.ref('clinical_decision_making.student_action').read()[0]
+        action = self.env.ref('clinical_decision_making.student_action').sudo().read()[0]
         action['domain'] = [('id', 'in', student_ids.ids)]
         action['context'] = {'create': False, 'delete': False, 'active_test': False}
         return action
@@ -93,7 +93,7 @@ class FacilityDepartment(models.Model):
     
     def action_view_facility_department(self):
         self.ensure_one()
-        action = self.env.ref('clinical_decision_making.action_facility_department').read()[0]
+        action = self.env.ref('clinical_decision_making.action_facility_department').sudo().read()[0]
         action['view_mode'] = 'form'
         action['res_id'] = self.id
         action['views'] = [(False, "form")]
@@ -103,7 +103,7 @@ class FacilityDepartment(models.Model):
     
     def action_view_placement_history(self):
         self.ensure_one()
-        action = self.env.ref('clinical_decision_making.archive_action').read()[0]
+        action = self.env.ref('clinical_decision_making.archive_action').sudo().read()[0]
         action['view_mode'] = 'tree'
         action['views'] = [(self.env.ref('clinical_decision_making.archive_view_tree').id, 'tree')]
         action['view_id'] = self.env.ref('clinical_decision_making.archive_view_tree').id

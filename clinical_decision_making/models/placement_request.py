@@ -15,12 +15,12 @@ class PlacementRequest(models.Model):
     _rec_name = 'name'
     
     name = fields.Char(string='Round #')
-    company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.user.company_id)
+    company_id = fields.Many2one('res.company', string='University', default=lambda self: self.env.user.company_id)
     student_ids = fields.Many2many(comodel_name='res.partner', string='Students')
     offer_ids = fields.Many2many(comodel_name='placement.offer', string='offers')
-    archive_offer_ids = fields.Many2many(comodel_name='archive.offer', string='archive offers', check_company=True)
+    archive_offer_ids = fields.Many2many(comodel_name='archive.offer', string='archive offers')
     facility_ids = fields.Many2many('medical.facility', string='Clinical Sites')
-    department_ids = fields.Many2many('facility.department', string='Department', check_company=True)    
+    department_ids = fields.Many2many('facility.department', string='Department')    
     student_count = fields.Integer(compute='_compute_count')
     offer_count = fields.Integer(compute='_compute_count')
     archive_offer_count = fields.Integer(compute='_compute_count')
@@ -42,8 +42,8 @@ class PlacementRequest(models.Model):
             request.archive_offer_count = len(request.archive_offer_ids)
             
     # Filters
-    experience_id = fields.Many2one(comodel_name='clinical.experience', string='Clinical Experience', domain="[('company_id', '=', company_id)]", required=True, check_company=True)
-    company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.user.company_id)
+    experience_id = fields.Many2one(comodel_name='clinical.experience', string='Clinical Experience', required=True)
+    company_id = fields.Many2one('res.company', string='University', default=lambda self: self.env.user.company_id)
     year = fields.Selection(selection=SELECTION_YEAR_RANGE, string='Year', default='2000', required=True)
     placement_term = fields.Selection([
         ('fall', 'Fall'),
@@ -361,25 +361,25 @@ class PlacementRequest(models.Model):
     # Smart Button Action Methods
     #------------------------------------------------------------------------------
     def action_view_students(self):
-        action = self.env.ref('clinical_decision_making.student_action').read()[0]
+        action = self.env.ref('clinical_decision_making.student_action').sudo().read()[0]
         action['domain'] = [('id', 'in', self.student_ids.ids)]
         action['context'] = {'create': False, 'delete': False}
         return action
     
     def action_view_lines(self):
-        action = self.env.ref('clinical_decision_making.placement_offer_action').read()[0]
+        action = self.env.ref('clinical_decision_making.placement_offer_action').sudo().read()[0]
         action['domain'] = [('id', 'in', self.offer_ids.ids)]
         action['context'] = {'create': False, 'delete': False, 'edit': False}
         return action
     
     def action_view_offer_lines(self):
-        action = self.env.ref('clinical_decision_making.action_archive_offer').read()[0]
+        action = self.env.ref('clinical_decision_making.action_archive_offer').sudo().read()[0]
         action['domain'] = [('id', 'in', self.archive_offer_ids.ids), ('active', '=', True)]
         action['context'] = {'create': False, 'delete': False, 'edit': False}
         return action
     
     def action_view_facilities(self):
-        action = self.env.ref('clinical_decision_making.medical_facility_action').read()[0]
+        action = self.env.ref('clinical_decision_making.medical_facility_action').sudo().read()[0]
         action['domain'] = [('id', 'in', self.facility_ids.ids)]
         action['context'] = {'create': False, 'delete': False, 'edit': False}
         return action

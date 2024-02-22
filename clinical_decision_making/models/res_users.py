@@ -10,7 +10,7 @@ class ResUsers(models.Model):
     def action_open_user_company(self):
     
         self.ensure_one()
-        action = self.env['ir.actions.actions']._for_xml_id('base.action_res_company_form')
+        action = self.env.ref('base.action_res_company_form').sudo().read()[0]
         action['context'] = {'create': False, 'delete': False}
         action.update({
             'view_mode': 'form',

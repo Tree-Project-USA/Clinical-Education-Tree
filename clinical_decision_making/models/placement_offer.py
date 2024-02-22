@@ -23,7 +23,7 @@ class PlacementOffer(models.Model):
     geographical_state = fields.Char(related='geographical_id.state')
     geographical_id = fields.Many2one(comodel_name='geographical', related='main_department_id.geographical_id')
     zip_code = fields.Char(related='geographical_id.zip_code')
-    line_ids = fields.One2many(comodel_name='placement.offer.line', inverse_name='offer_id', string='Placement Lines', check_company=True)
+    line_ids = fields.One2many(comodel_name='placement.offer.line', inverse_name='offer_id', string='Placement Lines')
     student_ids = fields.Many2many(comodel_name='res.partner', string='Students',domain=[('is_student', '=', True)], compute='_compute_offer_student_ids')
     state = fields.Selection([
             ('offer_details_entered', 'Offer Details Entered'),
@@ -32,8 +32,8 @@ class PlacementOffer(models.Model):
             ('offer_cancel', 'Offer Canceled'),
         ], string='Status', default='offer_details_entered')
     # experience_id = fields.Many2one(comodel_name='clinical.experience', string='Clinical Experience', domain="[('company_id', '=', company_id)]", required=True)
-    company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.user.company_id)
-    archive_offer_ids = fields.One2many(comodel_name='archive.offer', inverse_name='offer_id', string='Archive Offer', check_company=True)
+    company_id = fields.Many2one('res.company', string='University', default=lambda self: self.env.user.company_id)
+    archive_offer_ids = fields.One2many(comodel_name='archive.offer', inverse_name='offer_id', string='Archive Offer')
     archive_offer_count = fields.Integer(compute='_compute_archive_offer_count', string='Archive Offer Count')
     blocked_ids = fields.Many2many(comodel_name='res.partner', string='Blocked Students')
     is_single_facility = fields.Boolean(related='facility_id.is_single_facility', store=True)
@@ -71,6 +71,12 @@ class PlacementOffer(models.Model):
         archive_offer_model = self.env['archive.offer']
         for line_id in self.line_ids:
             for x in range(line_id.offers):
+                print(line_id.experience_id.id)
+                print(line_id.experience_id.id)
+                print(line_id.experience_id.id)
+                print(line_id.experience_id.id)
+                print(line_id.experience_id.id)
+                print(line_id.experience_id.id)
                 archive_offer_model.create({
                     'department_id': self.main_department_id.id if self.is_single_facility else line_id.department_id.id,
                     'experience_id': line_id.experience_id.id,
@@ -171,14 +177,14 @@ class PlacementOfferLine(models.Model):
     _description = "Offer line"
 
     name = fields.Char(string='Name')
-    facility_id = fields.Many2one(comodel_name='medical.facility', related='offer_id.facility_id', store=True, check_company=True)
-    department_id = fields.Many2one(comodel_name='facility.department' , string='Department', domain="[('id', 'in', department_ids)]", check_company=True)
+    facility_id = fields.Many2one(comodel_name='medical.facility', related='offer_id.facility_id', store=True)
+    department_id = fields.Many2one(comodel_name='facility.department' , string='Department', domain="[('id', 'in', department_ids)]")
     street = fields.Char(related='department_id.street')
     city = fields.Char(related='geographical_id.city')
     state = fields.Char(related='geographical_id.state')
     geographical_id = fields.Many2one(comodel_name='geographical', related='department_id.geographical_id')
     department_ids = fields.Many2many(comodel_name='facility.department', compute="_get_facility_departments")
-    archive_offer_ids = fields.One2many(comodel_name='archive.offer', inverse_name='offer_line_id', string='Archive Offer', check_company=True)
+    archive_offer_ids = fields.One2many(comodel_name='archive.offer', inverse_name='offer_line_id', string='Archive Offer')
     
     
     @api.depends('facility_id')
@@ -186,7 +192,7 @@ class PlacementOfferLine(models.Model):
         for rec in self:
             rec.department_ids = rec.facility_id.department_ids
     
-    experience_id = fields.Many2one(comodel_name='clinical.experience', string='Clinical Experience', domain="[('company_id', '=', company_id)]", required=True)
+    experience_id = fields.Many2one(comodel_name='clinical.experience', string='Clinical Experience', required=True)
     company_id = fields.Many2one('res.company', related='offer_id.company_id', store=True)
     placement_term = fields.Selection([
         ('fall', 'Fall'),

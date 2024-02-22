@@ -45,7 +45,7 @@ class ScceAttachmentType(models.Model):
     portal_id = fields.Char("Portal ID")
     description = fields.Text("Description")
     is_required = fields.Boolean(string="Is Required")
-    scce_id = fields.Many2one(comodel_name='res.partner', string='SCCE', domain=[('is_scce', '=', True)], tracking=True, required=True, check_company=True)
+    scce_id = fields.Many2one(comodel_name='res.partner', string='SCCE', domain=[('is_scce', '=', True)], tracking=True, required=True)
  
  
     @api.model
@@ -71,11 +71,11 @@ class Attachment(models.Model):
     _name = "attachments"
     _rec_name = "attachment_type"
 
-    student_id = fields.Many2one("res.partner", string="Student", check_company=True)
+    student_id = fields.Many2one("res.partner", string="Student")
     company_id = fields.Many2one('res.company', string='University', default=lambda self: self.env.user.company_id)
-    request_id = fields.Many2one("attachment.request", string="Request", check_company=True)
-    attachment_type = fields.Many2one("attachment.type", string="Attachment Type", check_company=True)
-    attachment_ids = fields.Many2many(comodel_name='ir.attachment', string="Attachments", tracking=True, check_company=True)   
+    request_id = fields.Many2one("attachment.request", string="Request")
+    attachment_type = fields.Many2one("attachment.type", string="Attachment Type")
+    attachment_ids = fields.Many2many(comodel_name='ir.attachment', string="Attachments", tracking=True)   
     expiration_date = fields.Date(string='Expiration Date')   
     note = fields.Text(string="Note")
     state = fields.Selection([
@@ -114,11 +114,11 @@ class ScceAttachment(models.Model):
     _name = "scce.attachments"
     _rec_name = "scce_attachment_type"
 
-    student_id = fields.Many2one("res.partner", string="Student", check_company=True)
+    student_id = fields.Many2one("res.partner", string="Student")
     company_id = fields.Many2one('res.company', string='University', default=lambda self: self.env.user.company_id)
-    request_id = fields.Many2one("scce.attachment.request", string="Request", check_company=True)
-    scce_attachment_type = fields.Many2one("scce.attachment.type", string="SCCE Attachment Type", check_company=True)
-    attachment_ids = fields.Many2many(comodel_name='ir.attachment', string="Attachments", tracking=True, check_company=True)   
+    request_id = fields.Many2one("scce.attachment.request", string="Request")
+    scce_attachment_type = fields.Many2one("scce.attachment.type", string="SCCE Attachment Type")
+    attachment_ids = fields.Many2many(comodel_name='ir.attachment', string="Attachments", tracking=True)   
     expiration_date = fields.Date(string='Expiration Date')   
     note = fields.Text(string="Note")
     state = fields.Selection([
