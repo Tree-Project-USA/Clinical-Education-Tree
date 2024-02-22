@@ -14,7 +14,6 @@ odoo.define("website_base.file_attachment_request", function(require) {
        init: function() {
         this._super.apply(this, arguments);
         this._popoverRPC = null;
-        this._onClickChangFile();
      },
 
      _onClickChangFile: function(ev) {
