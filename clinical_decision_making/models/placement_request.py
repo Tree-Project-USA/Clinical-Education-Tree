@@ -173,7 +173,7 @@ class PlacementRequest(models.Model):
         # Apply filter for has_hardship
         if self.apply_hardship:
                 student_domain.append(('is_with_hardship', '=', True))
-        student_ids = self.env["res.partner"].sudo().search(student_domain).filtered(lambda x: len(x.geographical_ids) > 0)
+        student_ids = self.env["res.partner"].sudo().search(student_domain).filtered(lambda x: len(x.preferred_geographical_ids) > 0)
         student_ids = student_ids.mapped('experience_schedual_ids').filtered(lambda x: x.name == term and x.experience_id.id == self.experience_id.id).mapped('student_id')
 
         rem_stu_ids = self.env['archive'].search([('student_id', 'in', student_ids.ids), ('placement_status', 'in', ['confirmed', 'completed']), ('year', '=', self.year), ('placement_term', '=', self.placement_term)]).mapped('student_id') # TODO: Add 'approved',  here 

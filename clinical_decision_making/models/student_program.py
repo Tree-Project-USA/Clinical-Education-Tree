@@ -69,7 +69,7 @@ class ProgramExperienceTerm(models.Model):
     program_id = fields.Many2one(comodel_name='program', string='Program')
     company_id = fields.Many2one('res.company', related='program_id.company_id')
     experience_id = fields.Many2one(comodel_name='clinical.experience', string='Clinical Experience')
-    sequence = fields.Integer(related='experience_id.sequence', store=True)
+    sequence = fields.Char(related='experience_id.sequence', store=True)
     term = fields.Integer(string='term Number', default=1)
     start_date = fields.Date(string='start Date')
     end_date = fields.Date(string='End Date')

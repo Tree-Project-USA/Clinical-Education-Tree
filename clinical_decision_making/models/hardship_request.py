@@ -33,8 +33,8 @@ class HardshipRequest(models.Model):
         default='initial_submission',
     )
     expiration_date = fields.Date(string='Expiration Date')
-    geographical_ids = fields.Many2many('geographical', 'geographical_ids', string='Geographical')
-    student_geographical_ids = fields.Many2many('geographical', 'student_geographical_ids', string='Student Geographical')
+    preferred_geographical_ids = fields.One2many(comodel_name='geographical.preferred', inverse_name='hardship_id', string='Preferred Addresses')
+    student_geographical_ids = fields.Many2many('geographical.preferred', string='Student Geographical')
     update_message = fields.Html(string='Message')
     attachment_cancel = fields.Binary(attachment=True)
     attachment_confirm = fields.Binary(attachment=True)
@@ -57,10 +57,15 @@ class HardshipRequest(models.Model):
         self.write({
             'state': 'approved',
         })
-        self.student_geographical_ids = self.student_id.geographical_ids.ids
+        self.student_geographical_ids = self.student_id.preferred_geographical_ids
+        self.student_id.preferred_geographical_ids.write({
+            'student_id': False
+        })
+        self.preferred_geographical_ids.write({
+            'student_id': self.student_id.id
+        })
         self.student_id.with_context(pass_validation=True).write({
             'deny_show_student': True,
-            'geographical_ids': self.geographical_ids.ids
         })
         template = self.env.ref('clinical_decision_making.mail_template_send_hardship_request_approved')
         template.send_mail(self.id, force_send=True)
@@ -70,9 +75,19 @@ class HardshipRequest(models.Model):
         self.write({
             'state': 'initial_submission',
         })
+        
+        
+        self.student_id.preferred_geographical_ids.write({
+            'student_id': False
+        })
+        
+        self.student_geographical_ids.write({
+            'student_id': self.student_id.id
+        })
+                
+        
         self.student_id.with_context(pass_validation=True).write({
             'deny_show_student': False,
-            'geographical_ids': self.student_geographical_ids.ids
         })
         self.student_id.can_apply_hardship = True
         

@@ -98,6 +98,22 @@ class Geographical(models.Model):
         vals['zip_code'] = str(int(vals['zip_code']))
         return super(Geographical, self).create(vals)
     
+class geographicalPreferred(models.Model):
+    _name = 'geographical.preferred'
+    _description = 'Preferred Addresses'
+    _rec_name = 'student_id'
+    
+    def _default_sequence(self):
+        return self.env.company.normal_number_zipcodes
+
+    sequence = fields.Integer('Sequence', default=_default_sequence)
+    student_id = fields.Many2one(comodel_name='res.partner', string='Student')
+    hardship_id = fields.Many2one(comodel_name='hardship.request', string='Hardship Request')
+    geographical_id = fields.Many2one(comodel_name='geographical', string='Zip Code', required=True)
+    city = fields.Char(related='geographical_id.city')
+    state = fields.Char(related='geographical_id.state')
+    zip = fields.Char(related='geographical_id.zip_code')
+    
 class geographicalHistory(models.Model):
     _name = 'geographical.history'
     _description = 'Geographical History'
