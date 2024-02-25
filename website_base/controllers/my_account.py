@@ -37,7 +37,7 @@ class CustomerPortals(CustomerPortal):
             values["hardship_ids"] = hardship_ids
             values["archive_ids"] = archive_ids
             values["partner"] = res_partner_id
-            values["locations"] = res_partner_id.geographical_ids
+            values["locations"] = res_partner_id.preferred_geographical_ids
             values["preferred_setting_ids"] = res_partner_id.preferred_setting_ids
             values["medical_attachment_ids"] = res_partner_id.medical_attachment_ids
             values["scce_medical_attachment_ids"] = res_partner_id.scce_medical_attachment_ids

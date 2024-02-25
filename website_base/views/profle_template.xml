@@ -315,7 +315,7 @@
               aria-labelledby="preferred-address-tab">
               <div class="my-4">
                 <a
-                t-if="not partner.geographical_ids or hardship_id.state in ['expired','declined']"
+                t-if="not partner.preferred_geographical_ids or hardship_id.state in ['expired','declined']"
                 type="button"
                 class="btn my-2"
                 role="button"
@@ -340,7 +340,7 @@
                       <t t-esc="val_index + 1" />
                     </td>
                     <td>
-                      <t t-esc="val.zip_code" />
+                      <t t-esc="val.zip" />
                     </td>
                     <td>
                       <t t-esc="val.state" />
@@ -432,7 +432,7 @@
                       <t t-set="files" t-value="files + 1"/>
                     </t>
                   </t>
-                  <li class="nav-item" role="presentation" t-if="hardship_id.geographical_ids">
+                  <li class="nav-item" role="presentation" t-if="hardship_id.preferred_geographical_ids">
                     <button class="nav-link active" id="geographical-ids-tab" data-bs-toggle="tab" data-bs-target="#geographical_ids"
                       type="button" role="tab" aria-controls="geographical_ids" aria-selected="false">Hardship Preferred Addresses</button>
                   </li>
@@ -456,12 +456,12 @@
                             </tr>
                           </thead>
                           <tbody>
-                            <tr t-foreach="hardship_id.geographical_ids" t-as="val">
+                            <tr t-foreach="hardship_id.preferred_geographical_ids" t-as="val">
                               <td>
                                 <t t-esc="val_index + 1" />
                               </td>
                               <td>
-                                <t t-esc="val.zip_code" />
+                                <t t-esc="val.zip" />
                               </td>
                               <td>
                                 <t t-esc="val.state" />
