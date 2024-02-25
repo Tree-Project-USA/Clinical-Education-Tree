@@ -52,7 +52,9 @@ class CustomerPortals(http.Controller):
                         "company_id": request.env.user.company_id.id,
                         "note":  kw.get("note") if kw.get("note") else False,
                         "state": "initial_submission",
-                        "geographical_ids": [(6, 0, zip_code_list)],
+                        "preferred_geographical_ids": [(0,0, {
+                            'geographical_id': i,
+                        }) for i in zip_code_list],
                     }
                 )
                 for files in range(0, int(kw.get("len_file"))):
@@ -101,7 +103,9 @@ class CustomerPortals(http.Controller):
                     "note":  post.get("note") if post.get("note") else False,                    
                     "state": "under_review",
                     "attachment_ids": file_list,
-                    "geographical_ids": [(6, 0, zip_code_list)],
+                    "preferred_geographical_ids": [(6,0, {
+                            'geographical_id': i,
+                        }) for i in zip_code_list],
                 })
                 template = request.env.ref('clinical_decision_making.mail_template_send_update_hardship_information_missing')
                 template.sudo().send_mail(hardship_id.id, force_send=True)

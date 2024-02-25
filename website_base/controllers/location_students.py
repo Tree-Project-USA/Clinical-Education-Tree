@@ -37,8 +37,11 @@ class Location(http.Controller):
 
                 list_locations.append(int(kw.get(val_id)))
                 zip_code_list.append(int(kw.get(val_zip)))
+            print(list_locations)
             values = {
-                "geographical_ids": list_locations,
+                "preferred_geographical_ids": [(0,0, {
+                    'geographical_id': i,
+                }) for i in list_locations],
                 "is_reach_maximum_zip_code": True,
             }
             try:
