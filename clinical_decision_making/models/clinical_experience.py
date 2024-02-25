@@ -16,21 +16,10 @@ class ClinicalExperience(models.Model):
 
     active = fields.Boolean(string='Status')
     name = fields.Char(string='Clinical Experience Name')
-    sequence = fields.Integer(string='Sequence', default=1)
+    sequence = fields.Char(
+        'Sequence', default=lambda self: self.env['ir.sequence'].next_by_code('clinical.experience'), company_dependent=True)
     company_id = fields.Many2one('res.company', string='Program', default=lambda self: self.env.user.company_id)
     
-    @api.model
-    def get_previous_next_experiences(self):
-        previous_experience = self.search([
-            ('sequence', '=', self.sequence - 1),
-            ('company_id', '=', self.company_id.id)
-        ], limit=1)
-        next_experience = self.search([
-            ('sequence', '=', self.sequence + 1),
-            ('company_id', '=', self.company_id.id)
-        ], limit=1)
-        
-        return previous_experience, next_experience 
     
     @api.model
     def create(self, values):
@@ -48,7 +37,7 @@ class ClinicalExperienceSchedual(models.Model):
 
     name = fields.Char(string='Term', compute='_compute_term_name', store=True,)
     experience_id = fields.Many2one(comodel_name='clinical.experience', string='Clinical Experience')
-    sequence = fields.Integer(related='experience_id.sequence', store=True)
+    sequence = fields.Char(related='experience_id.sequence', store=True)
     student_id = fields.Many2one(comodel_name='res.partner', string='Student')
     company_id = fields.Many2one('res.company', related='student_id.company_id')
     state = fields.Selection([

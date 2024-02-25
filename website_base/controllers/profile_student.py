@@ -24,7 +24,7 @@ class ProfileStudent(http.Controller):
         values["hardship_ids"] = hardship_ids
         values["hardship_id"] = hardship_id
         values["archive_ids"] = archive_ids
-        values["locations"] = student_id.geographical_ids
+        values["locations"] = student_id.geographical_ids # Need to Change to preferred_geographical_ids
         values["medical_attachment_ids"] = student_id.medical_attachment_ids
         values["scce_medical_attachment_ids"] = student_id.scce_medical_attachment_ids
         values["attachment_type_id"] = attachment_type_id

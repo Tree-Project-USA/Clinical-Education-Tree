@@ -14,6 +14,7 @@ class ResCompany(models.Model):
     max_hardship_zipcodes = fields.Integer(string='Number of Hardship ZipCodes', default=3)
     normal_number_zipcodes = fields.Integer(string='Number of Noraml ZipCodes', default=5, required=True)
     max_zipcodes_state = fields.Integer(string='Max ZipCodes in State', default=3, required=True)
+    number_zipcodes_state = fields.Integer(string='Number of ZipCodes in State', default=3, required=True)
     clinical_distance_mel = fields.Float(string='Min Distance between Student and Site (Mels)', default=50.0, required=True)
     zip_code_token = fields.Char(string='Zip Code API Token')
     contract_notify_months = fields.Integer(string='Contract Notification Days', default=60, required=True)

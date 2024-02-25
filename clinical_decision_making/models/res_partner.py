@@ -28,7 +28,7 @@ class ResPartner(models.Model):
     can_apply_hardship = fields.Boolean(string='Apply Hardship', default=False)
     is_reach_maximum_zip_code = fields.Boolean(string='Reach Maximum Zip Code', default=False)
     deny_show_student = fields.Boolean()
-    geographical_ids = fields.Many2many(comodel_name='geographical', string='Geographical')
+    preferred_geographical_ids = fields.One2many(comodel_name='geographical.preferred', inverse_name='student_id', string='Preferred Addresses')
     program_id = fields.Many2one(comodel_name='program', string='Program Duration')
     program_type = fields.Char(string='Program Type', default='DPT')
     start_term_type = fields.Selection([
@@ -196,17 +196,6 @@ class ResPartner(models.Model):
             'context': {'default_student_id': self.id, 'delete': False}
         }
     
-    # @api.onchange('geographical_ids')
-    # def _onchange_geographical_ids(self):
-    #     self.ensure_one()
-    #     if not self.env.context.get('pass_validation', False) or not self.is_with_hardship:
-    #         print(self.geographical_ids)
-    #         for rec in self.geographical_ids:
-    #             if rec.id in self.geographical_ids.filtered(lambda x : x.id != rec.id).mapped('id'):
-    #                 raise ValidationError(_('Zip code must be unique. '))
-    #         self.check_zip_code_distance(self.geographical_ids)
-    #         self.check_validation_zip_code_state(self.geographical_ids)
-
     @api.depends('first_name', 'last_name')
     def _compute_name(self):
         for record in self:
@@ -223,15 +212,16 @@ class ResPartner(models.Model):
                     raise ValidationError(_('The Distance Between zip codes (%s) and (%s) is (%s) and  too small that the distance required to (%s) miles'% (geographical_id.zip_code , zip_code.zip_code, distance, max_distance_mel)))
     
     def check_validation_zip_code_state(self, geographical_ids):
-        max_zipcodes_state = self.env.company.max_zipcodes_state or 3
+        max_zipcodes_state = self.env.company.max_zipcodes_state
+        number_zipcodes_state = self.env.company.number_zipcodes_state
 
         for geographical_id in geographical_ids:
             zipcoe_ids = geographical_id.get_zip_codes_state(geographical_ids)
             all_states = geographical_id.get_all_zip_code_state(geographical_ids)
-            if len(zipcoe_ids) > max_zipcodes_state:
+            if max_zipcodes_state and len(zipcoe_ids) > max_zipcodes_state:
                     raise ValidationError(_('You can only add maximum (%s) zip code in same state' % max_zipcodes_state))
 
-            if len(all_states) < 3:
+            if number_zipcodes_state and len(all_states) < number_zipcodes_state:
                     raise ValidationError('You Should add at least 3 different state.')
     
     @api.constrains('email')
@@ -240,7 +230,7 @@ class ResPartner(models.Model):
             if not re.match('^[_A-Za-z0-9-]+(\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-]+(\.[_A-Za-z0-9-]+)*(\.[A-Za-z]{2,4})$', self.email):
                 raise ValidationError(_('The personal email address must be valid ( example@example.com )'))
             
-    @api.constrains('geographical_ids')
+    @api.constrains('preferred_geographical_ids')
     def _check_geographical_ids(self):
         self.ensure_one()
         if self.env.context.get('pass_validation', False) or self.is_with_hardship:
@@ -248,15 +238,15 @@ class ResPartner(models.Model):
 
         if not self.env.context.get('pass_validation', False) or not self.is_with_hardship:
             normal_number_zipcodes = self.env.company.normal_number_zipcodes or 5
-            print(normal_number_zipcodes)
-            if len(self.geographical_ids) < normal_number_zipcodes or len(self.geographical_ids) > normal_number_zipcodes:
-                    raise ValidationError(_('Count of zip codes shuld be %s' % normal_number_zipcodes))
+            if len(self.preferred_geographical_ids) < normal_number_zipcodes or len(self.preferred_geographical_ids) > normal_number_zipcodes:
+                    raise ValidationError(_('Count of Preferred addresses shuld be %s' % normal_number_zipcodes))
                 
-            for rec in self.geographical_ids:
-                if rec.id in self.geographical_ids.filtered(lambda x : x.id != rec.id).mapped('id'):
-                    raise ValidationError(_('Zip code must be unique. '))
-            self.check_zip_code_distance(self.geographical_ids)
-            self.check_validation_zip_code_state(self.geographical_ids)
+            # for rec in self.geographical_ids:
+            #     if rec.id in self.geographical_ids.filtered(lambda x : x.id != rec.id).mapped('id'):
+            #         raise ValidationError(_('Zip code must be unique. '))
+            geographical_ids = self.preferred_geographical_ids.mapped('geographical_id')
+            self.check_zip_code_distance(geographical_ids)
+            self.check_validation_zip_code_state(geographical_ids)
 
 
     @api.model_create_multi
@@ -334,7 +324,7 @@ class ResPartner(models.Model):
         facility_distance_mel = float(facility_distance_mel) or self.env.company.clinical_distance_mel or 50
         accepted_facility_ids = set()
 
-        geographical_ids = self.mapped('geographical_ids')
+        geographical_ids = self.preferred_geographical_ids.mapped('geographical_id')
         for geographical_id in geographical_ids:
             distances = geographical_id.get_distance_with_multi_zip_codes([f.geographical_id for f in facility_ids])[0]
             accepted_facility_ids.update([f.id for f, distance in zip(facility_ids, distances) if distance <= facility_distance_mel])
@@ -343,7 +333,7 @@ class ResPartner(models.Model):
     
     def get_nearest_facility(self, facility_ids):
         data = []
-        geographical_ids = self.mapped('geographical_ids')
+        geographical_ids = self.preferred_geographical_ids.mapped('geographical_id')
         for geographical_id in geographical_ids:
             for facility_id in facility_ids:
                 distance, dis_and_geo = geographical_id.get_distance_with_zip_code(facility_id.geographical_id)
@@ -352,7 +342,7 @@ class ResPartner(models.Model):
     
     def get_nearby_facility_zipcode(self, facility_id):
         facility_distance_mel = self.env.company.clinical_distance_mel or 50
-        geographical_ids = self.mapped('geographical_ids')        
+        geographical_ids = self.preferred_geographical_ids.mapped('geographical_id')
         for geographical_id in geographical_ids:
             distance, dis_and_geo = geographical_id.self.get_distance_with_zip_code(facility_id.geographical_id)
             if distance <= facility_distance_mel:

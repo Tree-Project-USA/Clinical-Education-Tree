@@ -24,7 +24,7 @@ class Archive(models.Model):
     state = fields.Char(related='geographical_id.state')
     zip_code = fields.Char(related='geographical_id.zip_code')
     experience_id = fields.Many2one(comodel_name='clinical.experience', string='Clinical Experience', required=True, tracking=True)
-    company_id = fields.Many2one('res.company', string='University', default=lambda self: self.env.user.company_id)
+    company_id = fields.Many2one(related='student_id.company_id', store=True)
     setting = fields.Selection([
         ('op', 'OP'),
         ('ip', 'IP'),

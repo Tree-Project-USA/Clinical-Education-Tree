@@ -14,6 +14,7 @@
                         <field name="max_hardship_zipcodes"/>
                         <field name="normal_number_zipcodes"/>
                         <field name="max_zipcodes_state"/>
+                        <field name="number_zipcodes_state"/>
                         <field name="clinical_distance_mel"/>
                         <field name="zip_code_token"/>
                         <field name="contract_notify_months"/>

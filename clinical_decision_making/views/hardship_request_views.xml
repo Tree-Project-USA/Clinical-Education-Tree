@@ -56,12 +56,15 @@
                         <field name="company_id"  groups="base.group_multi_company"/>
                     </group>
                 <notebook>
-                    <page string="Preferred Addresses" name="geographical_ids">
-                        <field name="geographical_ids" attrs="{'readonly': [('state', 'in', ('expired', 'approved'))]}">
+                    <page string="Preferred Addresses" name="preferred_geographical_ids">
+                        <field name="preferred_geographical_ids" attrs="{'readonly': [('state', 'in', ('expired', 'approved'))]}">
                             <tree editable="bottom">
+                                <field name="sequence" widget="handle"/>
+                                <field name="student_id" invisible="1"/>
+                                <field name="hardship_id" invisible="1"/>
                                 <field name="city"/>
                                 <field name="state"/>
-                                <field name="zip_code"/>
+                                <field name="geographical_id"/>
                             </tree>
                         </field>
                     </page>
