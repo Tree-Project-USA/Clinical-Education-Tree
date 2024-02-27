@@ -64,7 +64,6 @@
                             <field name="location_dist" attrs="{'invisible': [('apply_location', '=', False)], 'required': [('apply_location', '=', True)]}"/>
                         </group>
                         <group>
-                            <field name="apply_placement_priority"/>
                         </group>
                         <group>
                             <field name="placement_status" string="Placement Status"/>

@@ -40,7 +40,8 @@
         "views/res_partner_ci_views.xml",
         "views/scce_attachment_type_views.xml",
         "views/menu.xml",
-        "views/res_company_views.xml"
+        "views/res_company_views.xml",
+        "views/program_experience_term_views.xml"
     ],
     'assets': {
         'web.assets_backend': [
