@@ -20,7 +20,7 @@
             <field name="name">program.view.form</field>
             <field name="model">program</field>
             <field name="arch" type="xml">
-                <form string="">
+                <form>
                     <sheet>
                         <field name="company_id" string="University" groups="base.group_multi_company"/>
                         <field name="program_experience_term_ids">
@@ -29,8 +29,7 @@
                                 <field name="company_id" string="University" groups="base.group_multi_company"/>
                                 <field name="experience_id" readonly="1"/>
                                 <field name="term" required="1"/>
-                                <field name="start_date" required="1"/>
-                                <field name="end_date" required="1"/>
+                                <button name="action_open_program_experience_dates" type="object" title="Enter Program term dates" string="Enter Program term dates"/>
                             </tree>
                         </field>
                     </sheet>

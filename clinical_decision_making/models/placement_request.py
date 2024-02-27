@@ -66,7 +66,7 @@ class PlacementRequest(models.Model):
     location_dist = fields.Float(string='Distance', default=_get_default_distance)
     
     # Placement Priority Criteria
-    apply_placement_priority = fields.Boolean(string='Placement Priority', default=True,        
+    apply_placement_priority = fields.Boolean(string='Placement Priority', default=False,        
         help="""
             Priority takeing
                 a. H.S Last Term Student
@@ -103,7 +103,7 @@ class PlacementRequest(models.Model):
     
     @api.onchange('experience_id', 'placement_term', 'year', 'apply_hardship',
               'apply_setting', 'apply_location', 'location_dist',
-              'apply_placement_priority', 'placement_status')
+              'placement_status')
     def _onchange_apply_criteria(self):
         self.ensure_one()
         term = self.convert_term_year(self.placement_term, self.year)
@@ -139,17 +139,17 @@ class PlacementRequest(models.Model):
              
         placement_status = ['matched', 'pending', 'confirmed', 'completed', 'approved'] # TODO: Here to Control the Student Avalivle 
 
-        if self.apply_placement_priority:
+        # if self.apply_placement_priority:
             
-                hardship_student_ids = student_ids.filtered(lambda student_id: student_id.is_with_hardship)
-                last_experience_student = student_ids.filtered(lambda student_id: student_id.get_student_last_experience() == self.experience_id) 
-                last_experience_student = last_experience_student.filtered(lambda student_id: not student_id.is_take_ip)
-                last_experience_student -= hardship_student_ids
+        #         hardship_student_ids = student_ids.filtered(lambda student_id: student_id.is_with_hardship)
+        #         last_experience_student = student_ids.filtered(lambda student_id: student_id.get_student_last_experience() == self.experience_id) 
+        #         last_experience_student = last_experience_student.filtered(lambda student_id: not student_id.is_take_ip)
+        #         last_experience_student -= hardship_student_ids
                 
-                print('==============================  placement_priority YES==================================')
-                print("hardship Student",last_experience_student)
-                print("important Student no has IP with last Term",hardship_student_ids)
-                student_ids = last_experience_student + hardship_student_ids
+        #         print('==============================  placement_priority YES==================================')
+        #         print("hardship Student",last_experience_student)
+        #         print("important Student no has IP with last Term",hardship_student_ids)
+        #         student_ids = last_experience_student + hardship_student_ids
 
                 
         

@@ -45,3 +45,4 @@ access_res_users_user,res_users_user,base.model_res_users,clinical_decision_maki
 access_plcement_management_user,plcement_management_user,model_plcement_management,base.group_user,1,1,1,1
 access_plcement_management_portal,plcement management portal,model_plcement_management,base.group_portal,1,1,1,1
 access_geographical_preferred_manager,geographical_preferred_manager,model_geographical_preferred,,1,1,1,1
+access_program_experience_dates_manager,program_experience_dates_manager,model_program_experience_dates,,1,1,1,1
