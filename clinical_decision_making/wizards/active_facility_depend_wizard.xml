@@ -12,7 +12,7 @@
                     </div>
                     <field name="facility_id" invisible="1"/>
                     <field name="department_ids" class="o_portal_wizard_user_one2many" widget="portal_wizard_user_one2many">
-                        <tree string="Department" editable="bottom" create="false" delete="false">
+                        <tree string="Location" editable="bottom" create="false" delete="false">
                             <field name="active" invisible="1"/>
                             <field name="name" readonly="1"/>
                             <field name="city"/>

@@ -51,7 +51,7 @@
     </record>
 
     <record id="facility_department_comp_rule" model="ir.rule">
-        <field name="name">Clinical Site Department multi-company</field>
+        <field name="name">Clinical Site Location multi-company</field>
         <field name="model_id" ref="model_facility_department"/>
         <field name="domain_force">[('company_id', 'in', company_ids)]</field>
     </record>

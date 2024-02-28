@@ -14,9 +14,9 @@ class MedicalFacility(models.Model):
     active = fields.Boolean(string='Active', compute='_compute_active')              
     name = fields.Char(string='Clinical Site Name', required=True)
     offer_id = fields.One2many('placement.offer', 'facility_id',string='Placement Offers')
-    address = fields.Char(string='Address')
-    email = fields.Char(related='scce_primary_id.email')
-    geographical_id = fields.Many2one(comodel_name='geographical', string='Zip Code')
+    address = fields.Char(string='Address', related='main_department_id.street', readonly=False)
+    email = fields.Char(related='scce_primary_id.email', store=True,)
+    geographical_id = fields.Many2one(comodel_name='geographical', related='main_department_id.geographical_id', readonly=False, store=True)
     city = fields.Char(related='geographical_id.city')
     state = fields.Char(related='geographical_id.state')
     zip = fields.Char(related='geographical_id.zip_code')
@@ -31,14 +31,15 @@ class MedicalFacility(models.Model):
     contracts_count = fields.Integer(compute='_compute_contracts_count', string='Contract Count', tracking=True)
     scce_ids = fields.One2many(comodel_name='scce.facility', inverse_name='facility_id', string='Clinical Site SCCE', tracking=True)
     scce_primary_id = fields.Many2one(comodel_name='res.partner', string='Primary SCCE', domain=[('is_scce', '=', True)], tracking=True)
-    scce_first_name = fields.Char(related='scce_primary_id.first_name')
-    scce_last_name = fields.Char(related='scce_primary_id.last_name')
+    scce_first_name = fields.Char(related='scce_primary_id.first_name', store=True)
+    scce_last_name = fields.Char(related='scce_primary_id.last_name', store=True)
     offer_ids = fields.One2many(comodel_name='placement.offer', inverse_name='facility_id', string='Offers')
     archive_offer_count = fields.Integer(compute='_compute_archive_offer_count', string='Archive Offer Count')
-    department_count = fields.Integer(compute='_compute_department_count', string='Department Count')
+    department_count = fields.Integer(compute='_compute_department_count', string='Location Count')
     department_ids = fields.One2many(comodel_name='facility.department', inverse_name='facility_id', string='Clinical Site Department')
     setting_ids = fields.Many2many(comodel_name='preferred.setting', string='Setting', compute='_compute_setting_ids')    
     main_department_id = fields.Many2one(comodel_name='facility.department', string='Main Department')
+    main_setting_ids = fields.Many2many(comodel_name='preferred.setting', related='main_department_id.setting_ids', readonly=False)    
     is_single_facility = fields.Boolean(string='Single Clinical Site', default=True)
     archive_ids = fields.One2many(comodel_name='archive', inverse_name='facility_id', string='Placement History')
     archive_count = fields.Integer(compute='_compute_archive_count', string='Placement History Count')
@@ -76,8 +77,7 @@ class MedicalFacility(models.Model):
     @api.depends('department_ids', 'department_ids.setting_ids')
     def _compute_setting_ids(self):
         for rec in self:
-            # rec.setting_ids = rec.department_ids.mapped('setting_ids')
-            rec.setting_ids = False
+            rec.setting_ids = rec.department_ids.mapped('setting_ids')
         
     @api.depends('contract_id', 'contract_id.state')
     def _compute_contract_warning(self):
@@ -261,6 +261,18 @@ class MedicalFacility(models.Model):
                 'context': {'default_facility_id': self.id},
             })
             return action
+        
+    @api.onchange('scce_ids', 'scce_ids.is_primary_scce')
+    def _compute_scce_ids(self):
+        self.ensure_one()
+        ids = self.env['scce.facility'].search([('id', 'in', self.scce_ids.ids)])
+        for record in ids:
+            print(record,record.is_primary_scce)
+            
+            if record.is_primary_scce:
+                ids.filtered(lambda x:x.id != record.id).write(
+                    {'is_primary_scce': False}
+                )
 class SCCEFacility(models.Model):
 
     _name = 'scce.facility'
@@ -271,31 +283,40 @@ class SCCEFacility(models.Model):
     scce_id = fields.Many2one('res.partner', string='SCCE', domain=[('is_scce', '=', True)])
     first_name = fields.Char(related='scce_id.first_name')
     last_name = fields.Char(related='scce_id.last_name')
-    email = fields.Char(related='scce_id.email')
+    email = fields.Char(related='scce_id.email', readonly=False, store=True)
     phone = fields.Char(related='scce_id.phone')
     company_id = fields.Many2one('res.company', string='University', default=lambda self: self.env.user.company_id)
-    is_primary_scce = fields.Boolean(string='Is Primary SCCE', store=True,)
-    is_secondary_scce = fields.Boolean(string='Is Secondary SCCE')
+    is_primary_scce = fields.Boolean(string='Set as Primary SCCE')
+    is_secondary_scce = fields.Boolean(string='Set as Secondary SCCE')
+    is_other = fields.Boolean(string='Is Other')
     complete_name = fields.Char('Complete Name', compute='_compute_complete_name', recursive=True, store=True)
     
+    def action_partner_access(self):
+        return self.env['portal.wizard'].with_context({'default_partner_ids': self.scce_id.ids}).action_open_wizard()
+        
     def action_set_primary(self):
         self.ensure_one()
         scce_ids = self.facility_id.mapped('scce_ids').ids
         if scce_ids:
-            self.search([('id', '!=', self.id), ('id', 'in', scce_ids)]).write({
+            self.search([('id', '!=', self.id), ('id', 'in', scce_ids)]).with_context(pass_validation=True).write({
                 'is_primary_scce': False
             })
         self.facility_id.scce_primary_id = self.scce_id
-        self.is_primary_scce = True
         
     def action_set_secondary(self):
         self.ensure_one()
         scce_ids = self.facility_id.mapped('scce_ids').ids
         if scce_ids:
-            self.search([('id', '!=', self.id), ('id', 'in', scce_ids)]).write({
+            self.search([('id', '!=', self.id), ('id', 'in', scce_ids)]).with_context(pass_validation=True).write({
                 'is_secondary_scce': False
             })
-        self.is_secondary_scce = True
+    
+    def unlink(self):
+        for rec in self:
+            if rec.is_primary_scce:
+                self.facility_id.scce_primary_id = False
+        return super(SCCEFacility, self).unlink()
+    
         
     @api.depends('scce_id.name', 'facility_id.name')
     def _compute_complete_name(self):

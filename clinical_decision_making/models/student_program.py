@@ -14,7 +14,7 @@ class Program(models.Model):
     _rec_name = 'name'
     
     name = fields.Char(string='Program Name')
-    num_terms = fields.Integer(string='Number of terms', default=1)
+    num_terms = fields.Integer(string='Number of Terms', default=1)
     active = fields.Boolean(string='Status')
     company_id = fields.Many2one('res.company', string='University', default=lambda self: self.env.user.company_id)
     program_experience_term_ids = fields.One2many(comodel_name='program.experience.term', inverse_name='program_id', string='Program Clinical Experience Terms', store=True)
@@ -75,7 +75,7 @@ class ProgramExperienceTerm(models.Model):
     company_id = fields.Many2one('res.company', related='program_id.company_id', store=True)
     experience_id = fields.Many2one(comodel_name='clinical.experience', string='Clinical Experience')
     sequence = fields.Char(related='experience_id.sequence', store=True)
-    term = fields.Integer(string='term Number', default=1)
+    term = fields.Integer(string='Term Number', default=1)
     date_ids = fields.One2many(comodel_name='program.experience.dates', inverse_name='program_term_id', string='Program Dates')
     
     def action_open_program_experience_dates(self):

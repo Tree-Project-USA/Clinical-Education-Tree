@@ -9,7 +9,7 @@ _logger = logging.getLogger(__name__)
 
 class FacilityDepartment(models.Model):
     _name = 'facility.department'
-    _description = _('Clinical Site Department')
+    _description = _('Clinical Site Location')
     _rec_name = 'complete_name'
 
     active = fields.Boolean(string='Active', default=True)

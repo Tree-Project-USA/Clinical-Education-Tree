@@ -20,7 +20,7 @@ class PlacementRequest(models.Model):
     offer_ids = fields.Many2many(comodel_name='placement.offer', string='offers')
     archive_offer_ids = fields.Many2many(comodel_name='archive.offer', string='archive offers')
     facility_ids = fields.Many2many('medical.facility', string='Clinical Sites')
-    department_ids = fields.Many2many('facility.department', string='Department')    
+    department_ids = fields.Many2many('facility.department', string='Location')    
     student_count = fields.Integer(compute='_compute_count')
     offer_count = fields.Integer(compute='_compute_count')
     archive_offer_count = fields.Integer(compute='_compute_count')
