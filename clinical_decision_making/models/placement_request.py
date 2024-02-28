@@ -343,7 +343,7 @@ class PlacementRequest(models.Model):
                         {status_report}
                     </ul>
                 </li>
-                <li><strong>Location ({facility_distance_mel} miles or less): </strong>{str(geographical_id.city)} {geographical_id.state} {geographical_id.zip_code} ({round(distance, 2)} Miles)</li>
+                <li><strong>Location ({facility_distance_mel} miles or less): </strong>{str(geographical_id.city)} {geographical_id.state} {geographical_id.zip_code} ({round(distance, 2)} Miles) from {self.get_ordinal_value(student_id, geographical_id)} Preferred Address</li>
             </ul>
         """
         
@@ -357,6 +357,16 @@ class PlacementRequest(models.Model):
         """
         
         return student_criteria, facility_criteria
+    
+    def get_ordinal_value(self, student_id, prefered_address):
+        number = student_id.preferred_geographical_ids.filtered(lambda x:x.geographical_id.id == prefered_address.id)
+        ordinal_dict = {
+            1: "first",
+            2: "second",
+            3: "third",
+            4: "fourth",
+        }
+        return ordinal_dict.get(number.sequence, str(number.sequence) + "th")
     
     # Smart Button Action Methods
     #------------------------------------------------------------------------------

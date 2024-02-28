@@ -30,7 +30,7 @@ class CustomerPortals(CustomerPortal):
             for scce_id in archive_ids.mapped("department_id").search([]).mapped("scce_ids").search([]).mapped("scce_id"):
                 scce_list.append(scce_id.id)
             attachment_type_id = request.env["attachment.type"].sudo().search([])
-            scce_attachment_type_id = request.env["scce.attachment.type"].sudo().search([("scce_id", "in", scce_list)])
+            scce_attachment_type_id = request.env["scce.attachment.type"].with_company(res_partner_id.company_id.id).search([("scce_id", "in", scce_list)])
             hardship_ids = request.env["hardship.request"].sudo().search([
                 ('student_id', '=', res_partner_id.id)])
             values["hardship_id"] = hardship_id

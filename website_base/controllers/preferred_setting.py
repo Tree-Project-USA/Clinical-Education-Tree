@@ -17,9 +17,9 @@ class PreferredSetting(http.Controller):
         values = {}
 
         if request.httprequest.method == "GET":
-            setting_ip_ids = request.env["preferred.setting"].sudo().search([("type_setting", "=", 'ip')])
-            setting_op_ids = request.env["preferred.setting"].sudo().search([("type_setting", "=", 'op')])
-            preferred_setting_ids = request.env["preferred.setting"].sudo().search([])
+            setting_ip_ids = request.env["preferred.setting"].search([("type_setting", "=", 'ip')])
+            setting_op_ids = request.env["preferred.setting"].search([("type_setting", "=", 'op')])
+            preferred_setting_ids = request.env["preferred.setting"].search([])
             values.update({
                 'setting_ip_ids' :  setting_ip_ids,
                 'setting_op_ids' :   setting_op_ids ,         

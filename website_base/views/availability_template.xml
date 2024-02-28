@@ -17,7 +17,7 @@
                             <table class="table add_file table-bordered">
                               <thead style="color:# a6ab75;">
                                 <tr>
-                                    <th style="width: 20rem" class="text-center">University</th>
+                                    <th style="width: 20rem" class="text-center">Program</th>
                                     <th style="width: 20rem" class="text-center">Location</th>
                                     <th class="text-center">CE Type</th>
                                     <th class="text-center">Term</th>

@@ -12,5 +12,17 @@
                 </tree>
             </field>
         </record>
+        <!-- Form View -->
+        <record model="ir.ui.view" id="preferred_setting_form">
+            <field name="name">preferred.setting.form</field>
+            <field name="model">preferred.setting</field>
+            <field name="arch" type="xml">
+                <form>
+                    <field name="name"/>
+                    <field name="company_id" string="University" groups="base.group_multi_company"/>
+                    <field name="type_setting"/>
+                </form>
+            </field>
+        </record>
 
 </odoo>

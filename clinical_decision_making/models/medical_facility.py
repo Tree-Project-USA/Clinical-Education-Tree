@@ -14,7 +14,7 @@ class MedicalFacility(models.Model):
     active = fields.Boolean(string='Active', compute='_compute_active')              
     name = fields.Char(string='Clinical Site Name', required=True)
     offer_id = fields.One2many('placement.offer', 'facility_id',string='Placement Offers')
-    address = fields.Char(string='Address', related='main_department_id.street', readonly=False)
+    address = fields.Char(string='Address', related='main_department_id.street', readonly=False, store=True)
     email = fields.Char(related='scce_primary_id.email', store=True,)
     geographical_id = fields.Many2one(comodel_name='geographical', related='main_department_id.geographical_id', readonly=False, store=True)
     city = fields.Char(related='geographical_id.city')
@@ -206,6 +206,7 @@ class MedicalFacility(models.Model):
             main_department_vals = {
                 'name': rec.name,
                 'facility_id': rec.id,
+                'street': res.address,
                 'scce_ids': [(6, 0, rec.scce_ids.ids)],
                 'setting_ids': [(6, 0, rec.setting_ids.ids)],
                 'geographical_id': rec.geographical_id.id,

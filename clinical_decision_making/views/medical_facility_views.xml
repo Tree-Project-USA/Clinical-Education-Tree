@@ -70,9 +70,27 @@
                             class="oe_stat_button"
                             icon="fa-book"
                             type="object">
-                            <div class="o_stat_info">
-                                <span class="o_stat_text text-danger" >
+                            <div attrs="{'invisible' : [('first_contract_date', '=', False)]}" class="o_stat_info">
+                                <span class="o_stat_text text-success" attrs="{'invisible' : [('contract_warning', '=', True)]}" title="In Contract Since"> In Contract Since</span>
+                                <span class="o_stat_value text-success" attrs="{'invisible' : [('contract_warning', '=', True)]}">
+                                    <field name="first_contract_date" readonly="1"/>
+                                </span>
+                                <span class="o_stat_text text-danger" attrs="{'invisible' : [('contract_warning', '=', False)]}" title="In Contract Since">
+                                    In Contract Since
+                                </span>
+                                <span class="o_stat_value text-danger" attrs="{'invisible' : [('contract_warning', '=', False)]}">
+                                    <field name="first_contract_date" readonly="1"/>
+                                </span>
+                            </div>
+                            <div attrs="{'invisible' : [('first_contract_date', '!=', False)]}" class="o_stat_info">
+                                <span class="o_stat_value text-danger">
+                                   <field name="contracts_count"/>
+                                </span>
+                                <span attrs="{'invisible' : [('contracts_count', '!=', 1)]}" class="o_stat_text text-danger" >
                                     Contract
+                                </span>
+                                <span attrs="{'invisible' : [('contracts_count', '=', 1)]}" class="o_stat_text text-danger">
+                                    Contracts
                                 </span>
                             </div>
                         </button>

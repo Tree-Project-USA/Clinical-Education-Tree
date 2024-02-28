@@ -72,7 +72,7 @@
                     <notebook>
                         <page string="Match">
                             <field name="archive_ids">
-                                <tree edit="false" create="false" delete="false" class="cdm">
+                                <tree edit="false" create="false" delete="false" id="ddddddd" class="cdm">
                                     <field name="student_id" invisible="1" attrs="{'readonly': [('is_declined', '=', True)]}"/>
                                     <field name="first_name" attrs="{'readonly': [('is_declined', '=', True)]}"/>
                                     <field name="last_name" attrs="{'readonly': [('is_declined', '=', True)]}"/>
