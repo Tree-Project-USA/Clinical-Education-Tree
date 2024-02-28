@@ -1,10 +1,11 @@
 # -*- encoding: utf-8 -*-
 import base64
 from odoo import http, _, Command
-from odoo.http import request
+from odoo.http import request, content_disposition
 from odoo.addons.http_routing.models.ir_http import slug
 from odoo.exceptions import AccessError, MissingError
 from odoo.addons.portal.controllers import portal
+from odoo.addons.survey.controllers import main
 
 class CustomerPortals(portal.CustomerPortal):
 
@@ -104,54 +105,53 @@ class CustomerPortals(portal.CustomerPortal):
             template = request.env.ref('clinical_decision_making.mail_template_send_account_creation_invitation')
             template.sudo().send_mail(user_sudo.id, force_send=True)
   
-    @http.route(['/student/details/<int:department>',
+    @http.route(['/student/details/<int:plcement>',
                  ], 
                 type="http", website=True, auth="user",Methods=["POST"])
-    def _student_details(self, ci_id=None, department=None, **post):
+    def _student_details(self, plcement=None, **post):
         res_partner_id = request.env.user.partner_id
-        department = request.env["facility.department"].sudo().search([('id', '=', department)])
+        post_plcement = request.env["post.plcement.management"].sudo().search([('id', '=', plcement)])
         value = {
             'res_partner_id': res_partner_id,
+            'post_plcement': post_plcement,
         }
         if post and request.httprequest.method == "POST":
-            rec_ci_id = request.env["res.partner"].sudo().search([('id', '=', ci_id)])
+           
+            rec_ci_id = request.env["res.partner"].sudo().search([('id', '=', post.get('ci_id'))])
             value_ci = self._get_value_cu(post)
             rec_ci_id.write(value_ci)
             value_plcement = self._get_value_plcement_management(post)
-            print(value_plcement)
-            plcement = request.env['plcement.management'].sudo().create(value_plcement)
-            plcement.write({
-                'ci_id': rec_ci_id.id,
-                'facility_id': department.facility_id.id,
-            })
-            pdf = request.env['ir.actions.report'].sudo()._render_qweb_pdf('website_base.ptce3_report_actions', [plcement.id])[0]
+            ci_ptse = request.env['ci.ptse'].sudo().create(value_plcement)
+            ci_ptse.write({'ci_id': rec_ci_id.id })
+            post_plcement.write({'ptse_3_id': ci_ptse.id })
+            pdf = request.env['ir.actions.report'].sudo()._render_qweb_pdf('website_base.ptce3_report_actions', [ci_ptse.id])[0]
             b64_pdf = base64.b64encode(pdf)
-            plcement.write({'ptse_3': b64_pdf})
-            self.action_get_attachment(plcement)
+            ci_ptse.write({'ptse_3': b64_pdf})
+            self.action_get_attachment(ci_ptse)
             return request.redirect('/my')
 
-        if department and ci_id:
-            rec_ci = request.env["res.partner"].sudo().search([('id', '=', ci_id)])
-            plcement = request.env["plcement.management"].sudo().search([('ci_id', '=', rec_ci.id)])
-            if plcement:
-                error = _('CI Details Have Already Been Created')
-                return request.redirect_query('/show/department/%s' % department.id, {"error": error})
-            value.update({
-                'ci':rec_ci,
-                'department': department
-            })
+        # if department and ci_id:
+        #     rec_ci = request.env["res.partner"].sudo().search([('id', '=', ci_id)])
+        #     plcement = request.env["plcement.management"].sudo().search([('ci_id', '=', rec_ci.id)])
+        #     if plcement:
+        #         error = _('CI Details Have Already Been Created')
+        #         return request.redirect_query('/show/department/%s' % department.id, {"error": error})
+        #     value.update({
+        #         'ci':rec_ci,
+        #         'department': department
+        #     })
             
-            return request.render("website_base.ptse3_student_details",value)
+        return request.render("website_base.ptse3_student_details",value)
     
     
     @http.route(['/ci/details/<int:plcement>'], 
                 type="http", website=True, auth="user",Methods=["POST"])
     def ptse3_ci_details(self, ci_id=None, plcement=None, report_type=None, download=False, **post):
-        plcement = request.env["plcement.management"].sudo().search([('id', '=', plcement)])
+        plcement = request.env["ci.ptse"].sudo().search([('id', '=', plcement)])
       
         if report_type:
             try:
-                plcement_sudo = self._document_check_access('plcement.management', plcement.id)
+                plcement_sudo = self._document_check_access('ci.ptse', plcement.id)
             except (AccessError, MissingError):
                 return request.redirect('/my')
 
@@ -206,3 +206,87 @@ class CustomerPortals(portal.CustomerPortal):
                     })
         return request.redirect("/student/details/%s?ci_id=%s" % (department.id, ci.id))
         
+        
+    @http.route(
+        ["/show/info/ci"], type="json", auth="user", methods=['POST'], website=True, csrf=False
+    )
+    def show_info_ci(self, **post):
+        ci_id = post.get('ci_id')
+        rec_ci = request.env["res.partner"].sudo().search([('id', '=', int(ci_id))])
+        value = {
+            'entry_level_pt_degree_earned': rec_ci.entry_level_pt_degree_earned or '',
+            'highest_degree_earned': rec_ci.highest_degree_earned or '',
+            'degree_area': rec_ci.degree_area or '',
+            'years_experience_ci': rec_ci.years_experience_ci or '',
+            'years_experience_clinician': rec_ci.years_experience_clinician or '',
+            'areas_expertise': rec_ci.areas_expertise or '',
+            'clinical_certification': rec_ci.clinical_certification or '',
+            'specify_area': rec_ci.specify_area or '',
+            'apta_credentialed_ci': rec_ci.apta_credentialed_ci or '',
+            'other_ci_credential': rec_ci.other_ci_credential or '',
+            'professional_organization_membership': rec_ci.professional_organization_membership or '',
+        }
+        return value
+    
+
+class CustomerSurvey(main.Survey):
+    
+    @http.route()
+    def survey_start(self, survey_token, answer_token=None, email=False, plcement=None, **post):
+        result =  super(CustomerSurvey, self).survey_start(survey_token, answer_token=answer_token, email=email, **post)
+        request.session['post_plcement'] = plcement
+        return result
+        
+    def _prepare_survey_finished_values(self, survey, answer, token=False):
+        result =  super(CustomerSurvey, self)._prepare_survey_finished_values(survey, answer, token=token)
+        print(request.session.get('post_plcement'),'<<<<<<<<<<<<<<<<post_plcement>>>>>>>>>>>>>>>>>>')
+        print('******************************************')
+        print('******************************************')
+        print('******************************************')
+        print('******************************************')
+        print('******************************************')
+        print('******************************************')
+        print('******************************************')
+        print('******************************************')
+        print('******************************************')
+        print('******************************************')
+        survey_id = result.get('survey')
+        user_input = result.get('answer')
+        post_plcement = request.env["post.plcement.management"].sudo().search([('id', '=', request.session.get('post_plcement'))])
+        if survey_id.ptse_type == 'ptse_1':
+           post_plcement.sudo().write({"ptse_1": user_input.id})
+        else:
+            post_plcement.sudo().write({"ptse_2": user_input.id})
+        return result
+    
+    @http.route()
+    def survey_display_page(self, survey_token, answer_token, **post):
+        result =  super(CustomerSurvey, self).survey_display_page(survey_token, answer_token, **post)
+        print('=========================request.session========================================',result)
+        print('=================================================================')
+        print('=================================================================')
+        print('============================post=====================================',post)
+        print('=================================================================')
+        print('=================================================================')
+        print('=================================================================')
+        print('=================================================================')
+        return result
+    @http.route(['/download/answer/<int:user_input>'], 
+                type="http", website=True, auth="user",Methods=["GET"])
+    def _download_answer_report(self, user_input, download=True):
+        user_input = request.env["survey.user_input"].sudo().search([('id', '=', user_input)])
+        report = request.env["ir.actions.report"].sudo()._render_qweb_pdf('survey.certification_report', [user_input.id], data={'report_type': 'pdf'})[0]
+
+        report_content_disposition = content_disposition('Certification.pdf')
+        if not download:
+            content_split = report_content_disposition.split(';')
+            content_split[0] = 'inline'
+            report_content_disposition = ';'.join(content_split)
+
+        return request.make_response(report, headers=[
+            ('Content-Type', 'application/pdf'),
+            ('Content-Length', len(report)),
+            ('Content-Disposition', report_content_disposition),
+        ])
+
+       

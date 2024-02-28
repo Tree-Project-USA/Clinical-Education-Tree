@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+<template id="survey_page_print" inherit_id="survey.survey_page_print">
+    <xpath expr="//fieldset" position="after">
+        <div class="clearfix oe_login_buttons my-4">
+            <a href="/my/home"
+              class="float-end custom_create btn btn-block "
+              style="background-color:#326434;color:#fff;">
+              Back To My Profile
+            </a>
+          </div>
+    </xpath>
+    
+</template>
+
+<template id="survey_fill_form_done"  inherit_id="survey.survey_fill_form_done">
+    <xpath expr='//div[contains(@class, "o_survey_finished")]' position="inside">
+        <a href="/my/home"
+        class="float-end custom_create btn btn-block "
+        style="background-color:#326434;color:#fff;">
+        Back To My Profile
+      </a>
+  </xpath>
+  </template>
+</odoo>

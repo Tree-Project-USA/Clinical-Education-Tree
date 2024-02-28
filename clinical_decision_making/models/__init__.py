@@ -24,5 +24,7 @@ from . import clinical_experience
 from . import res_company
 from . import ir_ui_menu
 from . import res_partner_ci
-from . import plcement_management
+from . import ci_ptse
 from . import res_users
+from . import post_plcement_management
+from . import survey_survey

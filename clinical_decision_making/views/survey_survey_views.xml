@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- View survey.survey tree -->
+    <record id="view_survey_survey_tree" model="ir.ui.view">
+        <field name="name">view.survey.survey.tree</field>
+        <field name="model">survey.survey</field>
+        <field name="inherit_id" ref=""/>
+        <field name="arch" type="xml">
+            <tree string="Survey Survey">
+            </tree>
+        </field>
+    </record>
+
+
+    <!-- View survey.survey form -->
+    <record id="inherit_view_survey_survey_form" model="ir.ui.view">
+        <field name="name">inherit view survey survey form</field>
+        <field name="model">survey.survey</field>
+        <field name="inherit_id" ref="survey.survey_survey_view_form"/>
+        <field name="arch" type="xml">
+           <field name="user_id" position="after">
+            <field name="ptse_type" widget="radio"/>
+           </field>
+        </field>
+    </record>
+
+</odoo>

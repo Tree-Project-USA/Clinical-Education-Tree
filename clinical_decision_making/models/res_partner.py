@@ -72,7 +72,7 @@ class ResPartner(models.Model):
     student_signature_date = fields.Date(string="Student Signature Date")
     ci_signature = fields.Binary(string="Clinical Instructor Signature")
     ci_signature_date = fields.Date(string="Clinical Instructor Signature Date")
-    plcement_management_ids = fields.One2many(comodel_name='plcement.management', inverse_name='student_id', string='Post Placement Management')
+    plcement_management_ids = fields.One2many(comodel_name='post.plcement.management', inverse_name='student_id', string='Post Placement Management')
     
             
     
