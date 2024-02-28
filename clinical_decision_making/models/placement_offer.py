@@ -178,7 +178,7 @@ class PlacementOfferLine(models.Model):
 
     name = fields.Char(string='Name')
     facility_id = fields.Many2one(comodel_name='medical.facility', related='offer_id.facility_id', store=True)
-    department_id = fields.Many2one(comodel_name='facility.department' , string='Department', domain="[('id', 'in', department_ids)]")
+    department_id = fields.Many2one(comodel_name='facility.department' , string='Location', domain="[('id', 'in', department_ids)]")
     street = fields.Char(related='department_id.street')
     city = fields.Char(related='geographical_id.city')
     state = fields.Char(related='geographical_id.state')

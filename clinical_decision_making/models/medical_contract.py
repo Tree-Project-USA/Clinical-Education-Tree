@@ -66,7 +66,7 @@ class FacilityContractHistory(models.Model):
         self.ensure_one()
         action = self.env['ir.actions.actions']._for_xml_id('clinical_decision_making.action_facility_contract')
         action.update({
-            'context': {'default_facility_id': self.facility_id.id},
+            'context': {'default_facility_id': self.facility_id.id, 'default_name': '%s - ' % self.facility_id.name},
             'view_mode': 'form',
             'view_id': self.env.ref('clinical_decision_making.facility_contract_view_form').id,
             'views': [(self.env.ref('clinical_decision_making.facility_contract_view_form').id, 'form')],
@@ -80,12 +80,13 @@ class FacilityContracts(models.Model):
     _description = 'Clinical Site Contract'
     _rec_name = 'facility_id'
     
+    
     name = fields.Char('Contract Reference', required=True)
     contract_attachment = fields.Binary(string='Contract Attachment', attachment=True)
     facility_id = fields.Many2one(comodel_name='medical.facility', string='Clinical Site')
     company_id = fields.Many2one('res.company', related='facility_id.company_id', store=True)
     date_start = fields.Date('Start Date', required=True)
-    date_end = fields.Date('End Date', required=True)
+    date_end = fields.Date('End Date')
     notes = fields.Html('Notes')
     state = fields.Selection([
         ('draft', 'Contract Initiated'),
@@ -126,10 +127,10 @@ class FacilityContracts(models.Model):
 
     # Cron job
     def action_require_renewal(self):
-        contract_notify_months = self.env.company.contract_notify_months or 6
+        contract_notify_months = self.env.company.contract_notify_months
         current_date = datetime.now()
         future_date = current_date + timedelta(days=contract_notify_months*30)
-        contract_ids = self.env['facility.contract'].sudo().search([("state","=","open"),("date_end" , "<", future_date)])
+        contract_ids = self.env['facility.contract'].sudo().search([("state","=","open"), ('future_date', '!=', False), ("date_end" , "<", future_date)])
         contract_ids.sudo().write({
             "state" : "require_renewal"
             })

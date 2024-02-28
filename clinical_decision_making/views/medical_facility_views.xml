@@ -45,7 +45,7 @@
                 <field name="active" invisible="1"/>
                 <header>
                 <button name="facility_multi_department"
-                    string="Apply Multi Department"
+                    string="Apply Multi Location"
                     type="object"
                     attrs="{'invisible':[('is_single_facility', '=', False)]}"
                 />
@@ -77,8 +77,8 @@
                             </div>
                         </button>
 
-                        <button name="action_open_facility_department" type="object" class="oe_stat_button" string="Department">
-                            <field name="department_count" widget="statinfo" string="Departments"/>
+                        <button name="action_open_facility_department" type="object" class="oe_stat_button" string="Location">
+                            <field name="department_count" widget="statinfo" string="Locations"/>
                         </button>
                         <button
                             name="action_open_placement_offer"
@@ -102,7 +102,7 @@
                             <field name="scce_primary_id" string="SCCE Primary" invisible="1"/>
                             <field name="scce_first_name" string="SCCE Last Name" invisible="1"/>
                             <field name="scce_last_name" string="SCCE Last Name" invisible="1"/>
-                            <field name="setting_ids" widget="many2many_tags" attrs="{'invisible':[('is_single_facility', '=', False)]}"/>
+                            <field name="main_setting_ids" widget="many2many_tags" attrs="{'invisible':[('is_single_facility', '=', False)]}"/>
                         </group>
                         <group>
                             <field name="city" attrs="{'invisible':[('is_single_facility', '=', False)]}"/>
@@ -112,7 +112,7 @@
                         </group>
                     </group>
                     <notebook>
-                        <page string="Department" attrs="{'invisible':[('is_single_facility', '=', True)]}">
+                        <page string="Location" invisible="1">
                             <field name="department_ids">
                                 <tree editable="bottom" decoration-primary="is_main_department==True">
                                     <field name="is_main_department" invisible="1"/>
@@ -125,19 +125,22 @@
                                     <field name="state"/>
                                     <field name="geographical_id" required="1"/>
                                     <field name="active_state" widget="badge" decoration-danger="active_state == 'not_active'" decoration-success="active_state == 'active'"/>
-                                    <button name="action_view_facility_department" type="object" icon="fa-external-link" title="Open Department Details"/>
+                                    <button name="action_view_facility_department" type="object" icon="fa-external-link" title="Open Location Details"/>
                                 </tree>
                             </field>
                         </page>
                         <page string="SCCE Information">
                             <field name="scce_ids" widget="one2many">
-                                <tree editable="bottom" class="prima">
+                                <tree editable="bottom">
                                     <field name="facility_id" invisible="1"/>
                                     <field name="scce_id"/>
-                                    <field name="is_primary_scce" widget="boolean_toggle" readonly="1" invisible="1"/>
-                                    <button string="Set to Primary" name="action_set_primary" type="object" icon="fa-check" attrs="{'invisible': [('is_primary_scce', '=', True)]}"/>
-                                    <field name="is_secondary_scce" widget="boolean_toggle" readonly="1" invisible="1"/>
-                                    <button string="Set to Secondary" name="action_set_secondary" type="object" icon="fa-check" attrs="{'invisible': [('is_secondary_scce', '=', True)]}"/>
+                                    <field name="email"/>
+                                    <button name="action_partner_access" type="object" string="Portal Access" class="btn-secondary"/>
+                                    <field name="is_primary_scce" widget="boolean_toggle" force_save="1"/>
+                                    <!-- <button string="Set to Primary" name="action_set_primary" type="object" icon="fa-check" attrs="{'invisible': [('is_primary_scce', '=', True)]}"/> -->
+                                    <field name="is_secondary_scce" widget="boolean_toggle"/>
+                                    <!-- <button string="Set to Secondary" name="action_set_secondary" type="object" icon="fa-check" attrs="{'invisible': [('is_secondary_scce', '=', True)]}"/> -->
+                                    <field name="is_other" widget="boolean_toggle"/>
                                 </tree>
                             </field>
                         </page>

@@ -18,4 +18,4 @@ class ResCompany(models.Model):
     clinical_distance_mel = fields.Float(string='Min Distance between Student and Site (Mels)', default=50.0, required=True)
     zip_code_token = fields.Char(string='Zip Code API Token')
     contract_notify_months = fields.Integer(string='Contract Notification Days', default=60, required=True)
-    hardship_attachment = fields.Binary(required=True)
+    hardship_attachment = fields.Binary(string='Hardship Attachment')

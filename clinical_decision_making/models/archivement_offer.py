@@ -12,7 +12,7 @@ class ArchiveOffer(models.Model):
     active = fields.Boolean(string='Active', default=True)
     student_id = fields.Many2one(comodel_name='res.partner', string='Student')
     is_linked = fields.Boolean('is Joined', default=False, readonly=True)
-    department_id = fields.Many2one(comodel_name='facility.department' , string='Department')
+    department_id = fields.Many2one(comodel_name='facility.department' , string='Location')
     facility_id = fields.Many2one(comodel_name='medical.facility', related='department_id.facility_id', store=True,)
     offer_id = fields.Many2one(comodel_name='placement.offer', string='Offer')
     offer_line_id = fields.Many2one(comodel_name='placement.offer.line', string='Line')

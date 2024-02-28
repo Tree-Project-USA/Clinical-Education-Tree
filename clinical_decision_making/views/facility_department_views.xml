@@ -46,15 +46,15 @@
                     <div class="oe_title">
                         <label for="name"/>
                         <h1>
-                            <field name="name" placeholder="Name..." required="1" attrs="{'readonly': [('is_main_department', '=', True)]}"/>
+                            <field name="name" placeholder="Name..." required="1"/>
                         </h1>
                     </div>
                     <group>
                         <group>
                             <field name="facility_id" required="1"/>
                             <field name="company_id" string="University" groups="base.group_multi_company"/>
-                            <field name="street" attrs="{'readonly': [('is_main_department', '=', True)]}"/>
-                            <field name="geographical_id" required="1" attrs="{'readonly': [('is_main_department', '=', True)]}"/>
+                            <field name="street"/>
+                            <field name="geographical_id" required="1"/>
                         </group>
                         <group>
                             <field name="city"/>
@@ -104,7 +104,7 @@
         <field name="name">view.facility.department.search</field>
         <field name="model">facility.department</field>
         <field name="arch" type="xml">
-            <search string="Clinical Site Department">
+            <search string="Clinical Site Location">
                 <group expand="1" string="Group By">
                     <filter string="Name" name="name" domain="[]" context="{'group_by':'name'}"/>
                 </group>
@@ -114,7 +114,7 @@
 
     <!-- Action facility.department -->
     <record id="action_facility_department" model="ir.actions.act_window">
-        <field name="name">Clinical Site Department</field>
+        <field name="name">Clinical Site Location</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">facility.department</field>
         <field name="view_mode">tree,form</field>
