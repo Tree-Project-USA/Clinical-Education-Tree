@@ -19,6 +19,8 @@ class ClinicalExperience(models.Model):
     sequence = fields.Char(
         'Sequence', default=lambda self: self.env['ir.sequence'].next_by_code('clinical.experience'), company_dependent=True)
     company_id = fields.Many2one('res.company', string='Program', default=lambda self: self.env.user.company_id)
+    ptse_2_survey = fields.Many2one('survey.survey', string="PTSE 2 Survey", domain=[('ptse_type', '=', 'ptse_2')])
+    ptse_1_survey = fields.Many2one('survey.survey', string="PTSE 1 Survey", domain=[('ptse_type', '=', 'ptse_1')])
     
     
     @api.model

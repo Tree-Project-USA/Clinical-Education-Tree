@@ -323,9 +323,9 @@
                       <tr>
                         <th scope="col">Student</th>
                         <th scope="col">Email</th>
-                        <th scope="col">Status</th>
+                        <th scope="col">Term</th>
+                        <th scope="col">Year</th>
                         <th scope="col">CI Details</th>
-                        <th scope="col">Write Date</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -337,17 +337,17 @@
                           <span t-field="plcement.student_id.email" />
                         </td>
                         <td>
-                          <span t-field="plcement.ci_details_status" />
+                          <span t-field="plcement.year" />
                         </td>
                         <td>
-                          <a t-if="plcement.stage_type == 'ci_details'" class="btn btn-primary" t-att-href="'/ci/details/%s' % (plcement.id)">
+                          <span t-field="plcement.placement_term"/>
+                        </td>
+                        <td>
+                          <a class="btn btn-primary" t-att-href="'/ci/details/%s' % (plcement.id)">
                             CI Details
                             <i class="fa fa-pencil"/>
                             </a>
-                            <span t-else="">-</span>
-                        </td>
-                        <td>
-                          <span t-field="plcement.write_date" t-options='{"widget": "date"}'/>
+                           
                         </td>
                       </tr>
                     </tbody>

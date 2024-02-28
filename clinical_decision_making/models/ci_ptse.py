@@ -9,9 +9,9 @@ _logger = logging.getLogger(__name__)
 SELECTION_YEAR_RANGE = [(str(i),str(i)) for i in range(2020, 2500)]
 
 
-class PlcementManagement(models.Model):
-    _name = 'plcement.management'
-    _description = _('Plcement Management')
+class CIPtse(models.Model):
+    _name = 'ci.ptse'
+    _description = _('CI PTSE 3')
     _rec_name = 'sequence'
     _order = 'sequence'
 
@@ -31,7 +31,6 @@ class PlcementManagement(models.Model):
     setting = fields.Selection(related='archive_id.setting')
     placement_term = fields.Selection(related='archive_id.placement_term')
     year = fields.Selection(related='archive_id.year')
-    parent_id = fields.Many2one(comodel_name='plcement.management', string='Parnet')
     display_type = fields.Selection([
         ('line_section', "Section"),
         ('line_ci', "CI")], default=False, help="Technical field for UX purpose.")
@@ -49,9 +48,9 @@ class PlcementManagement(models.Model):
     @api.model
     def create(self, vals):
         vals['sequence'] = self.env['ir.sequence'].next_by_code('post.plcement.management') or _('New')
-        return super(PlcementManagement, self).create(vals)
+        return super(CIPtse, self).create(vals)
 
     
     def _get_report_base_filename(self):
         self.ensure_one()
-        return '%s' % ( dict(self._fields['stage_type'].selection).get(self.stage_type))
+        return '%s' % (dict(self._fields['stage_type'].selection).get(self.stage_type))

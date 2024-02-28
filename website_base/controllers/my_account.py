@@ -64,13 +64,12 @@ class CustomerPortals(CustomerPortal):
             scce_facility_ids = request.env["scce.facility"].sudo().search([
                 ('scce_id', 'in', res_partner_id.scce_ids.ids)]).mapped("facility_id")
             
-            plcement_ids = request.env["plcement.management"].sudo().search([
+            post_plcement_ids = request.env["post.plcement.management"].sudo().search([
                 ('ci_id', '=', res_partner_id.id)])
-            print(plcement_ids)
-            
+          
             values["partner"] = res_partner_id
             values["scce_facility_ids"] = scce_facility_ids
-            values["plcement_ids"] = plcement_ids
+            values["plcement_ids"] = post_plcement_ids
             return request.render("website_base.ci_profile_template", values)
         
     @http.route(['/download/attachment/<int:id>'], type='http', auth='public', website=True)

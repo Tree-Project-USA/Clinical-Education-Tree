@@ -33,6 +33,7 @@
         "views/attachment_request_templates.xml",
         "views/ptse3_templates.xml",
         "views/ci_profle_template.xml",
+        "views/survey_templates_print.xml",
         #Report
         'report/report_action.xml',
         'report/ptce3_report_template.xml',
@@ -61,6 +62,7 @@
             "website_base/static/src/js/scce_attachment_request.js",
             "website_base/static/src/js/website_update_ci_information.js",
             "website_base/static/src/js/file_attachment_request.js",
+            "website_base/static/src/js/ptse3_student_details.js",
         ],
     },
     "installable": True,

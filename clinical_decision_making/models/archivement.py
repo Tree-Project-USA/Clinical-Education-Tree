@@ -111,7 +111,6 @@ class Archive(models.Model):
     
 
     def write(self, vals):
-        print(vals)
         res = super(Archive, self).write(vals)
         if 'placement_status' in vals:
             for rec in self:
@@ -122,6 +121,15 @@ class Archive(models.Model):
                     
                 if rec.placement_status == 'not_placed':
                     rec.unlink_offer()
+                elif rec.placement_status == 'completed':
+                    self.env["post.plcement.management"].sudo().create({
+                       'archive_id': rec.id,
+                       'student_id': rec.student_id.id,
+                       'facility_id': rec.department_id.facility_id.id,
+                       'experience_id': rec.experience_id.id,
+                       'year': rec.year,
+                       'placement_term': rec.placement_term,
+                   })
         return res
     
     def convert_abbr_to_term_year(self, term_year):
