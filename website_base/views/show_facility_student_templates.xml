@@ -150,8 +150,16 @@
                     <tr t-foreach="post_plcements" t-as="plcement">
                       <t t-set="ptse_1_survey" t-value="plcement.archive_id.experience_id.ptse_1_survey"/>
                       <t t-set="ptse_2_survey" t-value="plcement.archive_id.experience_id.ptse_2_survey"/>
-                      <t t-set="user_input_1" t-value="ptse_1_survey.mapped('user_input_ids').search([('partner_id', '=', request.env.user.partner_id.id),('state', '=', 'done')])"/>
-                      <t t-set="user_input_2" t-value="ptse_2_survey.mapped('user_input_ids').search([('partner_id', '=', request.env.user.partner_id.id),('state', '=', 'done')])"/>
+                      <t t-set="user_input_1" t-value="ptse_1_survey.mapped('user_input_ids').search([
+                      ('partner_id', '=', request.env.user.partner_id.id),
+                      ('state', '=', 'done'),
+                      ('survey_id', '=', ptse_1_survey.id)
+                      ])"/>
+                      <t t-set="user_input_2" t-value="ptse_2_survey.mapped('user_input_ids').search([
+                      ('partner_id', '=', request.env.user.partner_id.id),
+                      ('state', '=', 'done'),
+                      ('survey_id', '=', ptse_2_survey.id)
+                      ])"/>
                       
                       <td>
                         <span t-field="plcement.ci_id" />

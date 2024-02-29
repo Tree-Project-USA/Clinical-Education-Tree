@@ -122,6 +122,22 @@ class Archive(models.Model):
                 if rec.placement_status == 'not_placed':
                     rec.unlink_offer()
                 elif rec.placement_status == 'completed':
+                    ptse_1_survey = rec.experience_id.ptse_1_survey    
+                    ptse_2_survey = rec.experience_id.ptse_2_survey
+                    user_input_1 = ptse_1_survey.mapped('user_input_ids').search([
+                        ('partner_id', '=', rec.student_id.id),
+                        ('state', '=', 'done'),
+                        ('survey_id', '=', ptse_1_survey.id)
+                        ])
+                    user_input_2 = ptse_2_survey.mapped('user_input_ids').search([
+                        ('partner_id', '=', rec.student_id.id),
+                        ('state', '=', 'done'),
+                        ('survey_id', '=', ptse_2_survey.id)
+                        ])
+                    print(ptse_1_survey, '<<<<<<<<<<<<<<<<<<<<<<<<<ptse_1_survey')
+                    print(ptse_2_survey, '<<<<<<<<<<<<<<<<<<<<<<<<<ptse_2_survey')
+                    print(user_input_1, '<<<<<<<<<<<<<<<<<<<<<<<<<user_input_1')
+                    print(user_input_2, '<<<<<<<<<<<<<<<<<<<<<<<<<user_input_2')
                     self.env["post.plcement.management"].sudo().create({
                        'archive_id': rec.id,
                        'student_id': rec.student_id.id,
@@ -129,6 +145,8 @@ class Archive(models.Model):
                        'experience_id': rec.experience_id.id,
                        'year': rec.year,
                        'placement_term': rec.placement_term,
+                       'ptse_1': user_input_1.id if user_input_1 else False,
+                       'ptse_2': user_input_2.id if user_input_2 else False,
                    })
         return res
     
