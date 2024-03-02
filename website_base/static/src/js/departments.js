@@ -34,54 +34,68 @@ odoo.define("website_base.departments", function(require) {
             // add row for file
             const department_new_tag =
             `<tr class="department-list" id="zip_` + counter_availability + `">
-            <td class="row-index">
-                <select name="company_id_` + counter_availability + `" 
-                    id="company_id_` + counter_availability + `"
-                    class="form-control col-xl-12 custom-select company_id_` + counter_availability + `" required="1">
-                    <option  value="" selected="selected">` + option + `</option>
-                </select>
-            </td>
-            <td class="row-index">
-                <select name="department_id_` + counter_availability + `" 
-                    id="department_id_` + counter_availability + `"
-                    class="form-control col-xl-12 custom-select department_id_` + counter_availability + `" required="1">
-                    <option  value="" selected="selected">` + option + `</option>
-                </select>
-            </td>
-            <td class="row-index">
-                <select name="experience_id_` + counter_availability + `" 
-                    id="experience_id_` + counter_availability + `"
-                    class="form-control col-xl-12 custom-select experience_id_` + counter_availability + `" required="1">
-                    <option  value="" selected="selected">` + option + `</option>
-                </select>
-            </td>
-            <td class="row-index">
-                <select name="placement_term_` + counter_availability + `"  
-                    class="form-control col-xl-12 custom-select placement_term_` + counter_availability + `">
-                    <option  value="" selected="selected">` + option + `</option>
-                    <option  value="fall">FALL</option>
-                    <option value="spring">SPRING</option>
-                    <option value="summer">SUMMER</option>
-                </select>
-            </td>
-            <td class="row-index">
-                <select name="term_` + counter_availability + `" 
-                    id="term_` + counter_availability + `"
-                    class="form-control col-xl-12 custom-select term_` + counter_availability + `" required="1">
-                    <option  value="" selected="selected">` + option + `</option>
-                </select>
-            </td>
-            <td class="row-index">
-                <select name="setting_` + counter_availability + `"  
-                    class="form-control col-xl-12 custom-select setting_` + counter_availability + `">
-                    <option  value="" selected="selected">` + option + `</option>
-                    <option  value="op">OP</option>
-                    <option value="ip">IP</option>
-                </select>
-            </td>
-            <td class="row-index">
+            <td class="row-index" colspan="7">
                 <div class="row">
-                    <div class="col-12">
+                    <div class="col-lg-4 col-12">
+                        <label for="staticEmail" class="col-form-label">Program</label>
+                        <select name="company_id_` + counter_availability + `" 
+                            id="company_id_` + counter_availability + `"
+                            class="form-control col-xl-12 custom-select company_id_` + counter_availability + `" required="1">
+                            <option  value="" selected="selected">` + option + `</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-4 col-12">
+                        <label for="staticEmail" class="col-form-label">Locations</label>
+                        <select 
+                            name="department_id_` + counter_availability + `"  
+                            id="department_id_` + counter_availability + `"
+                            class="form-control col-xl-12 custom-select company_id_` + counter_availability + `" required="1"
+                        >
+                        <option  value="" selected="selected">` + option + `</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-4 col-12">
+                        <label for="staticEmail" class="col-form-label">Year</label>
+                        <select name="term_` + counter_availability + `" 
+                            id="term_` + counter_availability + `"
+                            class="form-control col-xl-12 custom-select experience_id_` + counter_availability + `" required="1">
+                            <option  value="" selected="selected">` + option + `</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-lg-4 col-12">
+                        <label for="staticEmail" class="col-form-label">Term</label>
+                        <select name="placement_term_${counter_availability}"
+                        id="placement_term_${counter_availability}"  
+                        class="form-control col-xl-12 custom-select placement_term_` + counter_availability + `" required="1">
+                            <option value="" selected="selected">` + option + `</option>
+                            <option value="fall">FALL</option>
+                            <option value="spring">SPRING</option>
+                            <option value="summer">SUMMER</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-4 col-12">
+                        <label for="staticEmail" class="col-form-label">CE Type</label>
+                        <select name="experience_id_` + counter_availability + `" 
+                            id="experience_id_` + counter_availability + `"
+                            class="form-control col-xl-12 custom-select experience_id_` + counter_availability + `" required="1">
+                            <option  value="" selected="selected">` + option + `</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-4 col-12">
+                        <label for="staticEmail" class="col-form-label">Offer Setting Type</label>
+                        <select name="setting_` + counter_availability + `"  
+                        class="form-control col-xl-12 custom-select setting_` + counter_availability + `" required="1">
+                            <option  value="" selected="selected">` + option + `</option>
+                            <option  value="op">OP</option>
+                            <option value="ip">IP</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4 col-12">
+                        <label for="staticEmail" class="col-form-label">Number of Over</label>
                         <div>
                             <input
                                 type="text"
@@ -92,7 +106,34 @@ odoo.define("website_base.departments", function(require) {
                             />
                         </div>
                     </div>
+                    <div class="col-lg-4 col-12">
+                        <label for="staticEmail" class="col-form-label">Start Date</label>
+                        <div>
+                            <input
+                                type="text"
+                                class="form-control"
+                                ${counter_availability === 0 ? 'required' : ''}
+                                name="start_date_` + counter_availability + `" 
+                                id="start_date_` + counter_availability + `"
+                                readonly="1"
+                            />
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-12">
+                        <label for="staticEmail" class="col-form-label">End Date</label>
+                        <div>
+                            <input
+                                type="text"
+                                class="form-control"
+                                ${counter_availability === 0 ? 'required' : ''}
+                                name="end_date_` + counter_availability + `" 
+                                id="end_date_` + counter_availability + `"
+                                readonly="1"
+                            />
+                        </div>
+                    </div>
                 </div>
+               
             </td>
             <td class="text-center" >
                 <i class="btn fa fa-trash fa_custom" 
@@ -149,10 +190,38 @@ odoo.define("website_base.departments", function(require) {
             };
             var department = "#department_id_" + counter_availability;
             var experience = "#experience_id_" + counter_availability;
-            var date = "#date_" + counter_availability;
+            var term = "#term_" + counter_availability;
+            var setting = "#setting_" + counter_availability;
             var company = "#company_id_" + counter_availability;
-            var year = "#term_" + counter_availability;
+            var placement_term = "#placement_term_" + counter_availability;
+            var start_date = "#start_date_" + counter_availability;
+            var end_date = "#end_date_" + counter_availability;
             var facility_id = $("#facility_id").val()
+            $(department).select2();
+            $(company).select2();
+            $(experience).select2();
+            $(term).select2();
+            $(setting).select2();
+            // $(placement_term).select2();
+
+            $(term).focus(function() {
+                // Store the current value on focus, before it changes
+            }).change(function() {
+                var years = $(term).val()
+                ajax.jsonRpc("/clinical/experience/dates", 'call', {
+                    years 
+                }).then(function(result) {
+                    $(experience).empty();
+                    $("#select2-chosen-3").html("<span>Select ...</span>");
+                    $(experience).html("<option>Select ...</option>");
+                    _.each(result["clinical_experience_ids"], function(value){
+                        $(experience).append($('<option>', {
+                            value: value.id,
+                            text: value.name,
+                        }));
+                    });
+                })
+            })
             ajax.jsonRpc("/departments", 'call', {
                 'id': facility_id,
             }).then(function(result) {
@@ -163,7 +232,7 @@ odoo.define("website_base.departments", function(require) {
                     }))
                 })
                 _.each(result["SELECTION_YEAR_RANGE"], function(value){
-                    $(year).append($('<option>', {
+                    $(term).append($('<option>', {
                         value: value.id,
                         text: value.id,
                     }))
@@ -174,13 +243,6 @@ odoo.define("website_base.departments", function(require) {
             }).change(function() {
                 var company_id = $(company).val()
                 ajax.jsonRpc("/inforamtion/company", 'call', { company_id }).then(function(data) {
-                    $(experience).empty();
-                    _.each(data["clinical_experience_ids"], function(value){
-                        $(experience).append($('<option>', {
-                            value: value.id,
-                            text: value.name,
-                        }))
-                    })
                     $(department).empty();
                     _.each(data["department_ids"], function(value){
                         $(department).append($('<option>', {
@@ -193,22 +255,12 @@ odoo.define("website_base.departments", function(require) {
             $(experience).focus(function() {
                 // Store the current value on focus, before it changes
             }).change(function() {
+                var years = $(term).val()
+                var terms = $(placement_term).val()
                 var experience_id = $(experience).val()
-                ajax.jsonRpc("/program/experience/term", 'call', { experience_id }).then(function(data) {
-                    // $(experience).empty();
-                    // _.each(data["clinical_experience_ids"], function(value){
-                    //     $(experience).append($('<option>', {
-                    //         value: value.id,
-                    //         text: value.name,
-                    //     }))
-                    // })
-                    // $(department).empty();
-                    // _.each(data["department_ids"], function(value){
-                    //     $(department).append($('<option>', {
-                    //         value: value.id,
-                    //         text: value.name + '/' + value.street + '/' + value.city + '/' + value.state,
-                    //     }))
-                    // })
+                ajax.jsonRpc("/program/experience/term", 'call', { experience_id, years, terms }).then(function(data) {
+                    $(start_date).val(data.start_date)
+                    $(end_date).val(data.end_date)
                 });
             })
             counter_availability++

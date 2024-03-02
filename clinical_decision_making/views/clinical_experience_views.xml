@@ -13,6 +13,7 @@
                 <field name="ptse_2_survey"/>
                 <field name="company_id" string="University" groups="base.group_multi_company"/>
                 <field name="active" widget="boolean_toggle"/>
+                <button name="action_open_experience_dates" type="object" string="Enter Clinical Experience dates"/>
             </tree>
         </field>
     </record>

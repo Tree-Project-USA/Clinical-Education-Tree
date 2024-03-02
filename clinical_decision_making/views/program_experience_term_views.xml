@@ -12,19 +12,18 @@
                     <field name="experience_id"/>
                     <field name="sequence"/>
                     <field name="term"/>
-                    <field name="date_ids"/>
                 </tree>
             </field>
         </record>
 
         <!-- program form view -->
-        <record id="program_experience_term_view_form" model="ir.ui.view">
-            <field name="name">program.experience.term.view.form</field>
-            <field name="model">program.experience.term</field>
+        <record id="clinical_experience_dates_view_form" model="ir.ui.view">
+            <field name="name">clinical.experience.view.form</field>
+            <field name="model">clinical.experience</field>
             <field name="arch" type="xml">
                 <form>
                     <sheet>
-                        <field name="program_id" invisible="1"/>
+                        <field name="action"/>
                         <field name="company_id" string="University" groups="base.group_multi_company" invisible="1"/>
                         <field name="date_ids">
                             <tree editable="bottom" delete="false">
@@ -43,12 +42,5 @@
             </field>
         </record>
 
-    <!-- Action program.experience.term -->
-    <record id="action_program_experience_term" model="ir.actions.act_window">
-        <field name="name">Program Experience Term</field>
-        <field name="type">ir.actions.act_window</field>
-        <field name="res_model">program.experience.term</field>
-        <field name="view_mode">tree,form</field>
-    </record>
 
 </odoo>

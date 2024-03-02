@@ -203,19 +203,42 @@ class SubmitAvailability(http.Controller):
         values["department_ids"] = departments
         return values
     
-    # @http.route('/program/experience/term', website=True, type='json', auth="user", csrf=False)
-    # def program_experience_term(self, experience_id=None, **kw):
-    #     values = {}
-    #     clinical_experience_ids = request.env['clinical.experience'].sudo().search([("id", "=", experience_id)])
-    #     print(clinical_experience_ids)
-    #     program_experience_term_ids = request.env["program.experience.term"].sudo().search([("experience_id", "=", clinical_experience_ids.id)])
-    #     x = program_experience_term_ids.filtered(lambda ex_id : ex_id.experience_id.id == clinical_experience_ids.id)
-    #     print(x)
-    #     # program_experiences = [{
-    #     #             'start_date': program_experience.start_date if program_experience.end_date else '',
-    #     #             'end_date': program_experience.end_date if program_experience.end_date else '',
-    #     #         } for program_experience in program_experience_term_ids]
-    #     # for i in program_experiences:
-    #     #     print(i)
-    #     # values["program_experience_term_ids"] = program_experiences
-    #     return values
+    @http.route('/clinical/experience/dates', website=True, type='json', auth="user", csrf=False)
+    def clinical_experience_dates(self, years= None, **kw):
+        values = {}
+        clinical_experience_dates_ids = request.env['clinical.experience.dates'].search([("year", "=", years)])
+        clinical_experience = clinical_experience_dates_ids.mapped("experience_id")
+        experiences = [{
+                    'id': experience.id,
+                    'name': experience.name if experience.name else '',
+                } for experience in clinical_experience]
+        values["clinical_experience_ids"] = experiences
+        return values
+        
+    @http.route('/program/experience/term', website=True, type='json', auth="user", csrf=False)
+    def program_experience_term(self, years=None, experience_id=None, terms=None, **kw):
+        values = {}
+        start_date = ""
+        end_date = ""
+        print(terms, "termstermstermsterms")
+        
+        print(experience_id)
+        clinical_experience_ids = request.env['clinical.experience'].sudo().search([("id", "=", experience_id)])
+        print(clinical_experience_ids.mapped("date_ids"))
+        for i in clinical_experience_ids.mapped("date_ids"):
+            if i.year == years:
+                if terms == "fall":
+                    start_date = i.fa_start_date if i.fa_start_date else ""
+                    end_date = i.fa_end_date if i.fa_end_date else ""
+                elif terms == "spring":
+                    start_date = i.sp_start_date if i.sp_start_date else ""
+                    end_date = i.sp_end_date if i.sp_end_date else ""
+                elif terms == "summer":
+                    start_date = i.su_start_date if i.su_start_date else ""
+                    end_date = i.su_end_date if i.su_end_date else ""
+            else:
+                break
+            values["start_date"] = start_date 
+            values["end_date"] = end_date 
+            return values
+        
