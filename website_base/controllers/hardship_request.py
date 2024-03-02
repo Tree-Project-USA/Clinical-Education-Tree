@@ -1,4 +1,4 @@
-from odoo import http
+from odoo import http, Command
 from odoo.http import request
 
 import base64
@@ -99,16 +99,15 @@ class CustomerPortals(http.Controller):
                         'res_id': hardship_id.id,
                     })
                     file_list.append(line_file)
+                hardship_id.preferred_geographical_ids = [(5, 0, 0)]
                 hardship_id.sudo().write({
                     "note":  post.get("note") if post.get("note") else False,                    
                     "state": "under_review",
                     "attachment_ids": file_list,
-                    "preferred_geographical_ids": [(6,0, {
-                            'geographical_id': i,
-                        }) for i in zip_code_list],
+                    "preferred_geographical_ids": [Command.create({'geographical_id': i}) for i in zip_code_list]
                 })
-                template = request.env.ref('clinical_decision_making.mail_template_send_update_hardship_information_missing')
-                template.sudo().send_mail(hardship_id.id, force_send=True)
+                template = request.env.ref('clinical_decision_making.mail_template_send_update_hardship_information_missing').sudo()
+                template.sudo().send_mail(hardship_id.id, force_send=False, raise_exception=False)
                 return request.redirect("/success/hardship/request")
             except Exception as e:
                 return request.render("website_base.error_request", {'exception': e})

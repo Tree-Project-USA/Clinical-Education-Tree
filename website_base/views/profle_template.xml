@@ -643,10 +643,10 @@
                               <t t-esc="val.attachment_type.name" />
                             </td>
                             <td>
-                              <div t-if="val.expiration_date">
+                              <div t-if="val.expiration_date and val.state != 'required_update'">
                                 <t t-esc="val.expiration_date"/>
                               </div>
-                              <div t-if="not val.expiration_date">
+                              <div t-if="not val.expiration_date or val.state == 'required_update'">
                                 <input type="date" 
                                         class="form-control" 
                                         name="expiration_date" 
@@ -657,7 +657,7 @@
                               </div>
                             </td>
                             <td>
-                                <div id= "dropContainer" t-if="not val.attachment_ids">
+                                <div id= "dropContainer" t-if="not val.attachment_ids or val.state == 'required_update'">
                                   <!-- <input type="file" id="fileInput" /> -->
                                   <div id="dropArea" style="
                                     text-align: center;
@@ -666,7 +666,7 @@
                                     <input class="form-control" name="datas" type="file" id="fileInput" accept=".jpg, .jpeg, .png, .pdf, .docx, .xls, .pptx" required="required"/>
                                   </div>
                                 </div>
-                                <div t-if="val.attachment_ids">
+                                <div t-if="val.attachment_ids and val.state != 'required_update'">
                                   <t t-foreach="val.attachment_ids" t-as="attachment">
                                     <a 
                                     type="button"
@@ -681,7 +681,7 @@
                                 </div>
                             </td>
                             <td>
-                              <button class="btn btn-primary" t-if="not val.state">submit</button>
+                              <button class="btn btn-primary" t-if="not val.state or val.state == 'required_update'">submit</button>
                               <span t-if="val.state == 'under_review'" class="badge bg-dark" t-esc="dict(val._fields['state'].selection).get(val.state)"/>
                               <span t-if="val.state == 'confirmed'" class="badge bg-success" t-esc="dict(val._fields['state'].selection).get(val.state)"/>
                               <span t-if="val.state == 'required_update'" class="badge bg-warning" t-esc="dict(val._fields['state'].selection).get(val.state)"/>
@@ -723,10 +723,10 @@
                           <t t-esc="val.scce_attachment_type.name" />
                         </td>
                         <td>
-                          <div t-if="val.expiration_date">
+                          <div t-if="val.expiration_date and val.state != 'required_update'">
                             <t t-esc="val.expiration_date"/>
                           </div>
-                          <div t-if="not val.expiration_date">
+                          <div t-if="not val.expiration_date or val.state == 'required_update'">
                             <input type="date" 
                                     class="form-control" 
                                     name="expiration_date" 
@@ -737,7 +737,7 @@
                           </div>
                         </td>
                         <td>
-                            <div t-if="not val.attachment_ids">
+                            <div t-if="not val.attachment_ids or val.state == 'required_update'">
                               <div id="dropArea2" style="
                                 text-align: center;
                               " class="input-group custom-file-button">
@@ -745,7 +745,7 @@
                                 <input class="form-control" name="datas" type="file" id="fileInput2" required="required"/>
                               </div>
                             </div>
-                            <div t-if="val.attachment_ids">
+                            <div t-if="val.attachment_ids and val.state != 'required_update'">
                               <t t-foreach="val.attachment_ids" t-as="attachment">
                                 <a 
                                 type="button"
@@ -760,7 +760,7 @@
                             </div>
                         </td>
                         <td>
-                          <button class="btn btn-primary" t-if="not val.state">submit</button>
+                          <button class="btn btn-primary" t-if="not val.state or  val.state == 'required_update'">submit</button>
                           <span t-if="val.state == 'under_review'" class="badge bg-dark" t-esc="dict(val._fields['state'].selection).get(val.state)"/>
                           <span t-if="val.state == 'confirmed'" class="badge bg-success" t-esc="dict(val._fields['state'].selection).get(val.state)"/>
                           <span t-if="val.state == 'required_update'" class="badge bg-warning" t-esc="dict(val._fields['state'].selection).get(val.state)"/>
