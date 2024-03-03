@@ -49,6 +49,9 @@ class CustomerPortals(CustomerPortal):
         elif res_partner_id.is_scce:
             scce_facility_ids = request.env["scce.facility"].sudo().search([
                 ('scce_id', '=', res_partner_id.id)]).mapped("facility_id")
+            placement_offer_ids = request.env["placement.offer"].sudo().search([
+                ('scce_id', '=', res_partner_id.id)
+            ])
             values["partner"] = res_partner_id
             scce_list = []
             for i in res_partner_id.search([("is_ci", "=", True)]).mapped("scce_ids"):
@@ -58,6 +61,7 @@ class CustomerPortals(CustomerPortal):
                 ("is_ci", "=", True),
                 ("scce_ids.scce_id", "in", res_partner_id.ids)
             ])
+            values["placement_offer_ids"] = placement_offer_ids
             values["scce_facility_ids"] = scce_facility_ids
             return request.render("website_base.scce_profile_template", values)
         elif res_partner_id.is_ci:

@@ -46,6 +46,7 @@
             "website_base/static/lib/js/signature_pad.umd.min.js",
             "website_base/static/src/css/profile_user.css",
             "website_base/static/src/css/hardship_information.css",
+            "website_base/static/src/css/department.css",
             "website_base/static/src/scss/style.scss",
             "website_base/static/src/js/location_student.js",
             "website_base/static/src/js/location_student_hard_ship.js",

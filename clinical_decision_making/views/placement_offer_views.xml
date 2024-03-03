@@ -56,6 +56,7 @@
                             <group>
                                 <group>
                                     <!-- <field name="student_id"/> -->
+                                    <field name="scce_id" string="SCCE"/>
                                     <field name="facility_id" string="Clinical Site" attrs="{'readonly': [('state', '!=', 'offer_details_entered')]}"/>
                                     <field name="main_department_id" attrs="{'invisible':[('is_single_facility', '=', False)]}"/>
 

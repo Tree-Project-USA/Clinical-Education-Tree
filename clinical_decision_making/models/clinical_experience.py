@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
-
+from datetime import date
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError, ValidationError
 
@@ -9,6 +9,8 @@ _logger = logging.getLogger(__name__)
 SELECTION_YEAR_RANGE = [(str(i),str(i)) for i in range(2020, 2500)]
 
 
+# class C33linicalExperience(models.Model):
+#     _name = 'program.experience.dates'
 class ClinicalExperience(models.Model):
     _name = 'clinical.experience'
     _description = _('Clinical Experience')
@@ -18,9 +20,26 @@ class ClinicalExperience(models.Model):
     name = fields.Char(string='Clinical Experience Name')
     sequence = fields.Char(
         'Sequence', default=lambda self: self.env['ir.sequence'].next_by_code('clinical.experience'), company_dependent=True)
-    company_id = fields.Many2one('res.company', string='Program', default=lambda self: self.env.user.company_id)
     ptse_2_survey = fields.Many2one('survey.survey', string="PTSE 2 Survey", domain=[('ptse_type', '=', 'ptse_2')])
     ptse_1_survey = fields.Many2one('survey.survey', string="PTSE 1 Survey", domain=[('ptse_type', '=', 'ptse_1')])
+    company_id = fields.Many2one('res.company', string='Program', default=lambda self: self.env.user.company_id)
+    date_ids = fields.One2many(comodel_name='clinical.experience.dates', inverse_name='experience_id', string='Program Dates')
+    
+    def action_open_experience_dates(self):
+        self.ensure_one()
+        action = self.env['ir.actions.actions']._for_xml_id('clinical_decision_making.action_clinical_experience')
+
+        action['context'] = {'delete': False, 'default_experience_id': self.id}
+        action.update({
+            'name': '%s Clinical Experience Dates' % self.name,
+            'view_mode': 'form',
+            'view_id': self.env.ref('clinical_decision_making.clinical_experience_dates_view_form').id,
+            'views': [(self.env.ref('clinical_decision_making.clinical_experience_dates_view_form').id, 'form')],
+            'res_id': self.id,
+            'target': 'new'
+        })
+
+        return action
     
     
     @api.model
@@ -30,6 +49,53 @@ class ClinicalExperience(models.Model):
         for program_id in program_ids:
             program_id.create_update_program_experience_term()
         return res
+    
+class ClinicalExperienceDates(models.Model):
+    _name = 'clinical.experience.dates'
+    _description = 'Clinical Experience Dates'
+    _rec_name = 'experience_id'
+    _order = "year"
+    
+    experience_id = fields.Many2one(comodel_name='clinical.experience', string='Clinical Experience')
+    company_id = fields.Many2one('res.company', related='experience_id.company_id', store=True)
+    year = fields.Selection(selection=SELECTION_YEAR_RANGE, string='Year', required=True)
+    
+    fa_start_date = fields.Date(string='Fall start Date')
+    fa_end_date = fields.Date(string='Fall End Date')
+    
+    sp_start_date = fields.Date(string='Spring start Date')
+    sp_end_date = fields.Date(string='Spring End Date')
+    
+    su_start_date = fields.Date(string='Summer start Date')
+    su_end_date = fields.Date(string='Summer End Date')
+    
+    _sql_constraints = [
+        ("year_check", "check(program_term_id,year)", "Year is already exsist"),
+    ]
+    
+    @api.onchange('year',
+                  'fa_start_date',
+                  'fa_end_date',
+                  'sp_start_date',
+                  'sp_end_date',
+                  'su_start_date',
+                  'su_end_date'
+
+                  )
+    def _onchange_field(self):
+        for rec in self:
+            if rec.year:
+                year = int(rec.year)
+                
+                rec.fa_start_date = date(year, rec.fa_start_date.month, rec.fa_start_date.day) if rec.fa_start_date else False
+                rec.fa_end_date = date(year, rec.fa_end_date.month, rec.fa_end_date.day) if rec.fa_end_date else False
+                
+                rec.sp_start_date = date(year, rec.sp_start_date.month, rec.sp_start_date.day) if rec.sp_start_date else False
+                rec.sp_end_date = date(year, rec.sp_end_date.month, rec.sp_end_date.day) if rec.sp_end_date else False
+                
+                rec.su_start_date = date(year, rec.su_start_date.month, rec.su_start_date.day) if rec.su_start_date else False
+                rec.su_end_date = date(year, rec.su_end_date.month, rec.su_end_date.day) if rec.su_end_date else False
+
     
 
 class ClinicalExperienceSchedual(models.Model):

@@ -116,9 +116,9 @@
         <field name="domain_force">[('company_id', 'in', company_ids)]</field>
     </record>
 
-    <record id="program_experience_dates_comp_rule" model="ir.rule">
-        <field name="name">Program Experience Dates multi-company</field>
-        <field name="model_id" ref="model_program_experience_dates"/>
+    <record id="clinical_experience_dates_comp_rule" model="ir.rule">
+        <field name="name">Clinical Experience Dates multi-company</field>
+        <field name="model_id" ref="model_clinical_experience_dates"/>
         <field name="domain_force">[('company_id', 'in', company_ids)]</field>
     </record>
 
