@@ -45,6 +45,11 @@
                       data-bs-target="#ci_information" type="button" role="tab" aria-controls="ci_information"
                       aria-selected="false">CI Information</button>
                   </li>
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link " id="offer-information-tab" data-bs-toggle="tab"
+                      data-bs-target="#offer_information" type="button" role="tab" aria-controls="offer_information"
+                      aria-selected="false">Offers</button>
+                  </li>
                 </ul>
                 <div class="tab-content" id="myTabContent">
                   <div class="tab-pane fade my-4 show active" id="scce_information" role="tabpanel"
@@ -113,7 +118,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="row">
+                    <!-- <div class="row">
                       <div class="col-12 text-center">
                         <a
                          type="button"
@@ -125,7 +130,7 @@
                          <i class="fa fa-pencil"/> Submit Availability
                        </a>
                       </div>
-                    </div>
+                    </div> -->
                   </div>
                   <div class="tab-pane fade my-4" id="medical_attachment_ids" role="tabpanel"
                     aria-labelledby="medical-attachment-ids-tab">
@@ -695,6 +700,75 @@
                         </tr>
                       </tbody>
                     </table>
+                  </div>
+                  <div class="tab-pane fade my-4" id="offer_information" role="tabpanel"
+                    aria-labelledby="offer-information-tab">
+                    <div class="row">
+                      <div class="col-12">
+                        <a
+                         type="button"
+                         class="btn"
+                         role="button" 
+                         t-attf-href="/submit/availability"
+                         style="background-color:  #326434; !important; color: #fff"
+                       >
+                         <i class="fa fa-pencil"/> Submit Availability
+                       </a>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <table class="table table-striped table-bordered shadow-sm text-center mt-5">
+                        <thead style="background-color:#326434; color: #fff">
+                          <tr>
+                            <th scope="col" colspan="1">Clinical Site</th>
+                            <th scope="col" colspan="1">Status</th>
+                            <th scope="col" colspan="1">Created on</th>
+                            <th/>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr t-foreach="placement_offer_ids" t-as="val">
+                            <td colspan="1"><t t-esc="val.facility_id.name"/></td>
+                            <td><t t-esc="dict(val._fields['state'].selection).get(val.state)" /></td>
+                            <td colspan="1"><t t-esc="val.create_date"/></td>
+                            <td class="text-center">
+                              <a class="btn btn-primary" type="button"  data-bs-toggle="modal"
+                              t-att-data-bs-target="'#modal_{}'.format(val.id)"
+                              >Show Details</a>
+                            </td>
+                            <div class="modal fade update_ci_information" t-attf-id="modal_{{val.id}}"
+                            tabindex="-1" aria-hidden="true">
+                              <div class="modal-dialog modal-xl">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Offer Information</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                  </div>
+                                  <div class="modal-body">
+                                    <div class="row">
+                                      <h3><span>Clinical Site:</span><span class="mx-4" t-esc="val.facility_id.name"/></h3>
+                                    </div>
+                                    <div class="row" t-foreach="val.line_ids" t-as="line">
+                                      <div class="col-3 my-2"><span class="mx-2" style="font-weight: bold;">Location:</span><span class="mx-2" t-esc="line.department_id.name"/></div>
+                                      <div class="col-3 my-2"><span class="mx-2" style="font-weight: bold;">University:</span><span class="mx-2" t-esc="line.company_id.name"/></div>
+                                      <div class="col-3 my-2"><span class="mx-2" style="font-weight: bold;">Cliinical Experience:</span><span class="mx-2" t-esc="line.experience_id.name"/></div>
+                                      <div class="col-3 my-2"><span class="mx-2" style="font-weight: bold;">Term:</span><span class="mx-2" t-esc="line.placement_term"/></div>
+                                      <div class="col-3 my-2"><span class="mx-2" style="font-weight: bold;">Year:</span><span class="mx-2" t-esc="line.year"/></div>
+                                      <div class="col-3 my-2"><span class="mx-2" style="font-weight: bold;">Offer Seting Type:</span><span class="mx-2" t-esc="line.setting"/></div>
+                                      <div class="col-3 my-2"><span class="mx-2" style="font-weight: bold;">Number of Offer:</span><span class="mx-2" t-esc="line.offers"/></div>
+                                      <div class="col-3 my-2"><span class="mx-2" style="font-weight: bold;">Street:</span><span class="mx-2" t-esc="line.street"/></div>
+                                      <div class="col-3 my-2"><span class="mx-2" style="font-weight: bold;">City:</span><span class="mx-2" t-esc="line.city"/></div>
+                                      <div class="col-3 my-2"><span class="mx-2" style="font-weight: bold;">State:</span><span class="mx-2" t-esc="line.state"/></div>
+                                      <div class="col-3 my-2"><span class="mx-2" style="font-weight: bold;">ZIP Code:</span><span class="mx-2" t-esc="line.geographical_id.zip_code"/></div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
           </div>

@@ -95,7 +95,7 @@ odoo.define("website_base.departments", function(require) {
                 </div>
                 <div class="row">
                     <div class="col-lg-4 col-12">
-                        <label for="staticEmail" class="col-form-label">Number of Over</label>
+                        <label for="staticEmail" class="col-form-label">Number of Offer</label>
                         <div>
                             <input
                                 type="text"

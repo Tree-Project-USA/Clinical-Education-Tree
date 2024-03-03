@@ -329,9 +329,9 @@
                 <thead style="background-color:#326434; color: #fff">
                   <tr>
                     <th style="width: 5rem;">#</th>
-                    <th>Zip code</th>
-                    <th>State</th>
                     <th>City</th>
+                    <th>State</th>
+                    <th>Zip code</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -340,13 +340,13 @@
                       <t t-esc="val_index + 1" />
                     </td>
                     <td>
-                      <t t-esc="val.zip" />
+                      <t t-esc="val.city" />
                     </td>
                     <td>
                       <t t-esc="val.state" />
                     </td>
                     <td>
-                      <t t-esc="val.city" />
+                      <t t-esc="val.zip" />
                     </td>
                   </tr>
                 </tbody>

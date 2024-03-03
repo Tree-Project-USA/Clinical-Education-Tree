@@ -17,6 +17,7 @@ class PlacementOffer(models.Model):
     priority = fields.Selection(
         [('0', 'Normal'), ('1', 'Urgent')], 'Priority', default='0', index=True)
     facility_id = fields.Many2one(comodel_name='medical.facility', string='Clinical Site')
+    scce_id = fields.Many2one(comodel_name='res.partner', string='SCCE')
     main_department_id = fields.Many2one(comodel_name='facility.department' , related='facility_id.main_department_id')
     street = fields.Char(related='main_department_id.street')
     city = fields.Char(related='geographical_id.city')

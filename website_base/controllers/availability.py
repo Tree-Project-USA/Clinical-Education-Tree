@@ -36,6 +36,7 @@ class SubmitAvailability(http.Controller):
                     line_ids = create_line_ids(department, kw)
                     department_list.append(line_ids)
                     vals = {
+                        "scce_id": partner_id.id,
                         "facility_id": facility_id,
                         "line_ids": department_list,
                     }
