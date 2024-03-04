@@ -118,10 +118,6 @@ class Archive(models.Model):
                     self.search([('id', '!=', self.id), ('student_id', '=', self.student_id.id), ('experience_id', '=', self.experience_id.id), ('placement_term', '=', self.placement_term)]).write({
                         'placement_status': 'not_placed'
                     })
-                    
-                if rec.placement_status == 'not_placed':
-                    rec.unlink_offer()
-                elif rec.placement_status == 'completed':
                     ptse_1_survey = rec.experience_id.ptse_1_survey    
                     ptse_2_survey = rec.experience_id.ptse_2_survey
                     user_input_1 = ptse_1_survey.mapped('user_input_ids').search([
@@ -134,20 +130,21 @@ class Archive(models.Model):
                         ('state', '=', 'done'),
                         ('survey_id', '=', ptse_2_survey.id)
                         ])
-                    print(ptse_1_survey, '<<<<<<<<<<<<<<<<<<<<<<<<<ptse_1_survey')
-                    print(ptse_2_survey, '<<<<<<<<<<<<<<<<<<<<<<<<<ptse_2_survey')
-                    print(user_input_1, '<<<<<<<<<<<<<<<<<<<<<<<<<user_input_1')
-                    print(user_input_2, '<<<<<<<<<<<<<<<<<<<<<<<<<user_input_2')
                     self.env["post.plcement.management"].sudo().create({
                        'archive_id': rec.id,
                        'student_id': rec.student_id.id,
                        'facility_id': rec.department_id.facility_id.id,
                        'experience_id': rec.experience_id.id,
-                       'year': rec.year,
-                       'placement_term': rec.placement_term,
+                       'year': rec.year if rec.year else False,
+                       'placement_term': rec.placement_term if rec.placement_term else False,
                        'ptse_1': user_input_1.id if user_input_1 else False,
                        'ptse_2': user_input_2.id if user_input_2 else False,
                    })
+                    
+                if rec.placement_status == 'not_placed':
+                    rec.unlink_offer()
+              
+                   
         return res
     
     def convert_abbr_to_term_year(self, term_year):

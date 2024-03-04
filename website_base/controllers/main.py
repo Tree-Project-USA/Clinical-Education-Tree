@@ -1,5 +1,9 @@
 # -*- encoding: utf-8 -*-
 import base64
+import json
+from dateutil import parser
+from odoo.tools.misc import DEFAULT_SERVER_DATETIME_FORMAT
+from datetime import datetime, date
 from odoo import http, _, Command
 from odoo.http import request, content_disposition
 from odoo.addons.http_routing.models.ir_http import slug
@@ -15,14 +19,14 @@ class CustomerPortals(portal.CustomerPortal):
         pdf = request.env['ir.actions.report'].sudo()._render_qweb_pdf('website_base.ptce3_report_actions', [res.id])[0]
         b64_pdf = base64.b64encode(pdf)
         # save pdf as attachment
-        name = "My Attachment"
+        name = '%s Student %s' % (dict(res._fields['stage_type'].selection).get(res.stage_type), res.student_id.name)
         return request.env['ir.attachment'].sudo().create({
             'name': name,
             'type': 'binary',
             'datas': b64_pdf,
             'store_fname': name,
-            'res_model': res_partner_id._name,
-            'res_id': res_partner_id.id,
+            'res_model': res.student_id._name,
+            'res_id': res.student_id.id,
             'mimetype': 'application/pdf',
             'public': True
         })
@@ -30,7 +34,22 @@ class CustomerPortals(portal.CustomerPortal):
     def check_data(self, data):
         return data if data else False
         
-    def _get_value_cu(self, value):
+    # def _get_value_cu(self, value):
+        
+    #     return {
+           
+    #         # 'ci_details_status': 'not_started',
+    #     }   
+        
+    def _get_value_plcement_management(self, value):
+        campus = value.get('campus')
+        home_address = value.get('home_address')
+        name_clinical_education_site = value.get('name_clinical_education_site')
+        city = value.get('city')
+        state = value.get('state')
+        clinical_experience_number =  value.get('clinical_experience_number')
+        clinical_experience_dates = value.get('clinical_experience_dates' )
+        student_signature = value.get('student_signature')
         entry_level_pt_degree_earned = value.get('entry_level_pt_degree_earned')
         highest_degree_earned = value.get('highest_degree_earned')
         degree_area = value.get('degree_area')
@@ -41,9 +60,19 @@ class CustomerPortals(portal.CustomerPortal):
         specify_area = value.get('specify_area')
         apta_credentialed_ci = value.get('apta_credentialed_ci')
         other_ci_credential = value.get('other_ci_credential')
+        student_signature_date = value.get('student_signature_date')
         professional_organization_membership = value.get('professional_organization_membership')
-        
         return {
+            'student_id': request.env.user.partner_id.id,
+            'campus': self.check_data(campus),
+            'home_address': self.check_data(home_address),
+            'name_clinical_education_site': self.check_data(name_clinical_education_site),
+            'city': self.check_data(city),
+            'state': self.check_data(state),
+            'clinical_experience_number': self.check_data(clinical_experience_number),
+            'clinical_experience_dates': parser.parse(clinical_experience_dates).date(),
+            'student_signature': self.check_data(student_signature) ,
+            'student_signature_date': parser.parse(student_signature_date).date() ,
             'entry_level_pt_degree_earned': self.check_data(entry_level_pt_degree_earned),
             'highest_degree_earned': self.check_data(highest_degree_earned),
             'degree_area': self.check_data(degree_area),
@@ -55,29 +84,6 @@ class CustomerPortals(portal.CustomerPortal):
             'apta_credentialed_ci': self.check_data(apta_credentialed_ci),
             'other_ci_credential': self.check_data(other_ci_credential),
             'professional_organization_membership': self.check_data(professional_organization_membership),
-            'ci_details_status': 'not_started',
-        }   
-        
-    def _get_value_plcement_management(self, value):
-        campus = value.get('campus')
-        home_address = value.get('home_address')
-        name_clinical_education_site = value.get('name_clinical_education_site')
-        city = value.get('city')
-        state = value.get('state')
-        clinical_experience_number =  value.get('clinical_experience_number')
-        clinical_experience_dates = value.get('clinical_experience_dates' )
-        student_signature = value.get('student_signature')
-        
-        return {
-            'student_id': request.env.user.partner_id.id,
-            'campus': self.check_data(campus),
-            'home_address': self.check_data(home_address),
-            'name_clinical_education_site': self.check_data(name_clinical_education_site),
-            'city': self.check_data(city),
-            'state': self.check_data(state),
-            'clinical_experience_number': self.check_data(clinical_experience_number),
-            'clinical_experience_dates': self.check_data(clinical_experience_dates),
-            'student_signature': self.check_data(student_signature) ,
             }
         
         
@@ -114,18 +120,37 @@ class CustomerPortals(portal.CustomerPortal):
         value = {
             'res_partner_id': res_partner_id,
             'post_plcement': post_plcement,
+            'ci_ids': post_plcement.facility_id.ci_ids or '',
         }
+        print('post_plcement.facility_id',post_plcement.facility_id)
+        print('post_plcement.facility_id',post_plcement.facility_id.ci_ids)
         if post and request.httprequest.method == "POST":
-           
-            rec_ci_id = request.env["res.partner"].sudo().search([('id', '=', post.get('ci_id'))])
-            value_ci = self._get_value_cu(post)
-            rec_ci_id.write(value_ci)
+            print(post.get('new_name'))
+            new_ci = json.loads(post.get('new_name').lower()) if post.get('new_name') else False
+            scce_id = post_plcement.facility_id.scce_primary_id
+            print( post_plcement.facility_id.scce_primary_id,'<<<<<<<32')
+            if new_ci:
+              rec_ci_id = request.env['res.partner'].sudo().create({
+                'is_ci': True,
+                'first_name': post.get('first_name'),
+                'last_name': post.get('last_name'),
+                'email': post.get('email'),
+                'scce_ids': [Command.link(scce_id.id)] if scce_id else False,
+              })
+            else:
+                rec_ci_id = request.env["res.partner"].sudo().search([('id', '=', post.get('ci_id'))])
+            
+            print('<<<<<<<33333333333333333333333333333>>>>>>>>>>>>>>>>>>>>2')
+            # value_ci = self._get_value_cu(post)
+            post_plcement.facility_id.write({
+                'ci_ids': [Command.link(rec_ci_id.id)]
+            })
             value_plcement = self._get_value_plcement_management(post)
             ci_ptse = request.env['ci.ptse'].sudo().create(value_plcement)
             ci_ptse.write({'ci_id': rec_ci_id.id })
-            post_plcement.write({'ptse_3_id': ci_ptse.id })
             pdf = request.env['ir.actions.report'].sudo()._render_qweb_pdf('website_base.ptce3_report_actions', [ci_ptse.id])[0]
             b64_pdf = base64.b64encode(pdf)
+            post_plcement.write({'ptse_3_id': ci_ptse.id })
             ci_ptse.write({'ptse_3': b64_pdf})
             self.action_get_attachment(ci_ptse)
             return request.redirect('/my')
@@ -158,13 +183,33 @@ class CustomerPortals(portal.CustomerPortal):
             if report_type in ('html', 'pdf', 'text'):
                 return self._show_report(model=plcement_sudo, report_type=report_type, report_ref='website_base.ptce3_report_actions', download=download)
         if post and request.httprequest.method == "POST":
-          
+            print(post,'post')
+            print('///////////////////////////////')
+            print('///////////////////////////////')
+            # rec_ci_id = request.env["res.partner"].sudo().search([('id', '=', post.get('ci_id'))])
+            plcement.ci_id.sudo().write({
+            'first_name': post.get('first_name'),
+            'last_name': post.get('last_name'),
+            'email': post.get('email'),
+            'entry_level_pt_degree_earned': post.get('entry_level_pt_degree_earned'),
+            'highest_degree_earned': post.get('highest_degree_earned'),
+            'degree_area': post.get('degree_area'),
+            'years_experience_ci': post.get('years_experience_ci'),
+            'years_experience_clinician': post.get('years_experience_clinician'),
+            'areas_expertise': post.get('areas_expertise'),
+            'clinical_certification': post.get('clinical_certification'),
+            'specify_area': post.get('specify_area'),
+            'apta_credentialed_ci': post.get('apta_credentialed_ci'),
+            'other_ci_credential': post.get('other_ci_credential'),
+            'professional_organization_membership': post.get('professional_organization_membership'),
+            })
             plcement.write({
                 'ci_signature': self.check_data(post.get('ci_signature')),
-                'ci_signature_date': self.check_data(post.get('ci_signature_date')),
+                'ci_signature_date':parser.parse(post.get('ci_signature_date')).date(),
                 'stage_type': 'ptse3'
             })
-            plcement.ci_id.sudo().write({'ci_details_status': 'completed'})
+            self.action_get_attachment(plcement)
+            # plcement.ci_id.sudo().write({'ci_details_status': 'completed'})
         value = {
             'is_ci': request.env.user.partner_id.is_ci,
             'plcement':plcement,

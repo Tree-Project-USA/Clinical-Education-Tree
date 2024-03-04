@@ -2,13 +2,24 @@
 <odoo>
     <template id="ptse3_student_details" name="CI Details">
         <t t-call="portal.portal_layout">
-            <form t-att-action="'/student/details/%s' % (post_plcement.id)" id="ptse-form" class="hardship student_details" method="post" enctype="multipart/form-data">
+            <div class="container">
+                <div class="loading-indicator text-center"
+                    style="display: flex;flex-direction: column;align-items: center;justify-content: center;height: 90vh;">
+                    <div class="spinner-border" style="width:15vh; height:15vh; color:#326434"
+                        role="status">
+                        <span class="visually-hidden"></span>
+                    </div>
+                </div>
+            </div>
+            <form t-att-action="'/student/details/%s' % (post_plcement.id)" id="ptse-form"
+                class="hardship student_details needs-validation d-none" method="post"
+                enctype="multipart/form-data">
                 <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
                 <div class="popup-card-error" id="popup-card-error">
                     <div class="content">
                         <h3>Erorr</h3>
                         <p id="content-p">
-                            There is currently no Technician
+                            Please  Signature
                         </p>
                     </div>
                 </div>
@@ -17,56 +28,119 @@
                         <div class="row mt16">
                             <div class="col-12 col-lg-12 justify-content-end">
                                 <div id="card" class="card">
-                                    <div id="card_header" class="card-header bg-white" data-anchor="true">
+                                    <div id="card_header" class="card-header bg-white"
+                                        data-anchor="true">
                                         <h5 class="d-flex mb-1 mb-md-0 h6">
                                             GENERAL INFORMATION AND SIGNATURES
                                         </h5>
                                     </div>
                                     <div id="card_body" class="card-body">
                                         <h5>General Information</h5>
-                                        <t t-set="geographical" 
-                                        t-value="request.env['geographical.preferred'].sudo().search([('id', 'in', res_partner_id.preferred_geographical_ids.ids)], limit=1, order='id desc')"/>
+                                        <t t-set="geographical"
+                                            t-value="request.env['geographical.preferred'].sudo().search([('id', 'in', res_partner_id.preferred_geographical_ids.ids)], limit=1, order='id desc')" />
                                         <div class="mb-3 row">
                                             <div class="col-12">
                                                 <label class="form-label fw-bold">Student Name:</label>
-                                                <input type="text" class="form-control w-50-input d-inline-block form-control-cpdm" id="name" name="name" required="required" t-att-value="res_partner_id.name" />
+                                                <input type="text"
+                                                    class="form-control w-50-input d-inline-block form-control-cpdm"
+                                                    id="name" name="name" required="required"
+                                                    t-att-value="res_partner_id.name" />
+                                                <div class="invalid-feedback">
+                                                    Please provide a valid Student Name.
+                                                </div>
                                             </div>
                                             <div class="col-12">
-                                                <label class="form-label fw-bold">Academic Institution:</label>
+                                                <label class="form-label fw-bold">AcademicInstitution:</label>
                                                 <span>University of St. Augustine (Campus)</span>
-                                                <input type="text" class="form-control w-40-input d-inline-block form-control-cpdm" name="campus" required="required" t-att-value="res_partner_id.campus" />
+                                                <input type="text"
+                                                    class="form-control w-40-input d-inline-block form-control-cpdm"
+                                                    name="campus" required="required"
+                                                    t-att-value="res_partner_id.campus" />
+                                                <div class="invalid-feedback">
+                                                    Please provide a valid Academic Institution.
+                                                </div>
                                             </div>
                                             <div class="col-12">
                                                 <label class="form-label fw-bold">Name of Clinical Education Site:</label>
-                                                <input type="text" class="form-control w-40-input d-inline-block form-control-cpdm" name="name_clinical_education_site" required="required" />
+                                                <input type="text"
+                                                    class="form-control w-40-input d-inline-block form-control-cpdm"
+                                                    name="name_clinical_education_site"
+                                                    required="required" />
+                                                <div class="invalid-feedback">
+                                                    Please provide a valid Name of Clinical
+                                                    Education Site.
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="row row-cols-1 row-cols-lg-3 ">
                                             <div class="col">
                                                 <label class="form-label fw-bold">Address:</label>
-                                                <input type="text" class="form-control w-auto d-inline-block form-control-cpdm" name="home_address" t-att-value="res_partner_id.home_address"  required="required"/>
-                                               
+                                                <input type="text"
+                                                    class="form-control w-auto d-inline-block form-control-cpdm"
+                                                    name="home_address"
+                                                    t-att-value="res_partner_id.home_address"
+                                                    required="required" />
+                                                <div class="invalid-feedback">
+                                                    Please provide a valid Address.
+                                                </div>
                                             </div>
                                             <div class="col">
                                                 <label class="form-label fw-bold">City:</label>
-                                                <input type="text" class="form-control w-auto d-inline-block form-control-cpdm" name="city" t-att-value="geographical.city" required="required" />
-                                               
+                                                <input type="text"
+                                                    class="form-control w-auto d-inline-block form-control-cpdm"
+                                                    name="city" t-att-value="geographical.city"
+                                                    required="required" />
+                                                <div class="invalid-feedback">
+                                                    Please provide a valid City.
+                                                </div>
                                             </div>
                                             <div class="col">
                                                 <label class="form-label fw-bold">State:</label>
-                                                <input type="text" class="form-control w-auto d-inline-block form-control-cpdm" name="state" t-att-value="geographical.state" required="required" />
-                                              
+                                                <input type="text"
+                                                    class="form-control w-auto d-inline-block form-control-cpdm"
+                                                    name="state" t-att-value="geographical.state"
+                                                    required="required" />
+                                                <div class="invalid-feedback">
+                                                    Please provide a valid State.
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="row row-cols-1 row-cols-lg-2 ">
                                             <div class="col">
                                                 <label class="form-label fw-bold">Clinical Experience Number:</label>
-                                                <input type="text" class="form-control w-auto d-inline-block form-control-cpdm" name="clinical_experience_number"  t-att-value="" required="required" />
+                                                <input type="text"
+                                                    class="form-control w-auto d-inline-block form-control-cpdm"
+                                                    name="clinical_experience_number" t-att-value=""
+                                                    required="required" />
+                                                <div class="invalid-feedback">
+                                                    Please provide a valid Clinical Experience
+                                                    Number.
+                                                </div>
                                             </div>
                                             <div class="col">
-                                                <label class="form-label fw-bold">Clinical Experience Dates:</label>
-                                                <input type="date" class="form-control w-auto d-inline-block form-control-cpdm" name="clinical_experience_dates" t-att-value="" required="required" />
+                                                <!-- <div class="form-group row"> -->
+                                                <label class="fw-bold control-label form-label">
+                                                    <span> Clinical Experience Dates: </span>
+                                                    <i class="fa fa-calendar mx-2"></i>
+                                                </label>
+                                                <!-- <div class="col-md-12"> -->
+                                                <div class="input-group d-inline"
+                                                    id="date_clinical_experience_dates"
+                                                    data-target-input="nearest">
+                                                    <input type="text"
+                                                        class="form-control w-auto d-inline-block form-control-cpdm"
+                                                        name="clinical_experience_dates"
+                                                        t-att-value="" required="required"
+                                                        data-toggle="datetimepicker"
+                                                        data-target="#date_clinical_experience_dates" />
+                                                </div>
+                                                <!-- </div> -->
+                                                <div class="invalid-feedback">
+                                                    Please provide a valid Clinical Experience
+                                                    Dates.
+                                                </div>
                                             </div>
+                                            <!-- </div> -->
                                         </div>
                                         <h6 class="mt-4">Signatures</h6>
                                         <p class="mb-4">
@@ -82,112 +156,240 @@
                                         </p>
                                         <div class="row row-cols-1 row-cols-lg-2 ">
                                             <div class="col">
-                                                <input type="hidden" id="student_signature" name="student_signature" value=""/>
-                                                <canvas id="signature-student" width="400" height="200"></canvas>
-                                                <br/>
+                                                <input type="hidden" id="student_signature"
+                                                    name="student_signature" value="" />
+                                                <canvas id="signature-student" width="400"
+                                                    height="200"></canvas>
+                                                <br />
                                                 <label class="form-label">STUDENT SIGNATURE</label>
-                                                    <i  id="clear-student" class="fa fa-trash text-danger " />
+                                                <i id="clear-student"
+                                                    class="fa fa-trash text-danger " />
                                             </div>
                                             <div class="col">
-                                                <input type="date" class="form-control form-control-cpdm" name="student_signature_date" value="" />
-                                                <label class="form-label">Date</label>
+                                                <div class="form-group row">
+                                                    <div class="col-md-12">
+                                                        <div class="input-group date"
+                                                            id="date_student_signature_date"
+                                                            data-target-input="nearest">
+                                                            <input type="text" required="required"
+                                                                class="form-control datetimepicker-input form-control-cpdm"
+                                                                data-toggle="datetimepicker"
+                                                                data-target="#date_student_signature_date"
+                                                                name="student_signature_date" />
+                                                        </div>
+                                                    </div>
+
+                                                    <label class="control-label form-label">
+                                                        <span> Date </span>
+                                                        <i class="fa fa-calendar mx-2"></i>
+                                                    </label>
+                                                    <div class="invalid-feedback">
+                                                        Please provide a valid Clinical Experience
+                                                        Dates.
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="col">
-                                                
-                                                <hr/>
-                                                <label class="form-label">CLINICAL INSTRUCTOR SIGNATURE</label>
+                                                <hr />
+                                                <span class="form-label fw-bold">CLINICAL INSTRUCTOR SIGNATURE</span>
                                             </div>
                                             <div class="col">
-                                                <hr/>
-                                                <label class="form-label">Date</label>
+                                                <hr />
+                                                <span class="form-label fw-bold">Date</span>
                                             </div>
                                         </div>
-                                            <div class="row">
-                                                <!-- <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="" id="new_name" name="new_name"/>
-                                                    <label class="form-check-label" for="new_name">
-                                                      Add CI
-                                                    </label>
-                                                  </div> -->
-                                                <div class="col-6 mb-2 select-ci">
-                                                    <div class="form-group row">
-                                                        <label for="staticEmail" class="col-form-label">CI</label>
-                                                        <select id="ci_id" name="ci_id"
-                                                            class="form-select select2" required="required">
-                                                            <t t-foreach="post_plcement.facility_id.ci_ids or []" t-as="ci">
-                                                                <option t-att-value="ci.id">
-                                                                    <t t-esc="ci.name" />
-                                                                </option>
-                                                            </t>
-                                                        </select>
-                                                      </div>
-                                                </div>
-                                                <div class="d-none input-ci">
-                                                    <div class="col-12">
-                                                        <label class="form-label fw-bold">Name:</label> 
-                                                        <input type="text" required="required" class="form-control w-40-input d-inline-block form-control-cpdm" id="entry_level_pt_degree_earned" name="entry_level_pt_degree_earned" />
+                                        <div class="row">
+                                            <div class="form-check mx-2">
+                                                <input class="form-check-input" type="checkbox"
+                                                    id="new_name" name="new_name" />
+                                                <label class="form-check-label" for="new_name">
+                                                    Add CI
+                                                </label>
+                                            </div>
+                                            <div class="col-6 mb-2 select-ci">
+                                                <div class="form-group row">
+                                                    <input type="hidden" id="ci_ids"
+                                                        t-att-value="ci_ids" />
+
+                                                    <label for="staticEmail" class="col-form-label">
+                                                        CI</label>
+                                                    <select id="ci_id" name="ci_id"
+                                                        class="form-select form-control-cpdm select2"
+                                                        required="required">
+                                                        <option value="">
+                                                            Select Ci
+                                                        </option>
+                                                        <t t-foreach="ci_ids" t-as="ci">
+                                                            <option t-att-value="ci.id">
+                                                                <t t-esc="ci.name" />
+                                                            </option>
+                                                        </t>
+                                                    </select>
+                                                    <div class="invalid-feedback">
+                                                        Please provide a valid CI.
                                                     </div>
-                                                    <div class="col-12 ">
-                                                        <label class="form-label fw-bold">Email:</label>
-                                                        <input type="email" required="required" class="form-control w-40-input d-inline-block form-control-cpdm" id="entry_level_pt_degree_earned" name="entry_level_pt_degree_earned" />
+                                                </div>
+                                            </div>
+                                            <div class="d-none input-ci">
+                                                <div class="col-12 col-lg-6">
+                                                    <label class="form-label fw-bold">First Name:</label>
+                                                    <input type="text"
+                                                        class="form-control w-40-input d-inline-block form-control-cpdm"
+                                                        id="first_name" name="first_name" />
+                                                    <div class="invalid-feedback">
+                                                        Please provide a valid First Name CI.
                                                     </div>
                                                 </div>
-                                                <div class="col-12">
-                                                    <label class="form-label fw-bold">Entry-Level PT Degree earned:</label>
-                                                    <input type="hidden" name="ci_id" />
-                                                    <input type="text" required="required" class="form-control w-40-input d-inline-block form-control-cpdm" id="entry_level_pt_degree_earned" name="entry_level_pt_degree_earned" />
+                                                <div class="col-12 col-lg-6">
+                                                    <label class="form-label fw-bold">Last Name:</label>
+                                                    <input type="text"
+                                                        class="form-control w-40-input d-inline-block form-control-cpdm"
+                                                        id="last_name" name="last_name" />
+                                                    <div class="invalid-feedback">
+                                                        Please provide a valid Last Name CI.
+                                                    </div>
                                                 </div>
+                                                <div class="col-12 ">
+                                                    <label class="form-label fw-bold">Email:</label>
+                                                    <input type="email"
+                                                        class="form-control w-40-input d-inline-block form-control-cpdm"
+                                                        id="email" name="email" />
+                                                    <div class="invalid-feedback">
+                                                        Please provide a valid Email.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <label class="form-label fw-bold">Entry-Level PT Degree earned:</label>
+                                                <input type="text" required="required"
+                                                    class="form-control w-40-input d-inline-block form-control-cpdm"
+                                                    id="entry_level_pt_degree_earned"
+                                                    name="entry_level_pt_degree_earned" />
+                                                <div class="invalid-feedback">
+                                                    Please provide a valid Email.
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="row row-cols-1 row-cols-lg-2 ">
                                             <div class="col">
                                                 <label class="form-label fw-bold">Highest degree earned:</label>
-                                                <input type="text" required="required" class="form-control w-auto d-inline-block form-control-cpdm" id="highest_degree_earned" name="highest_degree_earned" />
+                                                <input type="text" required="required"
+                                                    class="form-control w-auto d-inline-block form-control-cpdm"
+                                                    id="highest_degree_earned"
+                                                    name="highest_degree_earned" />
+                                                <div class="invalid-feedback">
+                                                    Please provide a valid Highest degree earned.
+                                                </div>
                                             </div>
                                             <div class="col">
                                                 <label class="form-label fw-bold">Degree Area:</label>
-                                                <input type="text" required="required" class="form-control w-auto d-inline-block form-control-cpdm" id="degree_area" name="degree_area" />
+                                                <input type="text" required="required"
+                                                    class="form-control w-auto d-inline-block form-control-cpdm"
+                                                    id="degree_area" name="degree_area" />
+                                                <div class="invalid-feedback">
+                                                    Please provide a valid Degree Area.
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-12">
                                                 <label class="form-label fw-bold">Years experience as CI:</label>
-                                                <input type="text" required="required" class="form-control w-40-input d-inline-block form-control-cpdm" id="years_experience_ci" name="years_experience_ci" />
+                                                <input type="text" required="required"
+                                                    class="form-control w-40-input d-inline-block form-control-cpdm"
+                                                    id="years_experience_ci"
+                                                    name="years_experience_ci" />
+                                                <div class="invalid-feedback">
+                                                    Please provide a valid Years experience as CI.
+                                                </div>
                                             </div>
                                             <div class="col-12">
                                                 <label class="form-label fw-bold">Years experience as clinician:</label>
-                                                <input type="text" required="required" class="form-control w-40-input d-inline-block form-control-cpdm" id="years_experience_clinician" name="years_experience_clinician" />
+                                                <input type="text" required="required"
+                                                    class="form-control w-40-input d-inline-block form-control-cpdm"
+                                                    id="years_experience_clinician"
+                                                    name="years_experience_clinician" />
+                                                <div class="invalid-feedback">
+                                                    Please provide a valid Years experience as
+                                                    clinician.
+                                                </div>
                                             </div>
                                             <div class="col-12">
-                                                <label class="form-label fw-bold">Areas of Expertise:</label>
-                                                <input type="text" required="required" class="form-control w-40-input d-inline-block form-control-cpdm" id="areas_expertise" name="areas_expertise" />
+                                                <label class="form-label fw-bold">
+                                                    Areas of Expertise:
+                                                </label>
+                                                <input type="text" required="required"
+                                                    class="form-control w-40-input d-inline-block form-control-cpdm"
+                                                    id="areas_expertise" name="areas_expertise" />
+                                                <div class="invalid-feedback">
+                                                    Please provide a valid Areas of Expertise.
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="row row-cols-1 row-cols-lg-2 ">
                                             <div class="col">
-                                                <label class="form-label fw-bold">Clinical Certification:</label>
-                                                <input type="text" class="form-control w-auto d-inline-block form-control-cpdm" id="clinical_certification" name="clinical_certification" />
+                                                <label class="form-label fw-bold">
+                                                    Clinical Certification:
+                                                </label>
+                                                <input type="text" required="required"
+                                                    class="form-control w-auto d-inline-block form-control-cpdm"
+                                                    id="clinical_certification"
+                                                    name="clinical_certification" />
+                                                <div class="invalid-feedback">
+                                                    Please provide a valid Clinical Certification.
+                                                </div>
                                             </div>
                                             <div class="col">
                                                 <label class="form-label fw-bold">Specify Area:</label>
-                                                <input type="text" class="form-control w-auto d-inline-block form-control-cpdm" id="specify_area" name="specify_area" />
+                                                <input type="text" required="required"
+                                                    class="form-control w-auto d-inline-block form-control-cpdm"
+                                                    id="specify_area" name="specify_area" />
+                                                <div class="invalid-feedback">
+                                                    Please provide a valid Specify Area.
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-12">
-                                                <label class="form-label fw-bold">APTA Credentialed CI:</label>
-                                                <input type="text" class="form-control w-40-input d-inline-block form-control-cpdm" id="apta_credentialed_ci" name="apta_credentialed_ci" />
+                                                <label class="form-label fw-bold">
+                                                    APTA Credentialed CI:
+                                                </label>
+                                                <input type="text" required="required"
+                                                    class="form-control w-40-input d-inline-block form-control-cpdm"
+                                                    id="apta_credentialed_ci"
+                                                    name="apta_credentialed_ci" />
+                                                <div class="invalid-feedback">
+                                                    Please provide a valid APTA Credentialed CI.
+                                                </div>
                                             </div>
                                             <div class="col-12">
-                                                <label class="form-label fw-bold">Other CI Credential:</label>
-                                                <input type="text" class="form-control w-40-input d-inline-block form-control-cpdm" id="other_ci_credential" name="other_ci_credential" />
+                                                <label class="form-label fw-bold">
+                                                    Other CI Credential:
+                                                </label>
+                                                <input type="text" required="required"
+                                                    class="form-control w-40-input d-inline-block form-control-cpdm"
+                                                    id="other_ci_credential"
+                                                    name="other_ci_credential" />
+                                                <div class="invalid-feedback">
+                                                    Please provide a valid Other CI Credential.
+                                                </div>
                                             </div>
                                             <div class="col-12">
-                                                <label class="form-label fw-bold">Professional organization membership:</label>
-                                                <input type="text" class="form-control w-40-input d-inline-block form-control-cpdm" id="professional_organization_membership" name="professional_organization_membership" />
+                                                <label class="form-label fw-bold">
+                                                    Professionalorganization membership:
+                                                </label>
+                                                <input type="text" required="required"
+                                                    class="form-control w-40-input d-inline-block form-control-cpdm"
+                                                    id="professional_organization_membership"
+                                                    name="professional_organization_membership" />
+                                                <div class="invalid-feedback">
+                                                    Please provide a valid Professional organization
+                                                    membership.
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <button id="save-student-signature"  class="mb8 btn btn-success">
+                                    <button type="submit" id="save-student-signature"
+                                        class="mb8 btn btn-success">
                                         <i class="fa fa-check" />
                                         <t>Save</t>
                                     </button>
@@ -203,13 +405,14 @@
 
     <template id="ptse3_ci_details" name="PTSE 3">
         <t t-call="portal.portal_layout">
-            <form t-att-action="'/ci/details/%s' % plcement.id" id="ptse-form" class="hardship" method="post" enctype="multipart/form-data">
+            <form t-att-action="'/ci/details/%s' % plcement.id" id="ptse-form"
+                class="student_details needs-validation" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
                 <div class="popup-card-error" id="popup-card-error">
                     <div class="content">
                         <h3>Erorr</h3>
                         <p id="content-p">
-                            There is currently no Technician
+                            Please  Signature
                         </p>
                     </div>
                 </div>
@@ -221,24 +424,30 @@
                                     <div class="card-body text-center pb-2 pt-3">
                                         <t t-out="title or ''" />
                                     </div>
-                                    <ul class="list-group list-group-flush flex-wrap flex-row flex-lg-column">
+                                    <ul
+                                        class="list-group list-group-flush flex-wrap flex-row flex-lg-column">
                                         <li class="list-group-item d-grid align-content-start">
-                                            <button  t-if="plcement.stage_type == 'ci_details' and is_ci" type="button" id="save-ci-signature"  class="mb8 btn btn-success">
+                                            <button
+                                                t-if="plcement.stage_type == 'ci_details' and is_ci"
+                                                type="submit" id="save-ci-signature"
+                                                class="mb8 btn btn-success">
                                                 <i class="fa fa-check" />
                                                 <t>Save</t>
                                             </button>
                                             <div class="o_download_pdf btn-toolbar flex-sm-nowrap">
                                                 <div class="btn-group flex-grow-1 me-1 mb-1">
-                                                    <a class="btn btn-secondary o_download_btn" t-attf-href="/ci/details/#{plcement.id}?report_type=pdf&amp;download=true" title="Download">
-                                                        <i class="fa fa-download" />
-                                                        Download
-                                                    </a>
+                                                    <a class="btn btn-secondary o_download_btn"
+                                                        t-attf-href="/ci/details/#{plcement.id}?report_type=pdf&amp;download=true"
+                                                        title="Download">
+                                                        <i class="fa fa-download" /> Download </a>
                                                 </div>
                                                 <div class="btn-group flex-grow-1 mb-1">
-                                                    <a class="btn btn-secondary o_print_btn o_portal_invoice_print" t-attf-href="/ci/details/#{plcement.id}?report_type=pdf" id="print_invoice_report" title="Print" target="_blank">
-                                                        <i class="fa fa-print" />
-                                                        Print
-                                                    </a>
+                                                    <a
+                                                        class="btn btn-secondary o_print_btn o_portal_invoice_print"
+                                                        t-attf-href="/ci/details/#{plcement.id}?report_type=pdf"
+                                                        id="print_invoice_report" title="Print"
+                                                        target="_blank">
+                                                        <i class="fa fa-print" /> Print </a>
                                                 </div>
                                             </div>
                                         </li>
@@ -247,7 +456,8 @@
                             </div>
                             <div class="col-12 col-lg-9 justify-content-end">
                                 <div id="card" class="card">
-                                    <div id="card_header" class="card-header bg-white" data-anchor="true">
+                                    <div id="card_header" class="card-header bg-white"
+                                        data-anchor="true">
                                         <h5 class="d-flex mb-1 mb-md-0 h6">
                                             GENERAL INFORMATION AND SIGNATURES
                                         </h5>
@@ -256,44 +466,53 @@
                                         <h5>General Information</h5>
                                         <div class="mb-3 row">
                                             <div class="col-12">
-                                                <label class="form-label fw-bold">Student Name:</label>
-                                                <span class="border-bottom border-2" t-field="plcement.student_id"/>
+                                                <label class="fw-bold">Student Name:</label>
+                                                <span class="border-bottom border-2"
+                                                    t-field="plcement.student_id" />
                                             </div>
                                             <div class="col-12">
-                                                <label class="form-label fw-bold">Academic Institution:</label>
+                                                <label class="fw-bold">Academic Institution:</label>
                                                 <span>University of St. Augustine (Campus)</span>
-                                                <span class="border-bottom border-2" t-field="plcement.campus"/>
+                                                <span class="border-bottom border-2"
+                                                    t-field="plcement.campus" />
                                             </div>
                                             <div class="col-12">
-                                                <label class="form-label fw-bold">Name of Clinical Education Site:</label>
-                                                <span class="border-bottom border-2" t-field="plcement.home_address"/>
+                                                <label class="fw-bold">Name of Clinical Education
+                                                    Site:</label>
+                                                <span class="border-bottom border-2"
+                                                    t-field="plcement.home_address" />
                                             </div>
                                         </div>
                                         <div class="row row-cols-1 row-cols-lg-3 ">
                                             <div class="col">
-                                                <label class="form-label fw-bold">Address:</label>
-                                                <span class="border-bottom border-2" t-field="plcement.name_clinical_education_site"/>
-                                               
+                                                <label class="fw-bold">Address:</label>
+                                                <span class="border-bottom border-2"
+                                                    t-field="plcement.name_clinical_education_site" />
+
                                             </div>
                                             <div class="col">
-                                                <label class="form-label fw-bold">City:</label>
-                                                <span class="border-bottom border-2" t-field="plcement.city"/>
-                                               
+                                                <label class="fw-bold">City:</label>
+                                                <span class="border-bottom border-2"
+                                                    t-field="plcement.city" />
+
                                             </div>
                                             <div class="col">
-                                                <label class="form-label fw-bold">State:</label>
-                                                <span class="border-bottom border-2" t-field="plcement.state"/>
-                                              
+                                                <label class="fw-bold">State:</label>
+                                                <span class="border-bottom border-2"
+                                                    t-field="plcement.state" />
+
                                             </div>
                                         </div>
                                         <div class="row row-cols-1 row-cols-lg-2 ">
                                             <div class="col">
-                                                <label class="form-label fw-bold">Clinical Experience Number:</label>
-                                                <span class="border-bottom border-2" t-field="plcement.clinical_experience_number"/>
+                                                <label class="fw-bold">Clinical Experience Number:</label>
+                                                <span class="border-bottom border-2"
+                                                    t-field="plcement.clinical_experience_number" />
                                             </div>
                                             <div class="col">
-                                                <label class="form-label fw-bold">Clinical Experience Dates:</label>
-                                                <span class="border-bottom border-2" t-field="plcement.clinical_experience_dates"/>
+                                                <label class="fw-bold">Clinical Experience Dates:</label>
+                                                <span class="border-bottom border-2"
+                                                    t-field="plcement.clinical_experience_dates" />
                                             </div>
                                         </div>
                                         <h6 class="mt-4">Signatures</h6>
@@ -310,88 +529,310 @@
                                         </p>
                                         <div class="row row-cols-1 row-cols-lg-2 ">
                                             <div class="col">
-                                               
-                                                <img t-att-src="image_data_uri(plcement.student_signature)" style="max-height: 4cm; max-width: 8cm;"/>
-                                                <label class="form-label">STUDENT SIGNATURE</label>
+                                                <img
+                                                    t-att-src="image_data_uri(plcement.student_signature)"
+                                                    style="max-height: 4cm; max-width: 8cm;" />
+                                                <label class="fw-bold">STUDENT SIGNATURE</label>
                                             </div>
                                             <div class="col">
-                                                <span class="border-bottom border-2" t-field="plcement.student_signature_date"/>
-                                                <label class="form-label">Date</label>
+                                                <span class="border-bottom border-2"
+                                                    t-field="plcement.student_signature_date" />
+                                                <br />
+                                                <label class="fw-bold">Date</label>
                                             </div>
                                             <div class="col">
-                                                <img t-if="plcement.stage_type == 'ptse3'" t-att-src="image_data_uri(plcement.ci_signature)" style="max-height: 4cm; max-width: 8cm;"/>
-                                                <input type="hidden" id="ci_signature" name="ci_signature" value=""/>
-                                                <canvas  t-if="plcement.stage_type == 'ci_details' and is_ci"  id="signature-ci" width="400" height="200"></canvas>
-                                                <label class="form-label">CLINICAL INSTRUCTOR SIGNATURE</label>
-                                                <button t-if="plcement.stage_type == 'ci_details' and is_ci"  type="button" id="clear-ci" class="btn">
+                                                <img t-if="plcement.stage_type == 'ptse3'"
+                                                    t-att-src="image_data_uri(plcement.ci_signature)"
+                                                    style="max-height: 4cm; max-width: 8cm;" />
+                                                <input type="hidden" id="ci_signature"
+                                                    name="ci_signature" value="" />
+                                                <canvas
+                                                    t-if="plcement.stage_type == 'ci_details' and is_ci"
+                                                    id="signature-ci" width="400" height="200"></canvas>
+                                                <label
+                                                    t-attf-class="#{'form-label' if plcement.stage_type == 'ci_details' and is_ci else 'fw-bold'}">
+                                                    CLINICAL INSTRUCTOR SIGNATURE</label>
+                                                <button
+                                                    t-if="plcement.stage_type == 'ci_details' and is_ci"
+                                                    type="button" id="clear-ci" class="btn">
                                                     <i class="fa fa-trash text-danger" />
                                                 </button>
                                             </div>
                                             <div class="col">
-                                                <t t-set="is_ci" t-value="request.env.user.partner_id.is_ci"/>
-                                                <input t-if="is_ci and not plcement.ci_signature_date" type="date" class="form-control  form-control-cpdm"  id="ci_signature_date" name="ci_signature_date" value="" />
-                                                <span t-else="" t-field="plcement.ci_signature_date"/>
-                                                <br/>
-                                                <label class="form-label">Date</label>
-                                            </div>
-                                        </div>
-                                       
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    <label class="form-label fw-bold">Entry-Level PT Degree earned:</label>
-                                                    <span class="border-bottom border-2" t-field="ci_id.entry_level_pt_degree_earned"/>
+                                                <t t-set="is_ci"
+                                                    t-value="request.env.user.partner_id.is_ci" />
+                                                <div t-if="is_ci and not plcement.ci_signature_date"
+                                                    class="col-md-12">
+                                                    <div class="input-group date"
+                                                        id="date_ci_signature_date"
+                                                        data-target-input="nearest">
+                                                        <input type="text" required="required"
+                                                            class="form-control datetimepicker-input form-control-cpdm"
+                                                            data-toggle="datetimepicker"
+                                                            data-target="#date_ci_signature_date"
+                                                            name="ci_signature_date" />
+                                                    </div>
                                                 </div>
-                                        </div>
-                                        <div class="row row-cols-1 row-cols-lg-2 ">
-                                            <div class="col">
-                                                <label class="form-label fw-bold">Highest degree earned:</label>
-                                                <span class="border-bottom border-2" t-field="ci_id.highest_degree_earned"/>
-                                            </div>
-                                            <div class="col">
-                                                <label class="form-label fw-bold">Degree Area:</label>
-                                                <span class="border-bottom border-2" t-field="ci_id.degree_area"/>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <label class="form-label fw-bold">Years experience as CI:</label>
-                                                <span class="border-bottom border-2" t-field="ci_id.years_experience_ci"/>
-                                            </div>
-                                            <div class="col-12">
-                                                <label class="form-label fw-bold">Years experience as clinician:</label>
-                                                <span class="border-bottom border-2" t-field="ci_id.years_experience_clinician"/>
-                                            </div>
-                                            <div class="col-12">
-                                                <label class="form-label fw-bold">Areas of Expertise:</label>
-                                                <span class="border-bottom border-2" t-field="ci_id.areas_expertise"/>
+                                                <span t-else="" t-field="plcement.ci_signature_date" />
+                                                <br />
+                                                <label
+                                                    t-attf-class="#{'form-label' if plcement.stage_type == 'ci_details' and is_ci else 'fw-bold'}">
+                                                    Date</label>
+                                                <div class="invalid-feedback">
+                                                    Please provide a valid Date.
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="row row-cols-1 row-cols-lg-2 ">
                                             <div class="col">
-                                                <label class="form-label fw-bold">Clinical Certification:</label>
-                                                <span class="border-bottom border-2" t-field="ci_id.clinical_certification"/>
+                                                <input type="hidden" name="ci_id"
+                                                    t-att-value="ci_id.id" />
+                                                <label
+                                                    t-attf-class="#{'form-label' if plcement.stage_type == 'ci_details' and is_ci else 'fw-bold'}">
+                                                    First Name:</label>
+                                                <input type="text"
+                                                    t-if="plcement.stage_type == 'ci_details' and is_ci"
+                                                    t-att-value="ci_id.first_name"
+                                                    class="form-control w-40-input d-inline-block form-control-cpdm"
+                                                    id="first_name" name="first_name" />
+                                                <span t-else="" class="border-bottom border-2"
+                                                    t-field="ci_id.first_name" />
+                                                <div class="invalid-feedback">
+                                                    Please provide a valid Nmae CI.
+                                                </div>
                                             </div>
                                             <div class="col">
-                                                <label class="form-label fw-bold">Specify Area:</label>
-                                                <span class="border-bottom border-2" t-field="ci_id.specify_area"/>
+                                                <label
+                                                    t-attf-class="#{'form-label' if plcement.stage_type == 'ci_details' and is_ci else 'fw-bold'}">
+                                                    Last Name:</label>
+                                                <input type="text"
+                                                    t-if="plcement.stage_type == 'ci_details' and is_ci"
+                                                    t-att-value="ci_id.last_name"
+                                                    class="form-control w-40-input d-inline-block form-control-cpdm"
+                                                    id="last_name" name="last_name" />
+                                                <span t-else="" class="border-bottom border-2"
+                                                    t-field="ci_id.last_name" />
+                                                <div class="invalid-feedback">
+                                                    Please provide a valid Last Name CI.
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-12">
-                                                <label class="form-label fw-bold">APTA Credentialed CI:</label>
-                                                <span class="border-bottom border-2" t-field="ci_id.apta_credentialed_ci"/>
+                                                <label
+                                                    t-attf-class="#{'form-label' if plcement.stage_type == 'ci_details' and is_ci else 'fw-bold'}">
+                                                    Email:</label>
+                                                <input type="text"
+                                                    t-if="plcement.stage_type == 'ci_details' and is_ci"
+                                                    t-att-value="ci_id.email"
+                                                    class="form-control w-40-input d-inline-block form-control-cpdm"
+                                                    id="email" name="email" />
+                                                <span t-else="" class="border-bottom border-2"
+                                                    t-field="ci_id.email" />
+                                                <div class="invalid-feedback">
+                                                    Please provide a valid Email CI.
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <label
+                                                    t-attf-class="#{'form-label' if plcement.stage_type == 'ci_details' and is_ci else 'fw-bold'}">
+                                                    Entry-Level PT Degree earned:</label>
+                                                <input type="text"
+                                                    t-if="plcement.stage_type == 'ci_details' and is_ci"
+                                                    t-att-value="plcement.entry_level_pt_degree_earned"
+                                                    required="required"
+                                                    class="form-control w-40-input d-inline-block form-control-cpdm"
+                                                    id="entry_level_pt_degree_earned"
+                                                    name="entry_level_pt_degree_earned" />
+                                                <span t-else="" class="border-bottom border-2"
+                                                    t-field="plcement.entry_level_pt_degree_earned" />
+                                                <div class="invalid-feedback">
+                                                    Please provide a valid Entry-Level PT Degree
+                                                    earned.
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row row-cols-1 row-cols-lg-2 ">
+                                            <div class="col">
+                                                <label
+                                                    t-attf-class="#{'form-label' if plcement.stage_type == 'ci_details' and is_ci else 'fw-bold'}">
+                                                    Highest degree earned:</label>
+                                                <input type="text"
+                                                    t-if="plcement.stage_type == 'ci_details' and is_ci"
+                                                    t-att-value="plcement.highest_degree_earned"
+                                                    required="required"
+                                                    class="form-control w-auto d-inline-block form-control-cpdm"
+                                                    id="highest_degree_earned"
+                                                    name="highest_degree_earned" />
+                                                <span t-else="" class="border-bottom border-2"
+                                                    t-field="plcement.highest_degree_earned" />
+                                                <div class="invalid-feedback">
+                                                    Please provide a valid Highest degree earned.
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <label
+                                                    t-attf-class="#{'form-label' if plcement.stage_type == 'ci_details' and is_ci else 'fw-bold'}">
+                                                    Degree Area:</label>
+                                                <input type="text"
+                                                    t-if="plcement.stage_type == 'ci_details' and is_ci"
+                                                    t-att-value="plcement.degree_area"
+                                                    required="required"
+                                                    class="form-control w-auto d-inline-block form-control-cpdm"
+                                                    id="degree_area" name="degree_area" />
+                                                <span t-else="" class="border-bottom border-2"
+                                                    t-field="plcement.degree_area" />
+                                                <div class="invalid-feedback">
+                                                    Please provide a valid Degree Area.
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <label
+                                                    t-attf-class="#{'form-label' if plcement.stage_type == 'ci_details' and is_ci else 'fw-bold'}">
+                                                    Years experience as CI:</label>
+                                                <input type="text"
+                                                    t-if="plcement.stage_type == 'ci_details' and is_ci"
+                                                    t-att-value="plcement.years_experience_ci"
+                                                    required="required"
+                                                    class="form-control w-40-input d-inline-block form-control-cpdm"
+                                                    id="years_experience_ci"
+                                                    name="years_experience_ci" />
+                                                <span class="border-bottom border-2" t-else=""
+                                                    t-field="plcement.years_experience_ci" />
+                                                <div class="invalid-feedback">
+                                                    Please provide a valid Years experience as CI.
+                                                </div>
                                             </div>
                                             <div class="col-12">
-                                                <label class="form-label fw-bold">Other CI Credential:</label>
-                                                <span class="border-bottom border-2" t-field="ci_id.other_ci_credential"/>
+                                                <label
+                                                    t-attf-class="#{'form-label' if plcement.stage_type == 'ci_details' and is_ci else 'fw-bold'}">
+                                                    Years experience as clinician:</label>
+                                                <input type="text"
+                                                    t-if="plcement.stage_type == 'ci_details' and is_ci"
+                                                    t-att-value="plcement.years_experience_clinician"
+                                                    required="required"
+                                                    class="form-control w-40-input d-inline-block form-control-cpdm"
+                                                    id="years_experience_clinician"
+                                                    name="years_experience_clinician" />
+                                                <span t-else="" class="border-bottom border-2"
+                                                    t-field="plcement.years_experience_clinician" />
+                                                <div class="invalid-feedback">
+                                                    Please provide a valid Years experience as
+                                                    clinician.
+                                                </div>
                                             </div>
                                             <div class="col-12">
-                                                <label class="form-label fw-bold">Professional organization membership:</label>
-                                                <span class="border-bottom border-2" t-field="ci_id.professional_organization_membership"/>
+                                                <label
+                                                    t-attf-class="#{'form-label' if plcement.stage_type == 'ci_details' and is_ci else 'fw-bold'}">
+                                                    Areas of Expertise:</label>
+                                                <input type="text"
+                                                    t-if="plcement.stage_type == 'ci_details' and is_ci"
+                                                    t-att-value="plcement.areas_expertise"
+                                                    required="required"
+                                                    class="form-control w-40-input d-inline-block form-control-cpdm"
+                                                    id="areas_expertise" name="areas_expertise" />
+                                                <span t-else="" class="border-bottom border-2"
+                                                    t-field="plcement.areas_expertise" />
+                                                <div class="invalid-feedback">
+                                                    Please provide a valid Areas of Expertise.
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row row-cols-1 row-cols-lg-2 ">
+                                            <div class="col">
+                                                <label
+                                                    t-attf-class="#{'form-label' if plcement.stage_type == 'ci_details' and is_ci else 'fw-bold'}">
+                                                    Clinical Certification:</label>
+                                                <input type="text"
+                                                    t-if="plcement.stage_type == 'ci_details' and is_ci"
+                                                    t-att-value="plcement.clinical_certification"
+                                                    required="required"
+                                                    class="form-control w-auto d-inline-block form-control-cpdm"
+                                                    id="clinical_certification"
+                                                    name="clinical_certification" />
+                                                <span t-else="" class="border-bottom border-2"
+                                                    t-field="plcement.clinical_certification" />
+                                                <div class="invalid-feedback">
+                                                    Please provide a valid Clinical Certification.
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <label
+                                                    t-attf-class="#{'form-label' if plcement.stage_type == 'ci_details' and is_ci else 'fw-bold'}">
+                                                    Specify Area:</label>
+                                                <input type="text"
+                                                    t-if="plcement.stage_type == 'ci_details' and is_ci"
+                                                    t-att-value="plcement.specify_area"
+                                                    required="required"
+                                                    class="form-control w-auto d-inline-block form-control-cpdm"
+                                                    id="specify_area" name="specify_area" />
+                                                <span t-else="" class="border-bottom border-2"
+                                                    t-field="plcement.specify_area" />
+                                                <div class="invalid-feedback">
+                                                    Please provide a valid Specify Area.
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <label
+                                                    t-attf-class="#{'form-label' if plcement.stage_type == 'ci_details' and is_ci else 'fw-bold'}">
+                                                    APTA Credentialed CI:</label>
+                                                <input type="text"
+                                                    t-if="plcement.stage_type == 'ci_details' and is_ci"
+                                                    t-att-value="plcement.apta_credentialed_ci"
+                                                    required="required"
+                                                    class="form-control w-40-input d-inline-block form-control-cpdm"
+                                                    id="apta_credentialed_ci"
+                                                    name="apta_credentialed_ci" />
+                                                <span t-else="" class="border-bottom border-2"
+                                                    t-field="plcement.apta_credentialed_ci" />
+                                                <div class="invalid-feedback">
+                                                    Please provide a valid APTA Credentialed CI.
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <label
+                                                    t-attf-class="#{'form-label' if plcement.stage_type == 'ci_details' and is_ci else 'fw-bold'}">
+                                                    Other CI Credential:</label>
+                                                <input type="text"
+                                                    t-if="plcement.stage_type == 'ci_details' and is_ci"
+                                                    t-att-value="plcement.other_ci_credential"
+                                                    required="required"
+                                                    class="form-control w-40-input d-inline-block form-control-cpdm"
+                                                    id="other_ci_credential"
+                                                    name="other_ci_credential" />
+                                                <span t-else="" class="border-bottom border-2"
+                                                    t-field="plcement.other_ci_credential" />
+                                                <div class="invalid-feedback">
+                                                    Please provide a valid Other CI Credential.
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <label
+                                                    t-attf-class="#{'form-label' if plcement.stage_type == 'ci_details' and is_ci else 'fw-bold'}">
+                                                    Professional organization membership:</label>
+                                                <input type="text"
+                                                    t-if="plcement.stage_type == 'ci_details' and is_ci"
+                                                    t-att-value="plcement.professional_organization_membership"
+                                                    required="required"
+                                                    class="form-control w-40-input d-inline-block form-control-cpdm"
+                                                    id="professional_organization_membership"
+                                                    name="professional_organization_membership" />
+                                                <span t-else="" class="border-bottom border-2"
+                                                    t-field="plcement.professional_organization_membership" />
+                                                <div class="invalid-feedback">
+                                                    Please provide a valid Professional organization
+                                                    membership.
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                   
+
                                 </div>
                             </div>
                         </div>

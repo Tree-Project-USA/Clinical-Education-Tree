@@ -58,7 +58,7 @@
             "website_base/static/src/js/departments.js",
             "website_base/static/src/js/attachment_request.js",
             "website_base/static/src/js/state_attachment_request.js",
-            "website_base/static/src/js/signature_cpdm.js",
+            # "website_base/static/src/js/signature_cpdm.js",
             "website_base/static/src/js/required_document.js",
             "website_base/static/src/js/scce_attachment_request.js",
             "website_base/static/src/js/website_update_ci_information.js",

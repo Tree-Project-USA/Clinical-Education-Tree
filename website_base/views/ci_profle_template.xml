@@ -343,10 +343,14 @@
                           <span t-field="plcement.placement_term"/>
                         </td>
                         <td>
-                          <a class="btn btn-primary" t-att-href="'/ci/details/%s' % (plcement.id)">
-                            CI Details
+                          <a t-if="plcement.ptse_3_id.stage_type == 'ci_details'" class="btn btn-primary" t-att-href="'/ci/details/%s' % (plcement.ptse_3_id.id)">
+                            Submit
                             <i class="fa fa-pencil"/>
-                            </a>
+                          </a>
+                          <a t-else="" class="nav-link" t-att-href="'/ci/details/%s' % (plcement.ptse_3_id.id)">
+                            View
+                            <i class="fa fa-eye mx-2"/>
+                          </a>
                            
                         </td>
                       </tr>

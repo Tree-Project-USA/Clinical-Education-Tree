@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from datetime import date 
-from odoo import models, fields, api, _
+from odoo import models, fields, api, _, Command
 from odoo.exceptions import ValidationError
 import re
 

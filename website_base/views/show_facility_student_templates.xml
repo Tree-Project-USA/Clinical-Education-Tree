@@ -168,32 +168,41 @@
                         <a t-if="not plcement.ptse_3_id" class="btn btn-primary" t-att-href="'/student/details/%s' % (plcement.id)">
                           Submit
                           </a>
-                          <a t-else="" class="btn btn-primary" t-att-href="'/ci/details/%s' % (plcement.ptse_3_id.id)">
-                            CI Details
+                          <a t-else="" class="nav-link" t-att-href="'/ci/details/%s' % (plcement.ptse_3_id.id)">
+                            View
                               <i class="fa fa-eye mx-2"/>
                           </a>
+                          
                       </td>
                       <td>
-                          <a t-if="not plcement.ptse_1 and not user_input_1" class="btn btn-primary" t-attf-href="/survey/start/#{ptse_1_survey.access_token}">
-                            PTSE 1
+                        <a t-if="not ptse_1_survey">
+                          - 
+                        </a>
+                          <a t-elif="not plcement.ptse_1 and not user_input_1" class="btn btn-primary" t-attf-href="/survey/start/#{ptse_1_survey.access_token}">
+                            Submit
                             <i class="fa fa-pencil"></i>
                           </a>
-                          <a t-else="" class="btn btn-primary" t-attf-href="/survey/print/#{ptse_1_survey.access_token}?answer_token=#{user_input_1.access_token}">
-                            PTSE 1
+                          <a t-else="" class="nav-link" t-attf-href="/survey/print/#{ptse_1_survey.access_token}?answer_token=#{user_input_1.access_token}">
+                           View
+                           <i class="fa fa-eye mx-2"/>
                           </a>
                       </td>
                       <td>
-                        <a t-if="not plcement.ptse_2 and not user_input_2" class="btn btn-primary" t-attf-href="/survey/start/#{ptse_2_survey.access_token}?plcement=#{plcement.id}">
-                          PTSE 2  
+                        <a t-if="not ptse_2_survey">
+                          - 
+                        </a>
+                        <a t-elif="not plcement.ptse_2 and not user_input_2" class="btn btn-primary" t-attf-href="/survey/start/#{ptse_2_survey.access_token}?plcement=#{plcement.id}">
+                          Submit 
                           <i class="fa fa-pencil"></i>
                         </a>
-                        <a t-else="" class="btn btn-primary" t-attf-href="/survey/print/#{ptse_2_survey.access_token}?answer_token=#{user_input_2.access_token}">
-                          PTSE 2
+                        <a t-else="" class="nav-link" t-attf-href="/survey/print/#{ptse_2_survey.access_token}?answer_token=#{user_input_2.access_token}">
+                          View
+                           <i class="fa fa-eye mx-2"/>
                         </a>
                       </td>
                       <td>
-                        <a t-if="plcement.ptse_3_id" class="btn btn-primary" t-att-href="'/ci/details/%s' % (plcement.ptse_3_id.id)">
-                          PTSE 3
+                        <a t-if="plcement.ptse_3_id"  t-att-href="'/ci/details/%s' % (plcement.ptse_3_id.id)">
+                          View
                           <i class="fa fa-eye mx-2"/>
                           </a>
                           <span t-else="">-</span>

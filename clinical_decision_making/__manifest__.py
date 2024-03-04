@@ -42,8 +42,8 @@
         "views/menu.xml",
         "views/res_company_views.xml",
         "views/program_experience_term_views.xml",
-        # "views/post_plcement_views.xml",
-        "views/survey_survey_views.xml"
+        "views/survey_survey_views.xml",
+
     ],
     'assets': {
         'web.assets_backend': [

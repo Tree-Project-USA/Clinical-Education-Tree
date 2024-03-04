@@ -102,7 +102,10 @@
 
 #card_body{
     .form-label{
-
+        &::after {
+            content: " * ";
+            color:#dc3545;
+        }
     }
     .form-control-cpdm{
         border: 0 !important; 
@@ -113,7 +116,22 @@
         &:focus{
             box-shadow: 0 0 0 0 !important;
         }
+        
     }
+}
+.was-validated {
+    #card_body{
+        .form-control-cpdm{
+            &:valid{
+                background-image: inherit;
+            }
+            &:invalid{
+                border: 0 !important; 
+                border-bottom: 1px solid #dc3545 !important; 
+            }
+        }
+    }
+    
 }
 .w-50-input{
     width: 50% !important;
