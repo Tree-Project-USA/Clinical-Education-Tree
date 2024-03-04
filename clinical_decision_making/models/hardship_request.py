@@ -13,7 +13,8 @@ class HardshipRequest(models.Model):
     attachment_ids = fields.Many2many(
         comodel_name='ir.attachment',
         string="Attachments",
-        tracking=True, 
+        tracking=True,
+        compute_sudo=True
     )
     note = fields.Text('Internal Notes', tracking=True)
     state = fields.Selection(

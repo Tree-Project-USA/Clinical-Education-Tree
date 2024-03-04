@@ -65,8 +65,8 @@ class ResPartner(models.Model):
              })]
         return attachment
     
-    medical_attachment_ids = fields.One2many(comodel_name='attachments', inverse_name='student_id', string='Required Document', default=get_default_required_document)
-    scce_medical_attachment_ids = fields.One2many(comodel_name='scce.attachments', inverse_name='student_id', string='SCCE Required Document', default=get_default_scce_document)
+    medical_attachment_ids = fields.One2many(comodel_name='attachments', inverse_name='student_id', string='Required Document', default=get_default_required_document, compute_sudo=True)
+    scce_medical_attachment_ids = fields.One2many(comodel_name='scce.attachments', inverse_name='student_id', string='SCCE Required Document', default=get_default_scce_document, compute_sudo=True)
     experience_schedual_ids = fields.Many2many(comodel_name='clinical.experience.schedual', compute='_compute_term_fields', string='Studnet Experience Schedual')
     student_signature = fields.Binary(string="Student Signature")
     student_signature_date = fields.Date(string="Student Signature Date")
@@ -106,8 +106,8 @@ class ResPartner(models.Model):
 
     
     def action_send_account_creation_invitation(self):
-        group_portal = self.env.ref('base.group_portal')
-        group_public = self.env.ref('base.group_public')
+        group_portal = self.env.ref('base.group_portal').sudo()
+        group_public = self.env.ref('base.group_public').sudo()
         partner_ids = self.env['res.partner'].search([('email', '!=', False),('is_student', '=', True)])
         for partner_id in partner_ids:
                 user_sudo = self.env['res.users'].search([('partner_id', '=', partner_id.id), ('login', '=', partner_id.email)])
@@ -116,7 +116,7 @@ class ResPartner(models.Model):
                     # create a user if necessary and make sure it is in the portal group
                     company = partner_id.company_id or self.env.company
                     user_sudo = self.sudo().with_company(company.id)._create_user(partner_id)
-                    template = self.env.ref('clinical_decision_making.mail_template_send_account_creation_invitation')
+                    template = self.env.ref('clinical_decision_making.mail_template_send_account_creation_invitation').sudo()
                     lang = user_sudo.sudo().lang
                     partner = user_sudo.sudo().partner_id
 
@@ -157,8 +157,8 @@ class ResPartner(models.Model):
                             'experience_id': schedual_id.experience_id.id,
                             'company_id': rec.company_id.id,
                             'student_id': rec.ids[0],
-                            'placement_term': self.get_specific_term_year(rec.start_term_type, rec.start_year, rec.program_id.num_terms, schedual_id.term, alternative_schedule)[0],
-                            'year': str(self.get_specific_term_year(rec.start_term_type, rec.start_year, rec.program_id.num_terms, schedual_id.term, alternative_schedule)[1]),
+                            'placement_term': self.get_specific_term_year(rec.start_term_type, rec.start_year, rec.program_id.num_terms, schedual_id.term, alternative_schedule)[0] if self.get_specific_term_year(rec.start_term_type, rec.start_year, rec.program_id.num_terms, schedual_id.term, alternative_schedule) is not None else False,
+                            'year': str(self.get_specific_term_year(rec.start_term_type, rec.start_year, rec.program_id.num_terms, schedual_id.term, alternative_schedule)[1]) if self.get_specific_term_year(rec.start_term_type, rec.start_year, rec.program_id.num_terms, schedual_id.term, alternative_schedule) is not None else False
                         })
                         for schedual_id in rec.program_id.program_experience_term_ids #.filtered(lambda x:x.experience_id.active == True)
                     ]
@@ -283,8 +283,7 @@ class ResPartner(models.Model):
         return terms[current_index], current_year
     
     def get_specific_term_year(self, start_term, start_year, num_terms, target_term_index, alternative_schedule=[]):
-        terms = ["spring", "summer", "fall"]
-
+        terms = ["spring", "summer", "fall"]        
         start_index = terms.index(start_term)
         current_index = start_index
         current_year = int(start_year)

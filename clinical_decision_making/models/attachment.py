@@ -75,7 +75,7 @@ class Attachment(models.Model):
     company_id = fields.Many2one('res.company', string='University', default=lambda self: self.env.user.company_id)
     request_id = fields.Many2one("attachment.request", string="Request")
     attachment_type = fields.Many2one("attachment.type", string="Attachment Type")
-    attachment_ids = fields.Many2many(comodel_name='ir.attachment', string="Attachments", tracking=True)   
+    attachment_ids = fields.Many2many(comodel_name='ir.attachment', string="Attachments", tracking=True, compute_sudo=True)
     expiration_date = fields.Date(string='Expiration Date')   
     note = fields.Text(string="Note")
     state = fields.Selection([
@@ -118,7 +118,7 @@ class ScceAttachment(models.Model):
     company_id = fields.Many2one('res.company', string='University', default=lambda self: self.env.user.company_id)
     request_id = fields.Many2one("scce.attachment.request", string="Request")
     scce_attachment_type = fields.Many2one("scce.attachment.type", string="SCCE Attachment Type")
-    attachment_ids = fields.Many2many(comodel_name='ir.attachment', string="Attachments", tracking=True)   
+    attachment_ids = fields.Many2many(comodel_name='ir.attachment', string="Attachments", tracking=True, compute_sudo=True)
     expiration_date = fields.Date(string='Expiration Date')   
     note = fields.Text(string="Note")
     state = fields.Selection([
