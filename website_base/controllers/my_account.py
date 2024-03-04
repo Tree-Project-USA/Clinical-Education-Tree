@@ -59,7 +59,7 @@ class CustomerPortals(CustomerPortal):
 
             values["ci"] = request.env["res.partner"].sudo().search([
                 ("is_ci", "=", True),
-                ("scce_ids.scce_id", "in", res_partner_id.ids)
+                ("scce_ids", "in", res_partner_id.ids)
             ])
             values["placement_offer_ids"] = placement_offer_ids
             values["scce_facility_ids"] = scce_facility_ids

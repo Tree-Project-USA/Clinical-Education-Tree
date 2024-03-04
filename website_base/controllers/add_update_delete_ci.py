@@ -6,10 +6,10 @@ class CiInformation(http.Controller):
     @http.route('/add/new/ci', website=True, type='http', csrf=False, auth="user", Methods=["POST"])
     def add_new_ci(self, **kw):
         partner_id = request.env.user.partner_id
-        scce_facility_id =  request.env["scce.facility"].sudo().search([("scce_id", "=", partner_id.id)])
+        print(partner_id)
         try:
             ci = request.env["res.partner"].sudo().create({
-                "scce_ids": [(6,0, scce_facility_id.ids)], 
+                "scce_ids": [(6,0, partner_id.ids)], 
                 "is_ci": True, 
                 "first_name": kw.get("first_name"),
                 "last_name": kw.get("last_name"),
