@@ -174,7 +174,9 @@
                         <page name='post_placement_managament' string="Post Placement Managament">
                             <field name="plcement_management_ids" mode="tree">
                             <tree editable="bottom">
-                                <field name="ci_id"/>
+                                <field name="company_id" invisible="1"/>
+                                <field name="experience_id"/>
+                                <field name="ci_id" optional="hide"/>
                                 <field name="year"/>
                                 <field name="placement_term"/>
                                 <field name="ptse_1"/>

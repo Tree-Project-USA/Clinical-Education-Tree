@@ -7,7 +7,7 @@ class ResPartner(models.Model):
     _inherit = 'res.partner'
     
     partner_d = fields.Many2one('res.partner', string='Clinical Site')
-    scce_ids = fields.Many2many('res.partner', 'scce_id_rel', 'partner_id_rel',  string="test scce" ,domain=[('is_scce', '=', True)]) 
+    scce_ids = fields.Many2many('res.partner', 'scce_id_rel', 'partner_id_rel',  string="Scce" ,domain=[('is_scce', '=', True)]) 
     # scce_ids = fields.Many2many('scce.facility', string='SCCE' ,domain=[('is_primary_scce', '=', True), ('scce_id','!=',False)]) 
     facility_id = fields.Many2one('medical.facility', string='Clinical Site')
     is_ci = fields.Boolean(string='Is CI', default=False)
