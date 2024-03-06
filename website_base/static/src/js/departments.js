@@ -5,13 +5,16 @@ odoo.define("website_base.departments", function(require) {
     var counter_availability = 0;
     var previous;
     var number_of_company;
+    var input= [];
     const previous_list = []
     const services_type_list = []
+    const department_list = []
 
     publicWidget.registry.Departments = publicWidget.Widget.extend({
         selector: ".availability",
         events: {
             'click #add_departments': '_onClickDepartment',
+            'input .number': '_onInputNumber',
         },
 
         /**
@@ -45,14 +48,45 @@ odoo.define("website_base.departments", function(require) {
                         </select>
                     </div>
                     <div class="col-lg-4 col-12">
-                        <label for="staticEmail" class="col-form-label">Locations</label>
-                        <select 
-                            name="department_id_` + counter_availability + `"  
-                            id="department_id_` + counter_availability + `"
-                            class="form-control col-xl-12 custom-select company_id_` + counter_availability + `" required="1"
-                        >
-                        <option  value="" selected="selected">` + option + `</option>
-                        </select>
+                    <label for="staticEmail" class="col-form-label">Departments</label>
+                        <div>
+                            <a 
+                                class="btn btn-primary" 
+                                type="button" 
+                                data-bs-toggle="modal"
+                                data-bs-target="#modal_Department_${counter_availability}"
+                            >
+                                Show Department
+                            </a>
+                        </div>
+                        <div class="modal fade update_ci_information" id="modal_Department_${counter_availability}"
+                            tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-xl">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Departments</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                    <div class="row" t-foreach="val.line_ids" t-as="line">
+                                        <table class="table table-striped table-bordered shadow-sm text-center mt-5">
+                                            <thead>
+                                                <tr>
+                                                    <th>Department</th>
+                                                    <th>Street</th>
+                                                    <th>State</th>
+                                                    <th>City</th>
+                                                    <th>Number</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="table_body_${counter_availability}">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     </div>
                     <div class="col-lg-4 col-12">
                         <label for="staticEmail" class="col-form-label">Year</label>
@@ -157,6 +191,7 @@ odoo.define("website_base.departments", function(require) {
                     el.closest('.department-list').remove();
                     counter_availability--
                     $('input[name="len_department"]').attr('value', counter_availability)
+                    $('input[name="len_departments"]').attr('value', department_list)
                 }
             });
 
@@ -188,6 +223,7 @@ odoo.define("website_base.departments", function(require) {
                 }
                 return this;
             };
+            var table_body = "#table_body_" + counter_availability;
             var department = "#department_id_" + counter_availability;
             var experience = "#experience_id_" + counter_availability;
             var term = "#term_" + counter_availability;
@@ -244,7 +280,40 @@ odoo.define("website_base.departments", function(require) {
                 var company_id = $(company).val()
                 ajax.jsonRpc("/inforamtion/company", 'call', { company_id }).then(function(data) {
                     $(department).empty();
+                    $(table_body).empty();
                     _.each(data["department_ids"], function(value){
+                        const row = `<tr value="${value.id}">
+                                        <td>${value.name}</td>
+                                        <td>${value.street}</td>
+                                        <td>${value.city}</td>
+                                        <td>${value.state}</td>
+                                        <td>
+                                            <input
+                                                type="text"
+                                                id="number_${value.id}"
+                                                class="form-control number"
+                                                name="number_${value.id}"
+                                                value=""
+                                            />
+                                        </td>
+                                    </tr>`;
+
+                        const newRow = $(row);
+                        var numbers = "#number_" + value.id
+
+                        input.push(newRow.find(numbers).val());
+                        $(table_body).append(newRow);
+
+
+                        $(numbers).bind('change', function () {
+
+                            console.log(value.id, "ahmed ah,med");
+                            console.log(value.street, "ahmed ah,med");
+                            console.log(value.city, "ahmed ah,med");
+                            console.log(value.state, "ahmed ah,med");
+                            console.log(counter_availability, "ahmed ah,med");
+                            console.log($(numbers).val(), "ahmed ah,med");
+                        })
                         $(department).append($('<option>', {
                             value: value.id,
                             text: value.name + '/' + value.street + '/' + value.city + '/' + value.state,
@@ -259,13 +328,33 @@ odoo.define("website_base.departments", function(require) {
                 var terms = $(placement_term).val()
                 var experience_id = $(experience).val()
                 ajax.jsonRpc("/program/experience/term", 'call', { experience_id, years, terms }).then(function(data) {
-                    $(start_date).val(data.start_date)
-                    $(end_date).val(data.end_date)
+                    const startDate = new Date(data.start_date);
+                    const endDate = new Date(data.end_date);
+                    const startDateString = startDate.toLocaleDateString('en', { month: 'long', day: 'numeric', year: 'numeric' });
+                    const endDateString = endDate.toLocaleDateString('en', { month: 'long', day: 'numeric', year: 'numeric' });
+                    $(start_date).val(startDateString);
+                    $(end_date).val(endDateString);
                 });
             })
             counter_availability++
             $('input[name="len_department"]').attr('value', counter_availability)
+            console.log(input)
+            $('input[name="len_departments"]').attr('value', department_list)
         },
+
+        _onInputNumber: function(ev) {
+            console.log(ev)
+            console.log(ev.currentTarget.value)
+            console.log(parseInt(ev.currentTarget.id.split("number_")[1]))
+            department_list.push(
+                {
+                    "id": parseInt(ev.currentTarget.id.split("number_")[1]),
+                    "number": parseInt(ev.currentTarget.value),
+                }
+            )
+            console.log(department_list)
+            $('input[name="len_departments"]').attr('value', department_list)
+        } 
     })
 
 })

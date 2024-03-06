@@ -730,7 +730,7 @@
                           <tr t-foreach="placement_offer_ids" t-as="val">
                             <td colspan="1"><t t-esc="val.facility_id.name"/></td>
                             <td><t t-esc="dict(val._fields['state'].selection).get(val.state)" /></td>
-                            <td colspan="1"><t t-esc="val.create_date"/></td>
+                            <td colspan="1"><t t-esc="val.create_date.strftime('%B/%d/%Y')"/></td>
                             <td class="text-center">
                               <a class="btn btn-primary" type="button"  data-bs-toggle="modal"
                               t-att-data-bs-target="'#modal_{}'.format(val.id)"

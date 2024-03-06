@@ -1,4 +1,4 @@
-from odoo import http, _
+from odoo import http, _, SUPERUSER_ID
 from odoo.http import request
 from odoo.exceptions import ValidationError
 
@@ -169,8 +169,9 @@ class SubmitAvailability(http.Controller):
     @http.route('/departments', website=True, type='json', auth="user", csrf=False)
     def departments(self, id=None, **kw):
         values = {}
-        
-        company_ids = request.env["res.company"].search([])
+        user_id = request.env.user.company_ids
+        print(user_id)
+        company_ids = request.env.user.company_ids
         SELECTION_YEAR_RANGE = [{
                     'id': str(i),
                 } for i in range(2020, 2500)]
@@ -186,9 +187,14 @@ class SubmitAvailability(http.Controller):
     def information_company(self, company_id=None, **kw):
         values = {}
         partner_id = request.env.user.partner_id
+        print(company_id)
+        print(company_id)
+        print(company_id)
         company_id = request.env["res.company"].sudo().search([("id", "=", company_id)])
-        department_ids = request.env["facility.department"].search([("company_id", "=", company_id.id), ('scce_ids.scce_id', '=', partner_id.id)])
-        clinical_experience_ids = request.env["clinical.experience"].sudo().search([("company_id", "=", company_id.id)])
+        department_ids = request.env["facility.department"].sudo().search([("company_id", "=", company_id.id), ('scce_ids.scce_id', '=', partner_id.id)])
+        print(company_id)
+        print(department_ids)
+        clinical_experience_ids = request.env["clinical.experience"].search([("company_id", "=", company_id.id)])
         experiences = [{
                     'id': experience.id,
                     'name': experience.name if experience.name else '',

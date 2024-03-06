@@ -12,6 +12,8 @@
                 <input type="hidden" name="csrf_token"
                     t-att-value="request.csrf_token()" />
                     <input type="hidden" name="len_department" value="1" />
+                    <!-- <input type="hidden" name="len_departments" value="1" /> -->
+                    <input type="text" name="len_departments" value="1" />
                     <div class="row mt-4">
                         <div>
                             <table class="table add_file table-bordered">
