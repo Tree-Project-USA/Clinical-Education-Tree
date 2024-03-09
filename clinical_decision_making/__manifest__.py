@@ -39,11 +39,11 @@
         "views/res_users_views.xml",
         "views/res_partner_ci_views.xml",
         "views/scce_attachment_type_views.xml",
-        "views/menu.xml",
         "views/res_company_views.xml",
         "views/program_experience_term_views.xml",
         "views/survey_survey_views.xml",
-
+        "views/student_campus_views.xml",
+        "views/menu.xml",
     ],
     'assets': {
         'web.assets_backend': [

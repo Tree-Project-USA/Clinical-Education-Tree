@@ -122,6 +122,12 @@
         <field name="domain_force">[('company_id', 'in', company_ids)]</field>
     </record>
 
+    <record id="student_campus_comp_rule" model="ir.rule">
+        <field name="name">Student Campus multi-company</field>
+        <field name="model_id" ref="model_student_campus"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
     <record id="preferred_setting_comp_rule" model="ir.rule">
         <field name="name">Preferred Setting Site multi-company</field>
         <field name="model_id" ref="model_preferred_setting"/>

@@ -278,7 +278,7 @@ class SCCEFacility(models.Model):
 
     _name = 'scce.facility'
     _description = 'Clinical Site SCCE'
-    _rec_name = 'complete_name'
+    _rec_name = 'scce_id'
     
     facility_id = fields.Many2one('medical.facility', string='Clinical Site')
     scce_id = fields.Many2one('res.partner', string='SCCE', domain=[('is_scce', '=', True)])

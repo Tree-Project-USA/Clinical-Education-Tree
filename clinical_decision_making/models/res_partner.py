@@ -24,6 +24,7 @@ class ResPartner(models.Model):
     personal_phone = fields.Char(string='Personal Phone')
     personal_email_address = fields.Char(string='Personal Email Address')
     campus = fields.Char(string='Campus', default='Austin, TX')
+    campus_id = fields.Many2one(comodel_name='student.campus', string='Campus')
     archive_ids = fields.One2many(comodel_name='archive', inverse_name='student_id', string='Placement History')
     can_apply_hardship = fields.Boolean(string='Apply Hardship', default=False)
     is_reach_maximum_zip_code = fields.Boolean(string='Reach Maximum Zip Code', default=False)
@@ -96,7 +97,7 @@ class ResPartner(models.Model):
         """ create a new user for wizard_user.partner_id
             :returns record of res.users
         """
-        return self.env['res.users'].with_context(no_reset_password=True)._create_user_from_template({
+        return self.env['res.users'].with_context(no_reset_password=True).sudo()._create_user_from_template({
             'email': email_normalize(partner_id.email),
             'login': email_normalize(partner_id.email),
             'partner_id': partner_id.id,
@@ -259,9 +260,11 @@ class ResPartner(models.Model):
     def validate_preferred_setting_ids(self):
         if self.env.context.get('pass_validation', False):
             return
+        
+        number_preferred_setting = self.env.company.number_preferred_setting
         for rec in self:
-            if len(rec.preferred_setting_ids) < 5:
-                raise ValidationError(_('Must be selected 5 preferred settings'))
+            if len(rec.preferred_setting_ids) < number_preferred_setting:
+                raise ValidationError(_('preferred setting must selecte %s setting' % number_preferred_setting))
     
     def calculate_end_term(self, start_term, start_year, num_terms, alternative_schedule=[]):
         terms = ["spring", "summer", "fall"]

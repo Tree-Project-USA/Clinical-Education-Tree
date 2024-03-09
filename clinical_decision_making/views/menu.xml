@@ -267,27 +267,42 @@ action = user.action_open_user_company()
         parent="configuration_menu"
         action="action_un_form"
         sequence="1"/>
+    
 
     <menuitem
         id="program_menu"
         name="Program Duration"
         action="program_action"
         parent="configuration_menu"
+        sequence="98"/>
+
+    <menuitem
+        id="campus_menu"
+        name="Student Campus"
+        action="clinical_decision_making.action_student_campus"
+        parent="configuration_menu"
         sequence="99"/>
+
+    <menuitem
+        id="preferred_setting_menu"
+        name="Settings Types"
+        action="action_preferred_setting"
+        parent="configuration_menu"
+        sequence="100"/>
     
     <menuitem
         id="attachment_type_menu"
         name="Program Attachment Type"
         action="clinical_decision_making.action_attachment_type"
         parent="configuration_menu"
-        sequence="100"/>
+        sequence="101"/>
 
     <menuitem
         id="scce_attachment_type_menu"
         name="Site Attachment Type"
         action="clinical_decision_making.action_scce_attachment_type"
         parent="configuration_menu"
-        sequence="101"/>
+        sequence="102"/>
 
     <menuitem
         id="clinical_experience_menu"
@@ -320,11 +335,5 @@ action = user.action_open_user_company()
         parent="setting_menu"
         sequence="5"/> -->
 
-    <menuitem
-        id="preferred_setting_menu"
-        name="Settings Types"
-        action="action_preferred_setting"
-        parent="configuration_menu"
-        sequence="99"/>
 
 </odoo>
