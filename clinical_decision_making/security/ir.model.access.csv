@@ -48,3 +48,4 @@ access_post_plcement_management_manager,post_plcement_management_manager,model_p
 access_ci_ptse_manager,ci_ptse_manager,model_ci_ptse,,1,1,1,1
 access_plcement_management_manager,plcement_management_manager,model_plcement_management,,1,1,1,1
 access_clinical_experience_dates_manager,clinical_experience_dates_manager,model_clinical_experience_dates,,1,1,1,1
+access_student_campus_manager,student_campus_manager,model_student_campus,,1,1,1,1

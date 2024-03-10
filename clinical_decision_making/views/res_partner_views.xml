@@ -85,6 +85,7 @@
                             </div>
                             <field name="is_with_hardship" invisible="1"/>
                             <field name="campus" readonly="1"/>
+                            <field name="campus_id"/>
                             <field name="program_id"/>
                             <field name="company_id" groups="base.group_multi_company"/>
                             <field name="program_type" readonly="1"/>

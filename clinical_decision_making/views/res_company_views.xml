@@ -10,6 +10,7 @@
                 <page string="Clin Ed Tree Settings" name="settings">
 
                     <group>
+                        <field name="number_preferred_setting"/>
                         <field name="max_distance_mel"/>
                         <field name="max_hardship_zipcodes"/>
                         <field name="normal_number_zipcodes"/>

@@ -29,3 +29,4 @@ from . import res_users
 from . import post_plcement_management
 from . import survey_survey
 from . import ir_attachment
+from . import student_campus

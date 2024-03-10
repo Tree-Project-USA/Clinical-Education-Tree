@@ -101,7 +101,7 @@ class Geographical(models.Model):
 class geographicalPreferred(models.Model):
     _name = 'geographical.preferred'
     _description = 'Preferred Addresses'
-    _rec_name = 'student_id'
+    _rec_name = 'geographical_id'
     
     def _default_sequence(self):
         return self.env.company.normal_number_zipcodes

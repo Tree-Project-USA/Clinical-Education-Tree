@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- View student.campus View Tree -->
+    <record id="view_student_campus_tree" model="ir.ui.view">
+        <field name="name">view.student.campus.tree</field>
+        <field name="model">student.campus</field>
+        <field name="arch" type="xml">
+            <tree string="Student Campus">
+                <field name="name"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- View student.campus form -->
+    <record id="view_student_campus_form" model="ir.ui.view">
+        <field name="name">view.student.campus.form</field>
+        <field name="model">student.campus</field>
+        <field name="arch" type="xml">
+            <form string="Student Campus">
+                <header></header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="Name..."/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <!-- Action student.campus -->
+    <record id="action_student_campus" model="ir.actions.act_window">
+        <field name="name">Student Campus</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">student.campus</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>
