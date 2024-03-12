@@ -41,7 +41,7 @@ class ResPartner(models.Model):
             if medical_facility:
                 for x in medical_facility:
                     x.facility_id.write({
-                        'ci_ids': [Command.unlink(res.ids[0])]
+                        'ci_ids': [Command.unlink(res.ids[0])] if res.ids else []
                     })
            
                 
