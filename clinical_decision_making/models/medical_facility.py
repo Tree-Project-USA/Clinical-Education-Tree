@@ -212,8 +212,11 @@ class MedicalFacility(models.Model):
                 'geographical_id': rec.geographical_id.id,
                 'is_main_department': True
             }
+            scce_primary_ids = rec.scce_ids.filtered(lambda x: x.is_primary_scce == True)
+            rec.scce_primary_id = scce_primary_ids[0].scce_id if scce_primary_ids else False
             main_department_id = self.env['facility.department'].create(main_department_vals)
             rec.main_department_id = main_department_id
+            rec.main_setting_ids = vals_list[0].get('main_setting_ids', []) if vals_list else []
         return res
     
     def write(self, vals):
