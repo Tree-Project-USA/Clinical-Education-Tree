@@ -75,7 +75,7 @@
                                             <field name="department_ids" invisible="1"/>
                                             <field name="department_id" attrs="{'column_invisible':[('parent.is_single_facility', '=', True)], 'required':[('parent.is_single_facility', '=', False)]}"/>
                                             <field name="company_id" string="University" groups="base.group_multi_company"/>
-                                            <field name="experience_id" required="1"/>
+                                            <field name="experience_id" required="1" widget="many2many_tags"/>
                                             <field name="placement_term" required="1"/>
                                             <field name="year" force_save="1" required="1"/> 
                                             <field name="setting" string="Offer Setting Type"/>

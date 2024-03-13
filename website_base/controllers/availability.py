@@ -1,53 +1,71 @@
-from odoo import http, _
+from odoo import http, _, SUPERUSER_ID, Command
 from odoo.http import request
 from odoo.exceptions import ValidationError
 
 class SubmitAvailability(http.Controller):
     @http.route('/submit/availability', website=True, type='http', auth="user")
-    def submit_availability(self, id=None, **kw):
+    def submit_availability(self, id=None, **post):
         values = {}
         partner_id = request.env.user.partner_id
         if request.httprequest.method == "GET":
             values["partner_id"] = partner_id 
+            company_ids = request.env.user.company_ids
+            SELECTION_YEAR_RANGE = [{
+                        'id': str(i),
+                    } for i in range(2020, 2500)]
+            values["company_ids"] = company_ids
+            values["SELECTION_YEAR_RANGE"] = SELECTION_YEAR_RANGE
             return request.render("website_base.availability_template", values)
-        elif request.httprequest.method == "POST":
-            def create_line_ids(department, kw):
-                return (0, 0, {
-                'department_id': kw[f"department_id_{department}"],
-                'experience_id': kw[f"experience_id_{department}"],
-                'placement_term': kw[f"placement_term_{department}"],
-                'company_id': kw[f"company_id_{department}"],
-                'year': kw[f"term_{department}"],
-                'setting': kw[f"setting_{department}"],
-                'offers': kw[f"offers_{department}"],
-            })
-            department_list = []
-            f_list = []
-            for department in range(int(kw.get("len_department"))):
-                department_id = request.env["facility.department"].sudo().search([("id", "=", kw[f"department_id_{department}"])])
-                facility_id = department_id.mapped("facility_id").id
-
-                if facility_id not in f_list:
-                    if f_list:
-                        f_list.pop(0)
-                        department_list = []
-
-                    f_list.append(facility_id)
-                    line_ids = create_line_ids(department, kw)
-                    department_list.append(line_ids)
-                    vals = {
-                        "scce_id": partner_id.id,
-                        "facility_id": facility_id,
-                        "line_ids": department_list,
-                    }
-                    placement_offer_request = request.env["placement.offer"].sudo().create(vals)
+        elif request.httprequest.method == "POST" and post:
+            departments = post.get("line_department_list").split(",")
+            placement_term = post.get("placement_term_list").split(",")
+            experience_ids = post.get("experience_id_list").split(",")
+            ce_dict = {}
+            for ce in experience_ids:
+                list_ce = ce.split("_")
+                if list_ce[0] in ce_dict:
+                    
+                    ce_dict.get(list_ce[0]).append(int(list_ce[1]))
                 else:
-                    line_ids = create_line_ids(department, kw)
-                    department_list = [line_ids]
-                    placement_offer_request.sudo().write({
-                        "line_ids": department_list,
-                    })
-
+                    ce_dict[list_ce[0]] = [int(list_ce[1])]
+                
+            list_departments = [int(i) for i in departments]    
+            for term in placement_term:
+                for index, department in enumerate(list_departments):
+                    res_department = request.env['facility.department'].sudo().search([ ('id', '=', department)])
+                    placement_offer = request.env['placement.offer'].with_company(request.env.user.company_id).\
+                     search([
+                         ('state', '=', 'offer_details_entered'),
+                         ('scce_id', '=', partner_id.id),
+                         ('facility_id', '=', res_department.facility_id.id),
+                         ],limit=1, order='create_date desc')
+                    if placement_offer :
+                        request.env['placement.offer.line'].sudo().create({
+                            'department_id': res_department.id,
+                                                'offer_id': placement_offer.id,
+                                                'experience_id': [Command.set(ce_dict.get(term))],
+                                                'placement_term': term,
+                                                'company_id': int(post.get("company_id")),
+                                                'year': post.get("year_term"),
+                                                'setting': post.get("setting"),
+                                                'offers': int(post[f"number_{index + 1}"]),
+                        })
+                       
+                    else:
+                        request.env["placement.offer"].sudo().create({
+                            'scce_id': partner_id.id,
+                            "facility_id": res_department.facility_id.id,
+                            "line_ids":[
+                                Command.create({
+                                    'department_id': res_department.id,
+                                    'experience_id': [Command.set(ce_dict.get(term))],
+                                    'placement_term': term,
+                                    'company_id': int(post.get("company_id")),
+                                    'year': post.get("year_term"),
+                                    'setting': post.get("setting"),
+                                    'offers': int(post[f"number_{index + 1}"]),
+                                })]     
+                            })
             return request.render("website_base.success_placement_offer_template")
         
     @http.route('/facility/scce/placement/offer/<int:id>', website=True, type='http', auth="user")
@@ -166,33 +184,12 @@ class SubmitAvailability(http.Controller):
             error = _("This placement offer has been taken by other student")
             return request.redirect_query("/facility/scce/placement/offer/%s" % facility_id, {"error": error})
     
-    @http.route('/departments', website=True, type='json', auth="user", csrf=False)
-    def departments(self, id=None, **kw):
-        values = {}
-        
-        company_ids = request.env["res.company"].search([])
-        SELECTION_YEAR_RANGE = [{
-                    'id': str(i),
-                } for i in range(2020, 2500)]
-        companys = [{
-                    'id': company.id,
-                    'name': company.name if company.name else '',
-                } for company in company_ids]
-        values["company_ids"] = companys
-        values["SELECTION_YEAR_RANGE"] = SELECTION_YEAR_RANGE
-        return values
     
     @http.route('/inforamtion/company', website=True, type='json', auth="user", csrf=False)
-    def information_company(self, company_id=None, **kw):
+    def information_company(self, **post):
         values = {}
         partner_id = request.env.user.partner_id
-        company_id = request.env["res.company"].sudo().search([("id", "=", company_id)])
-        department_ids = request.env["facility.department"].search([("company_id", "=", company_id.id), ('scce_ids.scce_id', '=', partner_id.id)])
-        clinical_experience_ids = request.env["clinical.experience"].sudo().search([("company_id", "=", company_id.id)])
-        experiences = [{
-                    'id': experience.id,
-                    'name': experience.name if experience.name else '',
-                } for experience in clinical_experience_ids]
+        department_ids = request.env["facility.department"].sudo().search([('scce_ids.scce_id', '=', partner_id.id)])
         departments = [{
                     'id': department.id,
                     'name': department.name if department.name else '',
@@ -200,19 +197,35 @@ class SubmitAvailability(http.Controller):
                     'city': department.city if department.city else '',
                     'state': department.state if department.state else '',
                 } for department in department_ids]
-        values["clinical_experience_ids"] = experiences
         values["department_ids"] = departments
         return values
     
     @http.route('/clinical/experience/dates', website=True, type='json', auth="user", csrf=False)
-    def clinical_experience_dates(self, years= None, **kw):
+    def clinical_experience_dates(self, **post):
         values = {}
-        clinical_experience_dates_ids = request.env['clinical.experience.dates'].search([("year", "=", years)])
-        clinical_experience = clinical_experience_dates_ids.mapped("experience_id")
-        experiences = [{
-                    'id': experience.id,
-                    'name': experience.name if experience.name else '',
-                } for experience in clinical_experience]
+        terms = post.get("placement_term")
+        clinical_experience_dates_ids = request.env['clinical.experience.dates']\
+            .search([("year", "=", post.get("year_term"))])
+        experiences = []
+        for  clinical in clinical_experience_dates_ids:
+            for t in terms:
+                if t == "fall":
+                    start_date = clinical.fa_start_date if clinical.fa_start_date else ""
+                    end_date = clinical.fa_end_date if clinical.fa_end_date else ""
+                elif t == "spring":
+                    start_date = clinical.sp_start_date if clinical.sp_start_date else ""
+                    end_date = clinical.sp_end_date if clinical.sp_end_date else ""
+                elif t == "summer":
+                    start_date = clinical.su_start_date if clinical.su_start_date else ""
+                    end_date = clinical.su_end_date if clinical.su_end_date else ""
+                clinical_dict ={
+                    'id': clinical.experience_id.id,
+                    'name': clinical.experience_id.name if clinical.experience_id.name else '',
+                    "start_date": start_date, 
+                    "end_date" : end_date, 
+                    "term" : t, 
+                }
+                experiences.append(clinical_dict)
         values["clinical_experience_ids"] = experiences
         return values
         
@@ -228,10 +241,10 @@ class SubmitAvailability(http.Controller):
         print(clinical_experience_ids.mapped("date_ids"))
         for i in clinical_experience_ids.mapped("date_ids"):
             if i.year == years:
-                if terms == "fall":
+                if "fall" in terms:
                     start_date = i.fa_start_date if i.fa_start_date else ""
                     end_date = i.fa_end_date if i.fa_end_date else ""
-                elif terms == "spring":
+                elif "spring" :
                     start_date = i.sp_start_date if i.sp_start_date else ""
                     end_date = i.sp_end_date if i.sp_end_date else ""
                 elif terms == "summer":

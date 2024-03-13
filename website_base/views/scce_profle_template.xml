@@ -730,7 +730,7 @@
                           <tr t-foreach="placement_offer_ids" t-as="val">
                             <td colspan="1"><t t-esc="val.facility_id.name"/></td>
                             <td><t t-esc="dict(val._fields['state'].selection).get(val.state)" /></td>
-                            <td colspan="1"><t t-esc="val.create_date"/></td>
+                            <td colspan="1"><t t-esc="val.create_date.strftime('%B/%d/%Y')"/></td>
                             <td class="text-center">
                               <a class="btn btn-primary" type="button"  data-bs-toggle="modal"
                               t-att-data-bs-target="'#modal_{}'.format(val.id)"
@@ -749,17 +749,18 @@
                                       <h3><span>Clinical Site:</span><span class="mx-4" t-esc="val.facility_id.name"/></h3>
                                     </div>
                                     <div class="row" t-foreach="val.line_ids" t-as="line">
-                                      <div class="col-3 my-2"><span class="mx-2" style="font-weight: bold;">Location:</span><span class="mx-2" t-esc="line.department_id.name"/></div>
-                                      <div class="col-3 my-2"><span class="mx-2" style="font-weight: bold;">University:</span><span class="mx-2" t-esc="line.company_id.name"/></div>
-                                      <div class="col-3 my-2"><span class="mx-2" style="font-weight: bold;">Cliinical Experience:</span><span class="mx-2" t-esc="line.experience_id.name"/></div>
-                                      <div class="col-3 my-2"><span class="mx-2" style="font-weight: bold;">Term:</span><span class="mx-2" t-esc="line.placement_term"/></div>
-                                      <div class="col-3 my-2"><span class="mx-2" style="font-weight: bold;">Year:</span><span class="mx-2" t-esc="line.year"/></div>
-                                      <div class="col-3 my-2"><span class="mx-2" style="font-weight: bold;">Offer Seting Type:</span><span class="mx-2" t-esc="line.setting"/></div>
-                                      <div class="col-3 my-2"><span class="mx-2" style="font-weight: bold;">Number of Offer:</span><span class="mx-2" t-esc="line.offers"/></div>
-                                      <div class="col-3 my-2"><span class="mx-2" style="font-weight: bold;">Street:</span><span class="mx-2" t-esc="line.street"/></div>
-                                      <div class="col-3 my-2"><span class="mx-2" style="font-weight: bold;">City:</span><span class="mx-2" t-esc="line.city"/></div>
-                                      <div class="col-3 my-2"><span class="mx-2" style="font-weight: bold;">State:</span><span class="mx-2" t-esc="line.state"/></div>
-                                      <div class="col-3 my-2"><span class="mx-2" style="font-weight: bold;">ZIP Code:</span><span class="mx-2" t-esc="line.geographical_id.zip_code"/></div>
+                                      <div class="col-3 my-2"><span class="mx-2 fw-bolder">Location:</span><p class="mx-2 text-muted" t-esc="line.department_id.name"/></div>
+                                      <div class="col-3 my-2"><span class="mx-2 fw-bolder">University:</span><p class="mx-2 text-muted" t-esc="line.company_id.name"/></div>
+                                      <div class="col-3 my-2"><span class="mx-2 fw-bolder">Cliinical Experience:</span><p class="mx-2 text-muted" t-field="line.experience_id"/></div>
+                                      <div class="col-3 my-2"><span class="mx-2 fw-bolder">Term:</span><p class="mx-2 text-muted" t-esc="line.placement_term"/></div>
+                                      <div class="col-3 my-2"><span class="mx-2 fw-bolder">Year:</span><p class="mx-2 text-muted" t-esc="line.year"/></div>
+                                      <div class="col-3 my-2"><span class="mx-2 fw-bolder">Offer Seting Type:</span><p class="mx-2 text-muted" t-esc="line.setting"/></div>
+                                      <div class="col-3 my-2"><span class="mx-2 fw-bolder">Number of Offer:</span><p class="mx-2 text-muted" t-esc="line.offers"/></div>
+                                      <div class="col-3 my-2"><span class="mx-2 fw-bolder">Street:</span><p class="mx-2 text-muted" t-esc="line.street"/></div>
+                                      <div class="col-3 my-2"><span class="mx-2 fw-bolder">City:</span><p class="mx-2 text-muted" t-esc="line.city"/></div>
+                                      <div class="col-3 my-2"><span class="mx-2 fw-bolder">State:</span><p class="mx-2 text-muted" t-esc="line.state"/></div>
+                                      <div class="col-3 my-2"><span class="mx-2 fw-bolder">ZIP Code:</span><p class="mx-2 text-muted" t-esc="line.geographical_id.zip_code"/></div>
+                                    <hr class="mb-3"/>
                                     </div>
                                   </div>
                                 </div>
