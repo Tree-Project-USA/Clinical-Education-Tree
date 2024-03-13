@@ -9,8 +9,9 @@ _logger = logging.getLogger(__name__)
 SELECTION_YEAR_RANGE = [(str(i),str(i)) for i in range(2020, 2500)]
 
 
-# class C33linicalExperience(models.Model):
-#     _name = 'program.experience.dates'
+class C33linicalExperience(models.Model):
+    _name = 'program.experience.dates'
+    
 class ClinicalExperience(models.Model):
     _name = 'clinical.experience'
     _description = _('Clinical Experience')
