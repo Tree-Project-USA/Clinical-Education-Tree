@@ -2,19 +2,15 @@ odoo.define("website_base.departments", function(require) {
     "use strict";
     var publicWidget = require("web.public.widget");
     var ajax = require('web.ajax');
-    var counter_availability = 0;
-    var previous;
-    var number_of_company;
-    var input= [];
-    const previous_list = []
-    const services_type_list = []
-    const department_list = []
 
     publicWidget.registry.Departments = publicWidget.Widget.extend({
         selector: ".availability",
         events: {
-            'click #add_departments': '_onClickDepartment',
-            'input .number': '_onInputNumber',
+            // 'click #add_departments': '_onClickDepartment',
+            // 'input .number': '_onInputNumber',
+            'change #company_id': '_onChangeCompany',
+            'change #year_term, #placement_term': '_onChangeYearTerm',
+            'click #submit-offers, #placement_term': '_onClickSubmitOffers',
         },
 
         /**
@@ -23,338 +19,93 @@ odoo.define("website_base.departments", function(require) {
         init: function() {
             this._super.apply(this, arguments);
             this._popoverRPC = null;
-            this._onClickDepartment();
+            // this._onClickDepartment();
         },
 
         start: function () {
             this.$(".custom-select").select2();
+            $('.availability').removeClass('d-none')
+            $('.loading-indicator').addClass('d-none')
         },
 
-
-        _onClickDepartment: function(ev) {
-            var option = "select..."
-            const department_id = "#" + $(".department-list:last").attr("id");
-            // add row for file
-            const department_new_tag =
-            `<tr class="department-list" id="zip_` + counter_availability + `">
-            <td class="row-index" colspan="7">
-                <div class="row">
-                    <div class="col-lg-4 col-12">
-                        <label for="staticEmail" class="col-form-label">Program</label>
-                        <select name="company_id_` + counter_availability + `" 
-                            id="company_id_` + counter_availability + `"
-                            class="form-control col-xl-12 custom-select company_id_` + counter_availability + `" required="1">
-                            <option  value="" selected="selected">` + option + `</option>
-                        </select>
-                    </div>
-                    <div class="col-lg-4 col-12">
-                    <label for="staticEmail" class="col-form-label">Departments</label>
-                        <div>
-                            <a 
-                                class="btn btn-primary" 
-                                type="button" 
-                                data-bs-toggle="modal"
-                                data-bs-target="#modal_Department_${counter_availability}"
-                            >
-                                Show Department
-                            </a>
-                        </div>
-                        <div class="modal fade update_ci_information" id="modal_Department_${counter_availability}"
-                            tabindex="-1" aria-hidden="true">
-                            <div class="modal-dialog modal-xl">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Departments</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                    <div class="row" t-foreach="val.line_ids" t-as="line">
-                                        <table class="table table-striped table-bordered shadow-sm text-center mt-5">
-                                            <thead>
-                                                <tr>
-                                                    <th>Department</th>
-                                                    <th>Street</th>
-                                                    <th>State</th>
-                                                    <th>City</th>
-                                                    <th>Number</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="table_body_${counter_availability}">
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    </div>
-                    <div class="col-lg-4 col-12">
-                        <label for="staticEmail" class="col-form-label">Year</label>
-                        <select name="term_` + counter_availability + `" 
-                            id="term_` + counter_availability + `"
-                            class="form-control col-xl-12 custom-select experience_id_` + counter_availability + `" required="1">
-                            <option  value="" selected="selected">` + option + `</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="row mt-4">
-                    <div class="col-lg-4 col-12">
-                        <label for="staticEmail" class="col-form-label">Term</label>
-                        <select name="placement_term_${counter_availability}"
-                        id="placement_term_${counter_availability}"  
-                        class="form-control col-xl-12 custom-select placement_term_` + counter_availability + `" required="1">
-                            <option value="" selected="selected">` + option + `</option>
-                            <option value="fall">FALL</option>
-                            <option value="spring">SPRING</option>
-                            <option value="summer">SUMMER</option>
-                        </select>
-                    </div>
-                    <div class="col-lg-4 col-12">
-                        <label for="staticEmail" class="col-form-label">CE Type</label>
-                        <select name="experience_id_` + counter_availability + `" 
-                            id="experience_id_` + counter_availability + `"
-                            class="form-control col-xl-12 custom-select experience_id_` + counter_availability + `" required="1">
-                            <option  value="" selected="selected">` + option + `</option>
-                        </select>
-                    </div>
-                    <div class="col-lg-4 col-12">
-                        <label for="staticEmail" class="col-form-label">Offer Setting Type</label>
-                        <select name="setting_` + counter_availability + `"  
-                        class="form-control col-xl-12 custom-select setting_` + counter_availability + `" required="1">
-                            <option  value="" selected="selected">` + option + `</option>
-                            <option  value="op">OP</option>
-                            <option value="ip">IP</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-4 col-12">
-                        <label for="staticEmail" class="col-form-label">Number of Offer</label>
-                        <div>
-                            <input
-                                type="text"
-                                class="form-control"
-                                ${counter_availability === 0 ? 'required' : ''}
-                                name="offers_` + counter_availability + `" 
-                                id="offers_` + counter_availability + `"
-                            />
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-12">
-                        <label for="staticEmail" class="col-form-label">Start Date</label>
-                        <div>
-                            <input
-                                type="text"
-                                class="form-control"
-                                ${counter_availability === 0 ? 'required' : ''}
-                                name="start_date_` + counter_availability + `" 
-                                id="start_date_` + counter_availability + `"
-                                readonly="1"
-                            />
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-12">
-                        <label for="staticEmail" class="col-form-label">End Date</label>
-                        <div>
-                            <input
-                                type="text"
-                                class="form-control"
-                                ${counter_availability === 0 ? 'required' : ''}
-                                name="end_date_` + counter_availability + `" 
-                                id="end_date_` + counter_availability + `"
-                                readonly="1"
-                            />
-                        </div>
-                    </div>
-                </div>
-               
-            </td>
-            <td class="text-center" >
-                <i class="btn fa fa-trash fa_custom" 
-                id="remove_department_` + counter_availability + `" type="button" 
-                    style="color:#dc3545;font-size:18px">
-                </i>
-            </td>`
-
-            if ($(".department-list:last").attr("id") !== undefined) {
-                $(department_id).after(department_new_tag);
-            } else {
-                $("#add_department").append(department_new_tag);
-
-            }
-
-            // delete row in  row of files
-            var removerow = '#remove_department_' + counter_availability;
-            $(removerow).click(function(ev) {
-                var el = $(ev.target);
-                if (el.closest('.department-list').index() >= $('.department-list:last').index()) {
-                    el.closest('.department-list').remove();
-                    counter_availability--
-                    $('input[name="len_department"]').attr('value', counter_availability)
-                    $('input[name="len_departments"]').attr('value', department_list)
-                }
-            });
-
-            var ChooseFile = '#chooseFile_' + counter_availability
-            var FileUpload = '#file-upload_' + counter_availability
-            var NoFile = '#noFile_' + counter_availability
-            $(ChooseFile).bind('change', function () {
-                var filename = $(ChooseFile).val();
-                if (/^\s*$/.test(filename)) {
-                  $(FileUpload).removeClass('active');
-                  $(NoFile).text("Drag and drop your file here"); 
-                }
-                else {
-                  $(FileUpload).addClass('active');
-                  $(NoFile).text(filename.replace("C:\\fakepath\\", "")); 
-                }
-              });
-              
-
-            Array.prototype.remove = function() {
-                var what, a = arguments,
-                    L = a.length,
-                    ax;
-                while (L && this.length) {
-                    what = a[--L];
-                    while ((ax = this.indexOf(what)) !== -1) {
-                        this.splice(ax, 1);
-                    }
-                }
-                return this;
-            };
-            var table_body = "#table_body_" + counter_availability;
-            var department = "#department_id_" + counter_availability;
-            var experience = "#experience_id_" + counter_availability;
-            var term = "#term_" + counter_availability;
-            var setting = "#setting_" + counter_availability;
-            var company = "#company_id_" + counter_availability;
-            var placement_term = "#placement_term_" + counter_availability;
-            var start_date = "#start_date_" + counter_availability;
-            var end_date = "#end_date_" + counter_availability;
-            var facility_id = $("#facility_id").val()
-            $(department).select2();
-            $(company).select2();
-            $(experience).select2();
-            $(term).select2();
-            $(setting).select2();
-            // $(placement_term).select2();
-
-            $(term).focus(function() {
-                // Store the current value on focus, before it changes
-            }).change(function() {
-                var years = $(term).val()
+        _onChangeCompany: function(ev) {
+            var CompanyId = $("#company_id").val()
+            var TableBody = $("#table_body")
+            var LineDepartment = 1
+            ajax.jsonRpc("/inforamtion/company", 'call', { 'company_id': CompanyId }).then(function(data) {
+                $(TableBody).empty();
+                var LineDepartmentList = []
+                _.each(data["department_ids"], function(value){
+                    console.log(value,'value')
+                    const row = `<tr value="${value.id}">
+                                    <td>${value.name}</td>
+                                    <td>${value.street}</td>
+                                    <td>${value.city}</td>
+                                    <td>${value.state}</td>
+                                    <td>
+                                        <input
+                                            type="text"
+                                            id="number_${LineDepartment}"
+                                            class="form-control number"
+                                            name="number_${LineDepartment}"
+                                            required="required"
+                                            value=""
+                                        />
+                                    </td>
+                                </tr>`;
+                    $(TableBody).append(row);
+                    LineDepartmentList.push(value.id)
+                    $('input[name="line_department_list"]').attr('value', LineDepartmentList)
+                    LineDepartment ++
+                })
+            })
+        },
+        _onChangeYearTerm: function(ev) {
+            var YearTerm = $("#year_term").val()
+            var PlacementTerm = $("#placement_term").val()
+            if(PlacementTerm && YearTerm){
+                
                 ajax.jsonRpc("/clinical/experience/dates", 'call', {
-                    years 
+                    "year_term" :  YearTerm,
+                    "placement_term" :  PlacementTerm
                 }).then(function(result) {
-                    $(experience).empty();
+                    $("#experience_id").empty();
                     $("#select2-chosen-3").html("<span>Select ...</span>");
-                    $(experience).html("<option>Select ...</option>");
+                    $("#experience_id").html("<option>Select ...</option>");
+                    var cont_ce = 0
                     _.each(result["clinical_experience_ids"], function(value){
-                        $(experience).append($('<option>', {
-                            value: value.id,
-                            text: value.name,
+                        const startDate = new Date(value.start_date);
+                        const endDate = new Date(value.end_date);
+                        const startDateString = startDate.toLocaleDateString('en', { month: 'long', day: 'numeric', year: 'numeric' });
+                        const endDateString = endDate.toLocaleDateString('en', { month: 'long', day: 'numeric', year: 'numeric' });
+                        // console.log(value.indexOf(), '<<<<<<<result')
+                       
+                        $("#experience_id").append($('<option>', {
+                            value: value.term + '_' + value.id ,
+                            text: value.name + ' [ ' +startDateString +' - '+ endDateString + ' ]',
                         }));
+                        cont_ce ++
                     });
                 })
-            })
-            ajax.jsonRpc("/departments", 'call', {
-                'id': facility_id,
-            }).then(function(result) {
-                _.each(result["company_ids"], function(value){
-                    $(company).append($('<option>', {
-                        value: value.id,
-                        text: value.name,
-                    }))
-                })
-                _.each(result["SELECTION_YEAR_RANGE"], function(value){
-                    $(term).append($('<option>', {
-                        value: value.id,
-                        text: value.id,
-                    }))
-                })
-            })
-            $(company).focus(function() {
-                // Store the current value on focus, before it changes
-            }).change(function() {
-                var company_id = $(company).val()
-                ajax.jsonRpc("/inforamtion/company", 'call', { company_id }).then(function(data) {
-                    $(department).empty();
-                    $(table_body).empty();
-                    _.each(data["department_ids"], function(value){
-                        const row = `<tr value="${value.id}">
-                                        <td>${value.name}</td>
-                                        <td>${value.street}</td>
-                                        <td>${value.city}</td>
-                                        <td>${value.state}</td>
-                                        <td>
-                                            <input
-                                                type="text"
-                                                id="number_${value.id}"
-                                                class="form-control number"
-                                                name="number_${value.id}"
-                                                value=""
-                                            />
-                                        </td>
-                                    </tr>`;
-
-                        const newRow = $(row);
-                        var numbers = "#number_" + value.id
-
-                        input.push(newRow.find(numbers).val());
-                        $(table_body).append(newRow);
-
-
-                        $(numbers).bind('change', function () {
-
-                            console.log(value.id, "ahmed ah,med");
-                            console.log(value.street, "ahmed ah,med");
-                            console.log(value.city, "ahmed ah,med");
-                            console.log(value.state, "ahmed ah,med");
-                            console.log(counter_availability, "ahmed ah,med");
-                            console.log($(numbers).val(), "ahmed ah,med");
-                        })
-                        $(department).append($('<option>', {
-                            value: value.id,
-                            text: value.name + '/' + value.street + '/' + value.city + '/' + value.state,
-                        }))
-                    })
-                });
-            })
-            $(experience).focus(function() {
-                // Store the current value on focus, before it changes
-            }).change(function() {
-                var years = $(term).val()
-                var terms = $(placement_term).val()
-                var experience_id = $(experience).val()
-                ajax.jsonRpc("/program/experience/term", 'call', { experience_id, years, terms }).then(function(data) {
-                    const startDate = new Date(data.start_date);
-                    const endDate = new Date(data.end_date);
-                    const startDateString = startDate.toLocaleDateString('en', { month: 'long', day: 'numeric', year: 'numeric' });
-                    const endDateString = endDate.toLocaleDateString('en', { month: 'long', day: 'numeric', year: 'numeric' });
-                    $(start_date).val(startDateString);
-                    $(end_date).val(endDateString);
-                });
-            })
-            counter_availability++
-            $('input[name="len_department"]').attr('value', counter_availability)
-            console.log(input)
-            $('input[name="len_departments"]').attr('value', department_list)
+            }
         },
-
-        _onInputNumber: function(ev) {
-            console.log(ev)
-            console.log(ev.currentTarget.value)
-            console.log(parseInt(ev.currentTarget.id.split("number_")[1]))
-            department_list.push(
-                {
-                    "id": parseInt(ev.currentTarget.id.split("number_")[1]),
-                    "number": parseInt(ev.currentTarget.value),
-                }
-            )
-            console.log(department_list)
-            $('input[name="len_departments"]').attr('value', department_list)
-        } 
+          /**
+         * @private
+         * @override
+         * @param {event} ev
+         */
+          _onClickSubmitOffers: function (ev) { 
+            if(!this.el.checkValidity()){
+                this.el.classList.add('was-validated');
+            }else{
+                var PlacementTerm = $("#placement_term").val()
+                var ExperienceID = $("#experience_id").val()
+                $('input[name="placement_term_list"]').attr('value', PlacementTerm)
+                $('input[name="experience_id_list"]').attr('value', ExperienceID)
+                this.el.submit()
+            }
+            
+        },
     })
 
 })

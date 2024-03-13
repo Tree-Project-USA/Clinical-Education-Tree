@@ -193,7 +193,7 @@ class PlacementOfferLine(models.Model):
         for rec in self:
             rec.department_ids = rec.facility_id.department_ids
     
-    experience_id = fields.Many2one(comodel_name='clinical.experience', string='Clinical Experience', required=True)
+    experience_id = fields.Many2many(comodel_name='clinical.experience', string='Clinical Experience', required=True)
     company_id = fields.Many2one('res.company', related='offer_id.company_id', store=True)
     placement_term = fields.Selection([
         ('fall', 'Fall'),
