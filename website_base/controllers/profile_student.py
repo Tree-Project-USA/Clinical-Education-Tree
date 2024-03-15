@@ -29,6 +29,9 @@ class ProfileStudent(http.Controller):
         values["scce_medical_attachment_ids"] = student_id.scce_medical_attachment_ids
         values["attachment_type_id"] = attachment_type_id
         values["facility_id"] = request.session.get('facility_id', False)
+        values.update(dict(request.params))
+        dict(request.params)
+        request.session['student_id'] = id
         if partner_id.is_scce == True:
             scce_attachment_type_id = request.env["scce.attachment.type"].sudo().search([("scce_id", "=", scce_id.id)])
             values["scce_attachment_type_id"] = scce_attachment_type_id

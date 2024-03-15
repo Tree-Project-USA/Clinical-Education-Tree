@@ -1,16 +1,24 @@
+:root {
+    --color1: #F9D6BF;
+    --color2: #1F4659;
+    --color3: #FFFFFF;
+    --button1:#FFFFFF;
+    --button2:#083B4D;
+}
+
 .form-control {
-    border: 1px solid #326434 !important;
+    border: 1px solid var(--button2) !important;
 }
 
 .form-control:focus {
-    border-color: #326434 !important;
-    border-bottom: 1px solid #b5b5b5 !important;
+    border-color: var(--button2) !important;
+    border-bottom: 1px solid var(--button2) !important;
 }
 
 .form-input {
     color: #3c3c3c;
     border: 0 !important;
-    border-bottom: 1px solid #b5b5b5 !important;
+    border-bottom: 1px solid var(--button2) !important;
     border-radius: 0;
 }
 
@@ -34,7 +42,7 @@
 }
 
 textarea.form-control {
-    min-height: calc(10.5em + 0.75rem + 2px) !important;
+    min-height: calc(11.5em + 0.75rem + 2px) !important;
 }
 
 .custom-file-button input[type=file] {

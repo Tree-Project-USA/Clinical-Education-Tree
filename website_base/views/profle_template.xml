@@ -7,7 +7,7 @@
           t-set="hardship_request"
           t-value="request.env['hardship.request'].sudo().search([('student_id', '=', request.env.user.partner_id.id)], limit=1, order='id desc' )"
         />
-        <div class="alert alert-success text-center shadow-sm"
+        <div class="alert alert-warning text-center shadow-sm"
           t-if="hardship_request.state == 'update_required'">
           <div class="d-flex justify-content-center">
             <p>
@@ -26,11 +26,9 @@
             </div>
           </div>
           <div class="row my-4">
-            <div class="col-12">
-              <div class="text-center mb-4 mt-2">
-                <h3>Student Information</h3>
-              </div>
-              <div class="text-center">
+            <div class="col-3 my-4 text-center">
+              <div class="nav flex-column nav-pills me-3 d-none d-lg-block" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <div class="text-center my-2">
                     <img
                       t-if="partner.image_1920"
                       t-att-src="image_data_uri(partner.image_1920)"
@@ -40,736 +38,759 @@
                     />
                     <img
                       t-else=""
-                      src="/website_base/static/src/img/blank-profile-picture.jpg"
+                      src="/website_base/static/src/img/user.png"
+                      class="img img-fluid o_wblog_author_avatar mr-1"
+                      loading="lazy"
+                      />
+                </div>
+                <button class="nav-student nav-link active" id="student-info-tab" data-bs-toggle="pill" data-bs-target="#student_info" type="button" role="tab" aria-controls="student_info" aria-selected="true">Student Information</button>
+                <button class="nav-student nav-link" id="preferred-address-tab" data-bs-toggle="pill" data-bs-target="#preferred_address" type="button" role="tab" aria-controls="preferred_address" aria-selected="false">Preferred Address</button>
+                <button class="nav-student nav-link" id="preferred-setting-tab" data-bs-toggle="pill" data-bs-target="#preferred_setting" type="button" role="tab" aria-controls="preferred_setting" aria-selected="false">Preferred Setting</button>
+                <button class="nav-student nav-link" id="hardship-accommodation-tab" data-bs-toggle="pill" data-bs-target="#hardship_accommodation" type="button" role="tab" aria-controls="hardship_accommodation" aria-selected="false">Hardship-Accommodation</button>
+                <button class="nav-student nav-link" id="placement-history-tab" data-bs-toggle="pill" data-bs-target="#placement_history" type="button" role="tab" aria-controls="placement_history" aria-selected="false">Student Placement Managment</button>
+                <button class="nav-student nav-link" id="medical-attachment-ids-tab" data-bs-toggle="pill" data-bs-target="#medical_attachment_ids" type="button" role="tab" aria-controls="medical_attachment_ids" aria-selected="false">Program Required Documents</button>
+                <button class="nav-student nav-link" id="scce_medical-attachment-ids-tab" data-bs-toggle="pill" data-bs-target="#scce_medical_attachment_ids" type="button" role="tab" aria-controls="scce_medical_attachment_ids" aria-selected="false">Site Required Documents</button>
+              </div>
+              <div class="nav flex-column nav-pills me-3 d-sm-block d-lg-none" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <div class="text-center my-4">
+                    <img
+                      t-if="partner.image_1920"
+                      t-att-src="image_data_uri(partner.image_1920)"
                       class="img img-fluid rounded-circle o_wblog_author_avatar mr-1"
                       loading="lazy"
                       style="width: 12rem; height:12rem;"
-                  />
-                  </div>
-            </div>
-          </div>
-          <ul class="nav nav-tabs my-4" id="myTab" role="tablist">
-            <li class="nav-item" role="presentation">
-              <button class="nav-link active" id="student-info-tab" data-bs-toggle="tab"
-                data-bs-target="#student_info" type="button" role="tab" aria-controls="student_info"
-                aria-selected="false">Student Information</button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link" id="preferred-address-tab" data-bs-toggle="tab"
-                data-bs-target="#preferred_address" type="button" role="tab"
-                aria-controls="preferred_address" aria-selected="false">Preferred Address</button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link" id="preferred-setting-tab" data-bs-toggle="tab"
-                data-bs-target="#preferred_setting" type="button" role="tab"
-                aria-controls="preferred_setting" aria-selected="false">Preferred Setting</button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link" id="hardship-accommodation-tab" data-bs-toggle="tab"
-                data-bs-target="#hardship_accommodation" type="button" role="tab"
-                aria-controls="hardship-accommodation" aria-selected="false">Hardship/Accommodation</button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link" id="placement-history-tab" data-bs-toggle="tab"
-                data-bs-target="#placement_history" type="button" role="tab"
-                aria-controls="placement_history" aria-selected="true">Student Placement Managment</button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link" id="medical-attachment-ids-tab" data-bs-toggle="tab"
-                data-bs-target="#medical_attachment_ids" type="button" role="tab" aria-controls="medical_attachment_ids"
-                aria-selected="false">Program Required Documents</button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link" id="scce_medical-attachment-ids-tab" data-bs-toggle="tab"
-                data-bs-target="#scce_medical_attachment_ids" type="button" role="tab" aria-controls="scce_medical_attachment_ids"
-                aria-selected="false">Site Required Documents</button>
-            </li>
-          </ul>
-          <div class="tab-content" id="myTabContent">
-            <div class="tab-pane fade my-4 show active" id="student_info" role="tabpanel"
-              aria-labelledby="student-info-tab">
-              <form
-                action="/update/information"
-                method="post"
-                enctype="multipart/form-data"
-              >
-                <input type="hidden" name="csrf_token"
-                  t-att-value="request.csrf_token()" />
-                <div class="row mt-4">
-                  <div class="col-lg-6">
-                    <div class="form-group row">
-                      <label for="staticEmail" class="col-form-label">First Name</label>
-                      <div>
-                        <input
-                          type="text"
-                          id="first_name"
-                          class="form-control"
-                          name="first_name"
-                          t-att-value="partner.first_name"
-                          readonly="readonly"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-lg-6">
-                    <div class="form-group row">
-                      <label for="staticEmail" class="col-form-label">Last Name</label>
-                      <div>
-                        <input
-                          type="text"
-                          id="last_name"
-                          class="form-control"
-                          name="last_name"
-                          t-att-value="partner.last_name"
-                          readonly="readonly"
-                        />
-                      </div>
-                    </div>
-                  </div>
+                    />
+                    <img
+                      t-else=""
+                      src="/website_base/static/src/img/user.png"
+                      class="img img-fluid o_wblog_author_avatar mr-1"
+                      loading="lazy"
+                      />
                 </div>
-                <div class="row mt-2">
-                  <div class="col-lg-6">
-                    <div class="form-group row">
-                      <label for="staticEmail" class="col-form-label">Home Address
-                        <i
-                          class="fa fa-pencil" />
-                      </label>
-                      <div>
-                        <input
-                          type="text"
-                          id="home_address"
-                          name="home_address"
-                          class="form-control updated"
-                          t-att-value="partner.home_address"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row mt-2">
-                  <div class="col-lg-6">
-                    <div class="form-group row">
-                      <label for="staticEmail" class="col-form-label">Home Phone
-                        <i
-                          class="fa fa-pencil" />
-                      </label>
-                      <div>
-                        <input
-                          type="text"
-                          id="phone"
-                          maxlength="10"
-                          oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
-                          name="phone"
-                          class="form-control updated"
-                          t-att-value="partner.phone"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row mt-2">
-                  <div class="col-lg-6">
-                    <div class="form-group row">
-                      <label for="staticEmail" class="col-form-label">Personal Phone
-                        <i
-                          class="fa fa-pencil" />
-                      </label>
-                      <div>
-                        <input
-                          type="text"
-                          id="personal_phone"
-                          maxlength="10"
-                          oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
-                          name="personal_phone"
-                          class="form-control updated"
-                          t-att-value="partner.personal_phone"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row mt-2">
-                  <div class="col-lg-6">
-                    <div class="form-group row">
-                      <label for="staticEmail" class="col-form-label">Personal Email Address
-                        <i
-                          class="fa fa-pencil" />
-                      </label>
-                      <div>
-                        <input
-                          type="email"
-                          id="personal_email_address"
-                          name="personal_email_address"
-                          class="form-control updated"
-                          t-att-value="partner.personal_email_address"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row mt-2">
-                  <div class="col-lg-6">
-                    <div class="form-group row">
-                      <label for="staticEmail" class="col-form-label">University Email Address</label>
-                      <div>
-                        <input
-                          type="text"
-                          id="email"
-                          name="email"
-                          class="form-control"
-                          readonly="readonly"
-                          t-att-value="partner.email"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row mt-2">
-                  <div class="col-lg-6">
-                    <div class="form-group row">
-                      <label for="staticEmail" class="col-form-label">Campus</label>
-                      <div>
-                        <input
-                          type="text"
-                          id="campus"
-                          name="campus"
-                          class="form-control"
-                          readonly="readonly"
-                          t-att-value="partner.campus"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row mt-2">
-                  <div class="col-lg-6">
-                    <div class="form-group row">
-                      <label for="staticEmail" class="col-form-label">Program Duration</label>
-                      <div>
-                        <input
-                          type="text"
-                          id="program_id"
-                          name="program_id"
-                          class="form-control"
-                          readonly="readonly"
-                          t-att-value="partner.program_id.name"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row mt-2">
-                  <div class="col-lg-6">
-                    <div class="form-group row">
-                      <label for="staticEmail" class="col-form-label">Program Type</label>
-                      <div>
-                        <input
-                          type="text"
-                          id="program_id"
-                          name="program_id"
-                          class="form-control"
-                          readonly="readonly"
-                          t-att-value="partner.program_type"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row mt-2">
-                  <div class="col-lg-6">
-                    <div class="form-group row">
-                      <label for="staticEmail" class="col-form-label">Graduation Term/ Year</label>
-                      <div>
-                        <input
-                          type="text"
-                          id="graduation_term"
-                          name="graduation_term"
-                          class="form-control"
-                          readonly="readonly"
-                          t-att-value="partner.graduation_term"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row mt-2">
-                  <div class="col-lg-6">
-                    <div class="form-group row">
-                      <label for="staticEmail" class="col-form-label">Cohort</label>
-                      <div>
-                        <input
-                          type="text"
-                          id="cohort_label"
-                          name="cohort_label"
-                          class="form-control"
-                          readonly="readonly"
-                          t-att-value="partner.cohort_label"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </form>
-            </div>
-            <div class="tab-pane fade my-4" id="preferred_address" role="tabpanel"
-              aria-labelledby="preferred-address-tab">
-              <div class="my-4">
-                <a
-                t-if="not partner.preferred_geographical_ids or hardship_id.state in ['expired','declined']"
-                type="button"
-                class="btn my-2"
-                role="button"
-                href="/add/location"
-                style="background-color:#326434; color: #fff"
-              >
-                  <i class="fa fa-pencil" /> Submit
-                </a>
-              </div>
-              <table class="table table-striped table-bordered shadow-sm text-center my-4"  t-if="locations">
-                <thead style="background-color:#326434; color: #fff">
-                  <tr>
-                    <th style="width: 5rem;">#</th>
-                    <th>City</th>
-                    <th>State</th>
-                    <th>Zip code</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr t-foreach="locations" t-as="val">
-                    <td>
-                      <t t-esc="val_index + 1" />
-                    </td>
-                    <td>
-                      <t t-esc="val.city" />
-                    </td>
-                    <td>
-                      <t t-esc="val.state" />
-                    </td>
-                    <td>
-                      <t t-esc="val.zip" />
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="tab-pane fade my-4" id="preferred_setting" role="tabpanel"
-              aria-labelledby="preferred-setting-tab">
-              <div class="my-4">
-                <a
-                  t-if="not partner.preferred_setting_ids"
-                  type="button"
-                  class="btn my-2"
-                  role="button"
-                  href="/add/preferred/setting"
-                  style="background-color:#326434; color: #fff"
-                >
-                  <i class="fa fa-pencil" /> Submit
-                </a>
-                <a
-                  t-if="partner.preferred_setting_ids"
-                  type="button"
-                  class="btn my-2"
-                  role="button"
-                  href="/add/preferred/setting"
-                  style="background-color:#326434; color: #fff"
-                >
-                  <i class="fa fa-pencil" /> Update
-                </a>
-              </div>
-              <table class="table table-striped table-bordered shadow-sm text-center my-4" t-if="partner.preferred_setting_ids">
-                <thead style="background-color:#326434; color: #fff">
-                  <tr>
-                    <th style="width: 5rem;">#</th>
-                    <th>Name</th>
-                    <th>Type Setting</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr t-foreach="preferred_setting_ids" t-as="val">
-                    <td><t t-esc="val_index + 1"/></td>
-                    <td>
-                      <t t-esc="val.name" />
-                    </td>
-                    <td>
-                      <t t-esc="val.type_setting" />
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="tab-pane fade my-4" id="hardship_accommodation" role="tabpanel"
-              aria-labelledby="hardship-accommodation-tab">
-              <div class="my-4">
-                <a
-                  t-if="not hardship_id or hardship_id.state in ['expired','declined']"
-                  type="button"
-                  class="btn my-2"
-                  role="button"
-                  href="/hardship/request"
-                  style="background-color:#326434; color: #fff"
-                >
-                  <i class="fa fa-pencil" />Submit
-                </a>
-              </div>
-              <div class="container hardship_information" t-if="hardship_id">
-                <input
-                    type="hidden"
-                    id="state"
-                    t-att-value="hardship_id.state"
-                />
-                <div class="d-flex align-items-center flex-wrap text-center style_stage mt-4">
-                  <span id="initial_submission" class="initial_submission">Initial Submission</span>
-                  <span id="under_review" class="under_review">Under Review</span>
-                  <span id="update_required" class="update_required" >Update Required</span>
-                  <span id="approved" class="approved">Approved</span>
-                  <span id="declined" class="declined">Declined</span>
-                  <span id="expired" class="expired">Expired</span>
-                </div>
-                <ul class="nav nav-tabs my-4" id="myTab" role="tablist">
-                  <t t-set="files" t-value="0"/>
-                  <t t-foreach="hardship_ids" t-as="file">
-                    <t t-if="file.attachment_confirm or file.attachment_cancel">
-                      <t t-set="files" t-value="files + 1"/>
-                    </t>
-                  </t>
-                  <li class="nav-item" role="presentation" t-if="hardship_id.preferred_geographical_ids">
-                    <button class="nav-link active" id="geographical-ids-tab" data-bs-toggle="tab" data-bs-target="#geographical_ids"
-                      type="button" role="tab" aria-controls="geographical_ids" aria-selected="false">Hardship Preferred Addresses</button>
-                  </li>
-                  <li class="nav-item" role="presentation" t-if="files">
-                    <button class="nav-link" id="files-tab" data-bs-toggle="tab" data-bs-target="#files"
-                      type="button" role="tab" aria-controls="files" aria-selected="false">Attachment</button>
-                  </li>
-                </ul>
-                <div class="tab-content" id="myTabContent">
-                  <div class="tab-pane fade my-4 show active" id="geographical_ids" role="tabpanel"
-                    aria-labelledby="geographical-ids-tab">
-                    <div class="row">
-                      <div class="col-12">
-                        <table class="table table-striped table-bordered shadow-sm text-center my-4">
-                          <thead style="background-color:#326434; color: #fff">
-                            <tr>
-                              <th style="width: 5rem;">#</th>
-                              <th>Zip code</th>
-                              <th>State</th>
-                              <th>City</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr t-foreach="hardship_id.preferred_geographical_ids" t-as="val">
-                              <td>
-                                <t t-esc="val_index + 1" />
-                              </td>
-                              <td>
-                                <t t-esc="val.zip" />
-                              </td>
-                              <td>
-                                <t t-esc="val.state" />
-                              </td>
-                              <td>
-                                <t t-esc="val.city" />
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="tab-pane fade my-4" id="files" role="tabpanel"
-                    aria-labelledby="files-tab">
-                    <div class="row">
-                      <div class="col-12">
-                        <table class="table table-striped table-bordered shadow-sm text-center my-4">
-                          <thead style="background-color:#326434; color: #fff">
-                            <tr>
-                              <th style="width: 5rem;">#</th>
-                              <th>Attachments</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr class="project_cost_line"  t-foreach="hardship_ids" t-as="file">
-                              <t t-if="file.attachment_confirm or file.attachment_cancel">
-                                <td>
-                                  <div class="form-group">
-                                    <span t-esc="file_index + 1"/>
-                                  </div>
-                                </td>
-                                <td>
-                                  <div t-if="file.attachment_confirm">
-                                    <p>Approval File</p>
-                                    <a 
-                                            type="button"
-                                            class="btn my-2"
-                                            role="button" 
-                                            style="background-color:  #326434; !important; color: #fff"
-                                            t-attf-href="/web/content/hardship.request/#{file.id}/attachment_confirm?download=true"
-                                          >
-                                      <i class="fa fa-download" />
-                                    </a>
-                                    <a 
-                                            type="button"
-                                            class="btn my-2"
-                                            role="button" 
-                                            style="background-color:  #326434; !important; color: #fff"
-                                            t-attf-href="/web/content/hardship.request/#{file.id}/attachment_confirm"
-                                            target="new"
-                                          >
-                                      <i class="fa fa-eye"/>
-                                    </a>
-                                    <t t-esc="file.date_attachment_confirm"/>
-                                  </div>
-                                  <div t-if="file.attachment_cancel">
-                                    <p>Declination File</p>
-                                    <a 
-                                            t-if="file.attachment_cancel"
-                                            type="button"
-                                            class="btn my-2"
-                                            role="button" 
-                                            style="background-color:  #326434; !important; color: #fff"
-                                            t-attf-href="/web/content/hardship.request/#{file.id}/attachment_cancel?download=true"
-                                          >
-                                      <i class="fa fa-download" />
-                                    </a>
-                                    <a 
-                                            t-if="file.attachment_cancel"
-                                            type="button"
-                                            class="btn my-2"
-                                            role="button" 
-                                            style="background-color:  #326434; !important; color: #fff"
-                                            t-attf-href="/web/content/hardship.request/#{file.id}/attachment_cancel"
-                                            target="new"
-                                          >
-                                      <i class="fa fa-eye"/>
-                                    </a>
-                                    <t t-esc="file.date_attachment_cancel"/>
-                                  </div>
-                                </td>
-                              </t>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <button class="nav-link active" id="student-info-tab" data-bs-toggle="pill" data-bs-target="#student_info" type="button" role="tab" aria-controls="student_info" aria-selected="true"><i class="fa fa-address-card" style="color:#083B4D; font-size:20px;"/></button>
+                <button class="nav-link" id="preferred-address-tab" data-bs-toggle="pill" data-bs-target="#preferred_address" type="button" role="tab" aria-controls="preferred_address" aria-selected="false"><i class="fa fa-map-marker" style="color:#083B4D; font-size:20px;"/></button>
+                <button class="nav-link" id="preferred-setting-tab" data-bs-toggle="pill" data-bs-target="#preferred_setting" type="button" role="tab" aria-controls="preferred_setting" aria-selected="false"><i  class="fa fa-cogs" style="color:#083B4D; font-size:20px;"/></button>
+                <button class="nav-link" id="hardship-accommodation-tab" data-bs-toggle="pill" data-bs-target="#hardship_accommodation" type="button" role="tab" aria-controls="hardship_accommodation" aria-selected="false"><i class="fa fa-wheelchair-alt" style="color:#083B4D; font-size:20px;"/></button>
+                <button class="nav-link" id="placement-history-tab" data-bs-toggle="pill" data-bs-target="#placement_history" type="button" role="tab" aria-controls="placement_history" aria-selected="false"><i class="fa fa-history" style="color:#083B4D; font-size:20px;"/></button>
+                <button class="nav-link" id="medical-attachment-ids-tab" data-bs-toggle="pill" data-bs-target="#medical_attachment_ids" type="button" role="tab" aria-controls="medical_attachment_ids" aria-selected="false"><i class="fa fa-file-text" style="color:#083B4D; font-size:20px;"/></button>
+                <button class="nav-link" id="scce_medical-attachment-ids-tab" data-bs-toggle="pill" data-bs-target="#scce_medical_attachment_ids" type="button" role="tab" aria-controls="scce_medical_attachment_ids" aria-selected="false"><i class="fa fa-file-text" style="color:#083B4D; font-size:20px;"/></button>
               </div>
             </div>
-            <div class="tab-pane fade my-4" id="placement_history" role="tabpanel"
-              aria-labelledby="placement-history-tab">
-              <table class="table table-striped table-bordered shadow-sm text-center mt-4">
-                <thead style="background-color:#326434; color: #fff">
-                  <tr>
-                    <th style="width: 5rem;">#</th>
-                    <th>Department</th>
-                    <th>Clinical Experience Type</th>
-                    <th>Term</th>
-                    <th>Year</th>
-                    <th>Setting Type</th>
-                    <th>Student Preferred City</th>
-                    <th>Student Preferred State</th>
-                    <th>Student Preferred Zip Code</th>
-                    <th>Placement Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr t-foreach="archive_ids" t-as="val">
-                    <t t-if="val.is_show_student">
-                      <td><t t-esc="val_index + 1"/></td>
-                      <td>
-                        <a t-attf-href="/show/department/#{val.department_id.id}">
-                          <i class="fa fa-eye mx-2" />
-                          <t t-esc="val.department_id.name" />
-                        </a>
-                      </td>
-                      <td>
-                        <t t-esc="val.experience_id.name"/>
-                      </td>
-                      <td>
-                        <t
-                          t-esc="dict(val._fields['placement_term'].selection).get(val.placement_term)" />
-                      </td>
-                      <td>
-                        <t t-esc="val.year" />
-                      </td>
-                      <td>
-                        <t t-esc="dict(val._fields['setting'].selection).get(val.setting)" />
-                      </td>
-                      <td>
-                        <t t-esc="val.city" />
-                      </td>
-                      <td>
-                        <t t-esc="val.state" />
-                      </td>
-                      <td>
-                        <t t-esc="val.geographical_id.zip_code" />
-                      </td>
-                      <td>
-                        <t
-                          t-esc="dict(val._fields['placement_status'].selection).get(val.placement_status)" />
-                      </td>
-                    </t>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="tab-pane fade my-4" id="medical_attachment_ids" role="tabpanel"
-                  aria-labelledby="medical-attachment-ids-tab">
-                  <table class="table table-striped table-bordered shadow-sm text-center mt-4" t-if="medical_attachment_ids">
-                    <thead style="background-color:#326434; color: #fff">
-                      <tr>
-                        <th scope="col">University</th>
-                        <th scope="col">Attachment Type</th>
-                        <th scope="col">Expiration Date</th>
-                        <th scope="col">Attachment</th>
-                        <th scope="col">status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr t-foreach="medical_attachment_ids" t-as="val">
-                        <form
-                            action="/update/attachment/student"
-                            method="post"
-                            class="attacment_student"
-                            enctype="multipart/form-data"
-                          >
-                          <input type="hidden" name="csrf_token"
-                          t-att-value="request.csrf_token()" />
-                          <input type="hidden" name="attachment_type_id"
-                          t-att-value="val.attachment_type.id" />
-                            <td>
-                              <t t-esc="val.company_id.name" />
-                            </td>
-                            <td>
-                              <t t-esc="val.attachment_type.name" />
-                            </td>
-                            <td>
-                              <div t-if="val.expiration_date and val.state != 'required_update'">
-                                <t t-esc="val.expiration_date"/>
-                              </div>
-                              <div t-if="not val.expiration_date or val.state == 'required_update'">
-                                <input type="date" 
-                                        class="form-control" 
-                                        name="expiration_date" 
-                                        id="expiration_date"
-                                        required="required"
-                                        t-att-value="val.expiration_date"
-                                    />
-                              </div>
-                            </td>
-                            <td>
-                                <div id= "dropContainer" t-if="not val.attachment_ids or val.state == 'required_update'">
-                                  <!-- <input type="file" id="fileInput" /> -->
-                                  <div id="dropArea" style="
-                                    text-align: center;
-                                  " class="input-group custom-file-button">
-                                    <label class="input-group-text" for="fileInput">Drag and Drop</label>
-                                    <input class="form-control" name="datas" type="file" id="fileInput" accept=".jpg, .jpeg, .png, .pdf, .docx, .xls, .pptx" required="required"/>
-                                  </div>
-                                </div>
-                                <div t-if="val.attachment_ids and val.state != 'required_update'">
-                                  <t t-foreach="val.attachment_ids" t-as="attachment">
-                                    <a 
-                                    type="button"
-                                    class="btn my-2"
-                                    role="button" 
-                                    style="background-color:#326434; color: #fff"
-                                    t-attf-href="/download/attachment/#{attachment.id}"
-                                  >
-                                    <i class="fa fa-download" />
-                                  </a>
-                                  </t>
-                                </div>
-                            </td>
-                            <td>
-                              <button class="btn btn-primary" t-if="not val.state or val.state == 'required_update'">submit</button>
-                              <span t-if="val.state == 'under_review'" class="badge bg-dark" t-esc="dict(val._fields['state'].selection).get(val.state)"/>
-                              <span t-if="val.state == 'confirmed'" class="badge bg-success" t-esc="dict(val._fields['state'].selection).get(val.state)"/>
-                              <span t-if="val.state == 'required_update'" class="badge bg-warning" t-esc="dict(val._fields['state'].selection).get(val.state)"/>
-                              <span t-if="val.state == 'cancel'" class="badge bg-danger" t-esc="dict(val._fields['state'].selection).get(val.state)"/>
-                            </td>
-                          </form>
-                      </tr>
-                    </tbody>
-                  </table>
-            </div>
-            <div class="tab-pane fade my-4" id="scce_medical_attachment_ids" role="tabpanel"
-              aria-labelledby="scce_medical-attachment-ids-tab">
-              <table class="table table-striped table-bordered shadow-sm text-center mt-4" t-if="scce_medical_attachment_ids">
-                <thead style="background-color:#326434; color: #fff">
-                  <tr>
-                    <th scope="col">University</th>
-                    <th scope="col">Attachment Type</th>
-                    <th scope="col">Expiration Date</th>
-                    <th scope="col">Attachment</th>
-                    <th scope="col">status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr t-foreach="scce_medical_attachment_ids" t-as="val">
-                    <form
-                        action="/update/scce/attachment/student"
-                        method="post"
-                        class="attacment_student"
-                        enctype="multipart/form-data"
-                      >
-                      <input type="hidden" name="csrf_token"
+            <div class="col-9">
+              <div class="tab-content" id="v-pills-tabContent">
+                <div class="tab-pane fade show active" id="student_info" role="tabpanel" aria-labelledby="student-info-tab">
+                  <form
+                    action="/update/information"
+                    method="post"
+                    enctype="multipart/form-data"
+                    class="row"
+                  >
+                    <input type="hidden" name="csrf_token"
                       t-att-value="request.csrf_token()" />
-                      <input type="hidden" name="attachment_type_id"
-                      t-att-value="val.scce_attachment_type.id" />
-                        <td>
-                          <t t-esc="val.company_id.name" />
-                        </td>
-                        <td>
-                          <t t-esc="val.scce_attachment_type.name" />
-                        </td>
-                        <td>
-                          <div t-if="val.expiration_date and val.state != 'required_update'">
-                            <t t-esc="val.expiration_date"/>
+                    <div class="row">
+                      <div class="col-lg-6">
+                        <div class="form-group row">
+                          <label for="staticEmail" class="col-form-label" style="color: #083B4D">First Name</label>
+                          <div>
+                            <input
+                              type="text"
+                              id="first_name"
+                              class="form-control"
+                              name="first_name"
+                              t-att-value="partner.first_name"
+                              readonly="readonly"
+                            />
                           </div>
-                          <div t-if="not val.expiration_date or val.state == 'required_update'">
-                            <input type="date" 
-                                    class="form-control" 
-                                    name="expiration_date" 
-                                    id="expiration_date"
-                                    required="required"
-                                    t-att-value="val.expiration_date"
-                                />
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="form-group row">
+                          <label for="staticEmail" class="col-form-label" style="color: #083B4D">Last Name</label>
+                          <div>
+                            <input
+                              type="text"
+                              id="last_name"
+                              class="form-control"
+                              name="last_name"
+                              t-att-value="partner.last_name"
+                              readonly="readonly"
+                            />
                           </div>
-                        </td>
-                        <td>
-                            <div t-if="not val.attachment_ids or val.state == 'required_update'">
-                              <div id="dropArea2" style="
-                                text-align: center;
-                              " class="input-group custom-file-button">
-                                <label class="input-group-text" for="fileInput2">Drag and Drop</label>
-                                <input class="form-control" name="datas" type="file" id="fileInput2" required="required"/>
-                              </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row mt-2">
+                      <div class="col-lg-6">
+                        <div class="form-group row">
+                          <label for="staticEmail" class="col-form-label" style="color: #083B4D">Home Address
+                            <i
+                              class="fa fa-pencil" />
+                          </label>
+                          <div>
+                            <input
+                              type="text"
+                              id="home_address"
+                              name="home_address"
+                              class="form-control updated"
+                              t-att-value="partner.home_address"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="form-group row">
+                          <label for="staticEmail" class="col-form-label" style="color: #083B4D">Home Phone
+                            <i
+                              class="fa fa-pencil" />
+                          </label>
+                          <div>
+                            <input
+                              type="text"
+                              id="phone"
+                              maxlength="10"
+                              oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                              name="phone"
+                              class="form-control updated"
+                              t-att-value="partner.phone"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row mt-2">
+                      <div class="col-lg-6">
+                        <div class="form-group row">
+                          <label for="staticEmail" class="col-form-label" style="color: #083B4D">Personal Phone
+                            <i
+                              class="fa fa-pencil" />
+                          </label>
+                          <div>
+                            <input
+                              type="text"
+                              id="personal_phone"
+                              maxlength="10"
+                              oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                              name="personal_phone"
+                              class="form-control updated"
+                              t-att-value="partner.personal_phone"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="form-group row">
+                          <label for="staticEmail" class="col-form-label" style="color: #083B4D">Personal Email Address
+                            <i
+                              class="fa fa-pencil" />
+                          </label>
+                          <div>
+                            <input
+                              type="email"
+                              id="personal_email_address"
+                              name="personal_email_address"
+                              class="form-control updated"
+                              t-att-value="partner.personal_email_address"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row mt-2">
+                      <div class="col-lg-6">
+                        <div class="form-group row">
+                          <label for="staticEmail" class="col-form-label" style="color: #083B4D">University Email Address</label>
+                          <div>
+                            <input
+                              type="text"
+                              id="email"
+                              name="email"
+                              class="form-control"
+                              readonly="readonly"
+                              t-att-value="partner.email"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="form-group row">
+                          <label for="staticEmail" class="col-form-label" style="color: #083B4D">Campus</label>
+                          <div>
+                            <input
+                              type="text"
+                              id="campus"
+                              name="campus"
+                              class="form-control"
+                              readonly="readonly"
+                              t-att-value="partner.campus"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row mt-2">
+                      <div class="col-lg-6">
+                        <div class="form-group row">
+                          <label for="staticEmail" class="col-form-label" style="color: #083B4D">Program Duration</label>
+                          <div>
+                            <input
+                              type="text"
+                              id="program_id"
+                              name="program_id"
+                              class="form-control"
+                              readonly="readonly"
+                              t-att-value="partner.program_id.name"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="form-group row">
+                          <label for="staticEmail" class="col-form-label" style="color: #083B4D">Program Type</label>
+                          <div>
+                            <input
+                              type="text"
+                              id="program_id"
+                              name="program_id"
+                              class="form-control"
+                              readonly="readonly"
+                              t-att-value="partner.program_type"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row mt-2 mb-4">
+                      <div class="col-lg-6">
+                        <div class="form-group row">
+                          <label for="staticEmail" class="col-form-label" style="color: #083B4D">Graduation Term/ Year</label>
+                          <div>
+                            <input
+                              type="text"
+                              id="graduation_term"
+                              name="graduation_term"
+                              class="form-control"
+                              readonly="readonly"
+                              t-att-value="partner.graduation_term"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="form-group row">
+                          <label for="staticEmail" class="col-form-label" style="color: #083B4D">Cohort</label>
+                          <div>
+                            <input
+                              type="text"
+                              id="cohort_label"
+                              name="cohort_label"
+                              class="form-control"
+                              readonly="readonly"
+                              t-att-value="partner.cohort_label"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                <div class="tab-pane fade my-4" id="preferred_address" role="tabpanel"
+                  aria-labelledby="preferred-address-tab">
+                  <div class="my-4 col-12 text-center">
+                    <a
+                    t-if="not partner.preferred_geographical_ids or hardship_id.state in ['expired','declined']"
+                    type="button"
+                    class="btn  my-2"
+                    role="button"
+                    href="/add/location"
+                    style="background-color:#F9D6BF; color: #083B4D"
+                    >
+                      <i class="fa fa-pencil" /> Submit
+                    </a>
+                  </div>
+                  <div class="table-responsive">
+                    <table class="table table-striped table-bordered shadow-sm text-center my-4"  t-if="locations">
+                      <thead style="background-color:#F9D6BF; color: #083B4D">
+                        <tr>
+                          <th style="width: 5rem;">#</th>
+                          <th>City</th>
+                          <th>State</th>
+                          <th>Zip code</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr t-foreach="locations" t-as="val">
+                          <td>
+                            <t t-esc="val_index + 1" />
+                          </td>
+                          <td>
+                            <t t-esc="val.city" />
+                          </td>
+                          <td>
+                            <t t-esc="val.state" />
+                          </td>
+                          <td>
+                            <t t-esc="val.zip" />
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="tab-pane fade my-4" id="preferred_setting" role="tabpanel"
+                  aria-labelledby="preferred-setting-tab">
+                  <div class="my-4">
+                    <a
+                      t-if="not partner.preferred_setting_ids"
+                      type="button"
+                      class="btn my-2"
+                      role="button"
+                      href="/add/preferred/setting"
+                      style="background-color:#F9D6BF; color: #083B4D"
+                    >
+                      <i class="fa fa-pencil" /> Submit
+                    </a>
+                    <a
+                      t-if="partner.preferred_setting_ids"
+                      type="button"
+                      class="btn my-2"
+                      role="button"
+                      href="/add/preferred/setting"
+                      style="background-color:#F9D6BF; color: #083B4D"
+                    >
+                      <i class="fa fa-pencil" /> Update
+                    </a>
+                  </div>
+                  <div>
+                    <div class="table-responsive">
+                      <table class="table table-striped table-bordered shadow-sm text-center my-4" t-if="partner.preferred_setting_ids">
+                        <thead style="background-color:#F9D6BF; color: #083B4D">
+                          <tr>
+                            <th style="width: 5rem;">#</th>
+                            <th>Name</th>
+                            <th>Type Setting</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr t-foreach="preferred_setting_ids" t-as="val">
+                            <td><t t-esc="val_index + 1"/></td>
+                            <td>
+                              <t t-esc="val.name" />
+                            </td>
+                            <td>
+                              <t t-esc="val.type_setting" />
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <div class="tab-pane fade my-4" id="hardship_accommodation" role="tabpanel"
+                  aria-labelledby="hardship-accommodation-tab">
+                  <div class="my-4 text-center">
+                    <a
+                      t-if="not hardship_id or hardship_id.state in ['expired','declined']"
+                      type="button"
+                      class="btn my-2"
+                      role="button"
+                      href="/hardship/request"
+                      style="background-color:#F9D6BF; color: #083B4D"
+                      >
+                      <i class="fa fa-pencil" />Submit
+                    </a>
+                  </div>
+                  <div class="container hardship_information" t-if="hardship_id">
+                    <input
+                        type="hidden"
+                        id="state"
+                        t-att-value="hardship_id.state"
+                    />
+                    <div class="d-flex align-items-center flex-wrap text-center style_stage mt-4 d-none d-lg-block">
+                      <span id="initial_submission" class="initial_submission">Initial Submission</span>
+                      <span id="under_review" class="under_review">Under Review</span>
+                      <span id="update_required" class="update_required" >Update Required</span>
+                      <span id="approved" class="approved">Approved</span>
+                      <span id="declined" class="declined">Declined</span>
+                      <span id="expired" class="expired">Expired</span>
+                    </div>
+                    <div class="d-sm-block d-lg-none text-center">
+                        <t t-if="hardship_id.state == 'approved'">
+                          <button class="btn btn-success">
+                            <span t-esc="dict(hardship_id._fields['state'].selection).get(hardship_id.state)"/>
+                          </button>
+                        </t>
+                        <t t-elif="hardship_id.state == 'update_required'">
+                          <button class="btn btn-warning">
+                            <span t-esc="dict(hardship_id._fields['state'].selection).get(hardship_id.state)"/>
+                          </button>
+                        </t>
+                        <t t-elif="hardship_id.state in ['declined', 'expired']">
+                          <button class="btn btn-danger">
+                            <span t-esc="dict(hardship_id._fields['state'].selection).get(hardship_id.state)"/>
+                          </button>
+                        </t>
+                        <t t-else="">
+                          <button class="btn" style="background-color:#F9D6BF; color: #083B4D">
+                            <span t-esc="dict(hardship_id._fields['state'].selection).get(hardship_id.state)"/>
+                          </button>
+                        </t>
+                    </div>
+                    <ul class="nav nav-tabs my-4" id="myTab" role="tablist">
+                      <t t-set="files" t-value="0"/>
+                      <t t-foreach="hardship_ids" t-as="file">
+                        <t t-if="file.attachment_confirm or file.attachment_cancel">
+                          <t t-set="files" t-value="files + 1"/>
+                        </t>
+                      </t>
+                      <li class="nav-item" role="presentation" t-if="files">
+                        <button class="nav-link nav-hardship active mx-1 my-1" id="files-tab" data-bs-toggle="tab" data-bs-target="#files"
+                        type="button" role="tab" aria-controls="files" aria-selected="false">Attachment</button>
+                      </li>
+                      <li class="nav-item" role="presentation" t-if="hardship_id.preferred_geographical_ids">
+                        <button class="nav-link nav-hardship mx-1 my-1" id="geographical-ids-tab" data-bs-toggle="tab" data-bs-target="#geographical_ids"
+                          type="button" role="tab" aria-controls="geographical_ids" aria-selected="false">Hardship Preferred Addresses</button>
+                      </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent">
+                      <div class="tab-pane fade show active my-4" id="files" role="tabpanel"
+                        aria-labelledby="files-tab">
+                        <div class="row">
+                          <div class="col-12">
+                            <div class="table-responsive">
+                              <table class="table table-striped table-bordered shadow-sm text-center my-4">
+                                <thead style="background-color:#F9D6BF; color: #083B4D">
+                                  <tr>
+                                    <th style="width: 5rem;">#</th>
+                                    <th>Attachments</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr class="project_cost_line"  t-foreach="hardship_ids" t-as="file">
+                                    <t t-if="file.attachment_confirm or file.attachment_cancel">
+                                      <td>
+                                        <div class="form-group">
+                                          <span t-esc="file_index + 1"/>
+                                        </div>
+                                      </td>
+                                      <td>
+                                        <div t-if="file.attachment_confirm">
+                                          <p>Approval File</p>
+                                          <a 
+                                                  type="button"
+                                                  class="btn my-2"
+                                                  role="button" 
+                                                  style="background-color:#F9D6BF; color: #083B4D"
+                                                  t-attf-href="/web/content/hardship.request/#{file.id}/attachment_confirm?download=true"
+                                                >
+                                            <i class="fa fa-download" />
+                                          </a>
+                                          <a 
+                                                  type="button"
+                                                  class="btn my-2"
+                                                  role="button" 
+                                                  style="background-color:#F9D6BF; color: #083B4D"
+                                                  t-attf-href="/web/content/hardship.request/#{file.id}/attachment_confirm"
+                                                  target="new"
+                                                >
+                                            <i class="fa fa-eye"/>
+                                          </a>
+                                          <t t-esc="file.date_attachment_confirm"/>
+                                        </div>
+                                        <div t-if="file.attachment_cancel">
+                                          <p>Declination File</p>
+                                          <a 
+                                                  t-if="file.attachment_cancel"
+                                                  type="button"
+                                                  class="btn my-2"
+                                                  role="button" 
+                                                  style="background-color:#F9D6BF; color: #083B4D"
+                                                  t-attf-href="/web/content/hardship.request/#{file.id}/attachment_cancel?download=true"
+                                                >
+                                            <i class="fa fa-download" />
+                                          </a>
+                                          <a 
+                                                  t-if="file.attachment_cancel"
+                                                  type="button"
+                                                  class="btn my-2"
+                                                  role="button" 
+                                                  style="background-color:#F9D6BF; color: #083B4D"
+                                                  t-attf-href="/web/content/hardship.request/#{file.id}/attachment_cancel"
+                                                  target="new"
+                                                >
+                                            <i class="fa fa-eye"/>
+                                          </a>
+                                          <t t-esc="file.date_attachment_cancel"/>
+                                        </div>
+                                      </td>
+                                    </t>
+                                  </tr>
+                                </tbody>
+                              </table>
                             </div>
-                            <div t-if="val.attachment_ids and val.state != 'required_update'">
-                              <t t-foreach="val.attachment_ids" t-as="attachment">
-                                <a 
-                                type="button"
-                                class="btn my-2"
-                                role="button" 
-                                style="background-color:#326434; color: #fff"
-                                t-attf-href="/download/attachment/#{attachment.id}"
-                              >
-                                <i class="fa fa-download" />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="tab-pane fade my-4 show" id="geographical_ids" role="tabpanel"
+                        aria-labelledby="geographical-ids-tab">
+                        <div class="row">
+                          <div class="col-12">
+                            <div class="table-responsive">
+                              <table class="table table-striped table-bordered shadow-sm text-center my-4">
+                                <thead style="background-color:#F9D6BF; color: #083B4D">
+                                  <tr>
+                                    <th style="width: 5rem;">#</th>
+                                    <th>Zip code</th>
+                                    <th>State</th>
+                                    <th>City</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr t-foreach="hardship_id.preferred_geographical_ids" t-as="val">
+                                    <td>
+                                      <t t-esc="val_index + 1" />
+                                    </td>
+                                    <td>
+                                      <t t-esc="val.zip" />
+                                    </td>
+                                    <td>
+                                      <t t-esc="val.state" />
+                                    </td>
+                                    <td>
+                                      <t t-esc="val.city" />
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="tab-pane fade my-4" id="placement_history" role="tabpanel"
+                  aria-labelledby="placement-history-tab">
+                  <div class="table-responsive">
+                    <table class="table table-striped table-bordered shadow-sm text-center mt-4">
+                      <thead style="background-color:#F9D6BF; color: #083B4D">
+                        <tr>
+                          <th style="width: 5rem;">#</th>
+                          <th>Location</th>
+                          <th>Clinical Experience Type</th>
+                          <th>Term</th>
+                          <th>Year</th>
+                          <th>Setting Type</th>
+                          <th>Student Preferred City</th>
+                          <th>Student Preferred State</th>
+                          <th>Student Preferred Zip Code</th>
+                          <th>Placement Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr t-foreach="archive_ids" t-as="val">
+                          <t t-if="val.is_show_student">
+                            <td><t t-esc="val_index + 1"/></td>
+                            <td>
+                              <a t-attf-href="/show/department/#{val.department_id.id}">
+                                <i class="fa fa-eye mx-2" />
+                                <t t-esc="val.department_id.name" />
                               </a>
-                              </t>
-                            </div>
-                        </td>
-                        <td>
-                          <button class="btn btn-primary" t-if="not val.state or  val.state == 'required_update'">submit</button>
-                          <span t-if="val.state == 'under_review'" class="badge bg-dark" t-esc="dict(val._fields['state'].selection).get(val.state)"/>
-                          <span t-if="val.state == 'confirmed'" class="badge bg-success" t-esc="dict(val._fields['state'].selection).get(val.state)"/>
-                          <span t-if="val.state == 'required_update'" class="badge bg-warning" t-esc="dict(val._fields['state'].selection).get(val.state)"/>
-                          <span t-if="val.state == 'cancel'" class="badge bg-danger" t-esc="dict(val._fields['state'].selection).get(val.state)"/>
-                        </td>
-                      </form>
-                  </tr>
-                </tbody>
-              </table>
+                            </td>
+                            <td>
+                              <t t-esc="val.experience_id.name"/>
+                            </td>
+                            <td>
+                              <t
+                                t-esc="dict(val._fields['placement_term'].selection).get(val.placement_term)" />
+                            </td>
+                            <td>
+                              <t t-esc="val.year" />
+                            </td>
+                            <td>
+                              <t t-esc="dict(val._fields['setting'].selection).get(val.setting)" />
+                            </td>
+                            <td>
+                              <t t-esc="val.city" />
+                            </td>
+                            <td>
+                              <t t-esc="val.state" />
+                            </td>
+                            <td>
+                              <t t-esc="val.geographical_id.zip_code" />
+                            </td>
+                            <td>
+                              <t
+                                t-esc="dict(val._fields['placement_status'].selection).get(val.placement_status)" />
+                            </td>
+                          </t>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="tab-pane fade my-4" id="medical_attachment_ids" role="tabpanel"
+                  aria-labelledby="medical-attachment-ids-tab">
+                  <div class="table-responsive">
+                    <table class="table table-striped table-bordered shadow-sm text-center mt-4" t-if="medical_attachment_ids">
+                      <thead style="background-color:#F9D6BF; color: #083B4D">
+                        <tr>
+                          <th scope="col">University</th>
+                          <th scope="col">Attachment Type</th>
+                          <th scope="col">Expiration Date</th>
+                          <th scope="col">Attachment</th>
+                          <th scope="col">status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr t-foreach="medical_attachment_ids" t-as="val">
+                          <form
+                              action="/update/attachment/student"
+                              method="post"
+                              class="attacment_student"
+                              enctype="multipart/form-data"
+                            >
+                            <input type="hidden" name="csrf_token"
+                            t-att-value="request.csrf_token()" />
+                            <input type="hidden" name="attachment_type_id"
+                            t-att-value="val.attachment_type.id" />
+                              <td>
+                                <t t-esc="val.company_id.name" />
+                              </td>
+                              <td>
+                                <t t-esc="val.attachment_type.name" />
+                              </td>
+                              <td>
+                                <div t-if="val.expiration_date and val.state != 'required_update'">
+                                  <t t-esc="val.expiration_date"/>
+                                </div>
+                                <div t-if="not val.expiration_date or val.state == 'required_update'">
+                                  <input type="date" 
+                                          class="form-control" 
+                                          name="expiration_date" 
+                                          id="expiration_date"
+                                          required="required"
+                                          t-att-value="val.expiration_date"
+                                      />
+                                </div>
+                              </td>
+                              <td>
+                                  <div id= "dropContainer" t-if="not val.attachment_ids or val.state == 'required_update'">
+                                    <div id="dropArea" style="
+                                      text-align: center;
+                                    " class="input-group custom-file-button">
+                                      <label class="input-group-text" for="fileInput">Drag and Drop</label>
+                                      <input class="form-control" name="datas" type="file" id="fileInput" accept=".jpg, .jpeg, .png, .pdf, .docx, .xls, .pptx" required="required"/>
+                                    </div>
+                                  </div>
+                                  <div t-if="val.attachment_ids and val.state != 'required_update'">
+                                    <t t-foreach="val.attachment_ids" t-as="attachment">
+                                      <a 
+                                      type="button"
+                                      class="btn my-2"
+                                      role="button" 
+                                      style="background-color:#083B4D; color: #F9D6BF"
+                                      t-attf-href="/download/attachment/#{attachment.id}"
+                                    >
+                                      <i class="fa fa-download" />
+                                    </a>
+                                    </t>
+                                  </div>
+                              </td>
+                              <td>
+                                <button class="btn" style="background-color:#F9D6BF; color: #083B4D" t-if="not val.state or val.state == 'required_update'">submit</button>
+                                <span t-if="val.state == 'under_review'" class="badge bg-dark" t-esc="dict(val._fields['state'].selection).get(val.state)"/>
+                                <span t-if="val.state == 'confirmed'" class="badge bg-success" t-esc="dict(val._fields['state'].selection).get(val.state)"/>
+                                <span t-if="val.state == 'required_update'" class="badge bg-warning text-dark" t-esc="dict(val._fields['state'].selection).get(val.state)"/>
+                                <span t-if="val.state == 'cancel'" class="badge bg-danger" t-esc="dict(val._fields['state'].selection).get(val.state)"/>
+                              </td>
+                            </form>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="tab-pane fade my-4" id="scce_medical_attachment_ids" role="tabpanel"
+                  aria-labelledby="scce_medical-attachment-ids-tab">
+                  <div class="table-responsive">
+                    <table class="table table-striped table-bordered shadow-sm text-center mt-4" t-if="scce_medical_attachment_ids">
+                      <thead style="background-color:#F9D6BF; color: #083B4D">
+                        <tr>
+                          <th scope="col">University</th>
+                          <th scope="col">Attachment Type</th>
+                          <th scope="col">Expiration Date</th>
+                          <th scope="col">Attachment</th>
+                          <th scope="col">status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr t-foreach="scce_medical_attachment_ids" t-as="val">
+                          <form
+                              action="/update/scce/attachment/student"
+                              method="post"
+                              class="attacment_student"
+                              enctype="multipart/form-data"
+                            >
+                            <input type="hidden" name="csrf_token"
+                            t-att-value="request.csrf_token()" />
+                            <input type="hidden" name="attachment_type_id"
+                            t-att-value="val.scce_attachment_type.id" />
+                              <td>
+                                <t t-esc="val.company_id.name" />
+                              </td>
+                              <td>
+                                <t t-esc="val.scce_attachment_type.name" />
+                              </td>
+                              <td>
+                                <div t-if="val.expiration_date and val.state != 'required_update'">
+                                  <t t-esc="val.expiration_date"/>
+                                </div>
+                                <div t-if="not val.expiration_date or val.state == 'required_update'">
+                                  <input type="date" 
+                                          class="form-control" 
+                                          name="expiration_date" 
+                                          id="expiration_date"
+                                          required="required"
+                                          t-att-value="val.expiration_date"
+                                      />
+                                </div>
+                              </td>
+                              <td>
+                                  <div t-if="not val.attachment_ids or val.state == 'required_update'">
+                                    <div id="dropArea2" style="
+                                      text-align: center;
+                                    " class="input-group custom-file-button">
+                                      <label class="input-group-text" for="fileInput2">Drag and Drop</label>
+                                      <input class="form-control" name="datas" type="file" id="fileInput2" required="required"/>
+                                    </div>
+                                  </div>
+                                  <div t-if="val.attachment_ids and val.state != 'required_update'">
+                                    <t t-foreach="val.attachment_ids" t-as="attachment">
+                                      <a 
+                                      type="button"
+                                      class="btn my-2"
+                                      role="button" 
+                                      style="background-color:#083B4D; color: #F9D6BF"
+                                      t-attf-href="/download/attachment/#{attachment.id}"
+                                    >
+                                      <i class="fa fa-download" />
+                                    </a>
+                                    </t>
+                                  </div>
+                              </td>
+                              <td>
+                                <button class="btn" style="background-color:#F9D6BF; color: #083B4D" t-if="not val.state or  val.state == 'required_update'">submit</button>
+                                <span t-if="val.state == 'under_review'" class="badge bg-dark" t-esc="dict(val._fields['state'].selection).get(val.state)"/>
+                                <span t-if="val.state == 'confirmed'" class="badge bg-success" t-esc="dict(val._fields['state'].selection).get(val.state)"/>
+                                <span t-if="val.state == 'required_update'" class="badge bg-warning text-dark" t-esc="dict(val._fields['state'].selection).get(val.state)"/>
+                                <span t-if="val.state == 'cancel'" class="badge bg-danger" t-esc="dict(val._fields['state'].selection).get(val.state)"/>
+                              </td>
+                            </form>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

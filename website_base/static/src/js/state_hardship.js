@@ -18,18 +18,18 @@ odoo.define("website_base.state_hardship", function(require) {
             var stage = $("#state").val();
             if (stage == "initial_submission") {
                 $("#initial_submission").css({
-                    "background-color": "#000000",
-                    color: "#b4904f",
+                    "background-color": "#083B4D",
+                    color: "#F9D6BF",
                 });
             } else if (stage == "update_required") {
                 $("#update_required").css({
-                    "background-color": "#000000",
-                    color: "#b4904f",
+                    "background-color": "#083B4D",
+                    color: "#F9D6BF",
                 });
             } else if (stage == "under_review") {
                 $("#under_review").css({
-                    "background-color": "#000000",
-                    color: "#b4904f",
+                    "background-color": "#083B4D",
+                    color: "#F9D6BF",
                 });
             } else if (stage == "approved") {
                 $("#approved").css({
@@ -43,8 +43,8 @@ odoo.define("website_base.state_hardship", function(require) {
                 });
             }else if (stage == "expired") {
                 $("#expired").css({
-                    "background-color": "000000",
-                    color: "#b4904f",
+                    "background-color": "083B4D",
+                    color: "#F9D6BF",
                 });
             }
         }
