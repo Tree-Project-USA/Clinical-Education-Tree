@@ -5,7 +5,9 @@ class RequiredDocument(http.Controller):
 
     @http.route("/required/documents", type="http", website=True, auth="user")
     def required_documents(self):
-        return request.render("website_base.required_document_template")
+        values = {}
+        values["student_id"] = request.session.get('student_id', False)
+        return request.render("website_base.required_document_template", values)
     
     @http.route("/create/required/documents", type="http", website=True, auth="user", Methods=["POST"])
     def create_required_documents(self, **kw):

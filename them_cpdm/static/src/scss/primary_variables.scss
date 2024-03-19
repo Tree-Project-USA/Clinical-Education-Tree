@@ -4,19 +4,18 @@
 
 $o-color-palettes: map-merge($o-color-palettes,
     (
-        'deem': (
-            'o-color-1': #a6ab75,
-            'o-color-2': #a6ab75,
+        'CPDM': (
+            'o-color-1': #F9D6BF,
+            'o-color-2': #1F4659,
             'o-color-3': #FFFFFF,
-            'o-color-4': #c4d2ae,
-            'o-color-5': #326434,
-            'primary': #326434,
-            
+            'o-color-4': #FFFFFF,
+            'o-color-5': #083B4D,
+            'primary': #EB7A24,
         ),
     )
 );
 
-$o-selected-color-palettes-names: append($o-selected-color-palettes-names, 'deem');
+$o-selected-color-palettes-names: append($o-selected-color-palettes-names, 'CPDM');
 
 
 // -------------------------------------------------------------------------- //
@@ -26,7 +25,7 @@ $o-selected-color-palettes-names: append($o-selected-color-palettes-names, 'deem
 $o-website-values-palettes: (
     (
         // Colors
-        'color-palettes-name': 'deem',
+        'color-palettes-name': 'CPDM',
     ),
 );
 

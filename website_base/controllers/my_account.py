@@ -67,7 +67,6 @@ class CustomerPortals(CustomerPortal):
         elif res_partner_id.is_ci:
             scce_facility_ids = request.env["scce.facility"].sudo().search([
                 ('scce_id', 'in', res_partner_id.scce_ids.ids)]).mapped("facility_id")
-            
             post_plcement_ids = request.env["post.plcement.management"].sudo().search([
                 ('ci_id', '=', res_partner_id.id)])
           

@@ -1,3 +1,24 @@
+:root {
+    --color1: #F9D6BF;
+    --color2: #1F4659;
+    --color3: #FFFFFF;
+    --button1:#FFFFFF;
+    --button2:#083B4D;
+}
+
+#wrapwrap{
+    background-color: var(--color3) !important;
+} 
+@media (min-width: 1200px) {
+    #wrapwrap{
+        background-image: url(/website_base/static/src/img/tree.png);
+        background-repeat: no-repeat;
+        background-color: var(--color3) !important;
+        background-position: top;
+        background-position-x: right;
+    }
+}
+
 .popup-card-error,
 .popup-card-warning,
 .popup-card-confirm{
@@ -60,43 +81,30 @@
     display: block;
     width: 94%;
     margin-left: 0.7rem;
-    border: 1px solid #ab8631;
+    border: 1px solid var(--button2);
 }
 
 .form-select:focus {
-    border-color: #ab8631;
-    box-shadow: 0 0 0 0.25rem #ab863196
+    border-color: var(--button2);
+    box-shadow: 0 0 0 0.25rem var(--button2)
 }
 
 .form-control:focus {
-    border-color: #ab8631;
-    box-shadow: 0 0 0 0.25rem #ab863196
+    border-color: var(--button2);
+    box-shadow: 0 0 0 0.25rem var(--button2)
 }
 
-.availability .nav-tabs .nav-link.active {
-    color: #ab8631 !important;
-}
-.availability .nav-link {
-    color: #000000 !important;
-}
-
-.student_profile .nav-tabs .nav-link.active {
-    color: #ab8631 !important;
-}
-.student_profile .nav-link {
-    color: #000000 !important;
-}
 .scce_profile .nav-tabs .nav-link.active {
-    color: #ab8631 !important;
+    color: var(--button2) !important;
 }
 .scce_profile .nav-link {
-    color: #000000 !important;
+    color: #083B4D !important;
 }
 .ci_profile .nav-tabs .nav-link.active {
-    color: #ab8631 !important;
+    color: var(--button2) !important;
 }
 .ci_profile .nav-link {
-    color: #000000 !important;
+    color: #083B4D !important;
 }
 
 
@@ -162,4 +170,19 @@
 
 .o_survey_brand_message {
     display: none !important;
+}
+
+.info-menu {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: 1054;
+    background: #fff;
+}
+
+#footer{
+    .pb16{
+        padding-bottom: 64px !important;
+    }
 }

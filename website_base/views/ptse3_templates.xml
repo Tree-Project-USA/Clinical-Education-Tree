@@ -5,7 +5,7 @@
             <div class="container">
                 <div class="loading-indicator text-center"
                     style="display: flex;flex-direction: column;align-items: center;justify-content: center;height: 90vh;">
-                    <div class="spinner-border" style="width:15vh; height:15vh; color:#326434"
+                    <div class="spinner-border" style="width:15vh; height:15vh; color: #083B4D"
                         role="status">
                         <span class="visually-hidden"></span>
                     </div>

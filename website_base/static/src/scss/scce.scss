@@ -1,0 +1,55 @@
+:root {
+    --color1: #F9D6BF;
+    --color2: #1F4659;
+    --color3: #FFFFFF;
+    --button1:#FFFFFF;
+    --button2:#083B4D;
+}
+.scce_profile{
+    .col-form-label {
+        font-weight: 700 !important;
+    }
+    .nav-scce{
+        color: var(--button2);
+        display: inline !important;
+        margin-top: 2px !important;
+        margin-bottom: 2px !important;
+    }
+    .nav-scce:hover{
+        background-color: var(--button2) !important;
+        color: var(--color1) !important;
+    }
+    .nav-hardship {
+        color: #083B4D !important;
+        background-color: var(--color1) !important;
+        border: 1px solid var(--button2) !important;
+        &.active {
+            color: var(--color1) !important;
+            background-color: var(--button2) !important;
+            border: 1px solid var(--color1) !important;
+        }
+        .nav-link {
+            color: #083B4D !important;
+        }
+        &.active {
+            color: var(--button2) !important;
+            background-color: var(--button2) !important;
+    }
+    }
+}
+
+.availability{
+    .nav-avalibility{
+        color: var(--button2);
+        display: inline !important;
+        margin-top: 2px !important;
+        margin-bottom: 2px !important;
+    }
+    .nav-avalibility:hover{
+        background-color: var(--button2) !important;
+        color: var(--color1) !important;
+    }
+    .nav-link {
+        color: #083B4D !important;
+    }
+}

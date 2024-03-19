@@ -19,14 +19,10 @@ body{
 #wrapwrap {
     background-color: #152F26;
 }
-
-#wrapwrap > main{
-    background-color: #FFFFFF !important;
-}
-
+/* 
 .navbar-light .navbar-toggler-icon {
     background-image: url(/them_cpdm/static/src/img/menu.png) !important;
-}
+} */
 
 .navbar {
     margin-bottom: 0;
@@ -52,7 +48,7 @@ header .navbar-brand.logo img {
     color: #FFFFFF;
     background-color: var(--Orang) !important;
 }
-
+/* 
 #wrapwrap.o_header_overlay > header:not(.o_header_affixed):not(.o_top_menu_collapse_shown) > .navbar {
     background-color: #152f26b5 !important;
     border-color: transparent;
@@ -66,7 +62,7 @@ header .navbar-brand.logo img {
 
 .nav-link {
     color: var(--wight_r) !important;
-}
+} */
 
 .js_change_lang {
     border: 1px solid;
