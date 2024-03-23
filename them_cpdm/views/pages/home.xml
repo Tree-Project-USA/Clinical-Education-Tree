@@ -1,19 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-    <template id="home" name="Home">
-      <t t-call="website.layout">
-          <div id="wrap" class="home oe_structure">
-              <t t-snippet="them_cpdm.s_carousel"/>
-              <div id="oe_structure_layout_01" class="oe_structure"/>
-              <t t-snippet="them_cpdm.s_text_image"/>
-              <div id="oe_structure_layout_02" class="oe_structure"/>
-              <t t-snippet="them_cpdm.s_features"/>
-              <div id="oe_structure_layout_03" class="oe_structure"/>
-              <t t-snippet="them_cpdm.s_banar"/>
-              <div id="oe_structure_layout_04" class="oe_structure"/>
-              <t t-snippet="them_cpdm.s_text_image2"/>
-              <div id="oe_structure_layout_05" class="oe_structure"/>
-          </div>
-      </t>
+    <template id="home" name="Home Page" inherit_id="website.homepage" active="True">
+        <data inherit_id="website.homepage">         
+            <xpath expr="//div[@id='wrap']" position="inside">
+            </xpath>
+        </data>
   </template>
 </odoo>
