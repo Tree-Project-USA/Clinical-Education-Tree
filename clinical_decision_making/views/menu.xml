@@ -4,7 +4,7 @@
     <menuitem 
         name="Clin Ed TREE" 
         id="menu_root_cpdm"  
-        web_icon="clinical_decision_making,static/description/icon.jpeg"
+        web_icon="clinical_decision_making,static/description/icon.png"
         />
 
     <record id="student_action" model="ir.actions.act_window">

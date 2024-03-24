@@ -1,10 +1,10 @@
 :root {
-    --color1: #104443;
-    --color2: #FFFFFF;
-    --color3: #262727;
-    --color4: rgba(0, 0, 0, 0.08);
-    --button1: #F8F7F7;
-    --button2: #D2E8E9;
+    --color1: #F9D6BF;
+    --color2: #1F4659;
+    --color3: #FFFFFF;
+    --color4: #FFFFFF;
+    --button1: #083B4D;
+    --button2: #EB7A24;
 }
 
 .o_main_navbar {
@@ -26,6 +26,10 @@
 .o_main_navbar .dropdown-toggle,
 .o_main_navbar .o_navbar_apps_menu .dropdown-toggle {
     color: var(--button1) !important;
+}
+.o_main_navbar .dropdown-toggle:hover{
+    color: var(--color1) !important;
+    background-color: var(--button1) !important;
 }
 
 .mk_apps_sidebar_panel {
@@ -268,4 +272,72 @@ a:hover {
 
 .bootstrap-datetimepicker-widget .datepicker table th {
     background-color: #61a8aa;
+}
+
+.btn-primary {
+    color:  var(--color1) !important;
+    background-color: var(--button1) !important;
+    border-color: var(--button1) !important;
+}
+
+.btn-light:hover {
+    color: var(--color1) !important;
+    background-color: var(--button1) !important;
+}
+
+.btn-outline-primary {
+    color: var(--color1) !important;
+    border-color: var(--color1) !important;
+}
+
+.form-check-input:checked {
+    background-color: var(--color1) !important;
+    border-color: var(--color1) !important;
+}
+
+.btn-outline-primary:hover {
+    color: var(--color1) !important;
+    background-color: var(--button1) !important;
+    border-color: var(--button1) !important;
+}
+
+.dropdown-item:hover {
+    color: var(--color1) !important;
+    background-color: var(--button1) !important;
+}
+
+.dropdown-menu{
+    color: var(--button1) !important;
+}
+
+.form-check:not(:disabled):not(.disabled):hover{
+    border-color: var(--color1) !important;
+}
+
+.form-check:not(:disabled):not(.disabled):hover .form-check-input{
+    border-color: var(--color1) !important;
+}
+
+.btn-fill-odoo, .btn-odoo {
+    color: var(--color1) !important;
+    background-color: var(--button1) !important;
+    border-color: var(--button1) !important;
+}
+
+.o_main_navbar {
+    border-bottom: 1px solid var(--color1);
+    background: var(--color1) !important;
+}
+
+.mk_apps_sidebar_panel {
+    background-color: var(--button1);
+}
+
+.o_main_navbar .o_menu_brand:hover {
+    color: var(--color1) !important;
+    background-color: var(--button1) !important;
+}
+
+.o_field_widget.o_field_many2one .o_external_button {
+    color: var(--color1) !important;
 }
