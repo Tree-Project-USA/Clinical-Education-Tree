@@ -359,14 +359,19 @@ class PlacementRequest(models.Model):
         return student_criteria, facility_criteria
     
     def get_ordinal_value(self, student_id, prefered_address):
-        number = student_id.preferred_geographical_ids.filtered(lambda x:x.geographical_id.id == prefered_address.id)
+        sequence = 0
+        for y,x in enumerate(student_id.preferred_geographical_ids):
+            if x.geographical_id.id == prefered_address.id:
+                sequence = y + 1
+                break
+            
         ordinal_dict = {
             1: "first",
             2: "second",
             3: "third",
             4: "fourth",
         }
-        return ordinal_dict.get(number.sequence, str(number.sequence) + "th")
+        return ordinal_dict.get(sequence, str(sequence) + "th")
     
     # Smart Button Action Methods
     #------------------------------------------------------------------------------
