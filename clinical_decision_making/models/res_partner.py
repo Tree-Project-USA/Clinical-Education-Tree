@@ -411,3 +411,13 @@ class ResPartner(models.Model):
     def _get_report_base_filename(self):
         self.ensure_one()
         return '%s %s' % (self.name, 'Signature')
+    
+    def get_formview_action(self, access_uid=None):
+        action = super(ResPartner, self).get_formview_action(access_uid=access_uid)
+        if self.is_scce:
+            action.update({
+                'view_mode': 'form',
+                'view_id': self.env.ref('clinical_decision_making.scce_view_form').id,
+                'views': [(self.env.ref('clinical_decision_making.scce_view_form').id, 'form')],
+            })
+        return action
