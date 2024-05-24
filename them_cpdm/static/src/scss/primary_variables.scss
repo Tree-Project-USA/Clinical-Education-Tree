@@ -3,14 +3,22 @@
 // -------------------------------------------------------------------------- //
 
 $o-color-palettes: map-merge($o-color-palettes,
+
+
     (
         'CPDM': (
-            'o-color-1': #F9D6BF,
+            'o-color-1': #8BB839,
             'o-color-2': #1F4659,
-            'o-color-3': #FFFFFF,
+            'o-color-3': #95B8A4,
             'o-color-4': #FFFFFF,
-            'o-color-5': #083B4D,
-            'primary': #EB7A24,
+            'o-color-5': #90BB2F,
+            'primary': #559C68,
+
+            // "--color1": #8BB839,
+            // "--color2": #1F4659,
+            // "--color3": #95B8A4,
+            // "--button1": #FFFFFF,
+            // "--button2": #90BB2F,
         ),
     )
 );
@@ -30,11 +38,11 @@ $o-website-values-palettes: (
 );
 
 .nav-link.active{
-    color: var(--o-color-2) !important;
+    color: var(o-color-4) !important;
 }
 
 a.nav-link.text-o-color-2:hover{
-    color: var(--o-color-2) !important;
+    color: var(o-color-4) !important;
 }
 
 header .navbar-nav .js_language_selector button.dropdown-toggle {

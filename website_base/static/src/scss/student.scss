@@ -1,11 +1,39 @@
 :root {
-    --color1: #F9D6BF;
+    --color1: #8BB839;
     --color2: #1F4659;
-    --color3: #FFFFFF;
+    --color3: #95B8A4;
     --button1:#FFFFFF;
-    --button2:#083B4D;
+    --button2:#90BB2F;
 }
-.student_profile{
+.student_profile, .hardship, .show-facility-student, .hard_ship_update, #form_temp_attachment_request{
+    .col-form-label, .modal-title{
+        color: var(--button2) !important;
+        font-weight: 700 !important;
+    }
+    .btn{
+        background-color: var(--button2) !important;
+        color: var(--button1) !important;
+    }
+    .btn-danger{
+        background-color: red !important;
+        color: var(--button1) !important;
+    }
+    table{
+        thead{
+            background-color: var(--button2) !important;
+            color: var(--button1) !important;
+        }
+    }
+    .nav-link{
+        .fa{
+            color: var(--button2) !important;
+        }
+        &.active{
+            .fa{
+                color: var(--button1) !important;
+            }
+        }
+    }
     .nav-student{
         color: var(--button2);
         display: inline !important;
@@ -14,21 +42,21 @@
     }
     .nav-student:hover{
         background-color: var(--button2) !important;
-        color: var(--color1) !important;
+        color: var(--button1) !important;
     }
     .nav-hardship {
-        color: #083B4D !important;
-        background-color: var(--color1) !important;
+        color: var(--button2) !important;
+        background-color: var(--button1) !important;
         border: 1px solid var(--button2) !important;
         &.active {
-            color: var(--color1) !important;
+            color: var(--button1) !important;
             background-color: var(--button2) !important;
-            border: 1px solid var(--color1) !important;
+            border: 1px solid var(--button1) !important;
         }
     }
     .student_profile{
         .nav-link {
-            color: #083B4D !important;
+            color: var(--button2) !important;
         }
         &.active {
             color: var(--button2) !important;
@@ -38,10 +66,22 @@
 }
 
 .locations_student{
-    .btn-primary{
-        color: var(--button2) !important;
+    .btn{
+        background-color: var(--button2) !important;
+        color: var(--button1) !important;
     }
-    .table{
-        color: var(--button2) !important;
+}
+
+.preferred_setting{
+    .btn{
+        background-color: var(--button2) !important;
+        color: var(--button1) !important;
+    }
+}
+
+.oe_login_buttons{
+    .custom_create{
+        background-color: var(--button2) !important;
+        color: var(--button1) !important;
     }
 }

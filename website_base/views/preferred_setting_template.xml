@@ -41,13 +41,11 @@
                             </div>
                             <div class="clearfix oe_login_buttons  my-3">
                                 <button type="button"
-                                    class="custom_create btn btn-block new-setting-submit "
-                                    style="background-color:#F9D6BF; color: #083B4D">
+                                    class="custom_create btn btn-block new-setting-submit">
                                     Submit
                                 </button>
                                 <a href="/my/home"
-                                    class="float-end custom_create btn btn-block "
-                                    style="background-color:#F9D6BF; color: #083B4D">
+                                    class="float-end custom_create btn btn-block ">
                                     Back To My Profile
                                 </a>
                             </div>

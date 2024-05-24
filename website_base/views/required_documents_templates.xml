@@ -28,7 +28,7 @@
                                 <div>
                                   <div class="table-responsive">
                                     <table class="table table-striped table-bordered shadow-sm text-center my-4">
-                                      <thead style="background-color:#F9D6BF; color: #083B4D">
+                                      <thead>
                                         <tr>
                                             <th>Name</th>
                                             <th>ID</th>
@@ -45,9 +45,7 @@
                                           <td colspan="4">
                                             <a 
                                               id="add_type_documents" 
-                                              class="btn m-2"
-                                              style="background-color:#F9D6BF; color: #083B4D"
-                                            >
+                                              class="btn m-2">
                                             <h6><i class="fa fa-plus-circle"/></h6>
                                             </a>
                                           </td>
@@ -63,8 +61,7 @@
                                   Submit
                               </button>
                               <a t-attf-href="/profile/student/#{student_id}"
-                                    class="float-end custom_create btn btn-block "
-                                    style="background-color:#F9D6BF; color: #083B4D">
+                                    class="float-end custom_create btn btn-block ">
                                     Back To My Profile
                                 </a>
                           </div>

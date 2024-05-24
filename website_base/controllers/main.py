@@ -42,7 +42,7 @@ class CustomerPortals(portal.CustomerPortal):
     #     }   
         
     def _get_value_plcement_management(self, value):
-        campus = value.get('campus')
+        campus_id = value.get('campus_id')
         home_address = value.get('home_address')
         name_clinical_education_site = value.get('name_clinical_education_site')
         city = value.get('city')
@@ -64,7 +64,7 @@ class CustomerPortals(portal.CustomerPortal):
         professional_organization_membership = value.get('professional_organization_membership')
         return {
             'student_id': request.env.user.partner_id.id,
-            'campus': self.check_data(campus),
+            'campus_id': self.check_data(campus_id),
             'home_address': self.check_data(home_address),
             'name_clinical_education_site': self.check_data(name_clinical_education_site),
             'city': self.check_data(city),

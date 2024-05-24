@@ -55,7 +55,7 @@
                                                 <input type="text"
                                                     class="form-control w-40-input d-inline-block form-control-cpdm"
                                                     name="campus" required="required"
-                                                    t-att-value="res_partner_id.campus" />
+                                                    t-att-value="res_partner_id.campus_id.name" />
                                                 <div class="invalid-feedback">
                                                     Please provide a valid Academic Institution.
                                                 </div>
@@ -474,7 +474,7 @@
                                                 <label class="fw-bold">Academic Institution:</label>
                                                 <span>University of St. Augustine (Campus)</span>
                                                 <span class="border-bottom border-2"
-                                                    t-field="plcement.campus" />
+                                                    t-field="plcement.campus_id.name" />
                                             </div>
                                             <div class="col-12">
                                                 <label class="fw-bold">Name of Clinical Education

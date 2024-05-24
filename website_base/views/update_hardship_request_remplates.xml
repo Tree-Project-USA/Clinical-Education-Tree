@@ -26,7 +26,7 @@
                           <div class="file row mt-4">
                             <div class="table-responsive">
                                 <table class="table add_file table-striped table-bordered shadow-sm text-center my-4">
-                                    <thead style="background-color:#F9D6BF; color: #083B4D">
+                                    <thead>
                                         <tr>
                                             <th>
                                                 #
@@ -67,7 +67,7 @@
                             <div class="col-lg-6 col-12">
                                 <div class="table-responsive">
                                   <table class="table add_file table-striped table-bordered shadow-sm text-center">
-                                    <thead style="background-color:#F9D6BF; color: #083B4D">
+                                    <thead>
                                       <tr>
                                         <th class="text-center" colspan="5">Application attachments</th>
                                         <th class="text-center" />
@@ -81,9 +81,7 @@
                                         <td colspan="6">
                                           <a 
                                             id="add_files" 
-                                            class="btn m-2"
-                                            style="background-color:#F9D6BF; color: #083B4D" 
-                                          >
+                                            class="btn m-2">
                                             <h6><i class="fa fa-plus-circle"/></h6>
                                           </a>
                                         </td>
@@ -106,12 +104,11 @@
                           </div>
                         <div class="clearfix oe_login_buttons mt-4">
                             <button type="submit"
-                                    class="custom_create btn btn-block" style="background-color:#F9D6BF; color: #083B4D">
+                                    class="custom_create btn btn-block">
                                 Submit
                             </button>
                             <a href="/my/home"
-                                  class="float-end custom_create btn btn-block "
-                                  style="background-color:#F9D6BF; color: #083B4D">
+                                  class="float-end custom_create btn btn-block ">
                                   Back To My Profile
                               </a>
                         </div>
