@@ -13,7 +13,7 @@ class Facility(http.Controller):
             
             archive_ids = request.env['archive'].sudo().search([
                 ('department_id', '=', department_id.id), 
-                ('student_id', '=', partner_id.id),
+                # ('student_id', '=', partner_id.id),
             ])
             rec_plcement = request.env['post.plcement.management'].sudo().search([
                 ('facility_id', '=', department_id.facility_id.id), 

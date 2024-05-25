@@ -234,3 +234,16 @@ class Archive(models.Model):
             # 'target': 'inline'
         })
         return action
+    
+    def _get_ptse_survey(self, type_ptse):
+        post_plcement = self.env["post.plcement.management"].search([
+            ('facility_id', '=', self.facility_id.id),
+            ('experience_id', '=', self.experience_id.id)
+            ])
+        if type_ptse == 'ptse_1_survey':
+            ptse_1_survey =  post_plcement.experience_id.ptse_1_survey
+            return {'ptse_1_survey': ptse_1_survey, 'user_input': post_plcement.ptse_1}
+        else:
+            ptse_2_survey =  post_plcement.experience_id.ptse_2_survey
+            return {'ptse_2_survey': ptse_2_survey, 'user_input': post_plcement.ptse_2}
+            
