@@ -2,11 +2,9 @@
 import base64
 import json
 from dateutil import parser
-from odoo.tools.misc import DEFAULT_SERVER_DATETIME_FORMAT
-from datetime import datetime, date
+
 from odoo import http, _, Command
 from odoo.http import request, content_disposition
-from odoo.addons.http_routing.models.ir_http import slug
 from odoo.exceptions import AccessError, MissingError
 from odoo.addons.portal.controllers import portal
 from odoo.addons.survey.controllers import main
@@ -33,13 +31,7 @@ class CustomerPortals(portal.CustomerPortal):
         
     def check_data(self, data):
         return data if data else False
-        
-    # def _get_value_cu(self, value):
-        
-    #     return {
-           
-    #         # 'ci_details_status': 'not_started',
-    #     }   
+
         
     def _get_value_plcement_management(self, value):
         campus = value.get('campus')
@@ -140,8 +132,6 @@ class CustomerPortals(portal.CustomerPortal):
             else:
                 rec_ci_id = request.env["res.partner"].sudo().search([('id', '=', post.get('ci_id'))])
             
-            print('<<<<<<<33333333333333333333333333333>>>>>>>>>>>>>>>>>>>>2')
-            # value_ci = self._get_value_cu(post)
             post_plcement.facility_id.write({
                 'ci_ids': [Command.link(rec_ci_id.id)]
             })
@@ -154,17 +144,6 @@ class CustomerPortals(portal.CustomerPortal):
             ci_ptse.write({'ptse_3': b64_pdf})
             self.action_get_attachment(ci_ptse)
             return request.redirect('/my')
-
-        # if department and ci_id:
-        #     rec_ci = request.env["res.partner"].sudo().search([('id', '=', ci_id)])
-        #     plcement = request.env["plcement.management"].sudo().search([('ci_id', '=', rec_ci.id)])
-        #     if plcement:
-        #         error = _('CI Details Have Already Been Created')
-        #         return request.redirect_query('/show/department/%s' % department.id, {"error": error})
-        #     value.update({
-        #         'ci':rec_ci,
-        #         'department': department
-        #     })
             
         return request.render("website_base.ptse3_student_details",value)
     
@@ -284,17 +263,6 @@ class CustomerSurvey(main.Survey):
         
     def _prepare_survey_finished_values(self, survey, answer, token=False):
         result =  super(CustomerSurvey, self)._prepare_survey_finished_values(survey, answer, token=token)
-        print(request.session.get('post_plcement'),'<<<<<<<<<<<<<<<<post_plcement>>>>>>>>>>>>>>>>>>')
-        print('******************************************')
-        print('******************************************')
-        print('******************************************')
-        print('******************************************')
-        print('******************************************')
-        print('******************************************')
-        print('******************************************')
-        print('******************************************')
-        print('******************************************')
-        print('******************************************')
         survey_id = result.get('survey')
         user_input = result.get('answer')
         post_plcement = request.env["post.plcement.management"].sudo().search([('id', '=', request.session.get('post_plcement'))])
@@ -307,14 +275,6 @@ class CustomerSurvey(main.Survey):
     @http.route()
     def survey_display_page(self, survey_token, answer_token, **post):
         result =  super(CustomerSurvey, self).survey_display_page(survey_token, answer_token, **post)
-        print('=========================request.session========================================',result)
-        print('=================================================================')
-        print('=================================================================')
-        print('============================post=====================================',post)
-        print('=================================================================')
-        print('=================================================================')
-        print('=================================================================')
-        print('=================================================================')
         return result
     @http.route(['/download/answer/<int:user_input>'], 
                 type="http", website=True, auth="user",Methods=["GET"])

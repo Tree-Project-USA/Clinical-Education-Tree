@@ -117,6 +117,8 @@
                     </thead>
                     <tbody>
                       <tr t-foreach="archive_ids" t-as="val">
+                        <t t-set="ptse_1_survey" t-value="val._get_ptse_survey('ptse_1_survey')"/>
+                        <t t-set="ptse_2_survey" t-value="val._get_ptse_survey('ptse_2_survey')"/>
                         <td>
                           <t t-esc="val_index + 1" />
                         </td>
@@ -133,8 +135,28 @@
                         <td>
                           <t t-esc="val.year" />
                         </td>
-                        <td></td>
-                        <td></td>
+                        <td>
+                          <t t-set="user_input_1" t-value="ptse_1_survey.get('user_input')"/>
+                          <t t-set="ptse1_survey" t-value="ptse_1_survey.get('ptse_1_survey')"/>
+                          <a t-if="user_input_1" class="nav-link" t-attf-href="/survey/print/#{ptse1_survey.access_token}?answer_token=#{user_input_1.access_token}">
+                           View
+                           <i class="fa fa-eye mx-2"/>
+                          </a>
+                          <t t-else="">
+                           -
+                          </t>
+                        </td>
+                        <td>
+                          <t t-set="user_input_2" t-value="ptse_2_survey.get('user_input')"/>
+                          <t t-set="ptse2_survey" t-value="ptse_2_survey.get('ptse_2_survey')"/>
+                          <a t-if="user_input_2" class="nav-link" t-attf-href="/survey/print/#{ptse2_survey.access_token}?answer_token=#{user_input_2.access_token}">
+                           View
+                           <i class="fa fa-eye mx-2"/>
+                          </a>
+                          <t t-else="">
+                           -
+                          </t>
+                        </td>
                       </tr>
                     </tbody>
                   </table>
@@ -185,7 +207,7 @@
                           <a t-if="not ptse_1_survey">
                             - 
                           </a>
-                            <a t-elif="not plcement.ptse_1 and not user_input_1" class="btn btn-primary" t-attf-href="/survey/start/#{ptse_1_survey.access_token}">
+                            <a t-elif="not plcement.ptse_1 and not user_input_1" class="btn btn-primary" t-attf-href="/survey/start/#{ptse_1_survey.access_token}?plcement=#{plcement.id}">
                               Submit
                               <i class="fa fa-pencil"></i>
                             </a>

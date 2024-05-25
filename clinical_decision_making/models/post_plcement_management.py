@@ -21,7 +21,7 @@ class PostPlcement(models.Model):
     facility_id = fields.Many2one('medical.facility', string='Clinical Site', readonly=True)
     experience_id = fields.Many2one(comodel_name='clinical.experience', string='Clinical Experience', domain="[('company_id', '=', company_id)]", required=True, check_company=True)
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.user.company_id)
-    year = fields.Selection(selection=SELECTION_YEAR_RANGE, string='Year', default='2000', required=True)
+    year = fields.Selection(selection=SELECTION_YEAR_RANGE, string='Year', default='2000')
     placement_term = fields.Selection([
         ('fall', 'Fall'),
         ('spring', 'Spring'),
