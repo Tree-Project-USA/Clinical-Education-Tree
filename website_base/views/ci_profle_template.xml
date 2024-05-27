@@ -34,14 +34,14 @@
                     loading="lazy"
                   />
                 </div>
-                <button class="nav-ci nav-link active" id="scce-information-tab"
+                <button class="col-12 nav-ci nav-link active" id="scce-information-tab"
                   data-bs-toggle="pill" data-bs-target="#scce_information" type="button" role="tab"
                   aria-controls="scce_information" aria-selected="true">CI Information</button>
-                <button class="nav-ci nav-link" id="facility-information-tab"
+                <button class="col-12 nav-ci nav-link" id="facility-information-tab"
                   data-bs-toggle="pill" data-bs-target="#facility_information" type="button"
                   role="tab" aria-controls="facility_information" aria-selected="false">Facility
                   Information</button>
-                <button class="nav-ci nav-link" id="post-placement-managament-tab"
+                <button class="col-12 nav-ci nav-link" id="post-placement-managament-tab"
                   data-bs-toggle="pill" data-bs-target="#post_placement_managament" type="button"
                   role="tab" aria-controls="post_placement_managament" aria-selected="false">Post
                   Placement Managament</button>

@@ -26,13 +26,13 @@
                               loading="lazy"
                             />
                           </div>
-                          <button class="nav-avalibility nav-link active" id="assigned-student-tab"
+                          <button class="col-12 nav-avalibility nav-link active" id="assigned-student-tab"
                             data-bs-toggle="pill" data-bs-target="#assigned_student" type="button" role="tab"
                             aria-controls="assigned_student" aria-selected="true">Assigned Student/s</button>
-                          <button class="nav-avalibility nav-link" id="scce-information-tab" data-bs-toggle="pill"
+                          <button class="col-12 nav-avalibility nav-link" id="scce-information-tab" data-bs-toggle="pill"
                             data-bs-target="#scce_information" type="button" role="tab"
                             aria-controls="scce_information" aria-selected="false">SCCE Information</button>
-                          <button class="nav-avalibility nav-link" id="placement-history-tab" data-bs-toggle="pill"
+                          <button class="col-12 nav-avalibility nav-link" id="placement-history-tab" data-bs-toggle="pill"
                             data-bs-target="#placement_history" type="button" role="tab"
                             aria-controls="placement_history" aria-selected="false">Placement History</button>
                         </div>
@@ -48,17 +48,17 @@
                           <button class="nav-link active" id="assigned-student-tab" data-bs-toggle="pill"
                             data-bs-target="#assigned_student" type="button" role="tab"
                             aria-controls="assigned_student" aria-selected="true">
-                            <i class="fa fa-user-md" style="color:#083B4D; font-size:20px;" />
+                            <i class="fa fa-user-md" style="font-size:20px;" />
                           </button>
                           <button class="nav-link" id="scce-information-tab" data-bs-toggle="pill"
                             data-bs-target="#scce_information" type="button" role="tab"
                             aria-controls="scce_information" aria-selected="false">
-                            <i class="fa fa-user" style="color:#083B4D; font-size:20px;" />
+                            <i class="fa fa-user" style="font-size:20px;" />
                           </button>
                           <button class="nav-link" id="placement-history-tab" data-bs-toggle="pill"
                             data-bs-target="#placement_history" type="button" role="tab"
                             aria-controls="placement_history" aria-selected="false">
-                            <i class="fa fa-history" style="color:#083B4D; font-size:20px;" />
+                            <i class="fa fa-history" style="font-size:20px;" />
                           </button>
                         </div>
                       </div>

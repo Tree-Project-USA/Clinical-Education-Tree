@@ -1,35 +1,64 @@
 :root {
-    --color1: #F9D6BF;
+    --color1: #8BB839;
     --color2: #1F4659;
-    --color3: #FFFFFF;
+    --color3: #95B8A4;
     --button1:#FFFFFF;
-    --button2:#083B4D;
+    --button2:#90BB2F;
 }
 .scce_profile{
-    .col-form-label {
+    .col-form-label, .modal-title{
+        color: var(--button2) !important;
         font-weight: 700 !important;
     }
+    .btn{
+        background-color: var(--button2) !important;
+        color: var(--button1) !important;
+    }
+    .btn-danger{
+        background-color: red !important;
+        color: var(--button1) !important;
+    }
+    table{
+        thead{
+            background-color: var(--button2) !important;
+            color: var(--button1) !important;
+        }
+    }
+    .nav-link{
+        .fa{
+            color: var(--button2) !important;
+        }
+        &.active{
+            .fa{
+                color: var(--button1) !important;
+            }
+        }
+    }
     .nav-scce{
-        color: var(--button2);
+        color: var(--button2) !important;
         display: inline !important;
         margin-top: 2px !important;
         margin-bottom: 2px !important;
+        &.active{
+            background-color: var(--button2) !important;
+            color: var(--button1) !important;
+        }
     }
     .nav-scce:hover{
         background-color: var(--button2) !important;
-        color: var(--color1) !important;
+        color: var(--button1) !important;
     }
     .nav-hardship {
-        color: #083B4D !important;
-        background-color: var(--color1) !important;
+        color: var(--button2) !important;
+        background-color: var(--button1) !important;
         border: 1px solid var(--button2) !important;
         &.active {
-            color: var(--color1) !important;
+            color: var(--button1) !important;
             background-color: var(--button2) !important;
-            border: 1px solid var(--color1) !important;
+            border: 1px solid var(--button1) !important;
         }
         .nav-link {
-            color: #083B4D !important;
+            color: var(--button1) !important;
         }
         &.active {
             color: var(--button2) !important;
@@ -39,6 +68,20 @@
 }
 
 .availability{
+    .col-form-label, .modal-title{
+        color: var(--button2) !important;
+        font-weight: 700 !important;
+    }
+    .btn{
+        background-color: var(--button2) !important;
+        color: var(--button1) !important;
+    }
+    table{
+        thead{
+            background-color: var(--button2) !important;
+            color: var(--button1) !important;
+        }
+    }
     .nav-avalibility{
         color: var(--button2);
         display: inline !important;
@@ -47,9 +90,13 @@
     }
     .nav-avalibility:hover{
         background-color: var(--button2) !important;
-        color: var(--color1) !important;
+        color: var(--button1) !important;
     }
     .nav-link {
-        color: #083B4D !important;
+        color: var(--button2) !important;
+        &.active{
+            background-color: var(--button2) !important;
+            color: var(--button1) !important;
+        }
     }
 }

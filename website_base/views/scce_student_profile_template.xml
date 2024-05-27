@@ -22,13 +22,13 @@
                       loading="lazy"
                       />
                 </div>
-                <button class="nav-student nav-link active" id="student-info-tab" data-bs-toggle="pill" data-bs-target="#student_info" type="button" role="tab" aria-controls="student_info" aria-selected="true">Student Information</button>
-                <button class="nav-student nav-link" id="preferred-address-tab" data-bs-toggle="pill" data-bs-target="#preferred_address" type="button" role="tab" aria-controls="preferred_address" aria-selected="false">Preferred Address</button>
-                <button class="nav-student nav-link" id="preferred-setting-tab" data-bs-toggle="pill" data-bs-target="#preferred_setting" type="button" role="tab" aria-controls="preferred_setting" aria-selected="false">Preferred Setting</button>
-                <button class="nav-student nav-link" id="hardship-accommodation-tab" data-bs-toggle="pill" data-bs-target="#hardship_accommodation" type="button" role="tab" aria-controls="hardship_accommodation" aria-selected="false">Hardship-Accommodation</button>
-                <button class="nav-student nav-link" id="placement-history-tab" data-bs-toggle="pill" data-bs-target="#placement_history" type="button" role="tab" aria-controls="placement_history" aria-selected="false">Student Placement Managment</button>
-                <button class="nav-student nav-link" id="medical-attachment-ids-tab" data-bs-toggle="pill" data-bs-target="#medical_attachment_ids" type="button" role="tab" aria-controls="medical_attachment_ids" aria-selected="false">Program Required Documents</button>
-                <button class="nav-student nav-link" id="scce_medical-attachment-ids-tab" data-bs-toggle="pill" data-bs-target="#scce_medical_attachment_ids" type="button" role="tab" aria-controls="scce_medical_attachment_ids" aria-selected="false">Site Required Documents</button>
+                <button class="col-12 nav-student nav-link active" id="student-info-tab" data-bs-toggle="pill" data-bs-target="#student_info" type="button" role="tab" aria-controls="student_info" aria-selected="true">Student Information</button>
+                <button class="col-12 nav-student nav-link" id="preferred-address-tab" data-bs-toggle="pill" data-bs-target="#preferred_address" type="button" role="tab" aria-controls="preferred_address" aria-selected="false">Preferred Address</button>
+                <button class="col-12 nav-student nav-link" id="preferred-setting-tab" data-bs-toggle="pill" data-bs-target="#preferred_setting" type="button" role="tab" aria-controls="preferred_setting" aria-selected="false">Preferred Setting</button>
+                <button class="col-12 nav-student nav-link" id="hardship-accommodation-tab" data-bs-toggle="pill" data-bs-target="#hardship_accommodation" type="button" role="tab" aria-controls="hardship_accommodation" aria-selected="false">Hardship-Accommodation</button>
+                <button class="col-12 nav-student nav-link" id="placement-history-tab" data-bs-toggle="pill" data-bs-target="#placement_history" type="button" role="tab" aria-controls="placement_history" aria-selected="false">Student Placement Managment</button>
+                <button class="col-12 nav-student nav-link" id="medical-attachment-ids-tab" data-bs-toggle="pill" data-bs-target="#medical_attachment_ids" type="button" role="tab" aria-controls="medical_attachment_ids" aria-selected="false">Program Required Documents</button>
+                <button class="col-12 nav-student nav-link" id="scce_medical-attachment-ids-tab" data-bs-toggle="pill" data-bs-target="#scce_medical_attachment_ids" type="button" role="tab" aria-controls="scce_medical_attachment_ids" aria-selected="false">Site Required Documents</button>
               </div>
               <div class="nav flex-column nav-pills me-3 d-sm-block d-lg-none" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                 <div class="text-center my-4">
@@ -46,13 +46,13 @@
                       loading="lazy"
                       />
                 </div>
-                <button class="nav-link active" id="student-info-tab" data-bs-toggle="pill" data-bs-target="#student_info" type="button" role="tab" aria-controls="student_info" aria-selected="true"><i class="fa fa-address-card" style="color:#083B4D; font-size:20px;"/></button>
-                <button class="nav-link" id="preferred-address-tab" data-bs-toggle="pill" data-bs-target="#preferred_address" type="button" role="tab" aria-controls="preferred_address" aria-selected="false"><i class="fa fa-map-marker" style="color:#083B4D; font-size:20px;"/></button>
-                <button class="nav-link" id="preferred-setting-tab" data-bs-toggle="pill" data-bs-target="#preferred_setting" type="button" role="tab" aria-controls="preferred_setting" aria-selected="false"><i  class="fa fa-cogs" style="color:#083B4D; font-size:20px;"/></button>
-                <button class="nav-link" id="hardship-accommodation-tab" data-bs-toggle="pill" data-bs-target="#hardship_accommodation" type="button" role="tab" aria-controls="hardship_accommodation" aria-selected="false"><i class="fa fa-wheelchair-alt" style="color:#083B4D; font-size:20px;"/></button>
-                <button class="nav-link" id="placement-history-tab" data-bs-toggle="pill" data-bs-target="#placement_history" type="button" role="tab" aria-controls="placement_history" aria-selected="false"><i class="fa fa-history" style="color:#083B4D; font-size:20px;"/></button>
-                <button class="nav-link" id="medical-attachment-ids-tab" data-bs-toggle="pill" data-bs-target="#medical_attachment_ids" type="button" role="tab" aria-controls="medical_attachment_ids" aria-selected="false"><i class="fa fa-file-text" style="color:#083B4D; font-size:20px;"/></button>
-                <button class="nav-link" id="scce_medical-attachment-ids-tab" data-bs-toggle="pill" data-bs-target="#scce_medical_attachment_ids" type="button" role="tab" aria-controls="scce_medical_attachment_ids" aria-selected="false"><i class="fa fa-file-text" style="color:#083B4D; font-size:20px;"/></button>
+                <button class="nav-link active" id="student-info-tab" data-bs-toggle="pill" data-bs-target="#student_info" type="button" role="tab" aria-controls="student_info" aria-selected="true"><i class="fa fa-address-card" style="font-size:20px;"/></button>
+                <button class="nav-link" id="preferred-address-tab" data-bs-toggle="pill" data-bs-target="#preferred_address" type="button" role="tab" aria-controls="preferred_address" aria-selected="false"><i class="fa fa-map-marker" style="font-size:20px;"/></button>
+                <button class="nav-link" id="preferred-setting-tab" data-bs-toggle="pill" data-bs-target="#preferred_setting" type="button" role="tab" aria-controls="preferred_setting" aria-selected="false"><i  class="fa fa-cogs" style="font-size:20px;"/></button>
+                <button class="nav-link" id="hardship-accommodation-tab" data-bs-toggle="pill" data-bs-target="#hardship_accommodation" type="button" role="tab" aria-controls="hardship_accommodation" aria-selected="false"><i class="fa fa-wheelchair-alt" style="font-size:20px;"/></button>
+                <button class="nav-link" id="placement-history-tab" data-bs-toggle="pill" data-bs-target="#placement_history" type="button" role="tab" aria-controls="placement_history" aria-selected="false"><i class="fa fa-history" style="font-size:20px;"/></button>
+                <button class="nav-link" id="medical-attachment-ids-tab" data-bs-toggle="pill" data-bs-target="#medical_attachment_ids" type="button" role="tab" aria-controls="medical_attachment_ids" aria-selected="false"><i class="fa fa-file-text" style="font-size:20px;"/></button>
+                <button class="nav-link" id="scce_medical-attachment-ids-tab" data-bs-toggle="pill" data-bs-target="#scce_medical_attachment_ids" type="button" role="tab" aria-controls="scce_medical_attachment_ids" aria-selected="false"><i class="fa fa-file-text" style="font-size:20px;"/></button>
               </div>
             </div>
             <div class="col-9">
@@ -186,7 +186,7 @@
                               name="campus"
                               class="form-control"
                               readonly="readonly"
-                              t-att-value="student_id.campus"
+                              t-att-value="student_id.campus_id.name"
                             />
                           </div>
                         </div>

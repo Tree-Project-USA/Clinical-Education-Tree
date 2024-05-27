@@ -1,23 +1,23 @@
 :root {
-    --color1: #F9D6BF;
+    --color1: #8BB839;
     --color2: #1F4659;
-    --color3: #FFFFFF;
+    --color3: #95B8A4;
     --button1:#FFFFFF;
-    --button2:#083B4D;
+    --button2:#90BB2F;
 }
 
-#wrapwrap{
-    background-color: var(--color3) !important;
-} 
-@media (min-width: 1200px) {
-    #wrapwrap{
-        background-image: url(/website_base/static/src/img/tree.png);
-        background-repeat: no-repeat;
-        background-color: var(--color3) !important;
-        background-position: top;
-        background-position-x: right;
-    }
-}
+// #wrapwrap{
+//     background-color: var(--color3) !important;
+// } 
+// @media (min-width: 1200px) {
+//     #wrapwrap{
+//         background-image: url(/website_base/static/src/img/tree.png);
+//         background-repeat: no-repeat;
+//         background-color: var(--color3) !important;
+//         background-position: top;
+//         background-position-x: right;
+//     }
+// }
 
 .popup-card-error,
 .popup-card-warning,
@@ -98,13 +98,13 @@
     color: var(--button2) !important;
 }
 .scce_profile .nav-link {
-    color: #083B4D !important;
+    color: var(--button2) !important;
 }
 .ci_profile .nav-tabs .nav-link.active {
     color: var(--button2) !important;
 }
 .ci_profile .nav-link {
-    color: #083B4D !important;
+    color: var(--button2) !important;
 }
 
 
