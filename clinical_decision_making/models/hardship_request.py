@@ -138,7 +138,16 @@ class HardshipRequest(models.Model):
             'target': 'new'
         }
     
-    
+    def action_view_geographical_map(self):
+        action = self.env.ref('clinical_decision_making.action_geographical_preferred').sudo().read()[0]
+        action.update({
+            'domain': [('id', 'in', self.preferred_geographical_ids.ids)],
+            'context': {'create': False, 'delete': False, 'edit': False},
+            'view_mode': 'leaflet_map',
+            'view_id': self.env.ref('clinical_decision_making.view_geographical_preferred_map').id,
+            'views': [(self.env.ref('clinical_decision_making.view_geographical_preferred_map').id, 'leaflet_map')],
+        })
+        return action
     
     def action_update(self):
         self.ensure_one()

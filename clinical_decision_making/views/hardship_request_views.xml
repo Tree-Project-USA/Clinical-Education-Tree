@@ -57,6 +57,7 @@
                     </group>
                 <notebook>
                     <page string="Preferred Addresses" name="preferred_geographical_ids">
+                        <button name="action_view_geographical_map" type="object" string="Open Map"/>
                         <field name="preferred_geographical_ids" attrs="{'readonly': [('state', 'in', ('expired', 'approved'))]}">
                             <tree editable="bottom">
                                 <field name="sequence" widget="handle"/>
