@@ -43,6 +43,7 @@
         "views/program_experience_term_views.xml",
         "views/survey_survey_views.xml",
         "views/student_campus_views.xml",
+        "views/geographical_preferred_views.xml",
         "views/menu.xml",
     ],
     'assets': {

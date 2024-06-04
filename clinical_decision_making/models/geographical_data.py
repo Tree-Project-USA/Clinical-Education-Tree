@@ -113,6 +113,8 @@ class geographicalPreferred(models.Model):
     city = fields.Char(related='geographical_id.city')
     state = fields.Char(related='geographical_id.state')
     zip = fields.Char(related='geographical_id.zip_code')
+    latitude = fields.Char(related='geographical_id.latitude', store=True)
+    longitude = fields.Char(related='geographical_id.longitude', store=True)
     
 class geographicalHistory(models.Model):
     _name = 'geographical.history'

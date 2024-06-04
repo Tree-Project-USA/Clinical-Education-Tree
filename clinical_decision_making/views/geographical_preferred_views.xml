@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- View geographical.preferred View Tree -->
+    <record id="view_geographical_preferred_tree" model="ir.ui.view">
+        <field name="name">view.geographical.preferred.tree</field>
+        <field name="model">geographical.preferred</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="sequence"/>
+                <field name="student_id"/>
+                <field name="hardship_id"/>
+                <field name="geographical_id"/>
+                <field name="city"/>
+                <field name="state"/>
+                <field name="zip"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- View geographical.preferred form -->
+    <record id="view_geographical_preferred_form" model="ir.ui.view">
+        <field name="name">view.geographical.preferred.form</field>
+        <field name="model">geographical.preferred</field>
+
+        <field name="arch" type="xml">
+            <form create="false" delete="false" edit="false">
+                <sheet>
+                    <group>
+                        <field name="geographical_id"/>
+                        <field name="city"/>
+                        <field name="state"/>
+                        <field name="zip"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_geographical_preferred_map" model="ir.ui.view">
+        <field name="model">geographical.preferred</field>
+        <field name="arch" type="xml">
+            <leaflet_map 
+            field_latitude="latitude" 
+            field_longitude="longitude" 
+            field_address="city" 
+            field_title="zip" 
+            >
+                <field name="__last_update" />
+                <field name="latitude" />
+                <field name="longitude" />
+                <field name="city" />
+                <field name="zip" />
+            </leaflet_map>
+        </field>
+    </record>
+
+    <record id="view_geographical_preferred_search" model="ir.ui.view">
+        <field name="name">view.geographical.preferred.search</field>
+        <field name="model">geographical.preferred</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="city"/>
+                <field name="state"/>
+                <field name="zip"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action geographical.preferred -->
+    <record id="action_geographical_preferred" model="ir.actions.act_window">
+        <field name="name">Geographical Preferred</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">geographical.preferred</field>
+        <field name="view_mode">tree,leaflet_map,form</field>
+    </record>
+
+</odoo>

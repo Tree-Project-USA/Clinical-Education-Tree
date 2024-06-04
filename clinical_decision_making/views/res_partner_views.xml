@@ -152,6 +152,7 @@
                         </page>
                         
                         <page string="Preferred Addresses" name="student_geographical" autofocus="autofocus">
+                            <button name="action_view_geographical_map" type="object" string="Open Map"/>
                             <field name="preferred_geographical_ids" mode="tree">
                                 <tree editable="bottom">
                                     <field name="sequence" widget="handle"/>
