@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Tree: oauth2.token -->
+    <record model="ir.ui.view" id="view_oauth2_token_tree">
+        <field name="name">tree.oauth2.token</field>
+        <field name="model">oauth2.token</field>
+        <field name="priority" eval="16"/>
+        <field name="arch" type="xml">
+            <tree string="oauth2_token">
+                <field name="name"/>
+                <field name="user_id"/>
+                <field name="client_id"/>
+                <field name="scopes"/>
+                <field name="access_token"/>
+                <field name="refresh_token"/>
+                <field name="expire_time"/>
+                <!-- <field name="dirty"/> -->
+            </tree>
+        </field>
+    </record>
+    <!-- Form: oauth2.token -->
+    <record model="ir.ui.view" id="view_oauth2_token_form">
+        <field name="name">form.oauth2_token</field>
+        <field name="model">oauth2.token</field>
+        <field name="priority" eval="15"/>
+        <field name="arch" type="xml">
+            <form string="oauth2_token">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="user_id"/>
+                        <field name="client_id"/>
+                        <field name="scopes"/>
+                        <field name="access_token"/>
+                        <field name="refresh_token"/>
+                        <field name="expire_time"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="Save" type="object" class="oe_highlight" special="save"/>
+                    <button string="Cancel" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <!-- Main Action: oauth2.token -->
+    <record id="action_oauth2_token" model="ir.actions.act_window">
+        <field name="name">OAuth2 tokens</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">oauth2.token</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            All important OAuth tokens
+          </p><p>
+            Ekika helps you track, manage and maintain your OAuth2 tokens.
+          </p>
+        </field>
+    </record>
+    <!-- Sub Action Tree: oauth2.token -->
+    <record id="action_oauth2_token_view_tree" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_oauth2_token_tree"/>
+        <field name="act_window_id" ref="action_oauth2_token"/>
+    </record>
+    <!-- Sub Action Form: oauth2.token -->
+    <record id="action_oauth2_token_view_form" model="ir.actions.act_window.view">
+        <field name="sequence" eval="2"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_oauth2_token_form"/>
+        <field name="act_window_id" ref="action_oauth2_token"/>
+    </record>
+
+</odoo>

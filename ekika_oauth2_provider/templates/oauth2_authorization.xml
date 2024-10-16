@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="oauth2_authorize_form">
+        <head>
+            <meta name="viewport" content="width=device-width, initial-scale=1"/>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous"/>
+        </head>
+        <t t-name="oauth2.authorize">
+            <!-- Authorize Form -->
+            <form class="oauth2_authorize_form_class" method="post" action="/oauth2/authorize">
+                <div class="container mt-5 mx-auto"
+                style="max-width: max-content;" >
+                  <div class="row text-center">
+                    <div class="col"><img t-att-src="'/ekika_oauth2_provider/static/src/img/oauth-symbol.png'" class="img-fluid" height="150px" width="150px" alt="LOGO"/></div>
+                  </div>
+                  <div class="row text-center">
+                    <div class="col"><h2><t t-esc="client_app_name"/></h2></div>
+                  </div>
+                  <div class="row" style="max-width: 500px;">
+                    <div class="col">You are about to allow your account's access to the <t t-esc="client_app_name"/> system. To confirm and allow access to the <t t-esc="client_app_name"/>, click "Allow" or "Deny" to not allow access.
+                    </div>
+                  </div>
+                  <div class="row mx-2">
+                    <t t-set="scopes_list" t-value="scopes.split(' ')"/>
+                    <ul class="list-group mb-3">
+                        <h4>Scopes:</h4>
+                        <t t-foreach="scopes_list" t-as="scope_item">
+                            <li class="list-group-item"><t t-esc="scope_item"/></li>
+                        </t>
+                    </ul>
+                  </div>
+                  <div class="row text-center">
+                    <div class="col">
+                        <button type="submit" class="btn btn-primary">Allow</button>
+                        <button type="button" class="btn btn-warning" onclick="authorizationDenyRedirect()">Deny</button>
+                    </div>
+                  </div>
+                </div>
+                <!-- Invisible Fields: Client ID, Response Type, Redirect URI, State -->
+                <input type="hidden" name="client_id" t-att-value="client_id"/>
+                <input type="hidden" name="user_id" t-att-value="user_id"/>
+                <input type="hidden" name="response_type" t-att-value="response_type"/>
+                <input type="hidden" name="redirect_uri" t-att-value="redirect_uri"/>
+                <input type="hidden" name="state" t-att-value="state"/>
+                <input type="hidden" name="scopes" t-att-value="scopes"/>
+            </form>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+        </t>
+        <script type="text/javascript">
+            function authorizationDenyRedirect() {
+                // Your JavaScript logic here
+                console.log('Button clicked!');
+                redirectUrl = "<t t-esc="redirect_uri"/>"
+                state = "<t t-esc="state"/>"
+                window.location.href = redirectUrl + "?error=access_denied" + "&amp;" + "state=" + state
+                // You can add more JavaScript code here
+            }
+        </script>
+    </template>
+</odoo>
