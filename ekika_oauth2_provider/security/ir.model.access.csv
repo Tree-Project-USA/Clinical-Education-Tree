@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_admin_oauth2_client,admin_oauth2_client,model_oauth2_client,base.group_system,1,1,1,1
+access_admin_oauth2_authorization_code,admin_oauth2_authorization_code,model_oauth2_authorization_code,base.group_system,1,1,1,1
+access_admin_oauth2_token,admin_oauth2_token,model_oauth2_token,base.group_system,1,1,1,1

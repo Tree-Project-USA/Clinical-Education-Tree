@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem name="OAuth2" id="menu_main_oauth2"
+        web_icon="base_api,static/description/icon.png"
+        sequence="1"/>
+    <menuitem name="OAuth2 Client" id="submenu_oauth2_client"
+        action="action_oauth2_client"
+        parent="menu_main_oauth2"
+        sequence="2"/>
+    <menuitem name="OAuth2 Authorization Codes" id="submenu_oauth2_authorization_code"
+        action="action_oauth2_authorization_code"
+        parent="menu_main_oauth2"
+        sequence="3"/>
+    <menuitem name="OAuth2 Tokens" id="submenu_oauth2_token"
+        action="action_oauth2_token"
+        parent="menu_main_oauth2"
+        sequence="4"/>
+
+</odoo>
