@@ -12,6 +12,9 @@
     ],
     'assets': {
         'web.assets_frontend': [
+            'custom_map/static/lib/leaflet.js',
+            'custom_map/static/lib/leaflet.css',
+            'custom_map/static/scss/*.scss',
             'custom_map/static/js/map.js',
         ],
     },

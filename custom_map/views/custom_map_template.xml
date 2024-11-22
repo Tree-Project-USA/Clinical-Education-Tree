@@ -2,7 +2,7 @@
 <odoo>
     <template id="custom_map_page" name="Custom Map Page">
         <t t-call="website.layout">
-            <div id="map" style="width: 100%; height: 700px;"></div>
+            <div class="student_map" id="map" style="width: 100%; height: 700px;"></div>
     
             <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
             <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
@@ -14,11 +14,10 @@
         </t>
     </template>
 
-    <template id="menu_portal" name="Menu Portal" inherit_id="website.navbar_nav">
-        <xpath expr="//ul" position="inside">
-            <li class="nav-item">
-                <a class="nav-link" href="/my/custom/map">map</a>
-            </li>
-        </xpath>
-    </template>
+  <record id="map_student" model="website.menu">
+    <field name="name">Map Medical Facility</field>
+    <field name="url">/medical/facility/map</field>
+    <field name="parent_id" ref="website.main_menu" />
+    <field name="sequence" type="int">22</field>
+  </record>
 </odoo>

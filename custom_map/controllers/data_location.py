@@ -4,17 +4,21 @@ import json
 
 class CustomMap(http.Controller):
 
-    @http.route('/custom_map/data/', type='json', auth='public', website=True)
+    @http.route('/location/data/', type='json')
     def get_map_data(self):
-        # Example: Fetching data from a model
-        Model = http.request.env['geographical.preferred']  # Replace 'your.model' with the actual model name
-        records = Model.search([])  # Fetch all records; customize as needed
+
+        Model = http.request.env['medical.facility']
+        records = Model.sudo().search([])
         data = []
 
         for record in records:
             data.append({
-                'name': record.zip,
-                'coords': [record.latitude, record.longitude]  # Adjust field names as needed
+                'clinical_site_name': record.name,
+                'scce_email_address': record.email,
+                'clinical_site_address': record.address,
+                'city': record.city,
+                'state': record.state,
+                'name': record.geographical_id.zip_code,
+                'coords': [record.geographical_id.latitude, record.geographical_id.longitude]
             })
-            
         return data
