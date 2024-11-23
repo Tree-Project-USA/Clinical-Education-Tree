@@ -1,0 +1,11 @@
+.student_map {
+    .leaflet-popup{
+        width: 30rem !important;
+        .leaflet-popup-content{
+            width: 100% !important;
+        }
+    }
+    .leaflet-left {
+        margin-left: 2rem !important;
+    }
+}

@@ -48,8 +48,11 @@
     ],
     'assets': {
         'web.assets_backend': [
-            'clinical_decision_making/static/src/scss/main.scss',
-
+            'clinical_decision_making/static/src/lib/*.js',
+            'clinical_decision_making/static/src/lib/*.css',
+            'clinical_decision_making/static/src/scss/*.scss',
+            'clinical_decision_making/static/src/js/*.js',
+            'clinical_decision_making/static/src/xml/*.xml',
         ],
 
         

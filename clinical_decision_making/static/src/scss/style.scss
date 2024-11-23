@@ -1,0 +1,11 @@
+.map_scce {
+    #map{
+        position: static !important;
+    }
+    .leaflet-popup-content{
+        width: 30rem !important;
+    }
+    .leaflet-left {
+        margin-left: 2rem !important;
+    }
+}
