@@ -63,6 +63,14 @@ odoo.define("clinical_decision_making.map", function (require) {
                                     <strong>SCCE Email Address</strong>
                                     <h6>${data.scce_email_address ? data.scce_email_address : "Not found Email"}</h6>
                                 </div>
+                                <div class="col-6">
+                                    <strong>SCCE First Name</strong>
+                                    <h6>${data.scce_first_name ? data.scce_first_name : "Not found First Name"}</h6>
+                                </div>
+                                <div class="col-6">
+                                    <strong>SCCE Last Name</strong>
+                                    <h6>${data.scce_last_name ? data.scce_last_name : "Not found Last Name"}</h6>
+                                </div>
                                 <div class="col-6 mt-2">
                                     <strong>SCCE Site Address</strong>
                                     <h6>${data.clinical_site_address ? data.clinical_site_address : "Not found Site Address"}</h6>
@@ -78,6 +86,15 @@ odoo.define("clinical_decision_making.map", function (require) {
                                 <div class="col-6 mt-2">
                                     <strong>Zip Code</strong>
                                     <h6>${data.name ? data.name : "Not found Zip Code"}</h6>
+                                </div>
+                                <div class="col-12 mt-2">
+                                    <strong>Settings</strong>
+                                    <ul>
+                                        ${data.settings.length > 0 
+                                            ? data.settings.map(d => `<li>${d.name}</li>`).join('') 
+                                            : '<li>No settings available</li>'
+                                        }
+                                    </ul>
                                 </div>
                             </div>
                         </div>
