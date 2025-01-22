@@ -43,7 +43,7 @@ class MedicalFacility(models.Model):
     is_single_facility = fields.Boolean(string='Single Clinical Site', default=True)
     archive_ids = fields.One2many(comodel_name='archive', inverse_name='facility_id', string='Placement History')
     archive_count = fields.Integer(compute='_compute_archive_count', string='Placement History Count')
-    ci_ids = fields.Many2many(comodel_name='res.partner', string='CI',domain=[('is_ci', '=', True)])
+    ci_ids = fields.Many2many(comodel_name='res.partner', string='CI',domain=[('is_ci', '=', True)], context={'is_ci': True, 'default_is_ci': True})
     comment = fields.Html(string='Notes')
     
     def facility_multi_department(self):
@@ -284,7 +284,7 @@ class SCCEFacility(models.Model):
     _rec_name = 'scce_id'
     
     facility_id = fields.Many2one('medical.facility', string='Clinical Site')
-    scce_id = fields.Many2one('res.partner', string='SCCE', domain=[('is_scce', '=', True)])
+    scce_id = fields.Many2one('res.partner', string='SCCE', domain=[('is_scce', '=', True)], context={'is_scce': True, 'default_is_scce': True})
     first_name = fields.Char(related='scce_id.first_name')
     last_name = fields.Char(related='scce_id.last_name')
     email = fields.Char(related='scce_id.email', readonly=False, store=True)

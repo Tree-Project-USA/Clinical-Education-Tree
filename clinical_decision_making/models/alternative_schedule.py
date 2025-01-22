@@ -19,25 +19,14 @@ class AlternativeSchedule(models.Model):
         ('summer', 'Summer'),
     ], string='Term Skipped', required=True)
     year = fields.Selection(selection=SELECTION_YEAR_RANGE, string='Year Skipped', required=True)
-    company_id = fields.Many2one('res.company', string='University', default=lambda self: self.env.user.company_id)
-    state = fields.Selection(
-        string=_('State'),
-        selection=[
-            ('draft', 'Draft'),
-            ('confirmed', 'Confirmed'),
-        ],
-        default='draft'
-    )
+    company_id = fields.Many2one('res.company', string='University')
+    state = fields.Selection(string=_('State'), selection=[('draft', 'Draft'), ('confirmed', 'Confirmed'),], default='draft')
     
     def action_confirm(self):
-        self.write({
-            'state': 'confirmed'
-        })
+        self.write({'state': 'confirmed'})
         
     def action_draft(self):
-        self.write({
-            'state': 'draft'
-        })
+        self.write({'state': 'draft'})
     
     @api.constrains('student_id', 'term', 'year')
     def _check_student_alternative_schedule(self):

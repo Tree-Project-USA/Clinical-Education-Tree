@@ -25,10 +25,7 @@ class Archive(models.Model):
     zip_code = fields.Char(related='geographical_id.zip_code')
     experience_id = fields.Many2one(comodel_name='clinical.experience', string='Clinical Experience', required=True, tracking=True)
     company_id = fields.Many2one(related='student_id.company_id', store=True)
-    setting = fields.Selection([
-        ('op', 'OP'),
-        ('ip', 'IP'),
-    ], string='Setting Type', tracking=True)
+    setting = fields.Selection([('op', 'OP'),('ip', 'IP')], string='Setting Type', tracking=True)
     placement_term = fields.Selection([
         ('fall', 'Fall'),
         ('spring', 'Spring'),

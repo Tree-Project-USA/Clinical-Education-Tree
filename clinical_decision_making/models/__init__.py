@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from . import res_partner
-# from . import cohort
-# from . import res_config
 from . import hardship_request
 from . import geographical_data
 from . import medical_contract
