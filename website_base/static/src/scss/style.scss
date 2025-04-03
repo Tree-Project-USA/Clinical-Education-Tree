@@ -1,23 +1,10 @@
 :root {
-    --color1: #8BB839;
-    --color2: #1F4659;
-    --color3: #95B8A4;
-    --button1:#FFFFFF;
-    --button2:#90BB2F;
+    --color1: ##D6A558;
+    --color2: #0D3A4C;
+    --color3: #6296aa;
+    --button1:#6296aa;
+    --button2:##D6A558;
 }
-
-// #wrapwrap{
-//     background-color: var(--color3) !important;
-// } 
-// @media (min-width: 1200px) {
-//     #wrapwrap{
-//         background-image: url(/website_base/static/src/img/tree.png);
-//         background-repeat: no-repeat;
-//         background-color: var(--color3) !important;
-//         background-position: top;
-//         background-position-x: right;
-//     }
-// }
 
 .popup-card-error,
 .popup-card-warning,
