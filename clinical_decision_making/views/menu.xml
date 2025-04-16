@@ -4,7 +4,7 @@
     <menuitem 
         name="Clin Ed TREE" 
         id="menu_root_cpdm"  
-        web_icon="clinical_decision_making,static/description/Clinical.png"
+        web_icon="clinical_decision_making,static/description/logo.png"
     />
 
     <record id="action_map_scce" model="ir.actions.client">
