@@ -7,18 +7,11 @@ $o-color-palettes: map-merge($o-color-palettes,
 
     (
         'CPDM': (
-            'o-color-1': #8BB839,
-            'o-color-2': #1F4659,
-            'o-color-3': #95B8A4,
+            'o-color-1': #D6A558,
+            'o-color-2': #0D3A4C,
+            'o-color-3': #6296aa,
             'o-color-4': #FFFFFF,
-            'o-color-5': #90BB2F,
-            'primary': #559C68,
-
-            // "--color1": #8BB839,
-            // "--color2": #1F4659,
-            // "--color3": #95B8A4,
-            // "--button1": #FFFFFF,
-            // "--button2": #90BB2F,
+            'o-color-5': #D6A558,
         ),
     )
 );
