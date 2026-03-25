@@ -1,5 +1,3 @@
 # -*- coding: utf-8 -*-
-
-from . import controllers
-from . import models
-from . import wizards
+# Meta-module bundle for clinical decision making features. 
+# Content relocated to cdm_base, cdm_matching, cdm_hardship etc.

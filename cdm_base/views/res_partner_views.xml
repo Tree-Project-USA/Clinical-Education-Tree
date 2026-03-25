@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Student Views -->
+    <record id="student_view_tree" model="ir.ui.view">
+        <field name="name">student.view.tree</field>
+        <field name="model">res.partner</field>
+        <field name="mode">primary</field>
+        <field name="priority">0</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="email"/>
+                <field name="personal_phone"/>
+                <field name="home_address"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="partner_view_search" model="ir.ui.view">
+        <field name="name">res.partner.view.search</field>
+        <field name="model">res.partner</field>
+        <field name="mode">primary</field>
+        <field name="priority">0</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="email"/>
+                <field name="personal_phone"/>
+                <field name="home_address"/>
+                <field name="contact_address"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="student_view_form" model="ir.ui.view">
+        <field name="name">student.view.form</field>
+        <field name="model">res.partner</field>
+        <field name="mode">primary</field>
+        <field name="priority">0</field>
+        <field name="arch" type="xml">
+            <form string="Student Profile" class="o_student_form">
+                <header>
+                    <button name="action_send_portal_invitation_bulk" string="Invite to Portal" type="object" class="btn-primary" attrs="{'invisible': [('is_student', '=', False)]}"/>
+                </header>
+                <sheet>
+                    <field name="active" invisible="1"/>
+                    <field name="is_student" invisible="1"/>
+                    
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+                    
+                    <div class="oe_button_box" name="button_box">
+                        <!-- Stat buttons will be added by other modules -->
+                    </div>
+
+                    <div class="oe_title">
+                        <span class="o_form_label">Student Name</span>
+                        <h1 class="d-flex flex-row">
+                            <field name="first_name" placeholder="First Name" class="me-2"/>
+                            <field name="last_name" placeholder="Last Name"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group name="academic_info" string="Academic Information">
+                            <field name="campus_id" options="{'no_create': True}"/>
+                            <field name="program_id" options="{'no_create': True}"/>
+                            <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                            <field name="start_year"/>
+                        </group>
+                        <group name="contact_info" string="Contact Information">
+                            <field name="email" widget="email" placeholder="University Email"/>
+                            <field name="personal_email_address" widget="email" placeholder="Personal Email"/>
+                            <field name="phone" widget="phone"/>
+                            <field name="personal_phone" widget="phone"/>
+                            <field name="home_address"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <!-- Pages will be added by other modules -->
+                        <page name="internal_notes" string="Internal Notes">
+                            <field name="comment" placeholder="Add private notes about this student here..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+</odoo>

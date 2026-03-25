@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Medical Facility Form Extension -->
+    <record id="medical_facility_view_form_matching" model="ir.ui.view">
+        <field name="name">medical.facility.view.form.matching</field>
+        <field name="model">medical.facility</field>
+        <field name="inherit_id" ref="cdm_base.medical_facility_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_open_placement_offer" type="object" class="oe_stat_button" icon="fa-ticket">
+                    <div class="o_stat_info">
+                        <span class="o_stat_text">Current Offers</span>
+                    </div>
+                </button>
+                <button name="action_open_placement_archive_offer" type="object" class="oe_stat_button" icon="fa-history">
+                    <field name="archive_offer_count" widget="statinfo" string="Offer History"/>
+                </button>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Placement History" name="history">
+                    <field name="archive_ids" readonly="1">
+                        <tree decoration-muted="placement_status == 'blocked'">
+                            <field name="student_id"/>
+                            <field name="experience_id"/>
+                            <field name="setting"/>
+                            <field name="placement_term"/>
+                            <field name="year"/>
+                            <field name="placement_status" widget="badge" decoration-success="placement_status == 'done'" decoration-warning="placement_status == 'normal'"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Facility Department Form Extension -->
+    <record id="view_facility_department_form_matching" model="ir.ui.view">
+        <field name="name">view.facility.department.form.matching</field>
+        <field name="model">facility.department</field>
+        <field name="inherit_id" ref="cdm_base.view_facility_department_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_open_department_archive_offer" type="object" class="oe_stat_button" string="Available Offers">
+                    <field name="archive_offer_count" widget="statinfo" string="Offers History"/>
+                </button>
+                <button name="action_view_placement_history" type="object" class="oe_stat_button" string="Placement History">
+                    <field name="archive_count" widget="statinfo" string="Placement History"/>
+                </button>
+                <button class="oe_stat_button" name="action_view_students" type="object" icon="fa-users">
+                    <field name="student_count" string="Students" widget="statinfo"/>
+                </button>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Placement History">
+                    <field name="archive_ids" options="{'no_open': True, 'no_create': True, 'create': False}" widget="one2many">
+                        <tree>
+                            <field name="student_id"/>
+                            <field name="facility_id"/>
+                            <field name="company_id" string="University" groups="base.group_multi_company"/>
+                            <field name="experience_id"/>
+                            <field name="setting"/>
+                            <field name="placement_term"/>
+                            <field name="year"/>
+                            <field name="city"/>
+                            <field name="state"/>
+                            <field name="geographical_id"/>
+                            <field name="placement_status"/>
+                            <field name="is_show_student" widget="boolean_toggle" />
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Active Facility Depend Wizard Extension -->
+    <record id="view_active_facility_depend_wizard_form_matching" model="ir.ui.view">
+        <field name="name">view.active.facility.depend.wizard.form.matching</field>
+        <field name="model">active.facility.depend.wizard</field>
+        <field name="inherit_id" ref="cdm_base.view_active_facility_depend_wizard_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='department_ids']/tree/button[@name='archive_department']" position="after">
+                <button name="archive_department_and_unlink_offers" string="Inactive" type="object" class="btn btn-link" attrs="{'invisible':[('active', '!=', True)]}"/>
+            </xpath>
+            <xpath expr="//footer/button[@name='archive_department']" position="after">
+                <button name="archive_department_and_unlink_offers" string="Inactive" type="object" class="btn btn-danger"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

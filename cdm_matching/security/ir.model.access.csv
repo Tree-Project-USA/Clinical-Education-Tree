@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_archive,archive,model_archive,,1,1,1,1
+access_placement_offer,placement.offer,model_placement_offer,,1,1,1,1
+access_placement_offer_line,placement.offer.line,model_placement_offer_line,,1,1,1,1
+access_placement_request,placement.request,model_placement_request,,1,1,1,1
+access_archive_offer,archive.offer,model_archive_offer,,1,1,1,1
+access_tree_matching,tree.matching,model_tree_matching,,1,1,1,1

@@ -106,7 +106,7 @@ class CustomerPortals(http.Controller):
                     "attachment_ids": file_list,
                     "preferred_geographical_ids": [Command.create({'geographical_id': i}) for i in zip_code_list]
                 })
-                template = request.env.ref('clinical_decision_making.mail_template_send_update_hardship_information_missing').sudo()
+                template = request.env.ref('cdm_base.mail_template_send_update_hardship_information_missing').sudo()
                 template.sudo().send_mail(hardship_id.id, force_send=False, raise_exception=False)
                 return request.redirect("/success/hardship/request")
             except Exception as e:

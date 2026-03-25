@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- View facility.department View Tree -->
+    <record id="view_facility_department_tree" model="ir.ui.view">
+        <field name="name">view.facility.department.tree</field>
+        <field name="model">facility.department</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="facility_id" invisible="1"/>
+                <field name="name"/>
+                <field name="scce_ids" widget="many2many_tags"/>
+                <field name="setting_ids" widget="many2many_tags"/>
+                <field name="street"/>
+                <field name="city"/>
+                <field name="state"/>
+                <field name="geographical_id"/>
+                <field name="active_state" widget="badge" decoration-danger="active_state == 'not_active'" decoration-success="active_state == 'active'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- View facility.department form -->
+    <record id="view_facility_department_form" model="ir.ui.view">
+        <field name="name">view.facility.department.form</field>
+        <field name="model">facility.department</field>
+        <field name="arch" type="xml">
+            <form>
+                <field name="is_main_department" invisible="1"/>
+                <field name="facility_scce_ids" invisible="1"/>
+                <field name="active" invisible="1"/>
+                <header></header>
+                <sheet>
+                    <widget name="web_ribbon" title="Not Active" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+                    <div name="button_box" position="inside">
+                    </div>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="Name..." required="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="facility_id" required="1"/>
+                            <field name="company_id" string="University" groups="base.group_multi_company"/>
+                            <field name="street"/>
+                            <field name="geographical_id" required="1"/>
+                        </group>
+                        <group>
+                            <field name="city"/>
+                            <field name="state"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Setting">
+                            <field name="setting_ids"/>
+                        </page>
+                        <page string="SCCE">
+                            <field name="scce_ids" options="{'no_open': True, 'no_create': True, 'create': False}" widget="one2many">
+                                <tree>
+                                    <field name="first_name"/>
+                                    <field name="last_name"/>
+                                    <field name="email"/>
+                                    <field name="phone"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_facility_department_map" model="ir.ui.view">
+        <field name="model">facility.department</field>
+        <field name="arch" type="xml">
+            <leaflet_map 
+            field_latitude="latitude" 
+            field_longitude="longitude" 
+            field_address="city" 
+            field_title="zip" 
+            >
+                <field name="__last_update" />
+                <field name="latitude" />
+                <field name="longitude" />
+                <field name="city" />
+                <field name="zip" />
+            </leaflet_map>
+        </field>
+    </record>
+
+    <!-- View facility.department search -->
+    <record id="view_facility_department_search" model="ir.ui.view">
+        <field name="name">view.facility.department.search</field>
+        <field name="model">facility.department</field>
+        <field name="arch" type="xml">
+            <search string="Clinical Site Location">
+                <group expand="1" string="Group By">
+                    <filter string="Name" name="name" domain="[]" context="{'group_by':'name'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action facility.department -->
+    <record id="action_facility_department" model="ir.actions.act_window">
+        <field name="name">Clinical Site Location</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">facility.department</field>
+        <field name="view_mode">tree,form,leaflet_map</field>
+    </record>
+
+</odoo>

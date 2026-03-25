@@ -32,7 +32,7 @@ class PreferredSetting(http.Controller):
                 res_partner_id.sudo().write({
                     'preferred_setting_ids' : list_setting
                                              })
-                template = request.env.ref('clinical_decision_making.mail_template_send_preferred_settings_added')
+                template = request.env.ref('cdm_base.mail_template_send_preferred_settings_added')
                 template.sudo().send_mail(request.env.user.id, force_send=True)
                 return request.redirect("/my/home")
            

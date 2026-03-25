@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_placement_request_tree" model="ir.ui.view">
+        <field name="name">placement.request.tree</field>
+        <field name="model">placement.request</field>
+        <field name="arch" type="xml">
+            <tree string="Placement Requests">
+                <field name="name"/>
+                <field name="company_id" string="University" groups="base.group_multi_company"/>
+                <field name="experience_id"/>
+                <field name="placement_term"/>
+                <field name="year"/>
+                <field name="student_ids" widget="many2many_tags" optional="hide"/>
+                <field name="facility_ids" widget="many2many_tags" optional="hide"/>
+                <field name="create_date"/>
+                <field name="create_uid"/>
+            </tree>
+        </field>
+    </record>
+    <!-- Form View -->
+    <record id="view_placement_request_form" model="ir.ui.view">
+        <field name="name">placement.request.form</field>
+        <field name="model">placement.request</field>
+        <field name="arch" type="xml">
+            <form string="Placement Request" class="o_placement_request_form">
+                <header>
+                    <button name="apply_filters" string="Apply Match Filter" type="object" class="btn-primary" attrs="{'invisible': [('state', '!=', 'draft')]}" data-hotkey="v"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,running,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" name="action_view_students" type="object" icon="fa-users">
+                            <field name="student_count" string="Students" widget="statinfo"/>
+                        </button>
+                        <button class="oe_stat_button" name="action_view_offer_lines" type="object" icon="fa-list">
+                            <field name="archive_offer_count" widget="statinfo" string="Available Offers"/>
+                        </button>
+                        <button class="oe_stat_button" name="action_view_facilities" type="object" icon="fa-hospital-o">
+                            <field name="facility_count" string="Clinical Sites" widget="statinfo"/>
+                        </button>
+                    </div>
+                    
+                    <div class="oe_title">
+                        <span class="o_form_label">Placement Request Name</span>
+                        <h1>
+                            <field name="name" placeholder="e.g. Spring 2024 Clinical Placement" required="1"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group name="info_group" string="General Information">
+                            <field name="company_id" string="University" groups="base.group_multi_company" options="{'no_create': True}"/>
+                            <field name="experience_id" options="{'no_create': True}"/>
+                            <field name="placement_term"/>
+                            <field name="year"/>
+                        </group>
+                        <group name="filter_group" string="Matching Criteria">
+                            <field name="apply_hardship" widget="boolean_toggle"/>
+                            <field name="apply_setting" widget="boolean_toggle"/>
+                            <field name="apply_location" widget="boolean_toggle"/>
+                            <field name="location_dist" attrs="{'invisible': [('apply_location', '=', False)], 'required': [('apply_location', '=', True)]}"/>
+                            <field name="placement_status" widget="badge" decoration-info="placement_status == 'normal'" decoration-success="placement_status == 'done'"/>
+                        </group>
+                    </group>
+                    
+                    <notebook>
+                        <page string="Student Matching" name="matching_page">
+                            <field name="archive_ids" mode="tree">
+                                <tree edit="false" create="false" delete="false" class="cdm">
+                                    <field name="student_id" invisible="1"/>
+                                    <field name="placement_status" invisible="1"/>
+                                    <field name="match_state" invisible="1"/>
+                                    
+                                    <field name="first_name" string="First Name"/>
+                                    <field name="last_name" string="Last Name"/>
+                                    <field name="facility_id" string="Assigned Facility"/>
+                                    <field name="offer_criteria" string="Offer Details"/>
+                                    <field name="student_criteria" string="Student Prefs"/>
+                                    <field name="match_state" string="Status" widget="badge" 
+                                           decoration-danger="match_state == 'decline'" 
+                                           decoration-success="match_state == 'approve'"
+                                           decoration-warning="match_state == False"/>
+                                    
+                                    <header>
+                                        <button name="action_approve" type="object" string="Bulk Approve" class="btn-success"/>
+                                    </header>
+
+                                    <button name="action_approve" type="object" string="Approve" 
+                                             class="btn-outline-success" 
+                                             attrs="{'invisible': ['|', ('match_state', '!=', False), ('placement_status', '!=', 'matched')]}"/>
+                                    
+                                    <button name="action_decline" type="object" string="Decline" 
+                                             class="btn-outline-danger"  
+                                             attrs="{'invisible': ['|', ('match_state', '!=', False), ('placement_status', '!=', 'matched')]}"/>
+                                    
+                                    <button name="action_view_student" type="object" icon="fa-user-circle" title="View Student Detail"/>
+                                    <button name="action_open_archive_log" type="object" icon="fa-history" title="View Placement Log"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Advanced Settings" name="advanced_settings">
+                             <group>
+                                <field name="create_date" readonly="1"/>
+                                <field name="create_uid" readonly="1"/>
+                             </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>

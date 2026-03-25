@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_post_plcement_management_manager,post_plcement_management_manager,model_post_plcement_management,,1,1,1,1
+access_ci_ptse_manager,ci_ptse_manager,model_ci_ptse,,1,1,1,1
+access_plcement_management_manager,plcement_management_manager,model_plcement_management,,1,1,1,1
