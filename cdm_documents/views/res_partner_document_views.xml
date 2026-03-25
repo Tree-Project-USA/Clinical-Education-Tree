@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="student_view_form_document" model="ir.ui.view">
+        <field name="name">student.view.form.document</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="cdm_base.student_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page name="required_documents" string="Documents">
+                    <group string="Program Required Documents">
+                        <field name="medical_attachment_ids" nolabel="1">
+                            <tree decoration-info="state == 'under_review'" decoration-success="state == 'confirmed'" decoration-danger="state == 'cancel'">
+                                <field name="attachment_type"/>
+                                <field name="expiration_date"/>
+                                <field name="attachment_ids" widget="many2many_attachment_preview"/>
+                                <field name="state" widget="badge"/>
+                                <button name="action_confirmed" string="Approve" type="object" icon="fa-check" attrs="{'invisible': [('state', '=', 'confirmed')]}"/>
+                            </tree>
+                        </field>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Hardship Request Received -->
+        <record id="mail_template_send_hardship_request_received" model="mail.template">
+            <field name="name">Send Hardship Request Received</field>
+            <field name="model_id" ref="cdm_hardship.model_hardship_request" />
+            <field name="subject">Hardship Request Received</field>
+            <field name="email_from">{{ object.company_id.email_formatted }}</field>
+            <field name="email_cc">{{ object.company_id.email_formatted }}</field>
+            <field name="email_to">{{ object.student_id.email_formatted }}</field>
+            <field name="body_html" type="html">
+                <table border="0" cellpadding="0" cellspacing="0" style="padding-top: 16px; background-color: #FFFFFF; font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-collapse:separate;">
+                    <tr>
+                        <td align="center">
+                            <table border="0" cellpadding="0" cellspacing="0" width="590" style="padding: 16px; background-color: #FFFFFF; color: #454748; border-collapse:separate;">
+                                <tbody>
+                                    <tr>
+                                        <td align="center" style="min-width: 590px;">
+                                            <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                                <tr>
+                                                    <td valign="top" style="font-size: 13px;">
+                                                        <div> Dear <span style="font-weight: bold;"><t t-out="object.student_id.name or ''">Marc Demo</t></span>,<br /><br /> We have received your hardship request, and we appreciate your communication. Our team will review the request thoroughly before rendering a decision. You will be notified of the outcome once the review process is complete. <br /><br /> Thank you for your understanding. <br /><br /> Best regards, <br /><br /> </div>
+                                                    </td>
+                                                </tr>
+                                                <tr><td style="text-align:center;"><hr width="100%" style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;" /></td></tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center" style="min-width: 590px;">
+                                            <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; font-size: 11px; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                                <tr>
+                                                    <td valign="middle" align="left">
+                                                        <h2 style="color:#226fff">Dr. Alameri</h2>
+                                                        <p>Mansoor Alameri, PT, MPT, PhD</p>
+                                                        <h3>Assistant Professor l Associate Director of Clinical Education</h3>
+                                                        <p>Flex DPT Program l University of St. Augustine for Health Sciences TXAU</p>
+                                                        <p style="color:#226fff">5401 La Crosse Ave, Austin TX 78739</p>
+                                                        <p>Office: (737) 202-3291 l Ext: 3421</p>
+                                                        <p><a href="mailto:Malameri@usa.edu">Malameri@usa.edu</a> | <a href="https://www.usa.edu/faculty/mansoor-alameri-pt-phd-mpt-cci/">www.usa.edu</a></p>
+                                                        <p>Schedule an Appointment: <a href="https://calendly.com/malameri/30min">Click Here</a></p>
+                                                        <img t-attf-src="/logo.png?company={{ user.company_id.id }}" style="padding: 0px; margin: 0px; height: auto; width: 80px;" t-att-alt="user.company_id.name" />
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </field>
+            <field name="lang">{{ object.student_id.lang }}</field>
+            <field name="auto_delete" eval="True" />
+        </record>
+
+        <!-- Hardship Request Information Missing -->
+        <record id="mail_template_send_hardship_information_missing" model="mail.template">
+            <field name="name">Send Hardship Request Information Missing</field>
+            <field name="model_id" ref="cdm_hardship.model_hardship_request" />
+            <field name="subject">Hardship Request Information Missing</field>
+            <field name="email_from">{{ (object.company_id.email_formatted or user.email_formatted) }}</field>
+            <field name="email_cc">{{ (object.company_id.email_formatted or user.email_formatted) }}</field>
+            <field name="body_html" type="html">
+                <table border="0" cellpadding="0" cellspacing="0" style="padding-top: 16px; background-color: #FFFFFF; font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-collapse:separate;">
+                    <tr>
+                        <td align="center">
+                            <table border="0" cellpadding="0" cellspacing="0" width="590" style="padding: 16px; background-color: #FFFFFF; color: #454748; border-collapse:separate;">
+                                <tbody>
+                                    <tr>
+                                        <td align="center" style="min-width: 590px;">
+                                            <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                                <tr>
+                                                    <td valign="top" style="font-size: 13px;">
+                                                        <div> Dear <span style="font-weight: bold;"><t t-out="object.student_id.name or ''">Marc Demo</t></span>,<br /><br /> Your hardship request is currently incomplete as it is missing some required information <t style="font-weight: 700;" t-out="object.update_message or ''" />. Kindly log in using the link provided to update and provide the necessary details.
+                                                            <div style="margin: 16px 0px 16px 0px;">
+                                                                <a href="/my" style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">Update Hardship Request</a>
+                                                            </div>
+                                                            If you have any questions or need assistance, feel free to contact us. <br /><br /> Best regards, <br /><br /> </div>
+                                                    </td>
+                                                </tr>
+                                                <tr><td style="text-align:center;"><hr width="100%" style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;" /></td></tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center" style="min-width: 590px;">
+                                            <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; font-size: 11px; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                                <tr>
+                                                    <td valign="middle" align="left">
+                                                        <h2 style="color:#226fff">Dr. Alameri</h2>
+                                                        <p>Mansoor Alameri, PT, MPT, PhD</p>
+                                                        <h3>Assistant Professor l Associate Director of Clinical Education</h3>
+                                                        <p>Flex DPT Program l University of St. Augustine for Health Sciences TXAU</p>
+                                                        <p style="color:#226fff">5401 La Crosse Ave, Austin TX 78739</p>
+                                                        <p>Office: (737) 202-3291 l Ext: 3421</p>
+                                                        <p><a href="mailto:Malameri@usa.edu">Malameri@usa.edu</a> | <a href="https://www.usa.edu/faculty/mansoor-alameri-pt-phd-mpt-cci/">www.usa.edu</a></p>
+                                                        <p>Schedule an Appointment: <a href="https://calendly.com/malameri/30min">Click Here</a></p>
+                                                        <img t-attf-src="/logo.png?company={{ user.company_id.id }}" style="padding: 0px; margin: 0px; height: auto; width: 80px;" t-att-alt="user.company_id.name" />
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </field>
+            <field name="lang">{{ object.student_id.lang }}</field>
+            <field name="auto_delete" eval="True" />
+        </record>
+    </data>
+</odoo>

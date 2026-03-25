@@ -1,0 +1,24 @@
+# -*- coding: utf-8 -*-
+import logging
+
+from odoo import models, fields, api, _
+from odoo.exceptions import UserError, ValidationError
+
+_logger = logging.getLogger(__name__)
+
+
+class ActiveFacilityDependWizard(models.TransientModel):
+    _name = 'active.facility.depend.wizard'
+    _description = _('Active Clinical Site Depend Wizard')
+
+    facility_id = fields.Many2one(comodel_name='medical.facility', string='Clinical Site')
+    department_ids = fields.One2many(comodel_name='facility.department', related='facility_id.department_ids')
+
+
+    def archive_department(self):
+        for department_id in self.department_ids:
+            department_id.archive_department()
+        
+    def unarchive_department(self):
+        for department_id in self.department_ids:
+            department_id.unarchive_department()

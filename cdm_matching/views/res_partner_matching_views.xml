@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="student_view_form_matching" model="ir.ui.view">
+        <field name="name">student.view.form.matching</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="cdm_base.student_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page name="experience_schedule" string="Placement Schedule">
+                    <field name="experience_schedual_ids">
+                        <tree decoration-info="placement_status == 'normal'" decoration-success="placement_status == 'done'">
+                            <field name="experience_id"/>
+                            <field name="placement_term"/>
+                            <field name="year"/>
+                            <field name="placement_status" widget="badge"/>
+                            <field name="archive_create_date" string="Matched On"/>
+                        </tree>
+                    </field>
+                </page>
+
+                <page string="Placement History" name="student_archive">
+                    <field name="archive_ids">
+                        <tree decoration-muted="is_declined == True">
+                            <field name="facility_id"/>
+                            <field name="department_id"/>
+                            <field name="experience_id"/>
+                            <field name="placement_term"/>
+                            <field name="year"/>
+                            <field name="placement_status" widget="badge" decoration-success="placement_status == 'approved'" decoration-warning="placement_status == 'pending'"/>
+                            <field name="is_declined" invisible="1"/>
+                            <button name="action_open_archive_log" type="object" icon="fa-history" title="View Log"/>
+                        </tree>
+                    </field>
+                </page>
+                
+                <page string="Preferences" name="preferences">
+                    <group>
+                        <group string="Top Locations">
+                            <field name="preferred_geographical_ids" nolabel="1">
+                                <tree editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="city"/>
+                                    <field name="state"/>
+                                    <field name="geographical_id" string="Zip Code"/>
+                                </tree>
+                            </field>
+                        </group>
+                        <group string="Preferred Settings">
+                            <field name="preferred_setting_ids" nolabel="1">
+                                <tree editable="bottom">
+                                    <field name="name" string="Setting"/>
+                                    <field name="type_setting" widget="badge"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

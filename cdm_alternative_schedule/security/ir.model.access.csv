@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_alternative_schedule_manager,alternative_schedule_manager,model_alternative_schedule,,1,1,1,1

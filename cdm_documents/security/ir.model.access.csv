@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_attachments_manager,attachments_manager,model_attachments,,1,1,1,1
+access_attachment_type_manager,attachment_type_manager,model_attachment_type,,1,1,1,1
+access_scce_attachment_type_manager,scce_attachment_type_manager,model_scce_attachment_type,,1,1,1,1
+access_scce_attachments_manager,scce_attachments_manager,model_scce_attachments,,1,1,1,1
+access_scce_attachment_request_manager,scce_attachment_request_manager,model_scce_attachment_request,,1,1,1,1
+access_attachment_request_manager,attachment_request_manager,model_attachment_request,,1,1,1,1

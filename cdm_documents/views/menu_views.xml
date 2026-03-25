@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem
+        id="attachment_type_menu"
+        name="Program Attachment Type"
+        action="action_attachment_type"
+        parent="cdm_base.configuration_menu"
+        sequence="40"/>
+
+    <menuitem
+        id="scce_attachment_type_menu"
+        name="Site Attachment Type"
+        action="action_scce_attachment_type"
+        parent="cdm_base.configuration_menu"
+        sequence="50"/>
+</odoo>

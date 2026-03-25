@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="student_view_form_alt_schedule" model="ir.ui.view">
+        <field name="name">student.view.form.alt.schedule</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="cdm_base.student_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="/form/*[1]" position="inside">
+                <button name="alternative_schedule_term_action" string="Request Alternative Schedule" type="object" class="btn-primary"/>
+            </xpath>
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <field name="alternative_schedule_count" invisible="1"/>
+                <button name="action_view_alternative_schedule" type="object" class="oe_stat_button" icon="fa-calendar" attrs="{'invisible': [('alternative_schedule_count', '=', 0)]}">
+                    <div class="o_stat_info">
+                        <span class="o_stat_value"><field name="alternative_schedule_count"/></span>
+                        <span class="o_stat_text">Alt Schedules</span>
+                    </div>
+                </button>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page name="alternative_schedule" string="Alternative Schedule">
+                    <field name="alternative_schedule_ids"/>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Hardship Accommodation Action -->
+    <record id="hardship_request_action" model="ir.actions.act_window">
+        <field name="type">ir.actions.act_window</field>
+        <field name="name">Hardship Accommodation</field>
+        <field name="res_model">hardship.request</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to create a new Hardship Accommodation.
+            </p>
+        </field>
+    </record>
+
+    <!-- Hardship Requests Menu -->
+    <menuitem
+        id="hardship_request_menu"
+        name="Hardship/Accommodation"
+        action="hardship_request_action"
+        parent="cdm_base.student_details_menu"
+        sequence="2"/>
+</odoo>

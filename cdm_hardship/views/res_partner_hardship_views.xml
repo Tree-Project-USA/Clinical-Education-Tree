@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="student_view_form_hardship" model="ir.ui.view">
+        <field name="name">student.view.form.hardship</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="cdm_base.student_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <field name="hardship_count" invisible="1"/>
+                <button name="action_open_hardship" type="object" class="oe_stat_button" icon="fa-exclamation-triangle" attrs="{'invisible': [('hardship_count', '=', 0)]}">
+                    <div class="o_stat_info">
+                        <span class="o_stat_value"><field name="hardship_count"/></span>
+                        <span class="o_stat_text">Hardships</span>
+                    </div>
+                </button>
+            </xpath>
+        </field>
+    </record>
+</odoo>

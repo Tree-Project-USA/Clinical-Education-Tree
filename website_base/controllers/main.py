@@ -88,7 +88,7 @@ class CustomerPortals(portal.CustomerPortal):
             # create a user if necessary and make sure it is in the portal group
             company = partner_id.company_id or request.env.company
             user_sudo = request.sudo().with_company(company.id)._create_user(partner_id)
-            template = request.env.ref('clinical_decision_making.mail_template_send_account_creation_invitation')
+            template = request.env.ref('cdm_base.mail_template_send_account_creation_invitation')
             lang = user_sudo.sudo().lang
             partner = user_sudo.sudo().partner_id
 
@@ -100,7 +100,7 @@ class CustomerPortals(portal.CustomerPortal):
                 user_sudo.write({'active': True, 'groups_id': [(4, group_portal.id), (3, group_public.id)]})
                 user_sudo.partner_id.signup_prepare()
         else:
-            template = request.env.ref('clinical_decision_making.mail_template_send_account_creation_invitation')
+            template = request.env.ref('cdm_base.mail_template_send_account_creation_invitation')
             template.sudo().send_mail(user_sudo.id, force_send=True)
   
     @http.route(['/student/details/<int:plcement>',
